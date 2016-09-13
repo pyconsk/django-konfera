@@ -1,9 +1,20 @@
 from django.db import models
 
+EVENT_TYPE_CHOICES = (
+    ('conference', 'Conference'),
+    ('meetup', 'Meetup'),
+)
+
+EVENT_STATUS_CHOICES = (
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+    ('expired', 'Expired'),
+)
+
 
 class Room(models.Model):
     title = models.CharField(max_length=128)
-    
+
     def __str__(self):
         return self.title
 
@@ -38,6 +49,16 @@ class Speaker(models.Model):
     social_url = models.URLField()
     country = models.CharField(max_length=64)
     sponsor = models.ForeignKey(Sponsor, default=None)
+
+
+class Event(models.Model):
+    title = models.CharField(max_length=128)
+    description = models.TextField()
+    date_from = models.DateTimeField()
+    date_to = models.DateTimeField()
+    event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
+    status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
+    location = models.ForeignKey('Location')
 
 
 class Receipt(models.Model):
