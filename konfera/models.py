@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class Location(models.Model):
 
@@ -17,4 +15,21 @@ class Location(models.Model):
         return "Location: {} {} {} {} {} {} {}".format(
             self.title, self.street, self.street2, self.city,
             self.postcode, self.state, self.capacity)
+
+
+class Sponsor(models.Model):
+    pass
+
+
+class Speaker(models.Model):
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    email = models.EmailField(max_length=255)
+    phone = models.CharField(max_length=64)
+    bio = models.TextField()
+    url = models.URLField()
+    social_url = models.URLField()
+    country = models.CharField(max_length=64)
+    sponsor = models.ForeignKey(Sponsor, default=None)
+
 
