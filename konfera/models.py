@@ -51,6 +51,7 @@ class Speaker(models.Model):
     sponsor = models.ForeignKey(Sponsor, default=None)
 
 
+
 class Event(models.Model):
     title = models.CharField(max_length=128)
     description = models.TextField()
@@ -77,3 +78,11 @@ class Receipt(models.Model):
     def __str__(self):
         return self.title
 
+
+class TicketType(models.Model):
+    title = models.CharField(max_length=128)
+    description = models.TextField()
+    price = models.DecimalField()
+    available_from = models.DateTimeField()
+    available_to = models.DateTimeField()
+    event = models.ForeignKey(Event, null=False)
