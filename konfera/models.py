@@ -1,10 +1,20 @@
 from django.db import models
 
+EVENT_TYPE_CHOICES = (
+    ('conference', 'Conference'),
+    ('meetup', 'Meetup'),
+)
 
-# Create your models here.
+EVENT_STATUS_CHOICES = (
+    ('draft', 'Draft'),
+    ('published', 'Published'),
+    ('expired', 'Expired'),
+)
+
+
 class Room(models.Model):
     title = models.CharField(max_length=128)
-    
+
     def __str__(self):
         return self.title
 
@@ -25,16 +35,21 @@ class Location(models.Model):
             self.postcode, self.state, self.capacity)
 
 
-EVENT_TYPE_CHOICES = (
-    ('conference', 'Conference'),
-    ('meetup', 'Meetup'),
-)
+class Sponsor(models.Model):
+    pass
 
-EVENT_STATUS_CHOICES = (
-    ('draft', 'Draft'),
-    ('published', 'Published'),
-    ('expired', 'Expired'),
-)
+
+class Speaker(models.Model):
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
+    email = models.EmailField(max_length=255)
+    phone = models.CharField(max_length=64)
+    bio = models.TextField()
+    url = models.URLField()
+    social_url = models.URLField()
+    country = models.CharField(max_length=64)
+    sponsor = models.ForeignKey(Sponsor, default=None)
+
 
 class Event(models.Model):
     title = models.CharField(max_length=128)
