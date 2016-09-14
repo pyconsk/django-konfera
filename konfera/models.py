@@ -58,3 +58,25 @@ class Receipt(models.Model):
     def __str__(self):
         return self.title
 
+talk_status_choices = (
+    ('cfp', 'CFP'),
+    ('draft', 'Draft'),
+    ('approved', 'Approved'),
+    ('rejected', 'Rejected'),
+    ('withdrawn', 'Withdrawn')
+)
+
+duration_choices = (
+    (30, '30'),
+    (45, '45'),
+)
+
+class Talk(models.Model):
+    title = models.CharField(max_length=256)
+    abstract = models.TextField()
+    talktype = models.Choices('talk', 'workshop')
+    status = models.CharField(max_length=32, choices=talk_status_choices)
+    duration = models.IntegerField(choices=duration_choices)
+    primary_speaker = models.ForeignKey(Speaker)
+    secondary_speaker = models.ForeignKey(Speaker)
+    event = models.ForeignKey(Event, blank=True)
