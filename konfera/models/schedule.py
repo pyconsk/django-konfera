@@ -1,6 +1,6 @@
 from django.db import models
-from konfera.models import Talk
-from konfera.models import Room
+from konfera.models import Talk, Room
+
 
 
 class Schedule(models.Model):
