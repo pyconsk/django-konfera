@@ -8,4 +8,4 @@ from .schedule import Schedule
 from .speaker import Speaker
 from .sponsor import Sponsor
 from .talk import Talk
-from .tickettype import TicketType
+from .ticket_type import TicketType

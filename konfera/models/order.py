@@ -1,10 +1,10 @@
 from django.db import models
 
 ORDER_CHOICES = (
-    ('awaiting_payment', 'awaiting payment'),
-    ('paid', 'paid'),
-    ('expired', 'expired'),
-    ('cancelled', 'cancelled'),
+    ('awaiting_payment', 'Awaiting payment'),
+    ('paid', 'Paid'),
+    ('expired', 'Expired'),
+    ('cancelled', 'Cancelled'),
 )
 
 

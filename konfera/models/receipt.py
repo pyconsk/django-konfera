@@ -2,7 +2,6 @@ from django.db import models
 
 
 class Receipt(models.Model):
-
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     street2 = models.CharField(max_length=128)
