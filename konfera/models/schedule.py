@@ -2,7 +2,6 @@ from django.db import models
 from konfera.models import Talk, Room
 
 
-
 class Schedule(models.Model):
     start = models.DateTimeField()
     description = models.CharField(max_length=128)
