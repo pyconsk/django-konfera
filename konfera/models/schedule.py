@@ -1,6 +1,6 @@
 from django.db import models
-from .talk import Talk
-from .room import Room
+from konfera.models import Talk
+from konfera.models import Room
 
 
 class Schedule(models.Model):
@@ -9,3 +9,6 @@ class Schedule(models.Model):
     talk = models.ForeignKey(Talk, null=False)
     duration = models.IntegerField()
     room = models.ForeignKey(Room, null=False)
+
+    def __str__(self):
+        return self.title

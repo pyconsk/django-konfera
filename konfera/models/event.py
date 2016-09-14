@@ -1,5 +1,5 @@
 from django.db import models
-from .location import Location
+from konfera.models import Location
 
 EVENT_TYPE_CHOICES = (
     ('conference', 'Conference'),
@@ -21,3 +21,6 @@ class Event(models.Model):
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
     location = models.ForeignKey(Location)
+
+    def __str__(self):
+        return self.title

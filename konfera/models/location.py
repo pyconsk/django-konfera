@@ -11,6 +11,4 @@ class Location(models.Model):
     capacity = models.IntegerField()
 
     def __str__(self):
-        return "Location: {} {} {} {} {} {} {}".format(
-            self.title, self.street, self.street2, self.city,
-            self.postcode, self.state, self.capacity)
+        return self.title
