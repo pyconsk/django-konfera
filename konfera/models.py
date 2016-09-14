@@ -1,21 +1,6 @@
 from django.db import models
 
 
-ORDER_CHOICES = (
-    ('awaiting_payment', 'awaiting payment'),
-    ('paid', 'paid'),
-    ('expired', 'expired'),
-    ('cancelled', 'cancelled'),
-)
-
-class Order(models.Model):
-    price = models.DecimalField()
-    discount = models.IntegerField()
-    status = models.CharField(choices=ORDER_CHOICES, max_length=256)
-    purchase_date = models.DateTimeField()
-    payment_date = models.DateTimeField()
-
-
 EVENT_TYPE_CHOICES = (
     ('conference', 'Conference'),
     ('meetup', 'Meetup'),
@@ -27,6 +12,21 @@ EVENT_STATUS_CHOICES = (
     ('expired', 'Expired'),
 )
 
+ORDER_CHOICES = (
+    ('awaiting_payment', 'awaiting payment'),
+    ('paid', 'paid'),
+    ('expired', 'expired'),
+    ('cancelled', 'cancelled'),
+)
+
+
+class Order(models.Model):
+    price = models.DecimalField()
+    discount = models.IntegerField()
+    status = models.CharField(choices=ORDER_CHOICES, max_length=256)
+    purchase_date = models.DateTimeField()
+    payment_date = models.DateTimeField()
+
 
 class Room(models.Model):
     title = models.CharField(max_length=128)
@@ -36,7 +36,6 @@ class Room(models.Model):
 
 
 class Location(models.Model):
-
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     street2 = models.CharField(max_length=128)
@@ -75,7 +74,7 @@ class Event(models.Model):
     date_to = models.DateTimeField()
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
-    location = models.ForeignKey('Location')
+    location = models.ForeignKey(Location)
 
 
 class Receipt(models.Model):
