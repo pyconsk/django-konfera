@@ -17,5 +17,5 @@ class Order(models.Model):
     payment_date = models.DateTimeField()
 
     def __str__(self):
-        return self.price - self.discount
+        return str(self.price - self.discount)
 
