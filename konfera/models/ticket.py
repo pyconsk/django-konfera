@@ -10,8 +10,8 @@ TICKET_STATUS = (
 
 
 class Ticket(models.Model):
-    type = models.ForeignKey('TicketType', null=False)
-    discount_code = models.ForeignKey('DiscountCodes', null=False)
+    type = models.ForeignKey('TicketType')
+    discount_code = models.ForeignKey('DiscountCodes')
     status = models.CharField(choices=TICKET_STATUS, max_length=32)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
