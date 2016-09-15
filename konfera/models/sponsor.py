@@ -1,5 +1,5 @@
 from django.db import models
-from konfera.models import Event
+
 
 SPONSOR_TYPE = (
     ('platinum', 'Platinum'),
@@ -17,7 +17,7 @@ class Sponsor(models.Model):
     logo = models.FileField()
     url = models.URLField()
     about_us = models.TextField()
-    event = models.ForeignKey(Event, null=False)
+    event = models.ForeignKey('Event', null=False)
 
     def __str__(self):
         return self.title
