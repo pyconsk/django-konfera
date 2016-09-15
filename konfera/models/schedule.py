@@ -9,4 +9,4 @@ class Schedule(models.Model):
     room = models.ForeignKey('Room', null=False)
 
     def __str__(self):
-        return self.title
+        return '%s (%s min)' % (self.start, self.duration)
