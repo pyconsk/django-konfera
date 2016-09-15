@@ -59,9 +59,9 @@ class SpeakerTest(TestCase):
         entry = models.Speaker(first_name="Test", last_name="Tester")
         self.assertEqual(str(entry),
                 '%s %s' % (entry.first_name, entry.last_name))
-        entry.title = 'Mr.'
+        entry.title = 'mr'
         self.assertEqual(str(entry),
-                '%s %s %s' % (entry.title, entry.first_name, entry.last_name))
+                'Mr. %s %s' % (entry.first_name, entry.last_name))
 
 
 class SponsorTest(TestCase):
