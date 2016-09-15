@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+<html>
+<head>
+    {% block title %}<H1>Our beloved sponsors :)</H1>{% endblock %}
+</head>
+<body>
+
+    {% block content %}
+            <div>
+                <ol>
+                {% for event in events %}
+                        <H3><li>{{ event.title}}</li></H3>
+                    {% for sponsor in sponsors|dictsortreversed:"type" %}
+                        <ul>
+                            {% if event == sponsor.event %}
+                                <a href="{{ sponsor.url }}">{{ sponsor.title }}</a>
+                            {% endif %}
+                        </ul>
+                    {%  endfor %}
+                {%  endfor %}
+                </ol>
+
+            </div>
+    {% endblock %}
+</body>
+</html>
