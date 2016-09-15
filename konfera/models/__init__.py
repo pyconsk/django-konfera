@@ -4,7 +4,8 @@ from .location import Location
 from .event import Event
 from .sponsor import Sponsor
 from .ticket_type import TicketType
-from .discountcodes import DiscountCodes
+from .discount_codes import DiscountCodes
+from .attendee_ticket import Ticket
 from .speaker import Speaker
 from .talk import Talk
 from .room import Room
