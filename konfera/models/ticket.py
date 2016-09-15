@@ -18,7 +18,7 @@ class Ticket(models.Model):
     email = models.EmailField()
     phone = models.CharField(max_length=64)
     description = models.TextField()
-    order = models.ForeignKey('Order', null=False)
+    order = models.ForeignKey('Order')
 
     def __str__(self):
         return "Ticket of Mr/Mrs/Ms {}".format(self.last_name)

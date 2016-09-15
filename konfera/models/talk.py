@@ -26,9 +26,9 @@ class Talk(models.Model):
     type = models.CharField(choices=TALK_TYPE, max_length=32)
     status = models.CharField(choices=TALK_STATUS, max_length=32)
     duration = models.CharField(choices=TALK_DURATION, max_length=32)
-    primary_speaker = models.ForeignKey('Speaker', null=False, related_name='secondary_speaker')
+    primary_speaker = models.ForeignKey('Speaker', related_name='secondary_speaker')
     secondary_speaker = models.ForeignKey('Speaker', default=None, related_name='primary_speaker')
-    event = models.ForeignKey('Event', null=False)
+    event = models.ForeignKey('Event')
 
     def __str__(self):
         return self.title
