@@ -23,11 +23,11 @@ TALK_DURATION = (
 class Talk(models.Model):
     title = models.CharField(max_length=256)
     abstract = models.TextField()
-    type = models.CharField(choices=TALK_TYPE)
-    status = models.CharField(choices=TALK_STATUS)
-    duration = models.CharField(choices=TALK_DURATION)
-    primary_speaker = models.ForeignKey(Speaker, null=False)
-    secondary_speaker = models.ForeignKey(Speaker, default=None)
+    type = models.CharField(choices=TALK_TYPE, max_length=32)
+    status = models.CharField(choices=TALK_STATUS, max_length=32)
+    duration = models.CharField(choices=TALK_DURATION, max_length=32)
+    primary_speaker = models.ForeignKey(Speaker, null=False, related_name='secondary_speaker')
+    secondary_speaker = models.ForeignKey(Speaker, default=None, related_name='primary_speaker')
     event = models.ForeignKey(Event, null=False)
 
     def __str__(self):
