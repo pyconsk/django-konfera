@@ -23,9 +23,11 @@ before_install:
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install coverage
+  - pip install flake8
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source konfera runtests.py
 
 after_success:
-- codecov
+  - codecov
+  - flake8 konfera
