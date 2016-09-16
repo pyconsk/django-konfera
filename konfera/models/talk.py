@@ -32,5 +32,5 @@ class Talk(models.Model):
     duration = models.IntegerField(choices=DURATION_CHOICES)
     primary_speaker = models.ForeignKey(Speaker)
     secondary_speaker = models.ForeignKey(Speaker)
-    event = models.ForeignKey(Event, blank=True)
+    event = models.ForeignKey(Event)
 
