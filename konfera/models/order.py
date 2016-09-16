@@ -18,4 +18,3 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.price - self.discount)
-
