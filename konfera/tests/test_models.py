@@ -29,7 +29,7 @@ class OrderTest(TestCase):
 
     def test_string_representation(self):
         entry = models.Order(price=155.5, discount=5.5)
-        self.assertEqual(str(entry), str(entry.price-entry.discount))
+        self.assertEqual(str(entry), str(entry.price - entry.discount))
 
 
 class ReceiptTest(TestCase):
@@ -59,7 +59,10 @@ class SpeakerTest(TestCase):
         entry = models.Speaker(first_name="Test", last_name="Tester")
         self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
         entry.title = 'mr'
-        self.assertEqual(str(entry), '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name))
+        self.assertEqual(
+            str(entry),
+            '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
+        )
 
 
 class SponsorTest(TestCase):
@@ -82,7 +85,10 @@ class TicketTest(TestCase):
         entry = models.Ticket(first_name="Test", last_name="Tester")
         self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
         entry.title = 'mr'
-        self.assertEqual(str(entry), '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name))
+        self.assertEqual(
+            str(entry),
+            '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
+        )
 
 
 class TicketTypeTest(TestCase):
