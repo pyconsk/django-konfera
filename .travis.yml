@@ -16,11 +16,10 @@ matrix:
     - python: "3.3"
       env: DJANGO_VERSION=1.8.14
 
-    # Flake 8
     - python: "3.5"
-      env: DJANGO_VERSION=1.10.1
+      env: TEST_PEP8=True
       install: pip install flake8
-      before_script: flake8 konfera
+      script: flake8 konfera
 
 before_install:
   - pip install codecov
