@@ -11,6 +11,7 @@ django-konfera
     :target: https://codecov.io/gh/pyconsk/django-konfera
 
 Yet another event organization app for Django.
+----------------------------------------------
 
 Web application written in python (django) to manage event organization.
 
@@ -42,4 +43,4 @@ Contributions are welcome, and they are greatly appreciated! Every little bit he
 Disclaimer
 ----------
 
-Django-konfera was designed for `Bratislava Python Meetups`<https://pycon.sk/sk/meetup.html>_ as a workshop, where people are learning Django.
+Django-konfera was designed for `Bratislava Python Meetups <https://pycon.sk/sk/meetup.html>`_ as a workshop, where people are learning Django.
