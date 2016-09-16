@@ -1,6 +1,5 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from konfera.models import TicketType
 
 
 class DiscountCodes(models.Model):
@@ -13,7 +12,7 @@ class DiscountCodes(models.Model):
     available_from = models.DateTimeField()
     available_to = models.DateTimeField()
     usage = models.IntegerField()
-    ticket_type = models.ForeignKey(TicketType, null=False)
+    ticket_type = models.ForeignKey('TicketType')
 
     def __str__(self):
         return self.title

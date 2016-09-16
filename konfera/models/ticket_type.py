@@ -1,5 +1,4 @@
 from django.db import models
-from konfera.models import Event
 
 
 class TicketType(models.Model):
@@ -8,7 +7,7 @@ class TicketType(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=12)
     available_from = models.DateTimeField()
     available_to = models.DateTimeField()
-    event = models.ForeignKey(Event, null=False)
+    event = models.ForeignKey('Event')
 
     def __str__(self):
         return self.title

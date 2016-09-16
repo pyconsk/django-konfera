@@ -1,0 +1,33 @@
+# Config file for automatic testing at travis-ci.org
+
+language: python
+
+python:
+  - "3.5"
+  - "3.4"
+
+env:
+  - DJANGO_VERSION=1.8.14
+  - DJANGO_VERSION=1.9.9
+  - DJANGO_VERSION=1.10.1
+
+matrix:
+  include:
+    - python: "3.3"
+      env: DJANGO_VERSION=1.8.14
+
+before_install:
+  - pip install codecov
+
+# command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
+install:
+  - pip install -q Django==$DJANGO_VERSION
+  - pip install coverage
+  - pip install flake8
+
+# command to run tests using coverage, e.g. python setup.py test
+script: coverage run --source konfera runtests.py
+
+after_success:
+  - codecov
+  - flake8 konfera
