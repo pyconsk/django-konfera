@@ -8,9 +8,9 @@ def sponsor_list_view(request, event_slug):
                     .filter(event=event).order_by('type')
 
     context = {'event': event,
-               'sponsors': sponsors, }
-    template = 'konfera/event_sponsors.html'
+               'sponsors': sponsors,
+               }
 
     return render(request=request,
-                  template_name=template,
+                  template_name='konfera/event_sponsors.html',
                   context=context, )
