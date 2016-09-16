@@ -11,17 +11,17 @@ TALK_STATUS_CHOICES = (
 )
 
 TALK_TYPE_CHOICES = (
-    ('workshop', 'workshop'),
-    ('talk', 'talk'),
+    ('workshop', 'Workshop'),
+    ('talk', 'Talk'),
 )
 
 LIGHTNING = 5
 MID = 30
 LONG = 45
 DURATION_CHOICES = (
-    (LIGHTNING, 5),
-    (MID, 30),
-    (LONG, 45),
+    (LIGHTNING, '5 min'),
+    (MID, '30 min'),
+    (LONG, '45 min'),
 )
 
 class Talk(models.Model):
@@ -30,7 +30,9 @@ class Talk(models.Model):
     talktype = models.CharField(max_length=32, choices=TALK_TYPE_CHOICES)
     status = models.CharField(max_length=32, choices=TALK_STATUS_CHOICES)
     duration = models.IntegerField(choices=DURATION_CHOICES)
-    primary_speaker = models.ForeignKey(Speaker)
-    secondary_speaker = models.ForeignKey(Speaker)
-    event = models.ForeignKey(Event)
+    primary_speaker = models.ForeignKey(Speaker, null=False, related_name='secondary_speaker')
+    secondary_speaker = models.ForeignKey(Speaker, default=None, related_name='primary_speaker')
+    event = models.ForeignKey(Event, null=False)
 
+    def __str__(self):
+        return self.title

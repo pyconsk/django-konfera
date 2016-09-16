@@ -1,4 +1,4 @@
-from .discountcodes import DiscountCodes
+from .discount_codes import DiscountCodes
 from .event import Event
 from .location import Location
 from .order import Order
@@ -8,4 +8,5 @@ from .schedule import Schedule
 from .speaker import Speaker
 from .sponsor import Sponsor
 from .talk import Talk
+from .ticket import Ticket
 from .ticket_type import TicketType
