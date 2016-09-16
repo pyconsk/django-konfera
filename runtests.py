@@ -40,7 +40,7 @@ except ImportError:
 
 def run_tests(*test_args):
     if not test_args:
-        test_args = ['tests']
+        test_args = ['konfera.tests']
 
     # Run tests
     TestRunner = get_runner(settings)
