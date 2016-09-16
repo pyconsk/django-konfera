@@ -16,6 +16,11 @@ matrix:
     - python: "3.3"
       env: DJANGO_VERSION=1.8.14
 
+    - python: "3.5"
+      env: TEST_PEP8=True
+      install: pip install flake8
+      script: flake8 konfera
+
 before_install:
   - pip install codecov
 
@@ -23,11 +28,9 @@ before_install:
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install coverage
-  - pip install flake8
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source konfera runtests.py
 
 after_success:
   - codecov
-  - flake8 konfera

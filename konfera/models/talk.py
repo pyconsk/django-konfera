@@ -20,6 +20,7 @@ TALK_DURATION = (
     (45, '45 min'),
 )
 
+
 class Talk(models.Model):
     title = models.CharField(max_length=256)
     abstract = models.TextField()
