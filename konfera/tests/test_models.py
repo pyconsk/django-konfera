@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from konfera import models
+from konfera.models.speaker import TITLE_CHOICES
 
 
 class DiscountCodesTest(TestCase):
@@ -49,19 +50,16 @@ class ScheduleTest(TestCase):
 
     def test_string_representation(self):
         entry = models.Schedule(start="2015-01-01 01:01:01", duration=15)
-        self.assertEqual(str(entry),
-                '%s (%s min)' % (entry.start, entry.duration))
+        self.assertEqual(str(entry), '%s (%s min)' % (entry.start, entry.duration))
 
 
 class SpeakerTest(TestCase):
 
     def test_string_representation(self):
         entry = models.Speaker(first_name="Test", last_name="Tester")
-        self.assertEqual(str(entry),
-                '%s %s' % (entry.first_name, entry.last_name))
+        self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
         entry.title = 'mr'
-        self.assertEqual(str(entry),
-                'Mr. %s %s' % (entry.first_name, entry.last_name))
+        self.assertEqual(str(entry), '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name))
 
 
 class SponsorTest(TestCase):
@@ -82,11 +80,9 @@ class TicketTest(TestCase):
 
     def test_string_representation(self):
         entry = models.Ticket(first_name="Test", last_name="Tester")
-        self.assertEqual(str(entry),
-                '%s %s' % (entry.first_name, entry.last_name))
-        entry.title = 'Mr.'
-        self.assertEqual(str(entry),
-                '%s %s %s' % (entry.title, entry.first_name, entry.last_name))
+        self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
+        entry.title = 'mr'
+        self.assertEqual(str(entry), '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name))
 
 
 class TicketTypeTest(TestCase):
@@ -94,4 +90,3 @@ class TicketTypeTest(TestCase):
     def test_string_representation(self):
         entry = models.TicketType(title="Test TicketType title")
         self.assertEqual(str(entry), entry.title)
-
