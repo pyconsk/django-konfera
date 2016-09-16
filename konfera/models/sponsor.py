@@ -17,7 +17,6 @@ class Sponsor(models.Model):
     logo = models.FileField()
     url = models.URLField()
     about_us = models.TextField()
-    event = models.ForeignKey('Event')
 
     def __str__(self):
         return self.title
