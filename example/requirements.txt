@@ -1,0 +1,5 @@
+# Project dependencies
+django>=1.10
+
+# The app itself in editable mode
+-e ../
