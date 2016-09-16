@@ -21,6 +21,7 @@ class Event(models.Model):
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
     location = models.ForeignKey(Location)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.title
