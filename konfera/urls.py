@@ -14,10 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.contrib import admin
 from konfera import views
 
 urlpatterns = [
     url(r'^event/(?P<event_slug>[\w,-]+)/$', views.sponsor_list_view, name='event_sponsors'),
-    url(r'^admin/', admin.site.urls),
 ]
