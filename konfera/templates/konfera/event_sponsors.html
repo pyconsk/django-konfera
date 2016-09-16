@@ -1,0 +1,14 @@
+{% extends 'konfera/base.html' %}
+
+{% block title %}<title>{{ event }}</title>{% endblock %}
+
+
+{% block content %}
+    <h1>{{ event }}</h1>
+    <div>
+        {% for sponsor in sponsors %}
+           <p><a href="{{ sponsor.url }}">{{ sponsor.title }}</a></p>
+        {%  endfor %}
+    </div>
+{% endblock %}
+
