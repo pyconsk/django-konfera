@@ -1,24 +1,24 @@
 from django.db import models
 
 
+TALK_STATUS = (
+    ('cfp', 'Call For Proposals'),
+    ('draft', 'Draft'),
+    ('approved', 'Approved'),
+    ('rejected', 'Rejected'),
+    ('withdrawn', 'Withdrawn')
+)
+
 TALK_TYPE = (
     ('talk', 'Talk'),
     ('workshop', 'Workshop'),
 )
 
-TALK_STATUS = (
-    ('cfp', 'Call for prop'),
-    ('draft', 'Draft'),
-    ('approved', 'Approved'),
-    ('rejected', 'Rejected'),
-    ('withdrawn', 'Withdrawn'),
-)
-
 TALK_DURATION = (
+    (5, '5 min'),
     (30, '30 min'),
     (45, '45 min'),
 )
-
 
 class Talk(models.Model):
     title = models.CharField(max_length=256)
