@@ -25,9 +25,11 @@ install:
   - pip install coverage
   - pip install flake8
 
+before_script:
+  - flake8 konfera
+
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source konfera runtests.py
 
 after_success:
   - codecov
-  - flake8 konfera
