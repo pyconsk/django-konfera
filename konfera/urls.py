@@ -18,4 +18,5 @@ from konfera import views
 
 urlpatterns = [
     url(r'^event/(?P<event_slug>[\w,-]+)/$', views.sponsor_list_view, name='event_sponsors'),
+    url(r'^event/$', views.event_list, name='events'),
 ]

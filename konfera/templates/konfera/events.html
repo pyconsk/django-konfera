@@ -1,0 +1,30 @@
+{% extends 'konfera/base.html' %}
+
+{% block title %}<title>List of upcoming events</title>{% endblock %}
+
+
+{% block content %}
+    <ul>
+        {% for event in events %}
+        <li>
+           <a href="{% url 'event_sponsors' event.slug %}">{{ event.title }}</a>
+        </li>
+        {%  endfor %}
+    </ul>
+    <div class="pagination">
+    <span class="step-links">
+        {% if events.has_previous %}
+            <a href="?page={{ events.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ events.number }} of {{ events.paginator.num_pages }}.
+        </span>
+
+        {% if events.has_next %}
+            <a href="?page={{ events.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+    </div>
+{% endblock %}
+
