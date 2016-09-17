@@ -5,7 +5,7 @@ from konfera.models import Event
 
 def sponsor_list_view(request, event_slug):
     event = get_object_or_404(Event, slug=event_slug)
-    sponsors = event.sponsors.all()
+    sponsors = event.sponsors.all().order_by('type', 'title')
 
     context = {'event': event,
                'sponsors': sponsors,
