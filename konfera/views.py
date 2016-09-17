@@ -18,8 +18,7 @@ def sponsor_list_view(request, event_slug):
 
 def event_list(request):
     events = Event.objects.all().order_by('date_from')
-    paginator = Paginator(events, 2)
-
+    paginator = Paginator(events, 10)
     page = request.GET.get('page')
     try:
         events = paginator.page(page)
