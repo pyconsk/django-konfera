@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from konfera.models import Event
+from konfera.models import Event, Talk
 
 
 def event_sponsors_list_view(request, event_slug):

@@ -2,7 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
-class DiscountCodes(models.Model):
+class DiscountCode(models.Model):
     title = models.CharField(max_length=128)
     hash = models.CharField(max_length=64)
     discount = models.IntegerField(
