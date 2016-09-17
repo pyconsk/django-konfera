@@ -21,10 +21,10 @@ class Speaker(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=64)
     bio = models.TextField()
-    url = models.URLField()
-    social_url = models.URLField()
+    url = models.URLField(blank=True, null=True)
+    social_url = models.URLField(blank=True, null=True)
     country = models.CharField(max_length=64)
-    sponsor = models.ForeignKey('Sponsor', default=None)
+    sponsor = models.ForeignKey('Sponsor', blank=True, null=True)
 
     def __str__(self):
         return '{title} {first_name} {last_name}'.format(

@@ -7,10 +7,10 @@ from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
 
 
-class DiscountCodesTest(TestCase):
+class DiscountCodeTest(TestCase):
 
     def test_string_representation(self):
-        entry = models.DiscountCodes(title="Test DiscountCode title")
+        entry = models.DiscountCode(title="Test DiscountCode title")
         self.assertEqual(str(entry), entry.title)
 
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCodes, Ticket, Speaker, Talk,
+from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
                             Room, Schedule)
 
 
@@ -41,7 +41,7 @@ admin.site.register(Order)
 admin.site.register(Location)
 admin.site.register(Sponsor)
 admin.site.register(TicketType)
-admin.site.register(DiscountCodes)
+admin.site.register(DiscountCode)
 admin.site.register(Ticket)
 admin.site.register(Speaker)
 admin.site.register(Talk)

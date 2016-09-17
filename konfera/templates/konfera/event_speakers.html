@@ -1,0 +1,17 @@
+{% extends 'konfera/base.html' %}
+
+{% block title %}{{ event }}|Speakers{% endblock %}
+
+
+{% block content %}
+    <h2>{{ event }}</h2>
+        <div>
+            {% for talk in talks %}
+                <h4>Talk: {{ talk }}</h4>
+               <p>Speaker#1 : <a href="{{ talk.primary_speaker.social_url }}">{{ talk.primary_speaker }}</a></p>
+                {% if talk.secondary_speaker %}
+                    <p>Speaker#2 : <a href="{{ talk.secondary_speaker.social_url }}">{{ talk.secondary_speaker }}</a></p>
+                {% endif %}
+            {%  endfor %}
+        </div>
+{% endblock %}
