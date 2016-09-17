@@ -34,8 +34,6 @@ class EventAdmin(admin.ModelAdmin):
         'slug': ('title',),
     }
 
-admin.site.register(Event, EventAdmin)
-
 
 class SpeakerAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'country', 'social_url',)
