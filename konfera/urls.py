@@ -21,4 +21,5 @@ urlpatterns = [
         name='event_speakers'),
     url(r'^(?P<event_slug>[\w, -]+)/sponsors/$', views.event_sponsors_list_view,
         name='event_sponsors'),
+    url(r'^event/$', views.event_list, name='events'),
 ]

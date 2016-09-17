@@ -2,18 +2,18 @@ from django.db import models
 
 
 SPONSOR_TYPE = (
-    ('platinum', 'Platinum'),
-    ('gold', 'Gold'),
-    ('silver', 'Silver'),
-    ('bronze', 'Bronze'),
-    ('other', 'Other'),
-    ('django_girls', 'Django girls'),
+    (1, 'Platinum'),
+    (2, 'Gold'),
+    (3, 'Silver'),
+    (4, 'Bronze'),
+    (5, 'Other'),
+    (6, 'Django girls'),
 )
 
 
 class Sponsor(models.Model):
     title = models.CharField(max_length=128)
-    type = models.CharField(choices=SPONSOR_TYPE, max_length=32)
+    type = models.IntegerField(choices=SPONSOR_TYPE)
     logo = models.FileField()
     url = models.URLField()
     about_us = models.TextField()
