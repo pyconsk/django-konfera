@@ -1,9 +1,10 @@
 {% extends 'konfera/base.html' %}
 
-{% block title %}{{ event }} Speakers{% endblock %}
+{% block title %}{{ event }}|Speakers{% endblock %}
 
 
 {% block content %}
+    <h2>{{ event }}</h2>
         <div>
             {% for talk in talks %}
                 <h4>Talk: {{ talk }}</h4>
@@ -14,4 +15,3 @@
             {%  endfor %}
         </div>
 {% endblock %}
-
