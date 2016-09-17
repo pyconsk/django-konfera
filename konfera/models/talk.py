@@ -28,7 +28,7 @@ class Talk(models.Model):
     status = models.CharField(choices=TALK_STATUS, max_length=32)
     duration = models.CharField(choices=TALK_DURATION, max_length=32)
     primary_speaker = models.ForeignKey('Speaker', related_name='secondary_speaker')
-    secondary_speaker = models.ForeignKey('Speaker', default=None, related_name='primary_speaker')
+    secondary_speaker = models.ForeignKey('Speaker', related_name='primary_speaker', blank=True, null=True)
     event = models.ForeignKey('Event')
 
     def __str__(self):
