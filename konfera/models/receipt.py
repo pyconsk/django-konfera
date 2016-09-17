@@ -11,7 +11,7 @@ class Receipt(models.Model):
     companyid = models.CharField(max_length=32, blank=True, null=True)
     taxid = models.CharField(max_length=32, blank=True, null=True)
     vatid = models.CharField(max_length=32, blank=True, null=True)
-    amount = models.FloatField()
+    amount = models.DecimalField(decimal_places=2, max_digits=12)
 
     def __str__(self):
         return self.title
