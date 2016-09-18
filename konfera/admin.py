@@ -70,10 +70,43 @@ class TalkAdmin(admin.ModelAdmin):
     )
 
 
+class SponsoredEventsInline(admin.TabularInline):
+    model = Sponsor.sponsored_events.through
+    verbose_name = _('Sponsored event')
+    verbose_name_plural = _('Sponsored events')
+    extra = 1
+
+
+class SponsoredSpeakersInline(admin.StackedInline):
+    model = Speaker
+    verbose_name = _('Sponsored speaker')
+    verbose_name_plural = _('Sponsored speakers')
+    extra = 1
+
+
+class SponsorAdmin(admin.ModelAdmin):
+    list_display = ('title', 'type', 'url',)
+    list_filter = ('type',)
+    search_fields = ('=title',)
+    ordering = ('type', 'title',)
+    filter_horizontal = ('sponsored_events',)
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'type', 'logo', 'url', 'about_us',)
+        }),
+    )
+
+    inlines = [
+        SponsoredEventsInline,
+        SponsoredSpeakersInline,
+    ]
+
+
+
 admin.site.register(Receipt)
 admin.site.register(Order)
 admin.site.register(Location)
-admin.site.register(Sponsor)
+admin.site.register(Sponsor, SponsorAdmin)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
