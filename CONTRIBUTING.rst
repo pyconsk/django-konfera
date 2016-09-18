@@ -35,4 +35,49 @@ We realize that there is never too much testing, so you can help us by creating 
 Getting help
 ------------
 
-If you look for help, visit our `monthly meetups in Bratislava <https://pycon.sk/sk/meetup.html>`_ or give us a shout at `mailing list: django-konfera@pycon.sk <https://groups.google.com/a/pycon.sk/forum/?hl=en#!forum/django-konfera>`_.
+If you look for help, visit our `monthly meetups in Bratislava <https://pycon.sk/sk/meetup.html>`_ or give us a shout at `mailing list: django-konfera@pycon.sk <https://groups.google.com/a/pycon.sk/forum/?hl=en#!forum/django-konfera>`_
+
+Developer's HowTo
+=================
+
+Development stadards
+--------------------
+
+* We do use standard PEP8, with extended line to 119 characters.
+* Each pull request is tested agains our automated test suite (yes, PEP8 is one of the tests).
+* Writing automated tests for the new code is preffered, but not required.
+
+Development setup
+-----------------
+
+You can either follow guide in example directory, but that is most just for testing the app from cloned repo.
+
+This is reusable django app, which means you have to create project first. Create directory and run the following commands (in Linux, or Mac).
+
+1. ``pyvenv envs3`` this will create virtual environments for you, where you can install all requirements needed
+2. ``source envs3/bin/activate`` activate virtual environmets
+3. ``pip install django`` install out main dependency
+4. ``django-admin startproject pyconsk`` start your own django project (feel free to name it differently)
+5. ``git clone git@github.com:YOUR-GITHUB-ACCOUNT/django-konfera.git`` make a clone of your fork of django-konfera
+6. ``cd pyconsk`` lets go inside the project directory
+7. ``ln -s ../django-konfera/konfera .`` create a symbolic link to it is in PYTHONPATH and app can be found by Django
+8. in pyconsk/settings.py add konfera into INSTALLED APPS
+9. ``python manage.py migrate`` execute migration so it will pre-populate the DB structure
+10. ``python manage.py runserver`` start development server, and check the app in browser
+
+Development metodology
+----------------------
+
+1. You create a `fork <https://github.com/pyconsk/django-konfera/fork>`_ of the project (you do this only once. Afterwards you already have it in your GitHub, it is your repo in which you are doing all the development).
+2. Clone your fork locally ``git clone git@github.com:YOUR-GITHUB-ACCOUNT/django-konfera.git`` add upstream remote to be able to download updated into your fork ``git remote add upstream https://github.com/pyconsk/django-konfera.git``. You dont have the right to push to upstream, but do regullary pull and push to your fork to keep it up-to-date and prevent conflicts.
+3. Pick up a `issue <https://github.com/pyconsk/django-konfera/issues>`_, and make a comment that you are working on it.
+4. In your local git copy you create a branch: ``git checkout -b XX-new-feature`` (where XX is issue number).
+5. Coding time:
+
+   * Do commit how often you need. At this point doesnt matter if code is broken between commits.
+   * Store your change in your repo at GitHub. You can push to server how many times you want: ``git push origin XX-new-feature``.
+   * Merge the code from upstream as often as you can: ``git pull upstream master``. At this point we dont care about merge message, or rebase to get rid of it. We will do `squash merge <https://github.com/blog/2141-squash-your-commits>`_ (in upstream master it will looks like one commit).
+
+6. Once you are happy with your code, you click on `pull request <https://help.github.com/articles/using-pull-requests>`_ button, and select master branch in upstream and XX-new-feature branch from your repo. At this point automated tests will be run if everything is OK, if you see some errors please fix them and push your fix into your branch. This way iy pull request updated with fixes and tests are run again.
+7. In case reviewer asks for changes you can do all the things mentioned in point 5. Once happy with the changes make a note in pull request to review again.
+8. Your feature is approved and merged to master of upstream, so you can check out master at your local copy: ``git checkout master`` and pull the newly approved changes from upstream ``git pull upstream master``. Pull from upstream will download your work (as one commit into master) that has been done in branch. Now you can delete your local branch ``git branch --delete XX-new-feature``, and also remote one ``git push origin :XX-new-feature``
