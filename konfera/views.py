@@ -1,6 +1,9 @@
+from django.contrib import messages
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from konfera.models import Event, Talk
+from konfera.forms import SpeakerForm, TalkForm
 
 
 def event_sponsors_list_view(request, event_slug):
@@ -43,3 +46,34 @@ def event_list(request):
     return render(request=request,
                   template_name='konfera/events.html',
                   context=context)
+
+
+def add_speaker_view(request):
+    form = SpeakerForm(request.POST or None)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
+        messages.success(request, "Speaker profile successfully created")
+        return HttpResponseRedirect(redirect_to='/event/add_talk/')
+    context = {'form': form,
+               }
+
+    return render(request=request,
+                  template_name='konfera/cfp_form.html',
+                  context=context, )
+
+
+def add_talk_view(request):
+    form = TalkForm(request.POST or None)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.status = 'cfp'
+        instance.save()
+        messages.success(request, "Talk submitted")
+        return HttpResponseRedirect(redirect_to='/event/')
+    context = {'form': form,
+               }
+
+    return render(request=request,
+                  template_name='konfera/cfp_form.html',
+                  context=context, )
