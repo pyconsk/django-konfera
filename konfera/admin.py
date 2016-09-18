@@ -54,6 +54,8 @@ class SpeakerAdmin(admin.ModelAdmin):
         }),
     )
 
+admin.site.register(Speaker, SpeakerAdmin)
+
 
 class TalkAdmin(admin.ModelAdmin):
     list_display = ('title', 'primary_speaker', 'type', 'duration', 'event', 'status',)
@@ -68,6 +70,8 @@ class TalkAdmin(admin.ModelAdmin):
             'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
         }),
     )
+
+admin.site.register(Talk, TalkAdmin)
 
 
 class SponsoredEventsInline(admin.TabularInline):
@@ -101,15 +105,14 @@ class SponsorAdmin(admin.ModelAdmin):
         SponsoredSpeakersInline,
     ]
 
+admin.site.register(Sponsor, SponsorAdmin)
+
 
 admin.site.register(Receipt)
 admin.site.register(Order)
 admin.site.register(Location)
-admin.site.register(Sponsor, SponsorAdmin)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
-admin.site.register(Speaker, SpeakerAdmin)
-admin.site.register(Talk, TalkAdmin)
 admin.site.register(Room)
 admin.site.register(Schedule)
