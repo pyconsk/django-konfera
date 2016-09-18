@@ -1,0 +1,24 @@
+{% extends 'konfera/base.html' %}
+
+{% block title %}{{ event }}|Details{% endblock %}
+
+
+{% block content %}
+    <h2>{{ event }}</h2>
+    <div>
+    <p>Type of event: {{ event.event_type }}</p>
+    <p>Description: {{ event.description }}</p>
+    <p>Taking place at: {{ event.location }}, {{ event.location.street }}, {{ event.location.city }}</p>
+    <p>Starting at: {{ event.date_from }}</p>
+    <p>Expected to end: {{ event.date_to }}</p>
+    <p>Status: {{ event.status|upper }}</p>
+    </div>
+    <div>
+        {%  if sponsors %}
+            <p>Event is sponsored by: </p>
+            {% for sponsor in sponsors %}
+                <a href="{{ sponsor.url }}">{{ sponsor }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
