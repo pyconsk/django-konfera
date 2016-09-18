@@ -102,7 +102,6 @@ class SponsorAdmin(admin.ModelAdmin):
     ]
 
 
-
 admin.site.register(Receipt)
 admin.site.register(Order)
 admin.site.register(Location)
