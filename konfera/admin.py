@@ -75,7 +75,8 @@ admin.site.register(Talk, TalkAdmin)
 
 
 class SponsoredEventsInline(admin.TabularInline):
-    model = Sponsor.sponsored_events.through
+    # Django 1.8 doesn't allow Sponsor.sponsored_events.through (caused by related_name)
+    model = Event.sponsors.through
     verbose_name = _('Sponsored event')
     verbose_name_plural = _('Sponsored events')
     extra = 1
@@ -93,7 +94,6 @@ class SponsorAdmin(admin.ModelAdmin):
     list_filter = ('type',)
     search_fields = ('=title',)
     ordering = ('type', 'title',)
-    filter_horizontal = ('sponsored_events',)
     fieldsets = (
         (None, {
             'fields': ('title', 'type', 'logo', 'url', 'about_us',)
