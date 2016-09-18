@@ -1,4 +1,7 @@
+import datetime
+
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
@@ -16,6 +19,12 @@ class EventTest(TestCase):
     def test_string_representation(self):
         entry = models.Event(title="Test Event title")
         self.assertEqual(str(entry), entry.title)
+
+    def test_dates_from_to(self):
+        event = models.Event(title="Test Event dates")
+        event.date_to = datetime.datetime.now()
+        event.date_from = event.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, event.clean)
 
 
 class LocationTest(TestCase):
