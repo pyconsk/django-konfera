@@ -28,6 +28,21 @@ class SpeakerAdmin(admin.ModelAdmin):
     )
 
 
+class TalkAdmin(admin.ModelAdmin):
+    list_display = ('title', 'primary_speaker', 'type', 'duration', 'event', 'status',)
+    list_filter = ('type', 'duration', 'event', 'status',)
+    search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
+    ordering = ('title',)
+    fieldsets = (
+        (_('Description'), {
+            'fields': ('title', 'abstract', 'event',)
+        }),
+        (_('Details'), {
+            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
+        }),
+    )
+
+
 admin.site.register(Receipt)
 admin.site.register(Order)
 admin.site.register(Location)
@@ -37,6 +52,6 @@ admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
 admin.site.register(Speaker, SpeakerAdmin)
-admin.site.register(Talk)
+admin.site.register(Talk, TalkAdmin)
 admin.site.register(Room)
 admin.site.register(Schedule)
