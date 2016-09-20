@@ -106,3 +106,9 @@ class TicketTypeTest(TestCase):
     def test_string_representation(self):
         entry = models.TicketType(title="Test TicketType title")
         self.assertEqual(str(entry), entry.title)
+
+    def test_dates_from_to(self):
+        tt = models.TicketType(title="Test TicketType dates")
+        tt.date_to = timezone.now()
+        tt.date_from = tt.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, tt.clean)
