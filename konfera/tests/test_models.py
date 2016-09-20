@@ -62,6 +62,16 @@ class ScheduleTest(TestCase):
         entry = models.Schedule(start="2015-01-01 01:01:01", duration=15)
         self.assertEqual(str(entry), '%s (%s min)' % (entry.start, entry.duration))
 
+    def test_duration_range(self):
+        entry = models.Schedule(start="2015-01-01 01:01:01", duration=0)
+        self.assertTrue(entry.full_clean)
+        entry.duration = -1
+        self.assertRaises(ValidationError, entry.full_clean)
+        entry.duration = 301
+        self.assertRaises(ValidationError, entry.full_clean)
+        entry.duration = 300
+        self.assertTrue(entry.full_clean)
+
 
 class SpeakerTest(TestCase):
 
@@ -83,6 +93,17 @@ class SponsorTest(TestCase):
 
 
 class TalkTest(TestCase):
+
+    def test_different_speakers(self):
+        speaker1 = models.Speaker(first_name="Test", last_name="Tester")
+        speaker2 = models.Speaker(first_name="Test", last_name="Testovac")
+        talk = models.Talk(title="Test Talk speakers")
+        talk.primary_speaker = speaker1
+        self.assertTrue(talk.clean)
+        talk.secondary_speaker = speaker2
+        self.assertTrue(talk.clean)
+        talk.secondary_speaker = speaker1
+        self.assertRaises(ValidationError, talk.clean)
 
     def test_string_representation(self):
         entry = models.Talk(title="Test Talk title")
