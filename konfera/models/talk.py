@@ -1,5 +1,5 @@
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 TALK_STATUS = (
@@ -24,10 +24,10 @@ TALK_DURATION = (
 
 class Talk(models.Model):
     title = models.CharField(max_length=256)
-    abstract = models.TextField()
+    abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32)
     status = models.CharField(choices=TALK_STATUS, max_length=32)
-    duration = models.IntegerField(choices=TALK_DURATION)
+    duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'))
     primary_speaker = models.ForeignKey('Speaker', related_name='secondary_speaker')
     secondary_speaker = models.ForeignKey('Speaker', related_name='primary_speaker', blank=True, null=True)
     event = models.ForeignKey('Event')
