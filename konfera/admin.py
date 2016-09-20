@@ -108,9 +108,23 @@ class SponsorAdmin(admin.ModelAdmin):
 admin.site.register(Sponsor, SponsorAdmin)
 
 
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'city', 'capacity')
+    list_filter = ('city',)
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'capacity',)
+        }),
+        (_('Address'), {
+            'fields': ('street', 'street2', 'state', 'city', 'postcode',)
+        }),
+    )
+
+admin.site.register(Location, LocationAdmin)
+
+
 admin.site.register(Receipt)
 admin.site.register(Order)
-admin.site.register(Location)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
