@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
 
 TALK_STATUS = (
     ('cfp', 'Call For Proposals'),
@@ -33,3 +34,10 @@ class Talk(models.Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        if self.primary_speaker == self.secondary_speaker:
+            raise ValidationError(_('%(primary)s have to be different than %(secondary)s'),
+                                  params={'primary': self._meta.get_field('primary_speaker').verbose_name,
+                                          'secondary': self._meta.get_field('secondary_speaker').verbose_name},
+                                  )
