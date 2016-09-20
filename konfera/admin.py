@@ -54,6 +54,8 @@ class SpeakerAdmin(admin.ModelAdmin):
         }),
     )
 
+admin.site.register(Speaker, SpeakerAdmin)
+
 
 class TalkAdmin(admin.ModelAdmin):
     list_display = ('title', 'primary_speaker', 'type', 'duration', 'event', 'status',)
@@ -69,15 +71,62 @@ class TalkAdmin(admin.ModelAdmin):
         }),
     )
 
+admin.site.register(Talk, TalkAdmin)
+
+
+class SponsoredEventsInline(admin.TabularInline):
+    # Django 1.8 doesn't allow Sponsor.sponsored_events.through (caused by related_name)
+    model = Event.sponsors.through
+    verbose_name = _('Sponsored event')
+    verbose_name_plural = _('Sponsored events')
+    extra = 1
+
+
+class SponsoredSpeakersInline(admin.StackedInline):
+    model = Speaker
+    verbose_name = _('Sponsored speaker')
+    verbose_name_plural = _('Sponsored speakers')
+    extra = 1
+
+
+class SponsorAdmin(admin.ModelAdmin):
+    list_display = ('title', 'type', 'url',)
+    list_filter = ('type',)
+    search_fields = ('=title',)
+    ordering = ('type', 'title',)
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'type', 'logo', 'url', 'about_us',)
+        }),
+    )
+
+    inlines = [
+        SponsoredEventsInline,
+        SponsoredSpeakersInline,
+    ]
+
+admin.site.register(Sponsor, SponsorAdmin)
+
+
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'city', 'capacity')
+    list_filter = ('city',)
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'capacity',)
+        }),
+        (_('Address'), {
+            'fields': ('street', 'street2', 'state', 'city', 'postcode',)
+        }),
+    )
+
+admin.site.register(Location, LocationAdmin)
+
 
 admin.site.register(Receipt)
 admin.site.register(Order)
-admin.site.register(Location)
-admin.site.register(Sponsor)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
-admin.site.register(Speaker, SpeakerAdmin)
-admin.site.register(Talk, TalkAdmin)
 admin.site.register(Room)
 admin.site.register(Schedule)

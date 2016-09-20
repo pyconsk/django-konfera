@@ -48,6 +48,18 @@ def event_list(request):
                   context=context)
 
 
+def event_details_view(request, event_slug):
+    event = get_object_or_404(Event, slug=event_slug)
+    sponsors = event.sponsors.all()
+    context = {'event': event,
+               'sponsors': sponsors,
+               }
+
+    return render(request=request,
+                  template_name='konfera/event_details.html',
+                  context=context, )
+
+
 def cfp_form_view(request):
     speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
     talk_form = TalkForm(request.POST or None, prefix='talk')
