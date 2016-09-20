@@ -48,30 +48,19 @@ def event_list(request):
                   context=context)
 
 
-def add_speaker_view(request):
-    form = SpeakerForm(request.POST or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
+def cfp_form_view(request):
+    speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
+    talk_form = TalkForm(request.POST or None, prefix='talk')
+    if speaker_form.is_valid() and talk_form.is_valid():
+        speaker_instance = speaker_form.save()
+        talk_instance = talk_form.save(commit=False)
+        talk_instance.primary_speaker = speaker_instance
+        talk_instance.save()
         messages.success(request, "Speaker profile successfully created")
-        return HttpResponseRedirect(redirect_to='/event/add_talk/')
-    context = {'form': form,
-               }
-
-    return render(request=request,
-                  template_name='konfera/cfp_form.html',
-                  context=context, )
-
-
-def add_talk_view(request):
-    form = TalkForm(request.POST or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.status = 'cfp'
-        instance.save()
-        messages.success(request, "Talk submitted")
         return HttpResponseRedirect(redirect_to='/event/')
-    context = {'form': form,
+
+    context = {'speaker_form': speaker_form,
+               'talk_form': talk_form,
                }
 
     return render(request=request,

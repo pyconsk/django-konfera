@@ -9,6 +9,8 @@ class SpeakerForm(forms.ModelForm):
 
 
 class TalkForm(forms.ModelForm):
+
     class Meta:
         model = Talk
-        exclude = ['status']
+        exclude = ['status', 'primary_speaker',]
+        labels = {'title': 'Talk title'}

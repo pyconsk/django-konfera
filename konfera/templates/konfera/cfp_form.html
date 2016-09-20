@@ -3,15 +3,12 @@
 {% block title %}{{ event }}|CFP{% endblock %}
 
 {% block content %}
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
+    <h2> About the speaker</h2>
     <form method="POST" action="">{% csrf_token %}
-{{ form.as_p }}
+        {{ speaker_form.as_p }}
+        <h2> About the talk</h2>
+        {{ talk_form.as_p }}
     <input type="submit" value="Save">
     </form>
+
 {% endblock %}
