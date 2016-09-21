@@ -67,8 +67,9 @@ def cfp_form_view(request):
         speaker_instance = speaker_form.save()
         talk_instance = talk_form.save(commit=False)
         talk_instance.primary_speaker = speaker_instance
+        talk_instance.status = 'cfp'
         talk_instance.save()
-        messages.success(request, "Speaker profile successfully created")
+        messages.success(request, "Your talk proposal successfully created")
         return HttpResponseRedirect(redirect_to='/event/')
 
     context = {'speaker_form': speaker_form,

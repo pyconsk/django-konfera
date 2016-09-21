@@ -12,5 +12,5 @@ class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        exclude = ['status', 'primary_speaker',]
+        exclude = ['status', 'primary_speaker', 'secondary_speaker']
         labels = {'title': 'Talk title'}
