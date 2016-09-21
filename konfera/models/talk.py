@@ -28,16 +28,18 @@ class Talk(models.Model):
     type = models.CharField(choices=TALK_TYPE, max_length=32)
     status = models.CharField(choices=TALK_STATUS, max_length=32)
     duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'))
-    primary_speaker = models.ForeignKey('Speaker', related_name='secondary_speaker')
-    secondary_speaker = models.ForeignKey('Speaker', related_name='primary_speaker', blank=True, null=True)
+    primary_speaker = models.ForeignKey('Speaker', related_name='primary_speaker_talks')
+    secondary_speaker = models.ForeignKey('Speaker', related_name='secondary_speaker_talks', blank=True, null=True)
     event = models.ForeignKey('Event')
 
     def __str__(self):
         return self.title
 
     def clean(self):
-        if self.primary_speaker == self.secondary_speaker:
-            raise ValidationError(_('%(primary)s have to be different than %(secondary)s'),
-                                  params={'primary': self._meta.get_field('primary_speaker').verbose_name,
-                                          'secondary': self._meta.get_field('secondary_speaker').verbose_name},
-                                  )
+        if hasattr(self, 'primary_speaker') and hasattr(self, 'secondary_speaker') \
+                and self.primary_speaker == self.secondary_speaker:
+            msg = _('%(primary)s have to be different than %(secondary)s') % {
+                'primary': self._meta.get_field('primary_speaker').verbose_name,
+                'secondary': self._meta.get_field('secondary_speaker').verbose_name
+            }
+            raise ValidationError({'primary_speaker': msg, 'secondary_speaker': msg})
