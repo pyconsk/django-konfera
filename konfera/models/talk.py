@@ -3,22 +3,22 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 TALK_STATUS = (
-    ('cfp', 'Call For Proposals'),
-    ('draft', 'Draft'),
-    ('approved', 'Approved'),
-    ('rejected', 'Rejected'),
-    ('withdrawn', 'Withdrawn')
+    ('cfp', _('Call For Proposals')),
+    ('draft', _('Draft')),
+    ('approved', _('Approved')),
+    ('rejected', _('Rejected')),
+    ('withdrawn', _('Withdrawn')),
 )
 
 TALK_TYPE = (
-    ('talk', 'Talk'),
-    ('workshop', 'Workshop'),
+    ('talk', _('Talk')),
+    ('workshop', _('Workshop')),
 )
 
 TALK_DURATION = (
-    (5, '5 min'),
-    (30, '30 min'),
-    (45, '45 min'),
+    (5, _('5 min')),
+    (30, _('30 min')),
+    (45, _('45 min')),
 )
 
 

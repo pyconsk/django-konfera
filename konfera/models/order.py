@@ -1,11 +1,12 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 ORDER_CHOICES = (
-    ('awaiting_payment', 'Awaiting payment'),
-    ('paid', 'Paid'),
-    ('expired', 'Expired'),
-    ('cancelled', 'Cancelled'),
+    ('awaiting_payment', _('Awaiting payment')),
+    ('paid', _('Paid')),
+    ('expired', _('Expired')),
+    ('cancelled', _('Cancelled')),
 )
 
 
