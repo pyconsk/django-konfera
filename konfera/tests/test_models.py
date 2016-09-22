@@ -1,7 +1,8 @@
 import datetime
 
-from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.test import TestCase
+from django.utils import timezone
 
 from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
@@ -22,7 +23,7 @@ class EventTest(TestCase):
 
     def test_dates_from_to(self):
         event = models.Event(title="Test Event dates")
-        event.date_to = datetime.datetime.now()
+        event.date_to = timezone.now()
         event.date_from = event.date_to + datetime.timedelta(+3)
         self.assertRaises(ValidationError, event.clean)
 
@@ -61,6 +62,16 @@ class ScheduleTest(TestCase):
         entry = models.Schedule(start="2015-01-01 01:01:01", duration=15)
         self.assertEqual(str(entry), '%s (%s min)' % (entry.start, entry.duration))
 
+    def test_duration_range(self):
+        entry = models.Schedule(start="2015-01-01 01:01:01", duration=0)
+        self.assertTrue(entry.full_clean)
+        entry.duration = -1
+        self.assertRaises(ValidationError, entry.full_clean)
+        entry.duration = 301
+        self.assertRaises(ValidationError, entry.full_clean)
+        entry.duration = 300
+        self.assertTrue(entry.full_clean)
+
 
 class SpeakerTest(TestCase):
 
@@ -82,6 +93,17 @@ class SponsorTest(TestCase):
 
 
 class TalkTest(TestCase):
+
+    def test_different_speakers(self):
+        speaker1 = models.Speaker(first_name="Test", last_name="Tester")
+        speaker2 = models.Speaker(first_name="Test", last_name="Testovac")
+        talk = models.Talk(title="Test Talk speakers")
+        talk.primary_speaker = speaker1
+        self.assertTrue(talk.clean)
+        talk.secondary_speaker = speaker2
+        self.assertTrue(talk.clean)
+        talk.secondary_speaker = speaker1
+        self.assertRaises(ValidationError, talk.clean)
 
     def test_string_representation(self):
         entry = models.Talk(title="Test Talk title")
@@ -105,3 +127,9 @@ class TicketTypeTest(TestCase):
     def test_string_representation(self):
         entry = models.TicketType(title="Test TicketType title")
         self.assertEqual(str(entry), entry.title)
+
+    def test_dates_from_to(self):
+        tt = models.TicketType(title="Test TicketType dates")
+        tt.date_to = timezone.now()
+        tt.date_from = tt.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, tt.clean)
