@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Receipt(models.Model):
+    order = models.OneToOneField('Order', on_delete=models.DO_NOTHING, related_name='receipt_of')
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     street2 = models.CharField(max_length=128, blank=True, null=True)

@@ -123,13 +123,29 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
+class ReceiptInline(admin.StackedInline):
+    model = Receipt
+
+
 class OrderAdmin(admin.ModelAdmin):
+    list_display = ('purchase_date', 'price', 'discount', 'status', 'receipt_of')
+    list_filter = ('status',)
     readonly_fields = ('purchase_date', 'payment_date')
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('price', 'discount', 'status'),
+        }),
+        (_('Dates'), {
+            'fields': ('purchase_date', 'payment_date'),
+            'classes': ('collapse',),
+        }),
+    )
+    inlines = [
+        ReceiptInline,
+    ]
 
 admin.site.register(Order, OrderAdmin)
 
-
-admin.site.register(Receipt)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
