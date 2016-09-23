@@ -5,12 +5,11 @@ from konfera.models import Speaker, Talk
 class SpeakerForm(forms.ModelForm):
     class Meta:
         model = Speaker
-        fields = '__all__'
+        exclude = ['sponsor']
 
 
 class TalkForm(forms.ModelForm):
 
     class Meta:
         model = Talk
-        exclude = ['status', 'primary_speaker', 'secondary_speaker']
-        labels = {'title': 'Talk title'}
+        exclude = ['status', 'primary_speaker', 'secondary_speaker', 'event']

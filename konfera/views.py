@@ -2,7 +2,9 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from konfera.models import Event, Talk
+from django.utils.translation import ugettext_lazy as _
+from konfera.models import Event
+from konfera.models.talk import CFP
 from konfera.forms import SpeakerForm, TalkForm
 
 
@@ -60,20 +62,25 @@ def event_details_view(request, event_slug):
                   context=context, )
 
 
-def cfp_form_view(request):
+def cfp_form_view(request, event_slug):
     speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
     talk_form = TalkForm(request.POST or None, prefix='talk')
     if speaker_form.is_valid() and talk_form.is_valid():
         speaker_instance = speaker_form.save()
         talk_instance = talk_form.save(commit=False)
         talk_instance.primary_speaker = speaker_instance
-        talk_instance.status = 'cfp'
+        talk_instance.status = CFP
+        talk_instance.event = Event.objects.get(slug=event_slug)
         talk_instance.save()
-        messages.success(request, "Your talk proposal successfully created")
+        message_text = _("Your talk proposal successfully created")
+        messages.success(request, message_text)
         return HttpResponseRedirect(redirect_to='/event/')
-
+    about_speaker_text = _("About the speaker")
+    about_talk_text = _("About the talk")
     context = {'speaker_form': speaker_form,
                'talk_form': talk_form,
+               'about_speaker': about_speaker_text,
+               'about_talk': about_talk_text,
                }
 
     return render(request=request,

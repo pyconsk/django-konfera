@@ -23,6 +23,6 @@ urlpatterns = [
         name='event_sponsors'),
     url(r'^event/(?P<event_slug>[\w, -]+)/details/$', views.event_details_view,
         name='event_details'),
-    url(r'^event/add_cfp/$', views.cfp_form_view, name='add_cfp_form'),
+    url(r'^event/(?P<event_slug>[\w, -]+)/add_cfp/$', views.cfp_form_view, name='event_cfp_form'),
     url(r'^event/$', views.event_list, name='events'),
 ]

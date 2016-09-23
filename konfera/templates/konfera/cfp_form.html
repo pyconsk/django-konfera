@@ -1,10 +1,10 @@
 {% extends 'konfera/base.html' %}
 
 {% block content %}
-    <h2> About the speaker</h2>
+    <h2>{{ about_speaker }}</h2>
     <form method="POST" action="">{% csrf_token %}
         {{ speaker_form.as_p }}
-        <h2> About the talk</h2>
+        <h2>{{about_talk }}</h2>
         {{ talk_form.as_p }}
     <input type="submit" value="Save">
     </form>
