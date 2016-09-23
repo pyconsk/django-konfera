@@ -123,8 +123,13 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ('purchase_date', 'payment_date')
+
+admin.site.register(Order, OrderAdmin)
+
+
 admin.site.register(Receipt)
-admin.site.register(Order)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
