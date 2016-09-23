@@ -1,5 +1,6 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from konfera.models import Event, Talk
 
 
@@ -31,6 +32,10 @@ def event_speakers_list_view(request, event_slug):
 
 def event_list(request):
     events = Event.objects.all().order_by('date_from')
+
+    if events.count() == 1:
+        return redirect('event_details', event_slug=events[0].slug)
+
     paginator = Paginator(events, 10)
     page = request.GET.get('page')
     try:
