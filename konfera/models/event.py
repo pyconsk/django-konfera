@@ -9,11 +9,20 @@ EVENT_TYPE_CHOICES = (
     ('meetup', _('Meetup')),
 )
 
+DRAFT = 'draft'
+PUBLISHED = 'published'
+EXPIRED = 'expired'
+
 EVENT_STATUS_CHOICES = (
-    ('draft', _('Draft')),
-    ('published', _('Published')),
-    ('expired', _('Expired')),
+    (DRAFT, _('Draft')),
+    (PUBLISHED, _('Published')),
+    (EXPIRED, _('Expired')),
 )
+
+
+class EventManager(models.Manager):
+    def published(self):
+        return self.get_queryset().filter(status=PUBLISHED)
 
 
 class Event(FromToModel):
@@ -24,6 +33,8 @@ class Event(FromToModel):
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
     location = models.ForeignKey('Location')
     sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
+
+    objects = EventManager()
 
     def __str__(self):
         return self.title
