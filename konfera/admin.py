@@ -15,13 +15,13 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('event_type', 'status')
 
     fieldsets = (
-        ('Description', {
+        (_('Description'), {
             'fields': ('title', 'slug', 'description'),
         }),
-        ('Dates', {
+        (_('Dates'), {
             'fields': ('date_from', 'date_to'),
         }),
-        ('Details', {
+        (_('Details'), {
             'fields': ('event_type', 'status', 'location'),
         }),
     )
