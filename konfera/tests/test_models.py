@@ -45,6 +45,7 @@ class OrderTest(TestCase):
         entry = models.Order(price=155.5, discount=5.5)
         entry.save()
         self.assertIsNone(entry.payment_date)
+        self.assertEqual(entry.status, 'awaiting_payment')
 
     def test_paid_order_save(self):
         entry = models.Order(price=155.5, discount=5.5, status='paid')
