@@ -129,8 +129,22 @@ class OrderAdmin(admin.ModelAdmin):
 admin.site.register(Order, OrderAdmin)
 
 
+class TicketTypeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price', 'attendee_type', 'event',)
+    list_filter = ('attendee_type',)
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'description', 'price', 'attendee_type', 'event',)
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to',)
+        }),
+    )
+
+admin.site.register(TicketType, TicketTypeAdmin)
+
+
 admin.site.register(Receipt)
-admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
 admin.site.register(Room)
