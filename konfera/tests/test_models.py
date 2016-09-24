@@ -8,6 +8,7 @@ from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
 from konfera.models.order import AWAITING
 
+
 class DiscountCodeTest(TestCase):
 
     def test_string_representation(self):
