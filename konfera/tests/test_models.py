@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
-
+from konfera.models.order import AWAITING
 
 class DiscountCodeTest(TestCase):
 
@@ -45,7 +45,7 @@ class OrderTest(TestCase):
         entry = models.Order(price=155.5, discount=5.5)
         entry.save()
         self.assertIsNone(entry.payment_date)
-        self.assertEqual(entry.status, 'awaiting_payment')
+        self.assertEqual(entry.status, AWAITING)
 
     def test_paid_order_save(self):
         entry = models.Order(price=155.5, discount=5.5, status='paid')
