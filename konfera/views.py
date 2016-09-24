@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from konfera.models import Event, Talk
 
 
 def event_sponsors_list_view(request, event_slug):
-    event = get_object_or_404(Event, slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=event_slug)
     sponsors = event.sponsors.all().order_by('type', 'title')
 
     context = {'event': event,
@@ -17,7 +18,7 @@ def event_sponsors_list_view(request, event_slug):
 
 
 def event_speakers_list_view(request, event_slug):
-    event = get_object_or_404(Event, slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=event_slug)
     talks = event.talk_set.all().order_by('primary_speaker__last_name')
 
     context = {'event': event,
@@ -30,7 +31,11 @@ def event_speakers_list_view(request, event_slug):
 
 
 def event_list(request):
-    events = Event.objects.all().order_by('date_from')
+    events = Event.objects.published().order_by('date_from')
+
+    if events.count() == 1:
+        return redirect('event_details', event_slug=events[0].slug)
+
     paginator = Paginator(events, 10)
     page = request.GET.get('page')
     try:
@@ -46,7 +51,7 @@ def event_list(request):
 
 
 def event_details_view(request, event_slug):
-    event = get_object_or_404(Event, slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=event_slug)
     sponsors = event.sponsors.all()
     context = {'event': event,
                'sponsors': sponsors,
