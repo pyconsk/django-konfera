@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
@@ -23,6 +24,13 @@ class TicketType(FromToModel):
 
     def __str__(self):
         return self.title
+
+    def ticket_type_status(self):
+        if timezone.now() < self.date_from:
+            return _('Not available yet')
+        elif self.date_to < timezone.now():
+            return _('Expired')
+        return _('Active')
 
 
 TicketType._meta.get_field('date_from').verbose_name = _('Available from')

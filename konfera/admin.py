@@ -130,14 +130,15 @@ admin.site.register(Order, OrderAdmin)
 
 
 class TicketTypeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'attendee_type', 'event',)
+    list_display = ('title', 'price', 'attendee_type', 'event', 'ticket_type_status')
     list_filter = ('attendee_type',)
+    readonly_fields = ('ticket_type_status',)
     fieldsets = (
         (_('Details'), {
             'fields': ('title', 'description', 'price', 'attendee_type', 'event',)
         }),
         (_('Availability'), {
-            'fields': ('date_from', 'date_to',)
+            'fields': ('date_from', 'date_to', 'ticket_type_status')
         }),
     )
 
