@@ -1,13 +1,14 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
 
 
 TICKET_STATUS = (
-    ('requested', 'Requested'),
-    ('registered', 'Registered'),
-    ('checked-in', 'Checked-in'),
-    ('cancelled', 'Cancelled'),
+    ('requested', _('Requested')),
+    ('registered', _('Registered')),
+    ('checked-in', _('Checked-in')),
+    ('cancelled', _('Cancelled')),
 )
 
 
