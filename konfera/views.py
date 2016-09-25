@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.talk import CFP
 from konfera.forms import SpeakerForm, TalkForm
 
-from konfera.models import Event, Talk
+from konfera.models import Event
 
 
 def event_sponsors_list_view(request, event_slug):
@@ -80,12 +80,8 @@ def cfp_form_view(request, event_slug):
         message_text = _("Your talk proposal successfully created")
         messages.success(request, message_text)
         return HttpResponseRedirect(redirect_to='/event/')
-    about_speaker_text = _("About the speaker")
-    about_talk_text = _("About the talk")
     context = {'speaker_form': speaker_form,
                'talk_form': talk_form,
-               'about_speaker': about_speaker_text,
-               'about_talk': about_talk_text,
                }
 
     return render(request=request,

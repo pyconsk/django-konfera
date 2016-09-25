@@ -1,11 +1,11 @@
-{% extends 'konfera/base.html' %}
+{% extends 'konfera/base.html' %}{% load i18n %}
 
 {% block content %}
-    <h2>{{ about_speaker }}</h2>
+    <h2>{% trans "About the speaker" %}</h2>
     <form method="POST" action="">{% csrf_token %}
         {{ speaker_form.as_p }}
-        <h2>{{about_talk }}</h2>
+        <h2>{% trans "About the talk" %}</h2>
         {{ talk_form.as_p }}
-    <input type="submit" value="Save">
+    <input type="submit" value={% trans "Send proposal" %}>
     </form>
 {% endblock %}
