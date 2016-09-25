@@ -1,12 +1,13 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 TITLE_UNSET = 'none'
 
 TITLE_CHOICES = (
     (TITLE_UNSET, ''),
-    ('mr', 'Mr.'),
-    ('ms', 'Ms.'),
+    ('mr', _('Mr.')),
+    ('ms', _('Ms.')),
 )
 
 

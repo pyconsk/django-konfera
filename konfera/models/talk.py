@@ -5,22 +5,22 @@ from django.utils.translation import ugettext_lazy as _
 CFP = 'cfp'
 
 TALK_STATUS = (
-    (CFP, 'Call For Proposals'),
-    ('draft', 'Draft'),
-    ('approved', 'Approved'),
-    ('rejected', 'Rejected'),
-    ('withdrawn', 'Withdrawn')
+    (CFP, _('Call For Proposals')),
+    ('draft', _('Draft')),
+    ('approved', _('Approved')),
+    ('rejected', _('Rejected')),
+    ('withdrawn', _('Withdrawn')),
 )
 
 TALK_TYPE = (
-    ('talk', 'Talk'),
-    ('workshop', 'Workshop'),
+    ('talk', _('Talk')),
+    ('workshop', _('Workshop')),
 )
 
 TALK_DURATION = (
-    (5, '5 min'),
-    (30, '30 min'),
-    (45, '45 min'),
+    (5, _('5 min')),
+    (30, _('30 min')),
+    (45, _('45 min')),
 )
 
 
@@ -29,7 +29,7 @@ class Talk(models.Model):
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32, default='talk')
     status = models.CharField(choices=TALK_STATUS, max_length=32)
-    duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'), default=30)
+    duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'))
     primary_speaker = models.ForeignKey(
         'Speaker',
         related_name='primary_speaker_talks',

@@ -15,13 +15,13 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('event_type', 'status')
 
     fieldsets = (
-        ('Description', {
+        (_('Description'), {
             'fields': ('title', 'slug', 'description'),
         }),
-        ('Dates', {
+        (_('Dates'), {
             'fields': ('date_from', 'date_to'),
         }),
-        ('Details', {
+        (_('Details'), {
             'fields': ('event_type', 'status', 'location'),
         }),
     )
@@ -123,8 +123,13 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
+class OrderAdmin(admin.ModelAdmin):
+    readonly_fields = ('purchase_date', 'payment_date')
+
+admin.site.register(Order, OrderAdmin)
+
+
 admin.site.register(Receipt)
-admin.site.register(Order)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)

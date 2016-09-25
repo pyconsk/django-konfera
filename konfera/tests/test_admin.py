@@ -1,11 +1,11 @@
 import datetime
 
-from django.test import TestCase
 from django.contrib.admin.sites import AdminSite
-from django.contrib.admin.options import ModelAdmin
+from django.test import TestCase
+from django.utils import timezone
 
-from konfera.models import Event, Location
 from konfera.admin import EventAdmin
+from konfera.models import Event, Location
 
 
 class MockRequest(object):
@@ -24,7 +24,7 @@ request.user = MockSuperUser()
 class ModelAdminTests(TestCase):
 
     def setUp(self):
-        now = datetime.datetime.now()
+        now = timezone.now()
         location = Location.objects.create(
             title='Test Venue',
             street='Some street',
@@ -48,7 +48,7 @@ class ModelAdminTests(TestCase):
 
     def test_default_fields(self):
         ev = EventAdmin(Event, self.site)
-        default_fields = ['title', 'slug', 'description', 'date_from', 'date_to', 'event_type', 'status', 'location',
+        default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status', 'location',
                           'sponsors']
 
         self.assertEqual(list(ev.get_fields(request)), default_fields)
