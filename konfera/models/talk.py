@@ -2,19 +2,24 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-CFP = 'cfp'
+CFP, DRAFT, APPROVED, REJECTED, WITHDRAWN = ('cfp',
+                                             'draft',
+                                             'approved',
+                                             'rejected',
+                                             'withdrawn')
+TALK, WORKSHOP = 'talk', 'workshop'
 
 TALK_STATUS = (
     (CFP, _('Call For Proposals')),
-    ('draft', _('Draft')),
-    ('approved', _('Approved')),
-    ('rejected', _('Rejected')),
-    ('withdrawn', _('Withdrawn')),
+    (DRAFT, _('Draft')),
+    (APPROVED, _('Approved')),
+    (REJECTED, _('Rejected')),
+    (WITHDRAWN, _('Withdrawn')),
 )
 
 TALK_TYPE = (
-    ('talk', _('Talk')),
-    ('workshop', _('Workshop')),
+    (TALK, _('Talk')),
+    (WORKSHOP, _('Workshop')),
 )
 
 TALK_DURATION = (
@@ -27,9 +32,9 @@ TALK_DURATION = (
 class Talk(models.Model):
     title = models.CharField(max_length=256)
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
-    type = models.CharField(choices=TALK_TYPE, max_length=32, default='talk')
+    type = models.CharField(choices=TALK_TYPE, max_length=32, default=TALK)
     status = models.CharField(choices=TALK_STATUS, max_length=32)
-    duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'))
+    duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'), default=30)
     primary_speaker = models.ForeignKey(
         'Speaker',
         related_name='primary_speaker_talks',

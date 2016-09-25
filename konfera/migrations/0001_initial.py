@@ -132,7 +132,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=256)),
                 ('abstract', models.TextField(help_text='Abstract will be published in the schedule.')),
-                ('abstract', models.TextField(help_text='Abstract will be published in the schedule.')),
                 ('type', models.CharField(choices=[('talk', 'Talk'), ('workshop', 'Workshop')], default='talk', max_length=32)),
                 ('status', models.CharField(choices=[('cfp', 'Call For Proposals'), ('draft', 'Draft'), ('approved', 'Approved'), ('rejected', 'Rejected'), ('withdrawn', 'Withdrawn')], max_length=32)),
                 ('duration', models.IntegerField(choices=[(5, '5 min'), (30, '30 min'), (45, '45 min')], default=30, help_text='Talk duration in minutes.')),
