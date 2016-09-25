@@ -3,9 +3,10 @@ import datetime
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
-from konfera.admin import EventAdmin
-from konfera.models import Event, Location
+from konfera.admin import EventAdmin, OrderAdmin
+from konfera.models import Event, Location, Order
 
 
 class MockRequest(object):
@@ -44,29 +45,54 @@ class ModelAdminTests(TestCase):
             status='published',
             location=location
         )
+
+        self.order = Order.objects.create(
+            price=128.0,
+            discount=0.5,
+        )
         self.site = AdminSite()
 
     def test_default_fields(self):
         ev = EventAdmin(Event, self.site)
-        default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status', 'location',
-                          'sponsors']
+        ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status',
+                             'location', 'sponsors']
 
-        self.assertEqual(list(ev.get_fields(request)), default_fields)
-        self.assertEqual(list(ev.get_fields(request, self.event)), default_fields)
+        self.assertEqual(list(ev.get_fields(request)), ev_default_fields)
+        self.assertEqual(list(ev.get_fields(request, self.event)), ev_default_fields)
+
+        order = OrderAdmin(Order, self.site)
+        order_default_fields = ['price', 'discount', 'status', 'purchase_date', 'payment_date']
+
+        self.assertEqual(list(order.get_fields(request)), order_default_fields)
+        self.assertEqual(list(order.get_fields(request, self.order)), order_default_fields)
 
     def test_default_fieldsets(self):
         ev = EventAdmin(Event, self.site)
-        default_fieldsets = (
-            ('Description', {
+        ev_default_fieldsets = (
+            (_('Description'), {
                 'fields': ('title', 'slug', 'description'),
             }),
-            ('Dates', {
+            (_('Dates'), {
                 'fields': ('date_from', 'date_to'),
             }),
-            ('Details', {
+            (_('Details'), {
                 'fields': ('event_type', 'status', 'location'),
             }),
         )
 
-        self.assertEqual(ev.get_fieldsets(request), default_fieldsets)
-        self.assertEqual(ev.get_fieldsets(request, self.event), default_fieldsets)
+        self.assertEqual(ev.get_fieldsets(request), ev_default_fieldsets)
+        self.assertEqual(ev.get_fieldsets(request, self.event), ev_default_fieldsets)
+
+        order = OrderAdmin(Event, self.site)
+        order_default_fieldsets = (
+            (_('Details'), {
+                'fields': ('price', 'discount', 'status'),
+            }),
+            (_('Dates'), {
+                'fields': ('purchase_date', 'payment_date'),
+                'classes': ('collapse',),
+            }),
+        )
+
+        self.assertEqual(order.get_fieldsets(request), order_default_fieldsets)
+        self.assertEqual(order.get_fieldsets(request, self.order), order_default_fieldsets)
