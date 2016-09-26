@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import ugettext_lazy as _
-from konfera.models.talk import CFP
-from konfera.forms import SpeakerForm, TalkForm
 
 from konfera.models import Event
+from konfera.models.talk import CFP
+from konfera.forms import SpeakerForm, TalkForm
 
 
 def event_sponsors_list_view(request, event_slug):
