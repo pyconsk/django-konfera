@@ -108,6 +108,11 @@ class SponsorAdmin(admin.ModelAdmin):
 admin.site.register(Sponsor, SponsorAdmin)
 
 
+class RoomsInline(admin.StackedInline):
+    model = Room
+    extra = 1
+
+
 class LocationAdmin(admin.ModelAdmin):
     list_display = ('title', 'city', 'capacity')
     list_filter = ('city',)
@@ -119,6 +124,10 @@ class LocationAdmin(admin.ModelAdmin):
             'fields': ('street', 'street2', 'state', 'city', 'postcode',)
         }),
     )
+
+    inlines = [
+        RoomsInline,
+    ]
 
 admin.site.register(Location, LocationAdmin)
 
@@ -149,5 +158,4 @@ admin.site.register(Order, OrderAdmin)
 admin.site.register(TicketType)
 admin.site.register(DiscountCode)
 admin.site.register(Ticket)
-admin.site.register(Room)
 admin.site.register(Schedule)
