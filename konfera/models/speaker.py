@@ -20,7 +20,7 @@ class Speaker(models.Model):
         default=TITLE_UNSET
     )
     email = models.EmailField(max_length=255)
-    phone = models.CharField(max_length=64, blank=True, null=True)
+    phone = models.CharField(max_length=64, blank=True)
     bio = models.TextField()
     url = models.URLField(blank=True, null=True)
     social_url = models.URLField(blank=True, null=True)
