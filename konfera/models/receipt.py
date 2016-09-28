@@ -5,13 +5,13 @@ class Receipt(models.Model):
     order = models.OneToOneField('Order', on_delete=models.DO_NOTHING, related_name='receipt_of')
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
-    street2 = models.CharField(max_length=128, blank=True, null=True)
+    street2 = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
     state = models.CharField(max_length=128)
-    companyid = models.CharField(max_length=32, blank=True, null=True)
-    taxid = models.CharField(max_length=32, blank=True, null=True)
-    vatid = models.CharField(max_length=32, blank=True, null=True)
+    companyid = models.CharField(max_length=32, blank=True)
+    taxid = models.CharField(max_length=32, blank=True)
+    vatid = models.CharField(max_length=32, blank=True)
     amount = models.DecimalField(decimal_places=2, max_digits=12)
 
     def __str__(self):
