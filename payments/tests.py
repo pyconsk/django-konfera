@@ -66,7 +66,7 @@ class TestCheckPaymentsStatus(TestCase):
     @patch('payments.utils._get_last_payments')
     def test_all_orders_are_paid(self, mock_api_call):
         mock_api_call.return_value = [
-            {'variable_symbol': str(self.order1.pk), 'amount': 200}, 
+            {'variable_symbol': str(self.order1.pk), 'amount': 200},
             {'variable_symbol': str(self.order2.pk), 'amount': 200},
         ]
         utils.check_payments_status()
@@ -86,7 +86,7 @@ class TestGetLastPayements(TestCase):
     @override_settings(FIO_BANK_TOKEN='fio_token')
     def test__get_last_payments(self, FioBankMockPeriod, FioBankMock):
 
-        data = utils._get_last_payments() 
+        data = utils._get_last_payments()
 
         self.assertEqual(data, [])
         FioBankMock.assert_called_with(token='fio_token')  # todo: fix error saying - not called
