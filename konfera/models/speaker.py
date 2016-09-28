@@ -22,8 +22,8 @@ class Speaker(models.Model):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=64, blank=True)
     bio = models.TextField()
-    url = models.URLField(blank=True, null=True)
-    social_url = models.URLField(blank=True, null=True)
+    url = models.URLField(blank=True)
+    social_url = models.URLField(blank=True)
     country = models.CharField(max_length=64)
     sponsor = models.ForeignKey('Sponsor', blank=True, null=True, related_name='sponsored_speakers')
 
