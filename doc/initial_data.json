@@ -26,6 +26,24 @@
     }
 },
 {
+    "model": "konfera.room",
+    "pk": 1,
+    "fields": {
+        "title": "Large auditorium",
+        "room": 1,
+        "capacity": 400
+    }
+},
+{
+    "model": "konfera.room",
+    "pk": 2,
+    "fields": {
+        "title": "Turing lecture hall",
+        "room": 1,
+        "capacity": 150
+    }
+},
+{
     "model": "konfera.event",
     "pk": 1,
     "fields": {
@@ -188,6 +206,149 @@
         "status": "published",
         "location": 2,
         "sponsors": []
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 1,
+    "fields": {
+        "date_from": "2015-10-14T12:00:00Z",
+        "date_to": "2016-01-24T00:00:00Z",
+        "title": "Supporter Early Bird",
+        "description": "Please select this ticket if you want to be listed on our website as a supporter.",
+        "price": "30.00",
+        "attendee_type": "supporter",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 2,
+    "fields": {
+        "date_from": "2015-10-14T12:00:00Z",
+        "date_to": "2016-01-24T00:00:00Z",
+        "title": "Standard Early Bird",
+        "description": "Standard conference ticket.",
+        "price": "20.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 3,
+    "fields": {
+        "date_from": "2015-10-14T12:00:00Z",
+        "date_to": "2016-01-24T00:00:00Z",
+        "title": "Student Early Bird",
+        "description": "Please select this ticket if you are a student. Valid student ID might be requested when you arrive at the conference.",
+        "price": "10.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 4,
+    "fields": {
+        "date_from": "2016-01-24T00:00:00Z",
+        "date_to": "2016-03-01T00:00:00Z",
+        "title": "Supporter",
+        "description": "Please select this ticket if you want to be listed on our website as a supporter.",
+        "price": "70.00",
+        "attendee_type": "supporter",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 5,
+    "fields": {
+        "date_from": "2016-01-24T00:00:00Z",
+        "date_to": "2016-03-01T00:00:00Z",
+        "title": "Standard",
+        "description": "Standard conference ticket.",
+        "price": "30.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 6,
+    "fields": {
+        "date_from": "2016-01-24T00:00:00Z",
+        "date_to": "2016-03-01T00:00:00Z",
+        "title": "Student",
+        "description": "Please select this ticket if you are a student. Valid student ID might be requested when you arrive at the conference.",
+        "price": "15.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 7,
+    "fields": {
+        "date_from": "2016-03-01T00:00:00Z",
+        "date_to": "2016-03-11T09:00:00Z",
+        "title": "Supporter Last Moment",
+        "description": "Please select this ticket if you want to be listed on our website as a supporter.",
+        "price": "90.00",
+        "attendee_type": "supporter",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 8,
+    "fields": {
+        "date_from": "2016-03-01T00:00:00Z",
+        "date_to": "2016-03-11T00:00:00Z",
+        "title": "Standard Last Moment",
+        "description": "Standard conference ticket.",
+        "price": "40.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 9,
+    "fields": {
+        "date_from": "2016-03-01T00:00:00Z",
+        "date_to": "2016-03-11T00:00:00Z",
+        "title": "Student Last Moment",
+        "description": "Please select this ticket if you are a student. Valid student ID might be requested when you arrive at the conference.",
+        "price": "20.00",
+        "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 10,
+    "fields": {
+        "date_from": "2015-10-14T00:00:00Z",
+        "date_to": "2016-03-11T00:00:00Z",
+        "title": "Volunteer",
+        "description": "Free ticket for people who are helping with the conference. There is an optional donation when registering for the conference.",
+        "price": "0.00",
+        "attendee_type": "volunteer",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 11,
+    "fields": {
+        "date_from": "2015-10-14T00:00:00Z",
+        "date_to": "2016-03-11T00:00:00Z",
+        "title": "Speaker",
+        "description": "Tickets issued for speakers.",
+        "price": "0.00",
+        "attendee_type": "attendee",
+        "event": 9
     }
 }
 ]
