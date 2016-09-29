@@ -1,3 +1,4 @@
+import datetime
 from decimal import Decimal
 from unittest.mock import patch
 
@@ -90,11 +91,13 @@ class TestCheckPaymentsStatus(TestCase):
 
 class TestGetLastPayements(TestCase):
 
+    @patch('django.utils.timezone.now', return_value=datetime.datetime(2016, 9, 29))
     @patch('fiobank.FioBank.period', return_value=[])
     @override_settings(FIO_BANK_TOKEN='fio_token')
-    def test__get_last_payments(self, FioBankMockPeriod):
+    def test__get_last_payments(self, FioBankMockPeriod, timezone_mock):
 
         data = utils._get_last_payments()
 
         self.assertEqual(data, [])
-        FioBankMockPeriod.assert_called_with('2016-09-26', '2016-09-29')  # todo: freeze time
+        FioBankMockPeriod.assert_called_with('2016-09-26', '2016-09-29')
+        timezone_mock.assert_called_once_with()

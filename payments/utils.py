@@ -1,6 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.conf import settings
+from django.utils import timezone
+
 from fiobank import FioBank
 
 from konfera.models import Order
@@ -27,7 +29,7 @@ def _get_last_payments():
     """ Get list of payments for last three days from FioBank """
     client = FioBank(token=settings.FIO_BANK_TOKEN)
 
-    today = datetime.today()
+    today = timezone.now()
     date_from = (today - timedelta(days=3)).strftime(DATE_FORMAT)
     date_to = today.strftime(DATE_FORMAT)
 
