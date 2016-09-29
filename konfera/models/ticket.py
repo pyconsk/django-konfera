@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 
 from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
-from konfera.models.order import Order
-from django.utils import timezone
+from konfera.models.order import Order, AWAITING
 
 
 TICKET_STATUS = (
@@ -23,8 +23,8 @@ class Ticket(models.Model):
     last_name = models.CharField(max_length=128)
     email = models.EmailField()
     phone = models.CharField(max_length=64, blank=True)
-    description = models.TextField()
-    order = models.ForeignKey('Order')
+    description = models.TextField(blank=True)
+    order = models.ForeignKey('Order', blank=True)
 
     def __str__(self):
         return '{title} {first_name} {last_name}'.format(
@@ -33,13 +33,15 @@ class Ticket(models.Model):
             last_name=self.last_name
         ).strip()
 
+    def discount_calculator(self):
+        if self.discount_code:
+            return self.type.price * self.discount_code.discount / 100
+        return 0
+
     def save(self, *args, **kwargs):
         if not hasattr(self, 'order'):
-            discount = 0
-            if self.discount_code:
-                discount = self.type.price * self.discount_code.discount/100
-            order = Order(price=self.type.price, discount=discount, status='awaiting_payment',
-                          purchase_date=timezone.now())
+            discount = self.discount_calculator()
+            order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
-        super(Ticket, self).save(*args, **kwargs) # Call the "real" save() method.
+        super(Ticket, self).save(*args, **kwargs)

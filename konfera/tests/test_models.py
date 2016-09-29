@@ -134,22 +134,22 @@ class TicketTest(TestCase):
         )
 
     def test_automatic_order_generator(self):
+        time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode=000000,
                                    state='test_state', capacity=20)
         location.save()
-        event = models.Event(title='test_event', description='test', event_type='meetup', status='published',
-                             location=location, date_from=timezone.now(), date_to=timezone.now())
+        event = models.Event(title='test_event', description='test', event_type='meetup',
+                             status=models.event.PUBLISHED, location=location, date_from=time, date_to=time)
         event.save()
         ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
                                         date_from=timezone.now(), date_to=timezone.now())
         ticket_type.save()
         discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
-                                            available_from=timezone.now(), available_to=timezone.now(), usage=1,
+                                            available_from=time, available_to=time, usage=1,
                                             ticket_type=ticket_type)
         discount_code.save()
         ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test", type=ticket_type,
-                               email='test@test.com', phone='0912345678', description='test',
-                               discount_code=discount_code)
+                               email='test@test.com', phone='0912345678', discount_code=discount_code)
         ticket.save()
         self.assertEquals(ticket.order.status, 'awaiting_payment')
         self.assertEquals(ticket.order.price, ticket_type.price)
