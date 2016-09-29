@@ -2,6 +2,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
+from konfera.models.order import Order
+from django.utils import timezone
 
 
 TICKET_STATUS = (
@@ -30,3 +32,14 @@ class Ticket(models.Model):
             first_name=self.first_name,
             last_name=self.last_name
         ).strip()
+
+    def save(self, *args, **kwargs):
+        if not hasattr(self, 'order'):
+            discount = 0
+            if self.discount_code:
+                discount = self.type.price * self.discount_code.discount/100
+            order = Order(price=self.type.price, discount=discount, status='awaiting_payment',
+                          purchase_date=timezone.now())
+            order.save()
+            self.order = order
+        super(Ticket, self).save(*args, **kwargs) # Call the "real" save() method.
