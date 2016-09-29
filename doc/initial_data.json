@@ -30,7 +30,7 @@
     "pk": 1,
     "fields": {
         "title": "Large auditorium",
-        "room": 1,
+        "location": 1,
         "capacity": 400
     }
 },
@@ -39,7 +39,7 @@
     "pk": 2,
     "fields": {
         "title": "Turing lecture hall",
-        "room": 1,
+        "location": 1,
         "capacity": 150
     }
 },
