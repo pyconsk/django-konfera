@@ -9,12 +9,104 @@ from konfera.models.speaker import TITLE_CHOICES
 from konfera.models.order import AWAITING
 
 
+class Mockup(object):
+
+    def __init__(self):
+        # TODO: store data in DB!
+        self.now = timezone.now()
+
+        self.event = models.Event(
+            title="UnitTest Event",
+            date_from=self.now,
+            date_to=self.now + datetime.timedelta(+1),
+        )
+#        self.event.save()
+
+        self.ticket_type = models.TicketType(
+            title="UnitTest TicketType for UnitTest Event",
+            date_from=self.event.date_from,
+            date_to=self.event.date_to,
+            event=self.event,
+        )
+#        self.ticket_type.save()
+
+        self.discount_code = models.DiscountCode(
+            title="UnitTest DiscountCode for UnitTest TicketType",
+            hash="TestHash",
+            date_from=self.ticket_type.date_from,
+            date_to=self.ticket_type.date_to,
+            discount=0,
+            ticket_type=self.ticket_type,
+        )
+#        self.ticket_type.save()
+
+
+# TODO: Unify tests in fewer TestCases, so we construct test DB only once to make the tests run faster!
 class DiscountCodeTest(TestCase):
+
+    def setUp(self):
+        self.mock = Mockup()
 
     def test_string_representation(self):
         entry = models.DiscountCode(title="Test DiscountCode title")
         self.assertEqual(str(entry), entry.title)
 
+    def test_string_representation(self):
+        """
+        String representation of model instance have to be equal to its title
+        """
+        dc = self.mock.discount_code
+        self.assertEqual(str(dc), dc.title)
+
+    def test_dates_start_before_end(self):
+        """
+        Discount code have to have start before end
+        """
+        dc = self.mock.discount_code
+        dc.date_from = dc.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, dc.clean)
+
+    def test_dates_start_end_definition_from_ticket_type(self):
+        """
+        Discount code start and end are picked up from Ticket type if not defined
+        """
+        dc = self.mock.discount_code
+        dc.date_from = None
+        dc.date_to = None
+        dc.clean()
+        self.assertEqual(dc.date_from, dc.ticket_type.date_from)
+        self.assertEqual(dc.date_to, dc.ticket_type.date_to)
+
+    def test_dates_start_before_ticket_type_start(self):
+        """
+        Discount code can not start before Ticket type
+        """
+        dc = self.mock.discount_code
+        dc.date_from = dc.ticket_type.date_from + datetime.timedelta(-3)
+        self.assertRaises(ValidationError, dc.clean)
+
+    def test_dates_end_after_ticket_type_end(self):
+        """
+        Discount code can not end after Ticket type
+        """
+        dc = self.mock.discount_code
+        dc.date_to = dc.ticket_type.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, dc.clean)
+
+    # def test_discount_values(self):
+    #     """
+    #     Discount is in percentage
+    #     """
+    #     dc = self.mock.discount_code
+    #     dc.discount = 0
+    #     print(dc.title, dc.ticket_type)
+    #     dc.full_clean()
+    #     dc.discount = 100
+    #     dc.full_clean()
+    #     dc.discount = -1
+    #     self.assertRaises(ValidationError, dc.full_clean)
+    #     dc.discount = 101
+    #     self.assertRaises(ValidationError, dc.full_clean)
 
 class EventTest(TestCase):
 
@@ -22,7 +114,7 @@ class EventTest(TestCase):
         entry = models.Event(title="Test Event title")
         self.assertEqual(str(entry), entry.title)
 
-    def test_dates_from_to(self):
+    def test_dates(self):
         event = models.Event(title="Test Event dates")
         event.date_to = timezone.now()
         event.date_from = event.date_to + datetime.timedelta(+3)
@@ -136,12 +228,36 @@ class TicketTest(TestCase):
 
 class TicketTypeTest(TestCase):
 
-    def test_string_representation(self):
-        entry = models.TicketType(title="Test TicketType title")
-        self.assertEqual(str(entry), entry.title)
+    def setUp(self):
+        self.mock = Mockup()
 
-    def test_dates_from_to(self):
-        tt = models.TicketType(title="Test TicketType dates")
-        tt.date_to = timezone.now()
+    def test_string_representation(self):
+        """
+        String representation of model instance have to be equal to its title
+        """
+        tt = self.mock.ticket_type
+        self.assertEqual(str(tt), tt.title)
+
+    def test_dates_start_before_end(self):
+        """
+        Ticket type have to have start before end
+        """
+        tt = self.mock.ticket_type
         tt.date_from = tt.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, tt.clean)
+
+    def test_dates_start_after_event_end(self):
+        """
+        Ticket type can not start after event end
+        """
+        tt = self.mock.ticket_type
+        tt.date_from = tt.event.date_to + datetime.timedelta(+3)
+        self.assertRaises(ValidationError, tt.clean)
+
+    def test_dates_end_after_event_end(self):
+        """
+        Ticket type can not end after event end
+        """
+        tt = self.mock.ticket_type
+        tt.date_to = tt.event.date_to + datetime.timedelta(+3)
         self.assertRaises(ValidationError, tt.clean)
