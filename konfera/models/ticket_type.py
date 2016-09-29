@@ -36,7 +36,7 @@ class TicketType(FromToModel):
     def __str__(self):
         return self.title
 
-   def _get_current_status(self):
+    def _get_current_status(self):
         now = timezone.now()
         status = ACTIVE
 
