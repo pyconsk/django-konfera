@@ -39,5 +39,8 @@ class Event(FromToModel):
     def __str__(self):
         return self.title
 
+
+Event._meta.get_field('date_from').blank = False
 Event._meta.get_field('date_from').verbose_name = _('Event beginning')
+Event._meta.get_field('date_to').blank = False
 Event._meta.get_field('date_to').verbose_name = _('Event end')

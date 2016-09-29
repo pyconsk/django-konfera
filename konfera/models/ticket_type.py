@@ -1,4 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
@@ -24,6 +26,24 @@ class TicketType(FromToModel):
     def __str__(self):
         return self.title
 
+    def clean(self):
+        now = timezone.now()
 
-TicketType._meta.get_field('date_from').verbose_name = _('Available from')
-TicketType._meta.get_field('date_to').verbose_name = _('Available to')
+        if not self.date_from or not self.date_to and now > self.event.date_to:
+            raise ValidationError(_('You are creating ticket type for event that has already ended. Please add the '
+                                    'dates manually.'))
+
+        if not self.date_from:
+            self.date_from = now
+
+        if not self.date_to:
+            self.date_to = self.event.date_to
+
+        msg = _('You can\'t sell tickets after your event has ended.')
+        if self.date_from > self.event.date_to:
+            raise ValidationError({'date_from': msg})
+
+        if self.date_to > self.event.date_to:
+            raise ValidationError({'date_to': msg})
+
+        super(TicketType, self).clean()
