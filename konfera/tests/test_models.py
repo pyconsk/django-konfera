@@ -7,6 +7,7 @@ from django.utils import timezone
 from konfera import models
 from konfera.models.speaker import TITLE_CHOICES
 from konfera.models.order import AWAITING
+from konfera.models.ticket_type import NOT_AVAILABLE, ACTIVE, EXPIRED
 
 
 class Mockup(object):
@@ -266,16 +267,16 @@ class TicketTypeTest(TestCase):
         tt = models.TicketType()
         tt.date_from = timezone.now() + datetime.timedelta(days=1)
         tt.date_to = timezone.now() + datetime.timedelta(days=3)
-        self.assertEquals(tt.status(), 'Not available yet')
+        self.assertEquals(tt.status(), NOT_AVAILABLE)
 
     def test_active_ticket(self):
         tt = models.TicketType()
         tt.date_from = timezone.now() - datetime.timedelta(days=1)
         tt.date_to = timezone.now() + datetime.timedelta(days=3)
-        self.assertEquals(tt.status(), 'Active')
+        self.assertEquals(tt.status(), ACTIVE)
 
     def test_expired_ticket(self):
         tt = models.TicketType()
         tt.date_from = timezone.now() - datetime.timedelta(days=3)
         tt.date_to = timezone.now() - datetime.timedelta(days=1)
-        self.assertEquals(tt.status(), 'Expired')
+        self.assertEquals(tt.status(), EXPIRED)

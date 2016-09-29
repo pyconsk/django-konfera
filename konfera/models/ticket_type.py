@@ -6,6 +6,16 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.abstract import FromToModel
 
 
+NOT_AVAILABLE = 'na'
+ACTIVE = 'active'
+EXPIRED = 'expired'
+
+STATUSES = {
+    NOT_AVAILABLE: _('Not available yet'),
+    ACTIVE: _('Active'),
+    EXPIRED: _('Expired'),
+}
+
 TICKET_TYPE_CHOICES = (
     ('volunteer', _('Volunteer')),
     ('press', _('Press')),
@@ -26,12 +36,20 @@ class TicketType(FromToModel):
     def __str__(self):
         return self.title
 
+   def _get_current_status(self):
+        now = timezone.now()
+        status = ACTIVE
+
+        if now < self.date_from:
+            status = NOT_AVAILABLE
+        elif self.date_to < now:
+            status = EXPIRED
+
+        return status
+
+    @property
     def status(self):
-        if timezone.now() < self.date_from:
-            return _('Not available yet')
-        elif self.date_to < timezone.now():
-            return _('Expired')
-        return _('Active')
+        return STATUSES[self._get_current_status()]
 
     def clean(self):
         now = timezone.now()
