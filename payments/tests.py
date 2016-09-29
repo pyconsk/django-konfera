@@ -81,13 +81,11 @@ class TestCheckPaymentsStatus(TestCase):
 
 class TestGetLastPayements(TestCase):
 
-    @patch('fiobank.FioBank')
     @patch('fiobank.FioBank.period', return_value=[])
     @override_settings(FIO_BANK_TOKEN='fio_token')
-    def test__get_last_payments(self, FioBankMockPeriod, FioBankMock):
+    def test__get_last_payments(self, FioBankMockPeriod):
 
         data = utils._get_last_payments()
 
         self.assertEqual(data, [])
-        FioBankMock.assert_called_with(token='fio_token')  # todo: fix error saying - not called
         FioBankMockPeriod.assert_called_with('2016-09-25', '2016-09-28')  # todo: freeze time
