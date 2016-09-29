@@ -32,6 +32,14 @@ class TestIsOrderPaid(TestCase):
         payments = [{'variable_symbol': str(order.pk), 'amount': 130}]
         self.assertTrue(utils._is_order_paid(order, payments))
 
+    @override_settings(PAYMENT_ERROR_RATE=0.01)
+    def test_error_rate(self):
+        payments = [{'variable_symbol': str(self.order.pk), 'amount': 198}]
+        self.assertTrue(utils._is_order_paid(self.order, payments))
+
+        payments = [{'variable_symbol': str(self.order.pk), 'amount': 197.99}]
+        self.assertFalse(utils._is_order_paid(self.order, payments))
+
 
 class TestCheckPaymentsStatus(TestCase):
     def setUp(self):
@@ -88,4 +96,4 @@ class TestGetLastPayements(TestCase):
         data = utils._get_last_payments()
 
         self.assertEqual(data, [])
-        FioBankMockPeriod.assert_called_with('2016-09-25', '2016-09-28')  # todo: freeze time
+        FioBankMockPeriod.assert_called_with('2016-09-26', '2016-09-29')  # todo: freeze time

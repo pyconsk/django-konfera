@@ -28,6 +28,7 @@ try:
         ],
         SITE_ID=1,
         MIDDLEWARE_CLASSES=(),
+        PAYMENT_ERROR_RATE=0.00,
     )
 
     try:

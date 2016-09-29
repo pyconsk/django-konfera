@@ -13,7 +13,11 @@ DATE_FORMAT = '%Y-%m-%d'
 def _is_order_paid(order, payments):
     """ Check whether order was already paid """
     for payment in payments:
-        if payment['variable_symbol'] == str(order.pk) and payment['amount'] >= (order.price - order.discount):
+        error = (order.price - order.discount) - payment['amount']
+
+        if payment['variable_symbol'] == str(order.pk) and \
+           error <= order.price * settings.PAYMENT_ERROR_RATE:
+
             return True
 
     return False
