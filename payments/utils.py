@@ -1,4 +1,5 @@
 from datetime import timedelta
+from decimal import Decimal
 
 from django.conf import settings
 from django.utils import timezone
@@ -18,7 +19,7 @@ def _is_order_paid(order, payments):
         error = (order.price - order.discount) - payment['amount']
 
         if payment['variable_symbol'] == str(order.pk) and \
-           error <= order.price * settings.PAYMENT_ERROR_RATE:
+           error <= (order.price - order.discount) * Decimal(settings.PAYMENT_ERROR_RATE / 100):
 
             return True
 

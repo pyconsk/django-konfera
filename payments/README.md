@@ -8,7 +8,7 @@
 - Install fiobank module - `pip install fiobank==1.2.0`.
 - Add `payments` to installed apps.
 - Set `FIO_BANK_TOKEN = 'token'` in settings.
-- Set `PAYMENT_ERROR_RATE = Decimal('0.0')` in settings.
+- Set `PAYMENT_ERROR_RATE = 0` (percentage) in settings.
 
 
 ## Usage

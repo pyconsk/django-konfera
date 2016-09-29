@@ -127,4 +127,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 FIO_BANK_TOKEN = 'token'
-PAYMENT_ERROR_RATE = Decimal('0.0')
+PAYMENT_ERROR_RATE = 0  # percentage
