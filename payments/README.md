@@ -5,7 +5,7 @@
 
 ## Installation
 
-- Install fiobank module - `pip install fiobank==1.2.0`.
+- Install fiobank module - `pip install -r payments/requirements.txt`.
 - Add `payments` to installed apps.
 - Set `FIO_BANK_TOKEN = 'token'` in settings.
 - Set `PAYMENT_ERROR_RATE = 0` (percentage) in settings.
