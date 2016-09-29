@@ -165,7 +165,8 @@ class TicketTypeAdmin(admin.ModelAdmin):
             'fields': ('title', 'description', 'price', 'attendee_type', 'event',)
         }),
         (_('Availability'), {
-            'fields': ('date_from', 'date_to', 'status')
+            'fields': ('date_from', 'date_to', 'status'),
+            'classes': ('collapse',),
         }),
     )
 
