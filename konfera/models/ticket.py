@@ -20,7 +20,7 @@ class Ticket(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     email = models.EmailField()
-    phone = models.CharField(max_length=64, blank=True, null=True)
+    phone = models.CharField(max_length=64, blank=True)
     description = models.TextField()
     order = models.ForeignKey('Order')
 
