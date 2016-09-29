@@ -261,3 +261,21 @@ class TicketTypeTest(TestCase):
         tt = self.mock.ticket_type
         tt.date_to = tt.event.date_to + datetime.timedelta(+3)
         self.assertRaises(ValidationError, tt.clean)
+
+    def test_unavailable_ticket(self):
+        tt = models.TicketType()
+        tt.date_from = timezone.now() + datetime.timedelta(days=1)
+        tt.date_to = timezone.now() + datetime.timedelta(days=3)
+        self.assertEquals(tt.status(), 'Not available yet')
+
+    def test_active_ticket(self):
+        tt = models.TicketType()
+        tt.date_from = timezone.now() - datetime.timedelta(days=1)
+        tt.date_to = timezone.now() + datetime.timedelta(days=3)
+        self.assertEquals(tt.status(), 'Active')
+
+    def test_expired_ticket(self):
+        tt = models.TicketType()
+        tt.date_from = timezone.now() - datetime.timedelta(days=3)
+        tt.date_to = timezone.now() - datetime.timedelta(days=1)
+        self.assertEquals(tt.status(), 'Expired')

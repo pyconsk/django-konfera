@@ -26,6 +26,13 @@ class TicketType(FromToModel):
     def __str__(self):
         return self.title
 
+    def status(self):
+        if timezone.now() < self.date_from:
+            return _('Not available yet')
+        elif self.date_to < timezone.now():
+            return _('Expired')
+        return _('Active')
+
     def clean(self):
         now = timezone.now()
 
