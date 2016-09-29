@@ -8,7 +8,7 @@ class Location(models.Model):
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
     state = models.CharField(max_length=128)
-    capacity = models.IntegerField()
+    capacity = models.IntegerField(blank=True)
 
     def __str__(self):
         return self.title
