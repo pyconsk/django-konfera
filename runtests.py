@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 import sys
+
 
 try:
     from django.conf import settings
@@ -28,7 +31,7 @@ try:
         ],
         SITE_ID=1,
         MIDDLEWARE_CLASSES=(),
-        PAYMENT_ERROR_RATE=0.00,
+        PAYMENT_ERROR_RATE=Deciaml('0.00'),
     )
 
     try:

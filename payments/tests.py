@@ -1,3 +1,4 @@
+from decimal import Decimal
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -32,7 +33,7 @@ class TestIsOrderPaid(TestCase):
         payments = [{'variable_symbol': str(order.pk), 'amount': 130}]
         self.assertTrue(utils._is_order_paid(order, payments))
 
-    @override_settings(PAYMENT_ERROR_RATE=0.01)
+    @override_settings(PAYMENT_ERROR_RATE=Decimal('0.01'))
     def test_error_rate(self):
         payments = [{'variable_symbol': str(self.order.pk), 'amount': 198}]
         self.assertTrue(utils._is_order_paid(self.order, payments))
