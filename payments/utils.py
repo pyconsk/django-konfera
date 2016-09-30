@@ -25,11 +25,19 @@ def _get_last_payments():
     return list(client.period(date_from, date_to))
 
 
+def _get_not_processed_payments(payments):
+    processed_payments = set(ProcessedTransation.objects.values_list('transaction_id', flat=True))  # todo: select only the new one (last 3 days)
+    return list(filter(
+        lambda payment: payment['transaction_id'] not in processed_payments,
+        payments
+    ))
+
+
 def _get_payments_for_order(order, payments):
-    return filter(
+    return list(filter(
         lambda payment: payment['variable_symbol'] == str(order.pk),  # todo: change order.pk to variable_symbol
         payments
-    )
+    ))
 
 
 def _process_payment(order, payment):
@@ -55,21 +63,13 @@ def _process_payment(order, payment):
 
 
 def check_payments_status():
-    """ For every awaiting and partly paid order check whether there is a new payment """
-
-    # Filter not processed payments
-    payments = _get_last_payments()
-    processed_payments = set(ProcessedTransation.objects.values_list('transaction_id', flat=True))  # todo: select only the new one (last 3 days)
-    new_payments = filter(
-        lambda payment: payment['transaction_id'] not in processed_payments,
-        payments
-    )
+    """ Process every awaiting and partly paid order """
 
     orders = Order.objects.filter(Q(status=AWAITING) | Q(status=PARTLY_PAID))
+    new_payments = _get_not_processed_payments(_get_last_payments())
 
-    # Process the payments
     for order in orders:
-        order_payments = _get_payments_for_order(order, new_payments)
 
+        order_payments = _get_payments_for_order(order, new_payments)
         for payment in order_payments:
             _process_payment(order, payment)
