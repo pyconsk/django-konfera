@@ -139,10 +139,10 @@ class ReceiptInline(admin.StackedInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('purchase_date', 'price', 'discount', 'status', 'receipt_of')
     list_filter = ('status',)
-    readonly_fields = ('purchase_date', 'payment_date')
+    readonly_fields = ('purchase_date', 'payment_date', 'amount_paid')
     fieldsets = (
         (_('Details'), {
-            'fields': ('price', 'discount', 'status'),
+            'fields': ('price', 'discount', 'status', 'amount_paid'),
         }),
         (_('Dates'), {
             'fields': ('purchase_date', 'payment_date'),
@@ -152,6 +152,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [
         ReceiptInline,
     ]
+
 
 admin.site.register(Order, OrderAdmin)
 
