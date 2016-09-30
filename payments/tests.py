@@ -8,38 +8,9 @@ from konfera import models
 from payments import utils
 
 
-class TestIsOrderPaid(TestCase):
-    def setUp(self):
-        self.order = models.Order.objects.create(price=200, discount=0)
-
-    def test_order_paid(self):
-        """ Attendee paid for ticket - good variable_symbol and amount """
-        payments = [{'variable_symbol': str(self.order.pk), 'amount': 200}]
-        self.assertTrue(utils._is_order_paid(self.order, payments))
-
-    def test_paid_less(self):
-        """ Attendee didn't paid enough """
-        payments = [{'variable_symbol': str(self.order.pk), 'amount': 42}]
-        self.assertFalse(utils._is_order_paid(self.order, payments))
-
-    def test_variable_symbol_notfound(self):
-        """ Atendee didn't paid yet - no matching variable_symbol """
-        payments = [{'variable_symbol': str(self.order.pk), 'amount': 200}]
-        order = models.Order.objects.create(price=200, discount=7)
-        self.assertFalse(utils._is_order_paid(order, payments))
-
-    def test_discounted_order_paid(self):
-        order = models.Order.objects.create(price=200, discount=70)
-        payments = [{'variable_symbol': str(order.pk), 'amount': 130}]
-        self.assertTrue(utils._is_order_paid(order, payments))
-
-    @override_settings(PAYMENT_ERROR_RATE=1)
-    def test_error_rate(self):
-        payments = [{'variable_symbol': str(self.order.pk), 'amount': 198}]
-        self.assertTrue(utils._is_order_paid(self.order, payments))
-
-        payments = [{'variable_symbol': str(self.order.pk), 'amount': 197.99}]
-        self.assertFalse(utils._is_order_paid(self.order, payments))
+# todo:
+# - test _get_payment_for_order
+# - test _process_payment
 
 
 class TestCheckPaymentsStatus(TestCase):
@@ -86,6 +57,8 @@ class TestCheckPaymentsStatus(TestCase):
         self.assertEqual(mock_api_call.call_count, 1)
         self.assertEqual(order1.status, models.order.PAID)
         self.assertEqual(order2.status, models.order.PAID)
+
+    # todo: add test - status is changed for both awating/party paid if a new payments is made
 
 
 class TestGetLastPayements(TestCase):
