@@ -26,8 +26,8 @@ def _get_last_payments():
 
 
 def _get_not_processed_payments(payments):
-    processed_payments = set(ProcessedTransation.objects.values_list('transaction_id', flat=True))  # todo: select only the new one (last 3 days)
-    return list(filter(
+    processed_payments = set(ProcessedTransation.objects.values_list('transaction_id', flat=True))
+        return list(filter(
         lambda payment: payment['transaction_id'] not in processed_payments,
         payments
     ))
