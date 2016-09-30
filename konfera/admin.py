@@ -172,6 +172,22 @@ class TicketTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(TicketType, TicketTypeAdmin)
 
-admin.site.register(DiscountCode)
+
+class DiscountCodeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'discount', 'ticket_type', 'usage')
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'hash')
+        }),
+        (_('Discount'), {
+            'fields': ('discount', 'usage')
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to'),
+            'classes': ('collapse',),
+        }),
+    )
+admin.site.register(DiscountCode, DiscountCodeAdmin)
+
 admin.site.register(Ticket)
 admin.site.register(Schedule)
