@@ -28,7 +28,7 @@ TICKET_TYPE_CHOICES = (
 
 class TicketType(FromToModel):
     title = models.CharField(max_length=128)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=12)
     attendee_type = models.CharField(choices=TICKET_TYPE_CHOICES, max_length=255, default='attendee')
     event = models.ForeignKey('Event')
@@ -40,9 +40,9 @@ class TicketType(FromToModel):
         now = timezone.now()
         status = ACTIVE
 
-        if self.date_from and now < self.date_from:
+        if not self.date_from or not self.date_to or now < self.date_from:
             status = NOT_AVAILABLE
-        elif self.date_to and self.date_to < now:
+        elif self.date_to < now:
             status = EXPIRED
 
         return status
@@ -54,7 +54,7 @@ class TicketType(FromToModel):
     def clean(self):
         now = timezone.now()
 
-        if not self.date_from or not self.date_to and now > self.event.date_to:
+        if (not self.date_from or not self.date_to) and now > self.event.date_to:
             raise ValidationError(_('You are creating ticket type for event that has already ended. Please add the '
                                     'dates manually.'))
 

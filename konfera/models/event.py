@@ -4,9 +4,12 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.abstract import FromToModel
 
 
+CONFERENCE = 'conference'
+MEETUP = 'meetup'
+
 EVENT_TYPE_CHOICES = (
-    ('conference', _('Conference')),
-    ('meetup', _('Meetup')),
+    (CONFERENCE, _('Conference')),
+    (MEETUP, _('Meetup')),
 )
 
 DRAFT = 'draft'

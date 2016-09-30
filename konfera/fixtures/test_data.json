@@ -44,6 +44,19 @@
     }
 },
 {
+    "model": "konfera.discountcode",
+    "pk": 1,
+    "fields": {
+        "date_from": "2016-01-24T00:00:00Z",
+        "date_to": "2016-03-01T00:00:00Z",
+        "title": "STU",
+        "hash": "STUDISCOUNT",
+        "discount": 25,
+        "usage": 5,
+        "ticket_type": 6
+    }
+},
+{
     "model": "konfera.event",
     "pk": 1,
     "fields": {
@@ -209,6 +222,21 @@
     }
 },
 {
+    "model": "konfera.event",
+    "pk": 12,
+    "fields": {
+        "date_from": "2016-06-07T18:30:00Z",
+        "date_to": "2016-06-07T21:30:00Z",
+        "title": "Eleventh Bratislava Python Meetup",
+        "slug": "bratislava-python-meetup-11",
+        "description": "Na j\u00fanovom meetupe n\u00e1m Juraj Bezru\u010dka predstav\u00ed \"python pre neprogramatorov\".\r\n\r\nJuraj n\u00e1m predstav\u00ed funkcie ako map, filter \u010di reduce aj s pr\u00edkladmi, \u010falej tie\u017e list/dict comprehension, pr\u00edpadne \u010fal\u0161ie u\u017eito\u010dn\u00e9 funkcie (vysvetl\u00ed tern\u00e1rny oper\u00e1tor a pod.)\r\n\r\nWe are looking forward to seeing you at the meetup.\r\n\r\nLanguage: Slovak\r\n\r\nContact: meetup@pycon.sk\r\n\r\nEvent organiser: SPy o.z.",
+        "event_type": "meetup",
+        "status": "published",
+        "location": 2,
+        "sponsors": []
+    }
+},
+{
     "model": "konfera.tickettype",
     "pk": 1,
     "fields": {
@@ -348,6 +376,19 @@
         "description": "Tickets issued for speakers.",
         "price": "0.00",
         "attendee_type": "attendee",
+        "event": 9
+    }
+},
+{
+    "model": "konfera.tickettype",
+    "pk": 12,
+    "fields": {
+        "date_from": "2015-10-14T00:00:00Z",
+        "date_to": "2016-03-11T00:00:00Z",
+        "title": "Freebie",
+        "description": "Tickets issued for attendees for free.",
+        "price": "0.00",
+        "attendee_type": "aid",
         "event": 9
     }
 }
