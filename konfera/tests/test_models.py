@@ -204,7 +204,7 @@ class TicketTest(TestCase):
                                         date_from=timezone.now(), date_to=timezone.now())
         ticket_type.save()
         discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
-                                            available_from=time, available_to=time, usage=1,
+                                            date_from=time, date_to=time, usage=1,
                                             ticket_type=ticket_type)
         discount_code.save()
         ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test", type=ticket_type,
