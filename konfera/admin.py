@@ -22,7 +22,11 @@ class EventAdmin(admin.ModelAdmin):
             'fields': ('date_from', 'date_to'),
         }),
         (_('Details'), {
-            'fields': ('event_type', 'status', 'location'),
+            'fields': ('event_type', 'status', 'location', 'footer_text', 'analytics'),
+        }),
+        (_('Social media'), {
+            'fields': ('social_media_meta', 'social_media_list'),
+            'classes': ('collapse',),
         }),
     )
 

@@ -1,6 +1,6 @@
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from konfera.models.abstract import FromToModel
 
 
@@ -34,8 +34,12 @@ class Event(FromToModel):
     description = models.TextField()
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
-    location = models.ForeignKey('Location')
+    location = models.ForeignKey('Location', related_name='events')
     sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
+    social_media_meta = JSONField(blank=True, null=True)
+    social_media_list = JSONField(blank=True, null=True)
+    footer_text = models.TextField(blank=True)
+    analytics = models.TextField(blank=True)
 
     objects = EventManager()
 
