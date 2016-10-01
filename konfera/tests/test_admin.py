@@ -61,7 +61,7 @@ class ModelAdminTests(TestCase):
         self.assertEqual(list(ev.get_fields(request, self.event)), ev_default_fields)
 
         order = OrderAdmin(Order, self.site)
-        order_default_fields = ['price', 'discount', 'status', 'purchase_date', 'payment_date']
+        order_default_fields = ['price', 'discount', 'status', 'purchase_date', 'payment_date', 'amount_paid']
 
         self.assertEqual(list(order.get_fields(request)), order_default_fields)
         self.assertEqual(list(order.get_fields(request, self.order)), order_default_fields)
@@ -86,7 +86,7 @@ class ModelAdminTests(TestCase):
         order = OrderAdmin(Event, self.site)
         order_default_fieldsets = (
             (_('Details'), {
-                'fields': ('price', 'discount', 'status'),
+                'fields': ('price', 'discount', 'status', 'amount_paid'),
             }),
             (_('Dates'), {
                 'fields': ('purchase_date', 'payment_date'),

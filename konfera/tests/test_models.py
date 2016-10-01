@@ -94,6 +94,20 @@ class OrderTest(TestCase):
         entry.save()
         self.assertIsNotNone(entry.payment_date)
 
+    def test_to_pay(self):
+        entry = models.Order(price=155.5, discount=5.5)
+        self.assertEqual(entry.to_pay, 150)
+
+    def test_left_to_pay(self):
+        """ Attende paid less """
+        entry = models.Order(price=155.5, discount=5.5, amount_paid=100)
+        self.assertEqual(entry.left_to_pay, 50)
+
+    def test_left_to_pay2(self):
+        """ Attendee paid more """
+        entry = models.Order(price=155.5, discount=5.5, amount_paid=200)
+        self.assertEqual(entry.left_to_pay, 0)
+
 
 class ReceiptTest(TestCase):
 
