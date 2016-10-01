@@ -25,4 +25,6 @@ urlpatterns = [
         name='event_details'),
     url(r'^event/(?P<event_slug>[\w, -]+)/add_cfp/$', views.cfp_form_view, name='event_cfp_form'),
     url(r'^event/$', views.event_list, name='events'),
+    url(r'^event/(?P<event_slug>[\w, -]+)/register/volunteer/$', views.register_volunteer,
+        name='event_register_volunteer'),
 ]
