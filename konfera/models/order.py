@@ -46,3 +46,7 @@ class Order(models.Model):
     def to_pay(self):
         """ Ticket's price after discount """
         return self.price - self.discount
+
+    @property
+    def variable_symbol(self):
+        return str(self.pk)  # todo: change to something better

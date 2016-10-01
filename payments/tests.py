@@ -67,23 +67,23 @@ class TestGetPaymentsForOrder(TestCase):
 
     def test_payment_found_for_order(self):
         payments = [
-            {'variable_symbol': str(self.order.pk)},
+            {'variable_symbol': self.order.variable_symbol},
             {'variable_symbol': str(self.order.pk + 13)},
         ]
         self.assertEqual(
             list(utils._get_payments_for_order(self.order, payments)),
-            [{'variable_symbol': str(self.order.pk)}]
+            [{'variable_symbol': self.order.variable_symbol}]
         )
 
     def test_multiple_payments_found_for_order(self):
         payments = [
-            {'variable_symbol': str(self.order.pk)},
+            {'variable_symbol': self.order.variable_symbol},
             {'variable_symbol': str(self.order.pk + 13)},
-            {'variable_symbol': str(self.order.pk)},
+            {'variable_symbol': self.order.variable_symbol},
         ]
         self.assertEqual(
             list(utils._get_payments_for_order(self.order, payments)),
-            [{'variable_symbol': str(self.order.pk)}, {'variable_symbol': str(self.order.pk)}]
+            [{'variable_symbol': self.order.variable_symbol}, {'variable_symbol': self.order.variable_symbol}]
         )
 
 
@@ -139,7 +139,7 @@ class TestCheckPaymentsStatus(TestCase):
     def test_one_order_is_paid(self, mock_api_call):
         """ FioBank doesn't have a payment for order1 - order's status was changed """
         mock_api_call.return_value = [
-            {'variable_symbol': str(self.order1.pk), 'amount': 200, 'transaction_id': '7'},
+            {'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'},
         ]
         utils.check_payments_status()
 
@@ -153,8 +153,8 @@ class TestCheckPaymentsStatus(TestCase):
     @patch('payments.utils._get_last_payments')
     def test_all_orders_are_paid(self, mock_api_call):
         mock_api_call.return_value = [
-            {'variable_symbol': str(self.order1.pk), 'amount': 200, 'transaction_id': '7'},
-            {'variable_symbol': str(self.order2.pk), 'amount': 200, 'transaction_id': '8'},
+            {'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'},
+            {'variable_symbol': self.order2.variable_symbol, 'amount': 200, 'transaction_id': '8'},
         ]
 
         utils.check_payments_status()
@@ -169,9 +169,9 @@ class TestCheckPaymentsStatus(TestCase):
     @patch('payments.utils._get_last_payments')
     def test_order_is_paid_in_multiple_payments(self, mock_api_call):
         mock_api_call.return_value = [
-            {'variable_symbol': str(self.order1.pk), 'amount': 150, 'transaction_id': '7'},
-            {'variable_symbol': str(self.order1.pk), 'amount': 50, 'transaction_id': '79'},
-            {'variable_symbol': str(self.order2.pk), 'amount': 30, 'transaction_id': '80'},
+            {'variable_symbol': self.order1.variable_symbol, 'amount': 150, 'transaction_id': '7'},
+            {'variable_symbol': self.order1.variable_symbol, 'amount': 50, 'transaction_id': '79'},
+            {'variable_symbol': self.order2.variable_symbol, 'amount': 30, 'transaction_id': '80'},
         ]
 
         utils.check_payments_status()

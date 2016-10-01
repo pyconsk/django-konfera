@@ -39,7 +39,7 @@ def _get_not_processed_payments(payments):
 
 def _get_payments_for_order(order, payments):
     return list(filter(
-        lambda payment: payment['variable_symbol'] == str(order.pk),  # todo: change order.pk to variable_symbol
+        lambda payment: payment['variable_symbol'] == order.variable_symbol,
         payments
     ))
 
