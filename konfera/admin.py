@@ -24,10 +24,6 @@ class EventAdmin(admin.ModelAdmin):
         (_('Details'), {
             'fields': ('event_type', 'status', 'location', 'footer_text', 'analytics'),
         }),
-        (_('Social media'), {
-            'fields': ('social_media_meta', 'social_media_list'),
-            'classes': ('collapse',),
-        }),
     )
 
     inlines = [
