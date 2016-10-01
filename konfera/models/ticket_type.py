@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -29,7 +30,7 @@ TICKET_TYPE_CHOICES = (
 class TicketType(FromToModel):
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    price = models.DecimalField(decimal_places=2, max_digits=12)
+    price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     attendee_type = models.CharField(choices=TICKET_TYPE_CHOICES, max_length=255, default='attendee')
     event = models.ForeignKey('Event')
 
