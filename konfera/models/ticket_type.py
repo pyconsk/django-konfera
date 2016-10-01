@@ -56,8 +56,8 @@ class TicketType(FromToModel):
 
         if hasattr(self, 'event'):
             if (not self.date_from or not self.date_to) and now > self.event.date_to:
-                raise ValidationError(_('You are creating ticket type for event that has already ended. Please add the '
-                                        'dates manually.'))
+                raise ValidationError(_('You are creating ticket type for event that has already ended. '
+                                        'Please add the dates manually.'))
 
             if not self.date_from:
                 self.date_from = now
