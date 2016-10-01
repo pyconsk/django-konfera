@@ -1,6 +1,6 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.core.exceptions import ValidationError
 
 
 class FromToModel(models.Model):
@@ -8,8 +8,8 @@ class FromToModel(models.Model):
     class Meta:
         abstract = True
 
-    date_from = models.DateTimeField(verbose_name=_('Beginning'))
-    date_to = models.DateTimeField(verbose_name=_('End'))
+    date_from = models.DateTimeField(verbose_name=_('Available from'), blank=True)
+    date_to = models.DateTimeField(verbose_name=_('Available to'), blank=True)
 
     def clean(self):
         if self.date_from and self.date_to and self.date_from >= self.date_to:

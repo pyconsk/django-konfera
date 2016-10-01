@@ -3,17 +3,58 @@ import datetime
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
 from konfera import models
-from konfera.models.speaker import TITLE_CHOICES
+from konfera.models.discount_code import DiscountCode
+from konfera.models.event import Event, MEETUP, PUBLISHED
 from konfera.models.order import AWAITING
+from konfera.models.speaker import TITLE_CHOICES
+from konfera.models.ticket_type import TicketType, STATUSES, NOT_AVAILABLE, ACTIVE, EXPIRED
 
 
 class DiscountCodeTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
-        entry = models.DiscountCode(title="Test DiscountCode title")
-        self.assertEqual(str(entry), entry.title)
+        """
+        String representation of model instance have to be equal to its title
+        """
+        dc = DiscountCode.objects.get(title='STU')
+        self.assertEqual(str(dc), dc.title)
+
+    def test_clean_dates(self):
+        """
+        Cleaning models dates follow different type of rules, also depending on event
+        """
+        tt = TicketType.objects.get(title='Student')
+        dc = DiscountCode(title='Test Discount', hash='TSTSTSTSTST', ticket_type=tt)
+
+        # Clean will prepopulate dates from ticket type
+        dc.clean()
+        self.assertEquals(dc.date_from, dc.ticket_type.date_from)
+        self.assertEquals(dc.date_to, dc.ticket_type.date_to)
+
+        # Discount can not be outside ticket type date range
+        dc.date_from = dc.ticket_type.date_from - datetime.timedelta(minutes=5)
+        self.assertRaises(ValidationError, dc.clean)
+        dc.date_from = dc.ticket_type.date_from
+        dc.date_to = dc.ticket_type.date_to + datetime.timedelta(minutes=5)
+        self.assertRaises(ValidationError, dc.clean)
+
+    def test_discount_values(self):
+        """
+        Discount is in percentage
+        """
+        dc = DiscountCode.objects.get(title='STU')
+        dc.discount = 0
+        dc.full_clean()
+        dc.discount = 100
+        dc.full_clean()
+        dc.discount = -1
+        self.assertRaises(ValidationError, dc.full_clean)
+        dc.discount = 101
+        self.assertRaises(ValidationError, dc.full_clean)
 
 
 class EventTest(TestCase):
@@ -22,7 +63,7 @@ class EventTest(TestCase):
         entry = models.Event(title="Test Event title")
         self.assertEqual(str(entry), entry.title)
 
-    def test_dates_from_to(self):
+    def test_dates(self):
         event = models.Event(title="Test Event dates")
         event.date_to = timezone.now()
         event.date_from = event.date_to + datetime.timedelta(+3)
@@ -139,8 +180,12 @@ class TalkTest(TestCase):
 class TicketTest(TestCase):
 
     def test_string_representation(self):
+        """
+        String representation of model instance have to be equal to its title
+        """
         entry = models.Ticket(first_name="Test", last_name="Tester")
         self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
+
         entry.title = 'mr'
         self.assertEqual(
             str(entry),
@@ -159,7 +204,7 @@ class TicketTest(TestCase):
                                         date_from=timezone.now(), date_to=timezone.now())
         ticket_type.save()
         discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
-                                            available_from=time, available_to=time, usage=1,
+                                            date_from=time, date_to=time, usage=1,
                                             ticket_type=ticket_type)
         discount_code.save()
         ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test", type=ticket_type,
@@ -171,13 +216,72 @@ class TicketTest(TestCase):
 
 
 class TicketTypeTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
-        entry = models.TicketType(title="Test TicketType title")
-        self.assertEqual(str(entry), entry.title)
+        """
+        String representation of model instance have to be equal to its title
+        """
+        tt = TicketType.objects.get(title='Standard Early Bird')
+        self.assertEqual(str(tt), tt.title)
 
-    def test_dates_from_to(self):
-        tt = models.TicketType(title="Test TicketType dates")
-        tt.date_to = timezone.now()
-        tt.date_from = tt.date_to + datetime.timedelta(+3)
+    def test_clean_dates(self):
+        """
+        Cleaning models dates follow different type of rules, also depending on event
+        """
+        now = timezone.now()
+        event = Event.objects.get(title='PyCon SK 2016')  # PyCon SK 2016 is in the past
+        tt = TicketType(title='Test Ticket', price=12, event=event)
+
+        # Past event and no dates raises error
         self.assertRaises(ValidationError, tt.clean)
+
+        # Past event and dates after it raises error
+        tt.date_from = now
+        tt.date_to = now + datetime.timedelta(days=3)
+        self.assertRaises(ValidationError, tt.clean)
+        tt.date_from = parse_datetime('2016-01-11T09:00:00Z')
+        self.assertRaises(ValidationError, tt.clean)
+
+        # End date can not be before start date
+        tt.date_to = tt.date_from - datetime.timedelta(days=3)
+        self.assertRaises(ValidationError, tt.clean)
+
+        # Correct data in the past before event, SAVE.
+        tt.date_to = tt.date_from + datetime.timedelta(days=13)
+        tt.clean()
+        tt.save()
+
+        # PyCon SK 2054 is in the future
+        future_event = Event.objects.create(title='PyCon SK 2054', description='test', event_type=MEETUP,
+                                            status=PUBLISHED, location=event.location,
+                                            date_from=parse_datetime('2054-03-11T09:00:00Z'),
+                                            date_to=parse_datetime('2054-03-13T18:00:00Z'))
+        ftt = TicketType(title='Test Future Ticket', price=120, event=future_event)
+
+        # Future event pre-populate the dates
+        ftt.clean()
+        self.assertAlmostEquals((ftt.date_from - now).seconds, 0)
+        self.assertEquals(ftt.date_to, ftt.event.date_to)
+        ftt.save()
+
+    def test_status(self):
+        now = timezone.now()
+        event = Event.objects.get(title='PyCon SK 2016')  # PyCon SK 2016 is in the past
+        tt = TicketType(title='Test Ticket', price=12, event=event)
+
+        # Dates are not set or are in future ticket type is not available
+        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+        tt.date_from = now + datetime.timedelta(days=1)
+        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+        tt.date_to = now + datetime.timedelta(days=3)
+        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+
+        # ticket type is within the date range so it is active
+        tt.date_from = now - datetime.timedelta(days=1)
+        self.assertEquals(tt.status, STATUSES[ACTIVE])
+
+        # passed ticket types we consider as expired
+        tt.date_from = now - datetime.timedelta(days=3)
+        tt.date_to = now - datetime.timedelta(days=1)
+        self.assertEquals(tt.status, STATUSES[EXPIRED])

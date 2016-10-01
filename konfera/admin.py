@@ -156,7 +156,39 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 
-admin.site.register(TicketType)
-admin.site.register(DiscountCode)
+
+class TicketTypeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price', 'attendee_type', 'event', 'status')
+    list_filter = ('attendee_type',)
+    readonly_fields = ('status',)
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'description', 'price', 'attendee_type', 'event',)
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to', 'status'),
+            'classes': ('collapse',),
+        }),
+    )
+
+admin.site.register(TicketType, TicketTypeAdmin)
+
+
+class DiscountCodeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'discount', 'ticket_type', 'usage')
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'hash')
+        }),
+        (_('Discount'), {
+            'fields': ('discount', 'usage')
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to'),
+            'classes': ('collapse',),
+        }),
+    )
+admin.site.register(DiscountCode, DiscountCodeAdmin)
+
 admin.site.register(Ticket)
 admin.site.register(Schedule)

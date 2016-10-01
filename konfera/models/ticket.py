@@ -5,12 +5,16 @@ from django.utils import timezone
 from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
 from konfera.models.order import Order, AWAITING
 
+REQUESTED = 'requested'
+REGISTERED = 'registered'
+CHECKEDIN = 'checked-in'
+CANCELLED = 'cancelled'
 
 TICKET_STATUS = (
-    ('requested', _('Requested')),
-    ('registered', _('Registered')),
-    ('checked-in', _('Checked-in')),
-    ('cancelled', _('Cancelled')),
+    (REQUESTED, _('Requested')),
+    (REGISTERED, _('Registered')),
+    (CHECKEDIN, _('Checked-in')),
+    (CANCELLED, _('Cancelled')),
 )
 
 
@@ -34,6 +38,7 @@ class Ticket(models.Model):
         ).strip()
 
     def discount_calculator(self):
+
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100
         return 0
