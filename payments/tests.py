@@ -1,4 +1,5 @@
 import datetime
+import logging
 from unittest.mock import patch
 
 from django.test import TestCase
@@ -7,6 +8,9 @@ from django.test.utils import override_settings
 from konfera import models
 from payments import utils
 from payments.models import ProcessedTransation
+
+
+logging.disable(logging.WARNING)
 
 
 class TestGetLastPayements(TestCase):

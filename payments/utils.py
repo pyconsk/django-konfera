@@ -1,5 +1,6 @@
 from datetime import timedelta
 from decimal import Decimal
+import logging
 
 from django.db.models import Q
 from django.conf import settings
@@ -13,6 +14,9 @@ from payments.models import ProcessedTransation
 
 
 DATE_FORMAT = '%Y-%m-%d'
+
+
+logger = logging.getLogger(__name__)
 
 
 def _get_last_payments():
@@ -51,11 +55,19 @@ def _process_payment(order, payment):
     amount_to_pay = order.left_to_pay - payment['amount']
 
     if amount_to_pay <= order.to_pay * Decimal(settings.PAYMENT_ERROR_RATE / 100):
-        # todo: log + email
+        # todo: email
         order.status = PAID
+
+        msg = 'Order(id={order_id}) was paid in payment with transaction_id={transaction_id}'.format(
+            order_id=order.pk, transaction_id=payment['transaction_id'])
+        logger.warning(msg)
     else:
-        # todo: log + email
+        # todo: email
         order.status = PARTLY_PAID
+
+        msg = 'Payment with transaction_id={transaction_id} for Order(id={order_id}) was found but it\'s outside ' \
+              'of error rate'.format(order_id=order.pk, transaction_id=payment['transaction_id'])
+        logger.warning(msg)
 
     order.amount_paid += payment['amount']
     order.save()
