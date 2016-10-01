@@ -23,8 +23,8 @@ ORDER_CHOICES = (
 
 class Order(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
-    amount_paid = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
-    discount = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
+    amount_paid = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
+    discount = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     status = models.CharField(choices=ORDER_CHOICES, default=AWAITING, max_length=20)
     purchase_date = models.DateTimeField(auto_now_add=True)
     payment_date = models.DateTimeField(blank=True, null=True)
