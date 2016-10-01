@@ -24,16 +24,17 @@ class DiscountCode(FromToModel):
         return self.title
 
     def clean(self):
-        if not self.date_from:
-            self.date_from = self.ticket_type.date_from
-        elif self.date_from < self.ticket_type.date_from:
-            raise ValidationError(
-                {'date_from': _('Discount code can not be available before ticket type is available for sale.')})
+        if hasattr(self, 'ticket_type'):
+            if not self.date_from:
+                self.date_from = self.ticket_type.date_from
+            elif self.date_from < self.ticket_type.date_from:
+                raise ValidationError(
+                    {'date_from': _('Discount code can not be available before ticket type is available for sale.')})
 
-        if not self.date_to:
-            self.date_to = self.ticket_type.date_to
-        elif self.date_to > self.ticket_type.date_to:
-            raise ValidationError(
-                {'date_to': _('Discount code can not be available after ticket type is available for sale.')})
+            if not self.date_to:
+                self.date_to = self.ticket_type.date_to
+            elif self.date_to > self.ticket_type.date_to:
+                raise ValidationError(
+                    {'date_to': _('Discount code can not be available after ticket type is available for sale.')})
 
         super(DiscountCode, self).clean()
