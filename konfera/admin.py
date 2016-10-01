@@ -206,4 +206,17 @@ class TicketAdmin(admin.ModelAdmin):
 admin.site.register(Ticket, TicketAdmin)
 
 
-admin.site.register(Schedule)
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('start', 'duration', 'talk', 'room')
+    list_filter = ('talk__event', 'room')
+    search_fields = ('=description',)
+    fieldsets = (
+        (_('Time'), {
+            'fields': ('start', 'duration'),
+        }),
+        (_('Details'), {
+            'fields': ('talk', 'room', 'description')
+        }),
+    )
+
+admin.site.register(Schedule, ScheduleAdmin)
