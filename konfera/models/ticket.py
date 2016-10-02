@@ -10,11 +10,6 @@ REGISTERED = 'registered'
 CHECKEDIN = 'checked-in'
 CANCELLED = 'cancelled'
 
-REQUESTED = 'requested'
-REGISTERED = 'registered'
-CHECKEDIN = 'checked-in'
-CANCELLED = 'cancelled'
-
 TICKET_STATUS = (
     (REQUESTED, _('Requested')),
     (REGISTERED, _('Registered')),
