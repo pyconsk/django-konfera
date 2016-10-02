@@ -9,11 +9,10 @@ from konfera.models.event import Event
 from konfera.models.talk import CFP
 from konfera.models.ticket import REQUESTED
 from konfera.models.ticket_type import TicketType, VOLUNTEER
-from konfera.utils import collect_view_data
 
 
 def event_sponsors_list_view(request, event_slug):
-    context = collect_view_data()
+    context = dict()
 
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
@@ -23,7 +22,7 @@ def event_sponsors_list_view(request, event_slug):
 
 
 def event_speakers_list_view(request, event_slug):
-    context = collect_view_data()
+    context = dict()
 
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
@@ -33,7 +32,7 @@ def event_speakers_list_view(request, event_slug):
 
 
 def event_list(request):
-    context = collect_view_data()
+    context = dict()
 
     events = Event.objects.published().order_by('date_from')
 
@@ -56,7 +55,7 @@ def event_list(request):
 
 
 def event_details_view(request, event_slug):
-    context = collect_view_data()
+    context = dict()
 
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
@@ -66,7 +65,7 @@ def event_details_view(request, event_slug):
 
 
 def cfp_form_view(request, event_slug):
-    context = collect_view_data()
+    context = dict()
     speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
     talk_form = TalkForm(request.POST or None, prefix='talk')
 
@@ -89,7 +88,7 @@ def cfp_form_view(request, event_slug):
 
 
 def register_volunteer(request, event_slug):
-    context = collect_view_data()
+    context = dict()
     event = get_object_or_404(Event, slug=event_slug)
     volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER)
 
