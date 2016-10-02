@@ -55,7 +55,7 @@ class ModelAdminTests(TestCase):
     def test_default_fields(self):
         ev = EventAdmin(Event, self.site)
         ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status',
-                             'location', 'sponsors']
+                             'location', 'sponsors', 'footer_text', 'analytics']
 
         self.assertEqual(list(ev.get_fields(request)), ev_default_fields)
         self.assertEqual(list(ev.get_fields(request, self.event)), ev_default_fields)
@@ -76,7 +76,7 @@ class ModelAdminTests(TestCase):
                 'fields': ('date_from', 'date_to'),
             }),
             (_('Details'), {
-                'fields': ('event_type', 'status', 'location'),
+                'fields': ('event_type', 'status', 'location', 'footer_text', 'analytics'),
             }),
         )
 
