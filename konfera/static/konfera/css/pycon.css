@@ -593,64 +593,64 @@ input, select {
   margin: 1px 0;
 }
 button {
- outline: 0;
+  outline: 0;
 }
 textarea {
- resize: none;
- outline: 0; 
+  resize: none;
+  outline: 0;
 }
 .panel .btn i,.btn span{
- color:#666666;
+  color:#666666;
 }
 .panel .panel-heading {
- background-color:#ffffff;
- font-weight:700;
- font-size:16px;
- color:#262626;
- border-color:#ffffff;
+  background-color:#ffffff;
+  font-weight:700;
+  font-size:16px;
+  color:#262626;
+  border-color:#ffffff;
 }
 .panel .panel-heading a {
- font-weight:400;
- font-size:11px;
+  font-weight:400;
+  font-size:11px;
 }
 .panel .panel-default {
- border-color:#cccccc;
+  border-color:#cccccc;
 }
 .panel .panel-thumbnail {
- padding:0;
+  padding:0;
 }
 .panel .img-circle {
- width:50px;
- height:50px;
+  width:50px;
+  height:50px;
 }
 .list-group-item:first-child,.list-group-item:last-child {
- border-radius:0;
+  border-radius:0;
 }
 h3,h4,h5 { 
- border:0 solid #efefef; 
- border-bottom-width:1px;
- padding-bottom:10px;
+  border:0 solid #efefef;
+  border-bottom-width:1px;
+  padding-bottom:10px;
 }
 .dropdown-menu {
- background-color:#f4f4f4;
- border-color:#f0f0f0;
- border-radius:0;
- margin-top:-1px;
+  background-color:#f4f4f4;
+  border-color:#f0f0f0;
+  border-radius:0;
+  margin-top:-1px;
 }
 /* end theme */
 
 /* template layout*/
 #subnav {
- position:fixed;
- width:100%;
+  position:fixed;
+  width:100%;
 }
 
 @media (max-width: 768px) {
- #subnav {
-  padding-top: 6px;
- }
+  #subnav {
+    padding-top: 6px;
+  }
 }
 
 #main {
- padding-top:120px;
+  padding-top:120px;
 }
