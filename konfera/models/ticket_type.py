@@ -17,13 +17,20 @@ STATUSES = {
     EXPIRED: _('Expired'),
 }
 
+VOLUNTEER = 'volunteer'
+PRESS = 'press'
+ATTENDEE = 'attendee'
+SUPPORTER = 'supporter'
+SPONSOR = 'sponsor'
+AID = 'aid'
+
 TICKET_TYPE_CHOICES = (
-    ('volunteer', _('Volunteer')),
-    ('press', _('Press')),
-    ('attendee', _('Attendee')),
-    ('supporter', _('Supporter')),
-    ('sponsor', _('Sponsor')),
-    ('aid', _('Aid')),
+    (VOLUNTEER, _('Volunteer')),
+    (PRESS, _('Press')),
+    (ATTENDEE, _('Attendee')),
+    (SUPPORTER, _('Supporter')),
+    (SPONSOR, _('Sponsor')),
+    (AID, _('Aid')),
 )
 
 

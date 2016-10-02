@@ -4,9 +4,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.models import Event
+from konfera.models import Event, TicketType
 from konfera.models.talk import CFP
-from konfera.forms import SpeakerForm, TalkForm
+from konfera.models.ticket import REQUESTED
+from konfera.models.ticket_type import VOLUNTEER
+from konfera.forms import SpeakerForm, TalkForm, VolunteerRegistrationForm
 
 
 def event_sponsors_list_view(request, event_slug):
@@ -87,3 +89,23 @@ def cfp_form_view(request, event_slug):
     return render(request=request,
                   template_name='konfera/cfp_form.html',
                   context=context, )
+
+
+def register_volunteer(request, event_slug):
+    event = get_object_or_404(Event, slug=event_slug)
+    volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER)
+
+    if request.method == "POST":
+        form = VolunteerRegistrationForm(request.POST)
+
+        if form.is_valid():
+            new_ticket = form.save(commit=False)
+            new_ticket.status = REQUESTED
+            new_ticket.type = volunteer_ticket_type
+            new_ticket.save()
+
+            return redirect('event_details', event_slug)
+    else:
+        form = VolunteerRegistrationForm()
+
+    return render(request, 'konfera/registration_form.html', {'form': form, 'type': VOLUNTEER})
