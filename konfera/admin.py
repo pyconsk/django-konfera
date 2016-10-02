@@ -153,7 +153,6 @@ class OrderAdmin(admin.ModelAdmin):
         ReceiptInline,
     ]
 
-
 admin.site.register(Order, OrderAdmin)
 
 
@@ -188,7 +187,36 @@ class DiscountCodeAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 
-admin.site.register(Ticket)
-admin.site.register(Schedule)
+
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('email', 'type', 'status')
+    list_filter = ('type__event', )
+    fieldsets = (
+        (_('Personal details'), {
+            'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
+        }),
+        (_('Ticket info'), {
+            'fields': ('type', 'discount_code', 'status', 'description')
+        }),
+    )
+
+admin.site.register(Ticket, TicketAdmin)
+
+
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('start', 'duration', 'talk', 'room')
+    list_filter = ('talk__event', 'room')
+    search_fields = ('=description',)
+    fieldsets = (
+        (_('Time'), {
+            'fields': ('start', 'duration'),
+        }),
+        (_('Details'), {
+            'fields': ('talk', 'room', 'description')
+        }),
+    )
+
+admin.site.register(Schedule, ScheduleAdmin)
