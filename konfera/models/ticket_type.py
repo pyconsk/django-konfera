@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -16,20 +17,27 @@ STATUSES = {
     EXPIRED: _('Expired'),
 }
 
+VOLUNTEER = 'volunteer'
+PRESS = 'press'
+ATTENDEE = 'attendee'
+SUPPORTER = 'supporter'
+SPONSOR = 'sponsor'
+AID = 'aid'
+
 TICKET_TYPE_CHOICES = (
-    ('volunteer', _('Volunteer')),
-    ('press', _('Press')),
-    ('attendee', _('Attendee')),
-    ('supporter', _('Supporter')),
-    ('sponsor', _('Sponsor')),
-    ('aid', _('Aid')),
+    (VOLUNTEER, _('Volunteer')),
+    (PRESS, _('Press')),
+    (ATTENDEE, _('Attendee')),
+    (SUPPORTER, _('Supporter')),
+    (SPONSOR, _('Sponsor')),
+    (AID, _('Aid')),
 )
 
 
 class TicketType(FromToModel):
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
-    price = models.DecimalField(decimal_places=2, max_digits=12)
+    price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     attendee_type = models.CharField(choices=TICKET_TYPE_CHOICES, max_length=255, default='attendee')
     event = models.ForeignKey('Event')
 
@@ -54,21 +62,22 @@ class TicketType(FromToModel):
     def clean(self):
         now = timezone.now()
 
-        if (not self.date_from or not self.date_to) and now > self.event.date_to:
-            raise ValidationError(_('You are creating ticket type for event that has already ended. Please add the '
-                                    'dates manually.'))
+        if hasattr(self, 'event'):
+            if (not self.date_from or not self.date_to) and now > self.event.date_to:
+                raise ValidationError(_('You are creating ticket type for event that has already ended. '
+                                        'Please add the dates manually.'))
 
-        if not self.date_from:
-            self.date_from = now
+            if not self.date_from:
+                self.date_from = now
 
-        if not self.date_to:
-            self.date_to = self.event.date_to
+            if not self.date_to:
+                self.date_to = self.event.date_to
 
-        msg = _('You can\'t sell tickets after your event has ended.')
-        if self.date_from > self.event.date_to:
-            raise ValidationError({'date_from': msg})
+            msg = _('You can\'t sell tickets after your event has ended.')
+            if self.date_from > self.event.date_to:
+                raise ValidationError({'date_from': msg})
 
-        if self.date_to > self.event.date_to:
-            raise ValidationError({'date_to': msg})
+            if self.date_to > self.event.date_to:
+                raise ValidationError({'date_to': msg})
 
         super(TicketType, self).clean()

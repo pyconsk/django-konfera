@@ -177,7 +177,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
     list_display = ('title', 'discount', 'ticket_type', 'usage')
     fieldsets = (
         (_('Details'), {
-            'fields': ('title', 'hash')
+            'fields': ('title', 'hash', 'ticket_type')
         }),
         (_('Discount'), {
             'fields': ('discount', 'usage')
