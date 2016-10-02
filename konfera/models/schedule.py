@@ -8,7 +8,7 @@ class Schedule(models.Model):
     description = models.TextField(
         blank=True,
         help_text=_('Description will be displayed, only if there is no related talk, eg. coffee break, lunch etc...'))
-    talk = models.ForeignKey('Talk', blank=True, related_name='scheduled_talks')
+    talk = models.ForeignKey('Talk', blank=True, null=True, related_name='scheduled_talks')
     duration = models.IntegerField(
         default=0,
         validators=[
@@ -16,7 +16,7 @@ class Schedule(models.Model):
             MinValueValidator(0)
         ],
         help_text=_('Duration in minutes.'))
-    room = models.ForeignKey('Room', blank=True, related_name='scheduled_rooms')
+    room = models.ForeignKey('Room', blank=True, null=True, related_name='scheduled_rooms')
 
     def __str__(self):
         return _('%s (%s min)') % (self.start, self.duration)

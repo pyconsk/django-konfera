@@ -55,21 +55,22 @@ class TicketType(FromToModel):
     def clean(self):
         now = timezone.now()
 
-        if (not self.date_from or not self.date_to) and now > self.event.date_to:
-            raise ValidationError(_('You are creating ticket type for event that has already ended. Please add the '
-                                    'dates manually.'))
+        if hasattr(self, 'event'):
+            if (not self.date_from or not self.date_to) and now > self.event.date_to:
+                raise ValidationError(_('You are creating ticket type for event that has already ended. '
+                                        'Please add the dates manually.'))
 
-        if not self.date_from:
-            self.date_from = now
+            if not self.date_from:
+                self.date_from = now
 
-        if not self.date_to:
-            self.date_to = self.event.date_to
+            if not self.date_to:
+                self.date_to = self.event.date_to
 
-        msg = _('You can\'t sell tickets after your event has ended.')
-        if self.date_from > self.event.date_to:
-            raise ValidationError({'date_from': msg})
+            msg = _('You can\'t sell tickets after your event has ended.')
+            if self.date_from > self.event.date_to:
+                raise ValidationError({'date_from': msg})
 
-        if self.date_to > self.event.date_to:
-            raise ValidationError({'date_to': msg})
+            if self.date_to > self.event.date_to:
+                raise ValidationError({'date_to': msg})
 
         super(TicketType, self).clean()

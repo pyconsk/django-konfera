@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
                 ('city', models.CharField(max_length=128)),
                 ('postcode', models.CharField(max_length=12)),
                 ('state', models.CharField(max_length=128)),
-                ('capacity', models.IntegerField(blank=True)),
+                ('capacity', models.IntegerField(blank=True, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -95,7 +95,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=128)),
-                ('capacity', models.IntegerField(blank=True)),
+                ('capacity', models.IntegerField(blank=True, null=True)),
                 ('location', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='rooms', to='konfera.Location')),
             ],
         ),
@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
                 ('start', models.DateTimeField()),
                 ('description', models.TextField(blank=True, help_text='Description will be displayed, only if there is no related talk, eg. coffee break, lunch etc...')),
                 ('duration', models.IntegerField(default=0, help_text='Duration in minutes.', validators=[django.core.validators.MaxValueValidator(300), django.core.validators.MinValueValidator(0)])),
-                ('room', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_rooms', to='konfera.Room')),
+                ('room', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_rooms', to='konfera.Room')),
             ],
         ),
         migrations.CreateModel(
@@ -193,7 +193,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='schedule',
             name='talk',
-            field=models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_talks', to='konfera.Talk'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='scheduled_talks', to='konfera.Talk'),
         ),
         migrations.AddField(
             model_name='event',
