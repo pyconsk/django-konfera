@@ -1,5 +1,9 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from konfera.models.abstract import KonferaModel
 
 
 SPONSOR_TYPE = (
@@ -12,12 +16,13 @@ SPONSOR_TYPE = (
 )
 
 
-class Sponsor(models.Model):
+class Sponsor(KonferaModel):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
     type = models.IntegerField(choices=SPONSOR_TYPE)
     logo = models.FileField()
     url = models.URLField()
-    about_us = models.TextField()
+    about_us = models.TextField(blank=True)
 
     def __str__(self):
         return self.title

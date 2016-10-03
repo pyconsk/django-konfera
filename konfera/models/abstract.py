@@ -3,7 +3,16 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
-class FromToModel(models.Model):
+class KonferaModel(models.Model):
+
+    class Meta:
+        abstract = True
+
+    date_created = models.DateTimeField(verbose_name=_('Created'), auto_now=True)
+    date_modified = models.DateTimeField(verbose_name=_('Last modified'), auto_now_add=True)
+
+
+class FromToModel(KonferaModel):
 
     class Meta:
         abstract = True

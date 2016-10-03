@@ -1,13 +1,16 @@
+import uuid
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-CFP, DRAFT, APPROVED, REJECTED, WITHDRAWN = ('cfp',
-                                             'draft',
-                                             'approved',
-                                             'rejected',
-                                             'withdrawn')
-TALK, WORKSHOP = 'talk', 'workshop'
+from konfera.models.abstract import KonferaModel
+
+CFP = 'cfp'
+DRAFT = 'draft'
+APPROVED = 'approved'
+REJECTED = 'rejected'
+WITHDRAWN = 'withdrawn'
 
 TALK_STATUS = (
     (CFP, _('Call For Proposals')),
@@ -16,6 +19,9 @@ TALK_STATUS = (
     (REJECTED, _('Rejected')),
     (WITHDRAWN, _('Withdrawn')),
 )
+
+TALK = 'talk'
+WORKSHOP = 'workshop'
 
 TALK_TYPE = (
     (TALK, _('Talk')),
@@ -29,7 +35,8 @@ TALK_DURATION = (
 )
 
 
-class Talk(models.Model):
+class Talk(KonferaModel):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=256)
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32, default=TALK)
