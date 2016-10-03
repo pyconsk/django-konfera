@@ -16,7 +16,6 @@ TITLE_CHOICES = (
 
 
 class Speaker(KonferaModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     title = models.CharField(

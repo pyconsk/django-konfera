@@ -25,7 +25,6 @@ ORDER_CHOICES = (
 
 
 class Order(KonferaModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     amount_paid = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     discount = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)

@@ -17,7 +17,6 @@ SPONSOR_TYPE = (
 
 
 class Sponsor(KonferaModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
     type = models.IntegerField(choices=SPONSOR_TYPE)
     logo = models.FileField()

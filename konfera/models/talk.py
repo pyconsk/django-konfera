@@ -36,7 +36,6 @@ TALK_DURATION = (
 
 
 class Talk(KonferaModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=256)
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32, default=TALK)

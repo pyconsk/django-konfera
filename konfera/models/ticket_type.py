@@ -36,23 +36,22 @@ TICKET_TYPE_CHOICES = (
 )
 
 PUBLIC = 'public'
-PRIATE = 'private'
+PRIVATE = 'private'
 DISABLED = 'disabled'
 
 ACCESSIBILITY = (
     (PUBLIC, _('Public')),
-    (PRIATE, _('Private')),
+    (PRIVATE, _('Private')),
     (DISABLED, _('Disabled')),
 )
 
 
 class TicketType(FromToModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     attendee_type = models.CharField(choices=TICKET_TYPE_CHOICES, max_length=32, default=ATTENDEE)
-    accessibility = models.CharField(choices=ACCESSIBILITY, max_length=32, default=PRIATE)
+    accessibility = models.CharField(choices=ACCESSIBILITY, max_length=32, default=PRIVATE)
     usage = models.IntegerField(default=10, help_text=_('Amount of tickets that can be issued.'))
     event = models.ForeignKey('Event')
 

@@ -33,7 +33,6 @@ class EventManager(models.Manager):
 
 
 class Event(FromToModel):
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
     slug = models.SlugField(verbose_name=_('Event url'), help_text=_('Slug field, relative URL to the event.'))
     description = models.TextField(blank=True)
