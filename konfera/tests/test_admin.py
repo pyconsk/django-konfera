@@ -1,12 +1,9 @@
-import datetime
-
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
-from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.admin import EventAdmin, OrderAdmin
-from konfera.models import Event, Location, Order
+from konfera.models import Event, Order
 
 
 class MockRequest(object):
