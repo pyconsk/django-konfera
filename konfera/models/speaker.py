@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.models.abstract import KonferaModel
+
 
 TITLE_UNSET = 'none'
 
@@ -11,7 +13,7 @@ TITLE_CHOICES = (
 )
 
 
-class Speaker(models.Model):
+class Speaker(KonferaModel):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     title = models.CharField(
@@ -21,7 +23,7 @@ class Speaker(models.Model):
     )
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=64, blank=True)
-    bio = models.TextField()
+    bio = models.TextField(blank=True)
     url = models.URLField(blank=True)
     social_url = models.URLField(blank=True)
     country = models.CharField(max_length=64)
