@@ -69,11 +69,7 @@
       </div>
       <div class="row">
         <div class="col-md-12">
-          <small class="text-center">
-            <a href="https://www.python.org/psf/trademarks/pycon/" target="_blank">PyCon™</a>is a trademark for
-            worldwide conference activities claimed by the
-            <a href="https://www.python.org/psf-landing/" target="_blank">Python Software foundation</a>.
-          </small>
+          {% if event %}{{ event.footer_text }}{% endif %}
         </div>
       </div>
     </footer>
