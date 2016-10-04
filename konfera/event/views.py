@@ -27,7 +27,7 @@ def event_speakers_list_view(request, event_slug):
 
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
-    context['talks'] = event.talk_set.all().order_by('primary_speaker__last_name')
+    context['talks'] = event.talk_set.filter(status='approved').order_by('primary_speaker__last_name')
 
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
 
