@@ -23,7 +23,7 @@
       {% endif %}
 
       <span class="current">
-          {% blocktrans with number=events.number total=events.paginator.num_pages %}
+          {% blocktrans with number=meetups.number total=meetups.paginator.num_pages %}
           Page {{ number }} of {{ total }}.
           {% endblocktrans %}
       </span>
