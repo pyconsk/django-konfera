@@ -1,7 +1,6 @@
 from django import forms
 
-from konfera.models import Speaker, Talk, Ticket
-
+from konfera.models import Ticket
 
 
 class VolunteerRegistrationForm(forms.ModelForm):

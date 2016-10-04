@@ -12,7 +12,6 @@ from konfera.models.ticket import REQUESTED
 from konfera.models.ticket_type import TicketType, VOLUNTEER
 
 
-
 def register_volunteer(request, event_slug):
     context = dict()
     event = get_object_or_404(Event, slug=event_slug)

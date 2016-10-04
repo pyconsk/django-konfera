@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from konfera import views
 
+
 urlpatterns = [
     url(r'^event/', include('konfera.event.urls')),
 
