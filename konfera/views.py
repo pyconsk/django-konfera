@@ -4,7 +4,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.forms import SpeakerForm, TalkForm, VolunteerRegistrationForm
+from konfera.event.forms import SpeakerForm, TalkForm
+from konfera.forms import VolunteerRegistrationForm
 from konfera.models.event import Event
 from konfera.models.talk import CFP
 from konfera.models.ticket import REQUESTED
