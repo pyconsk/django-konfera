@@ -19,16 +19,20 @@ STATUSES = {
 
 VOLUNTEER = 'volunteer'
 PRESS = 'press'
+STUDENT = 'student'
 ATTENDEE = 'attendee'
 SUPPORTER = 'supporter'
+SPEAKER = 'speaker'
 SPONSOR = 'sponsor'
 AID = 'aid'
 
 TICKET_TYPE_CHOICES = (
     (VOLUNTEER, _('Volunteer')),
     (PRESS, _('Press')),
+    (STUDENT, _('Student')),
     (ATTENDEE, _('Attendee')),
     (SUPPORTER, _('Supporter')),
+    (SPEAKER, _('Speaker')),
     (SPONSOR, _('Sponsor')),
     (AID, _('Aid')),
 )
