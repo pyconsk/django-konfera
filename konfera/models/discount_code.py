@@ -15,9 +15,9 @@ class DiscountCode(FromToModel):
             MaxValueValidator(100),
             MinValueValidator(0)
         ],
-        help_text=_('Value is percentage discount from ticket type price'),
+        help_text=_('Value is percentage discount from ticket type price.'),
     )
-    usage = models.IntegerField(default=1)
+    usage = models.IntegerField(default=1, help_text=_('Amount of tickets that can be issued.'))
     ticket_type = models.ForeignKey('TicketType')
 
     def __str__(self):

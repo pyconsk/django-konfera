@@ -2,8 +2,9 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
+from konfera.models.abstract import KonferaModel
 from konfera.models.order import Order, AWAITING
+from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
 
 REQUESTED = 'requested'
 REGISTERED = 'registered'
@@ -18,7 +19,7 @@ TICKET_STATUS = (
 )
 
 
-class Ticket(models.Model):
+class Ticket(KonferaModel):
     type = models.ForeignKey('TicketType')
     discount_code = models.ForeignKey('DiscountCode', blank=True, null=True)
     status = models.CharField(choices=TICKET_STATUS, max_length=32)

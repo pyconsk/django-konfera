@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.models.abstract import KonferaModel
+
 
 AWAITING = 'awaiting_payment'
 PAID = 'paid'
@@ -21,7 +23,7 @@ ORDER_CHOICES = (
 )
 
 
-class Order(models.Model):
+class Order(KonferaModel):
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     amount_paid = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     discount = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)

@@ -1,8 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 
+from konfera.models.abstract import KonferaModel
 
-class Receipt(models.Model):
+
+class Receipt(KonferaModel):
     order = models.OneToOneField('Order', on_delete=models.DO_NOTHING, related_name='receipt_of')
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)

@@ -2,8 +2,10 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.models.abstract import KonferaModel
 
-class Schedule(models.Model):
+
+class Schedule(KonferaModel):
     start = models.DateTimeField()
     description = models.TextField(
         blank=True,
