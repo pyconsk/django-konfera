@@ -109,11 +109,7 @@ class Migration(migrations.Migration):
                 ('companyid', models.CharField(blank=True, max_length=32)),
                 ('taxid', models.CharField(blank=True, max_length=32)),
                 ('vatid', models.CharField(blank=True, max_length=32)),
-<<<<<<< HEAD
-                ('amount', models.DecimalField(decimal_places=2, max_digits=12)),
-=======
                 ('amount', models.DecimalField(decimal_places=2, max_digits=12, validators=[django.core.validators.MinValueValidator(0)])),
->>>>>>> 3b25543c98d15696dcb4be10829065ea5c82ce91
                 ('order', models.OneToOneField(on_delete=django.db.models.deletion.DO_NOTHING, related_name='receipt_of', to='konfera.Order')),
             ],
             options={
@@ -163,11 +159,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(choices=[('none', ''), ('mr', 'Mr.'), ('ms', 'Ms.')], default='none', max_length=4)),
                 ('email', models.EmailField(max_length=255)),
                 ('phone', models.CharField(blank=True, max_length=64)),
-<<<<<<< HEAD
-                ('bio', models.TextField()),
-=======
                 ('bio', models.TextField(blank=True)),
->>>>>>> 3b25543c98d15696dcb4be10829065ea5c82ce91
                 ('url', models.URLField(blank=True)),
                 ('social_url', models.URLField(blank=True)),
                 ('country', models.CharField(max_length=64)),
@@ -226,11 +218,7 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(max_length=128)),
                 ('email', models.EmailField(max_length=254)),
                 ('phone', models.CharField(blank=True, max_length=64)),
-<<<<<<< HEAD
-                ('description', models.TextField()),
-=======
                 ('description', models.TextField(blank=True)),
->>>>>>> 3b25543c98d15696dcb4be10829065ea5c82ce91
                 ('discount_code', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='konfera.DiscountCode')),
                 ('order', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.CASCADE, to='konfera.Order')),
             ],
