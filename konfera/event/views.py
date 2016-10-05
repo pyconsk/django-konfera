@@ -5,11 +5,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.forms import VolunteerRegistrationForm
 from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
-from konfera.models.ticket import REQUESTED
-from konfera.models.ticket_type import TicketType, VOLUNTEER
 
 
 def event_sponsors_list_view(request, event_slug):
