@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
-from konfera.decorators import event_exists
 
 
 def event_sponsors_list_view(request, event_slug):
