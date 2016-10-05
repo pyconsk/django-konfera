@@ -260,7 +260,7 @@ class ScheduleAdmin(admin.ModelAdmin):
             'fields': ('start', 'duration'),
         }),
         (_('Details'), {
-            'fields': ('talk', 'room', 'description')
+            'fields': ('event', 'talk', 'room', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
