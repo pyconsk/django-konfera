@@ -1,12 +1,12 @@
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
+from konfera.decorators import event_exists
 
 
 def event_sponsors_list_view(request, event_slug):
@@ -63,6 +63,7 @@ def event_details_view(request, event_slug):
 
 
 def cfp_form_view(request, event_slug):
+    event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context = dict()
     speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
     talk_form = TalkForm(request.POST or None, prefix='talk')
@@ -74,10 +75,10 @@ def cfp_form_view(request, event_slug):
         talk_instance.status = CFP
         talk_instance.event = Event.objects.get(slug=event_slug)
         talk_instance.save()
-        message_text = _("Your talk proposal successfully created")
+        message_text = _("Your talk proposal successfully created.")
         messages.success(request, message_text)
 
-        return HttpResponseRedirect(redirect_to='/event/')
+        return redirect('event_details', event_slug=event.slug)
 
     context['speaker_form'] = speaker_form
     context['talk_form'] = talk_form
