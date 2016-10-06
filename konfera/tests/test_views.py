@@ -20,11 +20,10 @@ class TestEventList(TestCase):
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
 
-    def test_redirect_one_event(self):
+    def test_event_redirect(self):
         response = self.client.get('/event/')
         self.assertRedirects(response, '/event/one/')
 
-    def test_event_list(self):
         two = Event.objects.create(
             title='Two', slug='two', description='Second one', event_type='conference', status='published',
             location=self.location, date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
