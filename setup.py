@@ -18,7 +18,7 @@ if sys.argv[-1] == 'publish':
 
 setup(
     name='django-konfera',
-    version='0.1dev',
+    version='0.2dev',
     description='Web application written in python (django) to manage event organization.',
     author='Slovak Python User Group',
     author_email='info@pycon.sk',
