@@ -3,6 +3,7 @@ from django.test import TestCase
 
 from konfera.models import Event, Location, Talk
 from konfera.models.talk import CFP, TALK
+from konfera.models.event import PUBLISHED, CONFERENCE
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -16,23 +17,23 @@ class TestEventRedirect(TestCase):
             title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
         )
         self.one = Event.objects.create(
-            title='One', slug='one', description='First one', event_type='conference', status='published',
+            title='One', slug='one', description='First one', event_type=CONFERENCE, status=PUBLISHED,
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
 
     def test_redirects(self):
-        response = self.client.get('/event/')
-        self.assertEquals(len(Event.objects.all()), 1)
-        self.assertRedirects(response, '/event/one/')
+        response = self.client.get('/events/')
+        self.assertEquals(len(Event.objects.published()), 1)
+        self.assertRedirects(response, '/events/one/')
 
         two = Event.objects.create(
-            title='Two', slug='two', description='Second one', event_type='conference', status='published',
+            title='Two', slug='two', description='Second one', event_type=CONFERENCE, status=PUBLISHED,
             location=self.location, date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
         )
 
-        response = self.client.get('/event/')
+        response = self.client.get('/events/')
 
-        self.assertEquals(len(Event.objects.all()), 2)
+        self.assertEquals(len(Event.objects.published()), 2)
         self.assertTemplateUsed(response, 'konfera/events.html')
         self.assertEquals(list(response.context['events']), [self.one, two])
 
