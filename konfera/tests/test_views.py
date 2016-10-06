@@ -1,5 +1,10 @@
-from django.urls import reverse
+from django import VERSION
 from django.test import TestCase
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 from konfera.models import Event, Location, Talk
 from konfera.models.talk import CFP, TALK
