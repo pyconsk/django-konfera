@@ -22,6 +22,7 @@ class TestEventRedirect(TestCase):
 
     def test_redirects(self):
         response = self.client.get('/event/')
+        self.assertEquals(len(Event.objects.all()), 1)
         self.assertRedirects(response, '/event/one/')
 
         two = Event.objects.create(
@@ -31,6 +32,7 @@ class TestEventRedirect(TestCase):
 
         response = self.client.get('/event/')
 
+        self.assertEquals(len(Event.objects.all()), 2)
         self.assertTemplateUsed(response, 'konfera/events.html')
         self.assertEquals(list(response.context['events']), [self.one, two])
 
