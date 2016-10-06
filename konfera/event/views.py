@@ -111,7 +111,7 @@ class ScheduleView(DetailView):
         event_duration = event.date_to - event.date_from
         context['interval'] = [
             {'day': day, 'date': event.date_from + timedelta(days=day)}
-            for day in range(event_duration.days+1)
+            for day in range(event_duration.days + 1)
         ]
 
         return context
