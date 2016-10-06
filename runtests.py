@@ -22,12 +22,14 @@ try:
         INSTALLED_APPS=[
             "django.contrib.auth",
             "django.contrib.contenttypes",
+            "django.contrib.sessions",
             "django.contrib.sites",
             "django.contrib.messages",
             "konfera",
         ],
         SITE_ID=1,
         MIDDLEWARE_CLASSES=(
+            'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ),
     )
@@ -43,7 +45,7 @@ try:
 except ImportError:
     import traceback
     traceback.print_exc()
-    msg = "To fix this error, run: pip install -r requirements_test.txt"
+    msg = "To fix this error, run: pip install -r requirements.txt"
     raise ImportError(msg)
 
 
