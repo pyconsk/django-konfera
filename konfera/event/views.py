@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.forms import VolunteerRegistrationForm
 from konfera.models.event import Event
-from konfera.models.talk import CFP
+from konfera.models.talk import APPROVED, CFP
 from konfera.models.ticket import REQUESTED
 from konfera.models.ticket_type import TicketType, VOLUNTEER
 
@@ -27,7 +27,7 @@ def event_speakers_list_view(request, event_slug):
 
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
-    context['talks'] = event.talk_set.all().order_by('primary_speaker__last_name')
+    context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
 
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
 
