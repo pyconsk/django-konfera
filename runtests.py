@@ -15,7 +15,7 @@ try:
         TEMPLATES=[
             {
                 'BACKEND': 'django.template.backends.django.DjangoTemplates',
-                'DIRS': [],
+                'DIRS': ['konfera.templates'],
                 'APP_DIRS': True,
                 'OPTIONS': {
                     'context_processors': [
