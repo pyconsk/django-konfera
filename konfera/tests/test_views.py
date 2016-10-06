@@ -10,7 +10,7 @@ else:
     from django.urls import reverse
 
 
-class TestEventList(TestCase):
+class TestEventRedirect(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
             title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
@@ -20,7 +20,7 @@ class TestEventList(TestCase):
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
 
-    def test_event_redirect(self):
+    def test_redirects(self):
         response = self.client.get('/event/')
         self.assertRedirects(response, '/event/one/')
 
@@ -33,6 +33,17 @@ class TestEventList(TestCase):
 
         self.assertTemplateUsed(response, 'konfera/events.html')
         self.assertEquals(list(response.context['events']), [self.one, two])
+
+
+class TestEventList(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+        )
+        self.one = Event.objects.create(
+            title='One', slug='one', description='First one', event_type='conference', status='published',
+            location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+        )
 
     def _get_existing_event(self):
         url = reverse('event_cfp_form', kwargs={'event_slug': 'one'})
