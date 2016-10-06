@@ -23,10 +23,13 @@ try:
             "django.contrib.auth",
             "django.contrib.contenttypes",
             "django.contrib.sites",
+            "django.contrib.messages",
             "konfera",
         ],
         SITE_ID=1,
-        MIDDLEWARE_CLASSES=(),
+        MIDDLEWARE_CLASSES=(
+            'django.contrib.messages.middleware.MessageMiddleware',
+        ),
     )
 
     try:
