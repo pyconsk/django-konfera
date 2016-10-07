@@ -590,7 +590,6 @@ hr {
 }
 input, select {
   width: 98%;
-  margin: 1px 0;
 }
 button {
   outline: 0;
