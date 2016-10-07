@@ -1,0 +1,65 @@
+{% extends 'konfera/base.html' %}
+{% load i18n %}
+
+
+{% block title %}
+    {{ event }} | {% trans "Schedule" %}
+{% endblock %}
+
+
+{% block content %}
+    <h1>{% trans "Schedule" %}</h1>
+    <div>
+        {% for date in interval %}
+            {% if day == date.day %}
+                {{ date.date|date:"N j, Y" }} |
+            {% else %}
+            <a href="{% url "schedule" event.slug date.day %}">
+                {{ date.date|date:"N j, Y" }}
+            </a> |
+            {% endif %}
+        {% endfor %}
+
+        <h2> {{ schedule.0.start|date:"N j, Y" }}</h2>
+        <div>
+            {% for thing in schedule %}
+                {% ifchanged thing.room %}
+                <table class="table table-striped table-hover schedule">
+                    {% if thing.room %}
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="text-center">
+                                <span class="room">{{thing.room}}</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    {% endif %}
+                {% endifchanged %}
+
+                <tr class="event">
+                    <td class="info-meta">
+                        <div class="time">{{ thing.start|date:"H:m" }}</div>
+                    </td>
+                    <td class="info-main" data-toggle="dropdown">
+                    {% if thing.talk %}
+                        <div class="talk">{{thing.talk}}</div>
+                        <div class="speaker">
+                            {{ thing.talk.primary_speaker }}
+                            {% if thing.talk.secondary_speaker %}
+                                &amp;
+                                {{ things.talk.secondary_speaker }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    {{ thing.description }}
+                  </td>
+                </tr>
+            {% endfor %}
+            {% if schedule %}
+              </tbody>
+            </table> <!-- closing tag for <table class="table table-striped table-hover schedule"> -->
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

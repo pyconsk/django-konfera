@@ -252,7 +252,7 @@ admin.site.register(Ticket, TicketAdmin)
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('start', 'duration', 'talk', 'room')
     list_filter = ('talk__event', 'room')
-    ordering = ('start', 'room', 'talk__event')
+    ordering = ('start', 'room', 'event')
     search_fields = ('=description',)
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
@@ -260,7 +260,7 @@ class ScheduleAdmin(admin.ModelAdmin):
             'fields': ('start', 'duration'),
         }),
         (_('Details'), {
-            'fields': ('talk', 'room', 'description')
+            'fields': ('event', 'talk', 'room', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),

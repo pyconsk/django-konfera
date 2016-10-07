@@ -1,7 +1,10 @@
+from datetime import timedelta
+
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.event.forms import SpeakerForm, TalkForm
@@ -86,3 +89,29 @@ def cfp_form_view(request, event_slug):
     context['talk_form'] = talk_form
 
     return render(request=request, template_name='konfera/cfp_form.html', context=context)
+
+
+def schedule_redirect(request, slug):
+    return redirect('schedule', slug=slug, day=0)
+
+
+class ScheduleView(DetailView):
+    model = Event
+    template_name = 'konfera/event_schedule.html'
+
+    def get_context_data(self, **kwargs):
+        event = kwargs['object']
+
+        context = super().get_context_data()
+        context['day'] = int(self.kwargs['day'])
+
+        date = event.date_from + timedelta(days=context['day'])
+        context['schedule'] = event.schedules.filter(start__date=date.date()).order_by('room', 'start')
+
+        event_duration = event.date_to - event.date_from
+        context['interval'] = [
+            {'day': day, 'date': event.date_from + timedelta(days=day)}
+            for day in range(event_duration.days + 1)
+        ]
+
+        return context

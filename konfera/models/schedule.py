@@ -7,6 +7,7 @@ from konfera.models.abstract import KonferaModel
 
 class Schedule(KonferaModel):
     start = models.DateTimeField()
+    event = models.ForeignKey('Event', related_name='schedules')
     description = models.TextField(
         blank=True,
         help_text=_('Description will be displayed, only if there is no related talk, eg. coffee break, lunch etc...'))
