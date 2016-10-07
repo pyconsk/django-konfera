@@ -4,7 +4,6 @@ from konfera.models.ticket_type import VOLUNTEER
 from konfera.register.forms import VolunteerRegistrationForm
 from konfera.models.ticket import REQUESTED
 
-# Create your views here.
 
 def register_volunteer(request, event_slug):
     context = dict()
