@@ -34,6 +34,41 @@
   }
 },
 {
+  "model": "konfera.order",
+  "pk": 1,
+  "fields": {
+    "uuid": "f8e13e58-70fd-4b52-ae0b-59ee6eabd4b2",
+    "date_created": "2016-10-07T20:29:29.034Z",
+    "date_modified": "2016-10-07T20:27:45.246Z",
+    "price": "30.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "paid",
+    "purchase_date": "2016-10-07T20:27:45.246Z",
+    "payment_date": "2016-10-07T20:29:29.034Z"
+  }
+},
+{
+  "model": "konfera.receipt",
+  "pk": 1,
+  "fields": {
+    "uuid": "d392d91d-efdf-4e7c-af50-8ce830786bb3",
+    "date_created": "2016-10-07T20:29:29.037Z",
+    "date_modified": "2016-10-07T20:29:29.037Z",
+    "order": 1,
+    "title": "Mr.",
+    "street": "Bajkalska 1",
+    "street2": "",
+    "city": "Bratislava",
+    "postcode": "83102",
+    "state": "Slovakia",
+    "companyid": "",
+    "taxid": "",
+    "vatid": "",
+    "amount": "30.00"
+  }
+},
+{
   "model": "konfera.room",
   "pk": 1,
   "fields": {
@@ -250,7 +285,9 @@
     "location": 1,
     "footer_text": "",
     "analytics": "",
-    "sponsors": []
+    "sponsors": [
+      1
+    ]
   }
 },
 {
@@ -311,6 +348,56 @@
     "footer_text": "",
     "analytics": "",
     "sponsors": []
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 1,
+  "fields": {
+    "uuid": "5c987866-100c-4fe9-8404-47ea5f75986f",
+    "date_created": "2016-10-07T20:36:56.690Z",
+    "date_modified": "2016-10-07T20:36:56.690Z",
+    "title": "Red Hat",
+    "type": 1,
+    "logo": "redhat-logo.svg",
+    "url": "http://www.redhat.com",
+    "about_us": "Red Hat is the world's leading provider of open source enterprise technology, including cloud, virtualization, storage, Linux, and middleware. In addition to enterprise software, we offer award-winning support, training, and consulting services. We're a rapidly growing company supporting more than 90&#37; of Fortune 500 companies."
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 1,
+  "fields": {
+    "uuid": "ab29954a-a98b-4f2d-ab00-7897ac173d8e",
+    "date_created": "2016-10-07T20:36:56.694Z",
+    "date_modified": "2016-10-07T20:36:56.694Z",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "title": "mr",
+    "email": "private@example.com",
+    "phone": "",
+    "bio": "He's a software engineer at Red Hat. When I'm not writing Python code, I help organize meetups, mentor PyLadies, and attend conferences.",
+    "url": "http://encukou.cz/blog/",
+    "social_url": "https://twitter.com/encukou",
+    "country": "CZ",
+    "sponsor": 1
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 1,
+  "fields": {
+    "uuid": "e03ba2f5-e89e-4bde-a1cc-3fab74709e2f",
+    "date_created": "2016-10-07T20:39:27.530Z",
+    "date_modified": "2016-10-07T20:39:27.530Z",
+    "title": "How import works",
+    "abstract": "Every one of us has already used the `import` statement. Do you know what it actually does? How does it find the correct file using the module name and how a text file becomes a module? Did you know that Python can import from ZIP archives or run directories? Do you want to find out how cyclic imports happen and how to avoid them?\r\nThis talk will answer all of these questions.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 1,
+    "secondary_speaker": null,
+    "event": 9
   }
 },
 {
@@ -527,6 +614,40 @@
     "accessibility": "private",
     "usage": 10,
     "event": 9
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 1,
+  "fields": {
+    "uuid": "146af5b6-42a7-4777-ba02-ea86df9cc544",
+    "date_created": "2016-10-07T20:27:45.246Z",
+    "date_modified": "2016-10-07T20:27:45.247Z",
+    "type": 5,
+    "discount_code": null,
+    "status": "registered",
+    "title": "mr",
+    "first_name": "Test",
+    "last_name": "Testovac",
+    "email": "test.testovac@example.com",
+    "phone": "",
+    "description": "",
+    "order": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 1,
+  "fields": {
+    "uuid": "c9a14c91-e6e5-4437-b0a3-a292382d9a44",
+    "date_created": "2016-10-07T20:40:18.808Z",
+    "date_modified": "2016-10-07T20:40:18.808Z",
+    "start": "2016-03-11T09:20:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 1,
+    "duration": 30,
+    "room": 1
   }
 }
 ]
