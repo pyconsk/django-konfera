@@ -49,7 +49,7 @@ class TestEventList(TestCase):
         )
 
     def _get_existing_event(self):
-        url = reverse('event_cfp_form', kwargs={'event_slug': 'one'})
+        url = reverse('event_cfp_form', kwargs={'slug': 'one'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -78,7 +78,7 @@ class TestEventList(TestCase):
         }
 
     def test_cfp_non_existing_event(self):
-        url = reverse('event_cfp_form', kwargs={'event_slug': 'non-existing-event'})
+        url = reverse('event_cfp_form', kwargs={'slug': 'non-existing-event'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
@@ -101,4 +101,4 @@ class TestEventList(TestCase):
         self.assertEquals(talk_in_db[0].status, CFP)
 
         # Test redirect after submission
-        self.assertRedirects(response, reverse('event_details', kwargs={'event_slug': 'one'}))
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))

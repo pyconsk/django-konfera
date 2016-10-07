@@ -11,20 +11,20 @@ from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
 
 
-def event_sponsors_list_view(request, event_slug):
+def event_sponsors_list_view(request, slug):
     context = dict()
 
-    event = get_object_or_404(Event.objects.published(), slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
     context['sponsors'] = event.sponsors.all().order_by('type', 'title')
 
     return render(request=request, template_name='konfera/event_sponsors.html', context=context)
 
 
-def event_speakers_list_view(request, event_slug):
+def event_speakers_list_view(request, slug):
     context = dict()
 
-    event = get_object_or_404(Event.objects.published(), slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
     context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
 
@@ -37,7 +37,7 @@ def event_list(request):
     events = Event.objects.published().order_by('date_from')
 
     if events.count() == 1:
-        return redirect('event_details', event_slug=events[0].slug)
+        return redirect('event_details', slug=events[0].slug)
 
     paginator = Paginator(events, 10)
     page = request.GET.get('page')
@@ -54,18 +54,18 @@ def event_list(request):
     return render(request=request, template_name='konfera/events.html', context=context)
 
 
-def event_details_view(request, event_slug):
+def event_details_view(request, slug):
     context = dict()
 
-    event = get_object_or_404(Event.objects.published(), slug=event_slug)
+    event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
     context['sponsors'] = event.sponsors.all()
 
     return render(request=request, template_name='konfera/event_details.html', context=context)
 
 
-def cfp_form_view(request, event_slug):
-    event = get_object_or_404(Event.objects.published(), slug=event_slug)
+def cfp_form_view(request, slug):
+    event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
     speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
     talk_form = TalkForm(request.POST or None, prefix='talk')
@@ -75,12 +75,12 @@ def cfp_form_view(request, event_slug):
         talk_instance = talk_form.save(commit=False)
         talk_instance.primary_speaker = speaker_instance
         talk_instance.status = CFP
-        talk_instance.event = Event.objects.get(slug=event_slug)
+        talk_instance.event = Event.objects.get(slug=slug)
         talk_instance.save()
         message_text = _("Your talk proposal successfully created.")
         messages.success(request, message_text)
 
-        return redirect('event_details', event_slug=event.slug)
+        return redirect('event_details', slug=event.slug)
 
     context['speaker_form'] = speaker_form
     context['talk_form'] = talk_form
