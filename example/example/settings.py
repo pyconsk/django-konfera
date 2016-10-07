@@ -115,9 +115,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOCALE_PATHS = [
-    os.path.join(BASE_DIR, '..', 'konfera', 'locale'),
-]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
