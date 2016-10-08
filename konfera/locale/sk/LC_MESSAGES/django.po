@@ -1,0 +1,447 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-08 08:31+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: admin.py:20 admin.py:76 tests/test_admin.py:50
+msgid "Description"
+msgstr ""
+
+#: admin.py:23 tests/test_admin.py:53
+msgid "Dates"
+msgstr ""
+
+#: admin.py:26 admin.py:79 admin.py:113 admin.py:140 admin.py:169 admin.py:190
+#: admin.py:211 admin.py:262 templates/konfera/event_details.html:6
+#: tests/test_admin.py:56 tests/test_admin.py:70
+msgid "Details"
+msgstr "Detaily"
+
+#: admin.py:29 admin.py:60 admin.py:82 admin.py:116 admin.py:146 admin.py:172
+#: admin.py:197 admin.py:221 admin.py:243 admin.py:265 tests/test_admin.py:59
+#: tests/test_admin.py:73
+msgid "Modifications"
+msgstr ""
+
+#: admin.py:51
+msgid "Name"
+msgstr ""
+
+#: admin.py:54
+msgid "Contact"
+msgstr ""
+
+#: admin.py:57
+msgid "About"
+msgstr ""
+
+#: admin.py:94
+msgid "Sponsored event"
+msgstr ""
+
+#: admin.py:95
+msgid "Sponsored events"
+msgstr ""
+
+#: admin.py:101
+msgid "Sponsored speaker"
+msgstr ""
+
+#: admin.py:102
+msgid "Sponsored speakers"
+msgstr ""
+
+#: admin.py:143
+msgid "Address"
+msgstr ""
+
+#: admin.py:193 admin.py:217
+msgid "Availability"
+msgstr ""
+
+#: admin.py:214
+msgid "Discount"
+msgstr ""
+
+#: admin.py:237
+msgid "Personal details"
+msgstr ""
+
+#: admin.py:240
+msgid "Ticket info"
+msgstr ""
+
+#: admin.py:259
+msgid "Time"
+msgstr ""
+
+#: event/views.py:80
+msgid "Your talk proposal successfully created."
+msgstr ""
+
+#: models/abstract.py:14
+msgid "Created"
+msgstr ""
+
+#: models/abstract.py:15
+msgid "Last modified"
+msgstr ""
+
+#: models/abstract.py:23
+msgid "Available from"
+msgstr ""
+
+#: models/abstract.py:24
+msgid "Available to"
+msgstr ""
+
+#: models/abstract.py:28
+#, python-format
+msgid "%(date_from)s have to be before %(date_to)s."
+msgstr ""
+
+#: models/discount_code.py:18
+msgid "Value is percentage discount from ticket type price."
+msgstr ""
+
+#: models/discount_code.py:20 models/ticket_type.py:57
+msgid "Amount of tickets that can be issued."
+msgstr ""
+
+#: models/discount_code.py:32
+msgid ""
+"Discount code can not be available before ticket type is available for sale."
+msgstr ""
+
+#: models/discount_code.py:38
+msgid ""
+"Discount code can not be available after ticket type is available for sale."
+msgstr ""
+
+#: models/event.py:11
+msgid "Conference"
+msgstr ""
+
+#: models/event.py:12
+msgid "Meetup"
+msgstr ""
+
+#: models/event.py:21 models/talk.py:15
+msgid "Draft"
+msgstr ""
+
+#: models/event.py:22
+msgid "Published"
+msgstr ""
+
+#: models/event.py:23 models/ticket_type.py:46
+msgid "Private"
+msgstr ""
+
+#: models/event.py:24 models/order.py:21 models/ticket_type.py:17
+msgid "Expired"
+msgstr ""
+
+#: models/event.py:34
+msgid "Event name"
+msgstr ""
+
+#: models/event.py:35
+msgid "Event url"
+msgstr ""
+
+#: models/event.py:35
+msgid "Slug field, relative URL to the event."
+msgstr ""
+
+#: models/event.py:51
+msgid "Event beginning"
+msgstr ""
+
+#: models/event.py:53
+msgid "Event end"
+msgstr ""
+
+#: models/order.py:18
+msgid "Awaiting payment"
+msgstr ""
+
+#: models/order.py:19
+msgid "Partly paid"
+msgstr ""
+
+#: models/order.py:20
+msgid "Paid"
+msgstr ""
+
+#: models/order.py:22 models/ticket.py:18
+msgid "Cancelled"
+msgstr ""
+
+#: models/schedule.py:13
+msgid ""
+"Description will be displayed, only if there is no related talk, eg. coffee "
+"break, lunch etc..."
+msgstr ""
+
+#: models/schedule.py:21
+msgid "Duration in minutes."
+msgstr ""
+
+#: models/schedule.py:25
+#, python-format
+msgid "%(start)s (%(duration)s min)"
+msgstr ""
+
+#: models/speaker.py:11
+msgid "Mr."
+msgstr ""
+
+#: models/speaker.py:12
+msgid "Ms."
+msgstr ""
+
+#: models/sponsor.py:8
+msgid "Platinum"
+msgstr ""
+
+#: models/sponsor.py:9
+msgid "Gold"
+msgstr ""
+
+#: models/sponsor.py:10
+msgid "Silver"
+msgstr ""
+
+#: models/sponsor.py:11
+msgid "Bronze"
+msgstr ""
+
+#: models/sponsor.py:12
+msgid "Other"
+msgstr ""
+
+#: models/sponsor.py:13
+msgid "Django girls"
+msgstr ""
+
+#: models/talk.py:14
+msgid "Call For Proposals"
+msgstr ""
+
+#: models/talk.py:16
+msgid "Approved"
+msgstr ""
+
+#: models/talk.py:17
+msgid "Rejected"
+msgstr ""
+
+#: models/talk.py:18
+msgid "Withdrawn"
+msgstr ""
+
+#: models/talk.py:25
+msgid "Talk"
+msgstr ""
+
+#: models/talk.py:26
+msgid "Workshop"
+msgstr ""
+
+#: models/talk.py:30
+msgid "5 min"
+msgstr ""
+
+#: models/talk.py:31
+msgid "30 min"
+msgstr ""
+
+#: models/talk.py:32
+msgid "45 min"
+msgstr ""
+
+#: models/talk.py:38
+msgid "Abstract will be published in the schedule."
+msgstr ""
+
+#: models/talk.py:41
+msgid "Talk duration in minutes."
+msgstr ""
+
+#: models/talk.py:45
+msgid "Primary speaker"
+msgstr ""
+
+#: models/talk.py:50
+msgid "Secondary speaker"
+msgstr ""
+
+#: models/talk.py:62
+#, python-format
+msgid "%(primary)s have to be different than %(secondary)s."
+msgstr ""
+
+#: models/ticket.py:15
+msgid "Requested"
+msgstr ""
+
+#: models/ticket.py:16
+msgid "Registered"
+msgstr ""
+
+#: models/ticket.py:17
+msgid "Checked-in"
+msgstr ""
+
+#: models/ticket_type.py:15
+msgid "Not available yet"
+msgstr ""
+
+#: models/ticket_type.py:16
+msgid "Active"
+msgstr ""
+
+#: models/ticket_type.py:30
+msgid "Volunteer"
+msgstr ""
+
+#: models/ticket_type.py:31
+msgid "Press"
+msgstr ""
+
+#: models/ticket_type.py:32
+msgid "Student"
+msgstr ""
+
+#: models/ticket_type.py:33
+msgid "Attendee"
+msgstr ""
+
+#: models/ticket_type.py:34
+msgid "Supporter"
+msgstr ""
+
+#: models/ticket_type.py:35
+msgid "Speaker"
+msgstr ""
+
+#: models/ticket_type.py:36
+msgid "Sponsor"
+msgstr ""
+
+#: models/ticket_type.py:37
+msgid "Aid"
+msgstr ""
+
+#: models/ticket_type.py:45
+msgid "Public"
+msgstr ""
+
+#: models/ticket_type.py:47
+msgid "Disabled"
+msgstr ""
+
+#: models/ticket_type.py:83
+msgid ""
+"You are creating ticket type for event that has already ended. Please add "
+"the dates manually."
+msgstr ""
+
+#: models/ticket_type.py:92
+msgid "You can't sell tickets after your event has ended."
+msgstr ""
+
+#: templates/konfera/cfp_form.html:9
+msgid "Who are you? Please introduce yourself."
+msgstr ""
+
+#: templates/konfera/cfp_form.html:11
+msgid "What would you like to talk about?"
+msgstr ""
+
+#: templates/konfera/cfp_form.html:14
+msgid "Submit proposal"
+msgstr ""
+
+#: templates/konfera/event_details.html:14
+msgid "Type of event:"
+msgstr ""
+
+#: templates/konfera/event_details.html:17
+msgid "Description:"
+msgstr ""
+
+#: templates/konfera/event_details.html:20
+msgid "Taking place at:"
+msgstr ""
+
+#: templates/konfera/event_details.html:23
+msgid "Starting at:"
+msgstr ""
+
+#: templates/konfera/event_details.html:26
+msgid "Expected to end:"
+msgstr ""
+
+#: templates/konfera/event_details.html:29
+msgid "Status:"
+msgstr ""
+
+#: templates/konfera/event_details.html:35
+msgid "Event is sponsored by:"
+msgstr ""
+
+#: templates/konfera/event_schedule.html:6
+#: templates/konfera/event_schedule.html:11
+msgid "Schedule"
+msgstr ""
+
+#: templates/konfera/event_speakers.html:6
+msgid "Speakers"
+msgstr ""
+
+#: templates/konfera/event_speakers.html:14
+msgid "Talk:"
+msgstr ""
+
+#: templates/konfera/event_speakers.html:16
+msgid "Speaker #1:"
+msgstr ""
+
+#: templates/konfera/event_speakers.html:21
+msgid "Speaker #2:"
+msgstr ""
+
+#: templates/konfera/event_sponsors.html:6
+msgid "Sponsors"
+msgstr ""
+
+#: templates/konfera/events.html:6
+msgid "List of upcoming events"
+msgstr ""
+
+#: templates/konfera/registration_form.html:4
+#, python-format
+msgid " Registration of a %(type)s "
+msgstr ""
+
+#: templates/konfera/registration_form.html:8
+#, python-format
+msgid " Register as a %(type)s "
+msgstr ""
