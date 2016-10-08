@@ -17,6 +17,6 @@ from django.conf.urls import url
 from konfera.register import views
 
 urlpatterns = [
-    url(r'^volunteer/event/(?P<event_slug>[\w, -]+)/$', views.register_volunteer, name='event_register_volunteer'),
+    url(r'^volunteer/event/(?P<slug>[\w, -]+)/$', views.register_volunteer, name='event_register_volunteer'),
 
 ]
