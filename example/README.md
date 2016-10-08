@@ -4,15 +4,11 @@ This example is provided as a convenience feature to allow potential users to tr
 
 It can also be used to develop the app in place.
 
-Prerequisites to beginning development: python3 and sqlite3 installed
+Prerequisites to beginning development:
+  - python3 and sqlite3 installed.
+  - We suggest using [`pyvenv`](https://docs.python.org/3/library/venv.html) to setup a virtualenv for the project (to isolate project-specific dependencies from the rest of your system)
 
 To run this example, follow these instructions:
-
-0. Install [virtualenv](http://docs.python-guide.org/en/latest/dev/virtualenvs/) via pip, and create a new virtualenv with the following command:
-
-  `virtualenv -p /path/to/python3 venv`
-
-Then run `source venv/bin/activate` to start the virtualenv wrapper for the project.
 
 1. Navigate to the `example` directory
 
