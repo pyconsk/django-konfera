@@ -15,7 +15,11 @@ from konfera.models.ticket_type import TicketType, VOLUNTEER
 def register_volunteer(request, event_slug):
     context = dict()
     event = get_object_or_404(Event, slug=event_slug)
-    volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER)
+    volunteer_ticket_type = get_object_or_404(
+            TicketType,
+            event=event.id,
+            attendee_type=VOLUNTEER
+    )
 
     if request.method == "POST":
         form = VolunteerRegistrationForm(request.POST)
@@ -56,4 +60,3 @@ def meetup_list(request):
     context['meetups'] = meetups
 
     return render(request, 'konfera/meetups.html', context=context)
-
