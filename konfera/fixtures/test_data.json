@@ -34,6 +34,56 @@
   }
 },
 {
+  "model": "konfera.order",
+  "pk": 1,
+  "fields": {
+    "uuid": "f8e13e58-70fd-4b52-ae0b-59ee6eabd4b2",
+    "date_created": "2016-10-07T20:29:29.034Z",
+    "date_modified": "2016-10-07T20:27:45.246Z",
+    "price": "30.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "paid",
+    "purchase_date": "2016-10-07T20:27:45.246Z",
+    "payment_date": "2016-10-07T20:29:29.034Z"
+  }
+},
+{
+  "model": "konfera.order",
+  "pk": 2,
+  "fields": {
+    "uuid": "499c93aa-7a75-4a45-ab09-61a34242819f",
+    "date_created": "2016-10-07T20:43:14.274Z",
+    "date_modified": "2016-10-07T20:43:14.274Z",
+    "price": "0.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "awaiting_payment",
+    "purchase_date": "2016-10-07T20:43:14.275Z",
+    "payment_date": null
+  }
+},
+{
+  "model": "konfera.receipt",
+  "pk": 1,
+  "fields": {
+    "uuid": "d392d91d-efdf-4e7c-af50-8ce830786bb3",
+    "date_created": "2016-10-07T20:29:29.037Z",
+    "date_modified": "2016-10-07T20:29:29.037Z",
+    "order": 1,
+    "title": "Mr.",
+    "street": "Bajkalska 1",
+    "street2": "",
+    "city": "Bratislava",
+    "postcode": "83102",
+    "state": "Slovakia",
+    "companyid": "",
+    "taxid": "",
+    "vatid": "",
+    "amount": "30.00"
+  }
+},
+{
   "model": "konfera.room",
   "pk": 1,
   "fields": {
@@ -250,7 +300,10 @@
     "location": 1,
     "footer_text": "",
     "analytics": "",
-    "sponsors": []
+    "sponsors": [
+      1,
+      2
+    ]
   }
 },
 {
@@ -311,6 +364,106 @@
     "footer_text": "",
     "analytics": "",
     "sponsors": []
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 1,
+  "fields": {
+    "uuid": "5c987866-100c-4fe9-8404-47ea5f75986f",
+    "date_created": "2016-10-07T20:36:56.690Z",
+    "date_modified": "2016-10-07T20:36:56.690Z",
+    "title": "Red Hat",
+    "type": 1,
+    "logo": "redhat-logo.svg",
+    "url": "http://www.redhat.com",
+    "about_us": "Red Hat is the world's leading provider of open source enterprise technology, including cloud, virtualization, storage, Linux, and middleware. In addition to enterprise software, we offer award-winning support, training, and consulting services. We're a rapidly growing company supporting more than 90&#37; of Fortune 500 companies."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 2,
+  "fields": {
+    "uuid": "d65dd72a-76d2-4a0e-8e3c-6b1e2f50ea04",
+    "date_created": "2016-10-08T05:43:24.383Z",
+    "date_modified": "2016-10-08T05:43:24.384Z",
+    "title": "Erigones",
+    "type": 1,
+    "logo": "erigones-logo.svg",
+    "url": "https://erigones.com",
+    "about_us": "Professional virtualization products and services from Slovakia. Used by companies focused on deploying and maintaining large server farms and scalable server infrastructures. Our product, Erigones SDDC, is THE cloud management software used for deploying, maintaining and automating cloud data centers and their processes."
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 1,
+  "fields": {
+    "uuid": "ab29954a-a98b-4f2d-ab00-7897ac173d8e",
+    "date_created": "2016-10-07T20:36:56.694Z",
+    "date_modified": "2016-10-07T20:36:56.694Z",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "title": "mr",
+    "email": "private@example.com",
+    "phone": "",
+    "bio": "He's a software engineer at Red Hat. When I'm not writing Python code, I help organize meetups, mentor PyLadies, and attend conferences.",
+    "url": "http://encukou.cz/blog/",
+    "social_url": "https://twitter.com/encukou",
+    "country": "CZ",
+    "sponsor": 1
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 2,
+  "fields": {
+    "uuid": "05b7bd48-97a4-4834-861c-488fd373ca4d",
+    "date_created": "2016-10-08T05:45:17.924Z",
+    "date_modified": "2016-10-08T05:45:17.924Z",
+    "first_name": "Andrea",
+    "last_name": "\u0160te\u0148ov\u00e1",
+    "title": "ms",
+    "email": "private2@example.com",
+    "phone": "",
+    "bio": "Andrea works on development of server applications since 2012. IT runs in her family, and that was one of the reasons she chose this path. She dislikes bad code and old technologies. Furthermore, she is one of the organizers of Bratislava Scala meetup.",
+    "url": "",
+    "social_url": "https://www.linkedin.com/in/andrea-%C5%A1te%C5%88ov%C3%A1-3b92b050",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 1,
+  "fields": {
+    "uuid": "e03ba2f5-e89e-4bde-a1cc-3fab74709e2f",
+    "date_created": "2016-10-07T20:39:27.530Z",
+    "date_modified": "2016-10-07T20:39:27.530Z",
+    "title": "How import works",
+    "abstract": "Every one of us has already used the `import` statement. Do you know what it actually does? How does it find the correct file using the module name and how a text file becomes a module? Did you know that Python can import from ZIP archives or run directories? Do you want to find out how cyclic imports happen and how to avoid them?\r\nThis talk will answer all of these questions.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 1,
+    "secondary_speaker": null,
+    "event": 9
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 2,
+  "fields": {
+    "uuid": "464cc993-2c57-4b51-b9c9-5f960d152f76",
+    "date_created": "2016-10-08T05:45:57.903Z",
+    "date_modified": "2016-10-08T05:45:57.903Z",
+    "title": "Basics of functional programming",
+    "abstract": "Functional programming offers a different approach to data and program structure. Originally a domain of academic institutions, however, nowadays it is getting used more and more, particularly thanks to its usefulness in distributed systems. Examples of functional properties in code include: usage of immutable variables, recursion, pattern matching or higher-order functions, which are not always easy to understand for a beginner. In this talk, we will introduce some of the functional programming properties and their usage in Python.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 2,
+    "secondary_speaker": null,
+    "event": 9
   }
 },
 {
@@ -527,6 +680,74 @@
     "accessibility": "private",
     "usage": 10,
     "event": 9
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 1,
+  "fields": {
+    "uuid": "146af5b6-42a7-4777-ba02-ea86df9cc544",
+    "date_created": "2016-10-07T20:27:45.246Z",
+    "date_modified": "2016-10-07T20:27:45.247Z",
+    "type": 5,
+    "discount_code": null,
+    "status": "registered",
+    "title": "mr",
+    "first_name": "Test",
+    "last_name": "Testovac",
+    "email": "test.testovac@example.com",
+    "phone": "",
+    "description": "",
+    "order": 1
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 2,
+  "fields": {
+    "uuid": "ee19148f-392e-4ea6-97c3-270e0056b931",
+    "date_created": "2016-10-07T20:43:14.276Z",
+    "date_modified": "2016-10-07T20:43:14.276Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "email": "private@example.com",
+    "phone": "",
+    "description": "",
+    "order": 2
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 1,
+  "fields": {
+    "uuid": "c9a14c91-e6e5-4437-b0a3-a292382d9a44",
+    "date_created": "2016-10-07T20:40:18.808Z",
+    "date_modified": "2016-10-07T20:40:18.808Z",
+    "start": "2016-03-11T09:20:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 1,
+    "duration": 30,
+    "room": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 2,
+  "fields": {
+    "uuid": "16dc2ad4-a44c-4cd4-ac96-b5730f2a0a35",
+    "date_created": "2016-10-08T06:55:43.259Z",
+    "date_modified": "2016-10-08T06:55:43.259Z",
+    "start": "2016-03-11T10:00:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 2,
+    "duration": 30,
+    "room": 1
   }
 }
 ]
