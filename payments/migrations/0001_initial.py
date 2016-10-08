@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
             name='ProcessedTransation',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('datetime', models.DateTimeField(auto_now_add=True)),
+                ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('transaction_id', models.CharField(max_length=20, unique=True)),
             ],
         ),
