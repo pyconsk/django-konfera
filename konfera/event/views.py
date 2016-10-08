@@ -19,6 +19,8 @@ def event_sponsors_list_view(request, event_slug):
     context['event'] = event
     context['sponsors'] = event.sponsors.all().order_by('type', 'title')
 
+    set_event_ga_to_context(event, context)
+
     return render(request=request, template_name='konfera/event_sponsors.html', context=context)
 
 
@@ -28,6 +30,8 @@ def event_speakers_list_view(request, event_slug):
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
     context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
+
+    set_event_ga_to_context(event, context)
 
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
 
@@ -88,6 +92,8 @@ def cfp_form_view(request, event_slug):
     context['speaker_form'] = speaker_form
     context['talk_form'] = talk_form
 
+    set_event_ga_to_context(event, context)
+
     return render(request=request, template_name='konfera/cfp_form.html', context=context)
 
 
@@ -113,5 +119,7 @@ class ScheduleView(DetailView):
             {'day': day, 'date': event.date_from + timedelta(days=day)}
             for day in range(event_duration.days + 1)
         ]
+
+        set_event_ga_to_context(event, context)
 
         return context
