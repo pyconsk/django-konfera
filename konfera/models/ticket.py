@@ -2,19 +2,24 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
-from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
+from konfera.models.abstract import KonferaModel
 from konfera.models.order import Order, AWAITING
+from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
 
+REQUESTED = 'requested'
+REGISTERED = 'registered'
+CHECKEDIN = 'checked-in'
+CANCELLED = 'cancelled'
 
 TICKET_STATUS = (
-    ('requested', _('Requested')),
-    ('registered', _('Registered')),
-    ('checked-in', _('Checked-in')),
-    ('cancelled', _('Cancelled')),
+    (REQUESTED, _('Requested')),
+    (REGISTERED, _('Registered')),
+    (CHECKEDIN, _('Checked-in')),
+    (CANCELLED, _('Cancelled')),
 )
 
 
-class Ticket(models.Model):
+class Ticket(KonferaModel):
     type = models.ForeignKey('TicketType')
     discount_code = models.ForeignKey('DiscountCode', blank=True, null=True)
     status = models.CharField(choices=TICKET_STATUS, max_length=32)
@@ -34,6 +39,7 @@ class Ticket(models.Model):
         ).strip()
 
     def discount_calculator(self):
+
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100
         return 0

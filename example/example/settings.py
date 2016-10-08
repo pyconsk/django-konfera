@@ -63,6 +63,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'konfera.utils.collect_view_data',
             ],
         },
     },
@@ -126,3 +127,5 @@ MEDIA_URL = '/media/'
 
 FIO_BANK_TOKEN = 'token'
 PAYMENT_ERROR_RATE = 0  # percentage
+
+GOOGLE_ANALYTICS = 'UA-XXXXXXXX-X'

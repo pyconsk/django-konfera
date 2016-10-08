@@ -9,7 +9,7 @@ python:
 env:
   - DJANGO_VERSION=1.8.15
   - DJANGO_VERSION=1.9.10
-  - DJANGO_VERSION=1.10.1
+  - DJANGO_VERSION=1.10.2
 
 matrix:
   include:
@@ -35,3 +35,11 @@ script: coverage run --source konfera runtests.py
 
 after_success:
   - codecov
+
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/2f5f7550882030346bca
+    on_success: change
+    on_failure: always
+    on_start: never

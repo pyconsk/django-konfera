@@ -13,7 +13,9 @@ class SponsorshipInline(admin.TabularInline):
 class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_from', 'date_to', 'event_type', 'status')
     list_filter = ('event_type', 'status')
-
+    ordering = ('date_from', 'date_to', 'title')
+    search_fields = ('=title',)
+    readonly_fields = ('uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Description'), {
             'fields': ('title', 'slug', 'description'),
@@ -22,14 +24,16 @@ class EventAdmin(admin.ModelAdmin):
             'fields': ('date_from', 'date_to'),
         }),
         (_('Details'), {
-            'fields': ('event_type', 'status', 'location'),
+            'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
         }),
     )
-
     inlines = [
         SponsorshipInline,
     ]
-
     prepopulated_fields = {
         'slug': ('title',),
     }
@@ -42,6 +46,7 @@ class SpeakerAdmin(admin.ModelAdmin):
     list_filter = ('country', 'title', 'sponsor',)
     ordering = ('last_name', 'first_name',)
     search_fields = ('=last_name', '=first_name',)  # case insensitive searching
+    readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Name'), {
             'fields': ('title', ('first_name', 'last_name',),)
@@ -52,6 +57,10 @@ class SpeakerAdmin(admin.ModelAdmin):
         (_('About'), {
             'fields': ('bio', 'country', ('url', 'social_url',), 'sponsor',)
         }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
     )
 
 admin.site.register(Speaker, SpeakerAdmin)
@@ -61,13 +70,18 @@ class TalkAdmin(admin.ModelAdmin):
     list_display = ('title', 'primary_speaker', 'type', 'duration', 'event', 'status',)
     list_filter = ('type', 'duration', 'event', 'status',)
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
-    ordering = ('title',)
+    ordering = ('title', 'event')
+    readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Description'), {
             'fields': ('title', 'abstract', 'event',)
         }),
         (_('Details'), {
             'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
         }),
     )
 
@@ -94,12 +108,16 @@ class SponsorAdmin(admin.ModelAdmin):
     list_filter = ('type',)
     search_fields = ('=title',)
     ordering = ('type', 'title',)
+    readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
-        (None, {
+        (_('Details'), {
             'fields': ('title', 'type', 'logo', 'url', 'about_us',)
         }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
     )
-
     inlines = [
         SponsoredEventsInline,
         SponsoredSpeakersInline,
@@ -116,15 +134,20 @@ class RoomsInline(admin.StackedInline):
 class LocationAdmin(admin.ModelAdmin):
     list_display = ('title', 'city', 'capacity')
     list_filter = ('city',)
+    ordering = ('city', 'title')
+    readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
             'fields': ('title', 'capacity',)
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'state', 'city', 'postcode',)
+            'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
         }),
     )
-
     inlines = [
         RoomsInline,
     ]
@@ -139,13 +162,15 @@ class ReceiptInline(admin.StackedInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('purchase_date', 'price', 'discount', 'status', 'receipt_of')
     list_filter = ('status',)
-    readonly_fields = ('purchase_date', 'payment_date', 'amount_paid')
+    ordering = ('purchase_date',)
+    search_fields = ('=uuid',)
+    readonly_fields = ('purchase_date', 'payment_date', 'amount_paid', 'uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
-            'fields': ('price', 'discount', 'status', 'amount_paid'),
+            'fields': ('uuid', 'price', 'discount', 'status', 'amount_paid'),
         }),
-        (_('Dates'), {
-            'fields': ('purchase_date', 'payment_date'),
+        (_('Modifications'), {
+            'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'),
             'classes': ('collapse',),
         }),
     )
@@ -156,7 +181,92 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 
-admin.site.register(TicketType)
-admin.site.register(DiscountCode)
-admin.site.register(Ticket)
-admin.site.register(Schedule)
+
+class TicketTypeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'price', 'attendee_type', 'event', 'status')
+    list_filter = ('attendee_type',)
+    ordering = ('title', 'event')
+    readonly_fields = ('status', 'uuid', 'date_created', 'date_modified')
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'description', 'uuid', 'price', 'attendee_type', 'event',)
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to', 'status'),
+            'classes': ('collapse',),
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
+    )
+
+admin.site.register(TicketType, TicketTypeAdmin)
+
+
+class DiscountCodeAdmin(admin.ModelAdmin):
+    list_display = ('title', 'discount', 'ticket_type', 'usage')
+    ordering = ('title', 'ticket_type')
+    readonly_fields = ('date_created', 'date_modified')
+    fieldsets = (
+        (_('Details'), {
+            'fields': ('title', 'hash', 'ticket_type')
+        }),
+        (_('Discount'), {
+            'fields': ('discount', 'usage')
+        }),
+        (_('Availability'), {
+            'fields': ('date_from', 'date_to'),
+            'classes': ('collapse',),
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
+    )
+
+admin.site.register(DiscountCode, DiscountCodeAdmin)
+
+
+class TicketAdmin(admin.ModelAdmin):
+    list_display = ('email', 'type', 'status')
+    list_filter = ('status', 'type__event',)
+    ordering = ('order__purchase_date', 'email')
+    search_fields = ('=last_name', '=first_name', '=email', )  # case insensitive searching
+    readonly_fields = ('date_created', 'date_modified')
+    fieldsets = (
+        (_('Personal details'), {
+            'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
+        }),
+        (_('Ticket info'), {
+            'fields': ('type', 'discount_code', 'status', 'description')
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
+    )
+
+admin.site.register(Ticket, TicketAdmin)
+
+
+class ScheduleAdmin(admin.ModelAdmin):
+    list_display = ('start', 'duration', 'talk', 'room')
+    list_filter = ('talk__event', 'room')
+    ordering = ('start', 'room', 'event')
+    search_fields = ('=description',)
+    readonly_fields = ('date_created', 'date_modified')
+    fieldsets = (
+        (_('Time'), {
+            'fields': ('start', 'duration'),
+        }),
+        (_('Details'), {
+            'fields': ('event', 'talk', 'room', 'description')
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified'),
+            'classes': ('collapse',),
+        }),
+    )
+
+admin.site.register(Schedule, ScheduleAdmin)

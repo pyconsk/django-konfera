@@ -62,8 +62,10 @@ This is reusable django app, which means you have to create project first. Creat
 6. ``cd pyconsk`` lets go inside the project directory
 7. ``ln -s ../django-konfera/konfera .`` create a symbolic link to it is in PYTHONPATH and app can be found by Django
 8. in pyconsk/settings.py add konfera into INSTALLED APPS
-9. ``python manage.py migrate`` execute migration so it will pre-populate the DB structure
-10. ``python manage.py runserver`` start development server, and check the app in browser
+9. ``url(r'^konfera/', include('konfera.urls')`` include konfera.urls in project's urls.py file
+10. ``python manage.py migrate`` execute migration so it will pre-populate the DB structure
+11. ``python manage.py loaddata konfera/fixtures/test_data.json`` insert dummy data into DB
+12. ``python manage.py runserver`` start development server, and check the app in browser
 
 Development metodology
 ----------------------
