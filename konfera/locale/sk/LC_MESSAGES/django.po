@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-07 17:56+0000\n"
+"POT-Creation-Date: 2016-10-08 08:25+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 #: admin.py:211 admin.py:262 templates/konfera/event_details.html:6
 #: tests/test_admin.py:56 tests/test_admin.py:70
 msgid "Details"
-msgstr ""
+msgstr "Detaily"
 
 #: admin.py:29 admin.py:60 admin.py:82 admin.py:116 admin.py:146 admin.py:172
 #: admin.py:197 admin.py:221 admin.py:243 admin.py:265 tests/test_admin.py:59
@@ -91,7 +91,7 @@ msgid "Time"
 msgstr ""
 
 #: event/views.py:80
-msgid "Your talk proposal successfully created"
+msgid "Your talk proposal successfully created."
 msgstr ""
 
 #: models/abstract.py:14
@@ -193,17 +193,17 @@ msgstr ""
 msgid "Cancelled"
 msgstr ""
 
-#: models/schedule.py:12
+#: models/schedule.py:13
 msgid ""
 "Description will be displayed, only if there is no related talk, eg. coffee "
 "break, lunch etc..."
 msgstr ""
 
-#: models/schedule.py:20
+#: models/schedule.py:21
 msgid "Duration in minutes."
 msgstr ""
 
-#: models/schedule.py:24
+#: models/schedule.py:25
 #, python-format
 msgid "%s (%s min)"
 msgstr ""
@@ -367,15 +367,15 @@ msgstr ""
 msgid "You can't sell tickets after your event has ended."
 msgstr ""
 
-#: templates/konfera/cfp_form.html:8
+#: templates/konfera/cfp_form.html:9
 msgid "Who are you? Please introduce yourself."
 msgstr ""
 
-#: templates/konfera/cfp_form.html:12
+#: templates/konfera/cfp_form.html:11
 msgid "What would you like to talk about?"
 msgstr ""
 
-#: templates/konfera/cfp_form.html:17
+#: templates/konfera/cfp_form.html:14
 msgid "Submit proposal"
 msgstr ""
 
@@ -405,6 +405,11 @@ msgstr ""
 
 #: templates/konfera/event_details.html:35
 msgid "Event is sponsored by:"
+msgstr ""
+
+#: templates/konfera/event_schedule.html:6
+#: templates/konfera/event_schedule.html:11
+msgid "Schedule"
 msgstr ""
 
 #: templates/konfera/event_speakers.html:6
