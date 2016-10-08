@@ -17,9 +17,7 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
-    url(r'^event/', include('konfera.event.urls')),
     url(r'^meetups/', views.meetup_list, name='list_all_meetups'),
-    url(r'^(?P<event_slug>[\w, -]+)/register/volunteer/$', views.register_volunteer, name='event_register_volunteer'),
     url(r'^events/', include('konfera.event.urls'), name='event_list'),
     url(r'register/', include('konfera.register.urls')),
 ]

@@ -1,10 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.forms import VolunteerRegistrationForm
-from konfera.models.event import Event, MEETUP
-from konfera.models.talk import CFP
 from konfera.models import Event, TicketType
 from konfera.models.ticket_type import VOLUNTEER
 from konfera.register.forms import VolunteerRegistrationForm
