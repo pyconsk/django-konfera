@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
+from konfera.utils import set_event_ga_to_context
 
 
 def event_sponsors_list_view(request, event_slug):
@@ -60,6 +61,8 @@ def event_details_view(request, event_slug):
     event = get_object_or_404(Event.objects.published(), slug=event_slug)
     context['event'] = event
     context['sponsors'] = event.sponsors.all()
+
+    set_event_ga_to_context(event, context)
 
     return render(request=request, template_name='konfera/event_details.html', context=context)
 
