@@ -48,21 +48,18 @@ def _process_payment(order, payment):
     """
     Process the payment
     - change the amount_paid
-    - send the order's status to attendee by email
     - log what happend
     - add payment to ProcessedTransation
     """
     amount_to_pay = order.left_to_pay - payment['amount']
 
     if amount_to_pay <= order.to_pay * Decimal(settings.PAYMENT_ERROR_RATE / 100):
-        # todo: email
         order.status = PAID
 
         msg = 'Order(id={order_id}) was paid in payment with transaction_id={transaction_id}'.format(
             order_id=order.pk, transaction_id=payment['transaction_id'])
         logger.warning(msg)
     else:
-        # todo: email
         order.status = PARTLY_PAID
 
         msg = 'Payment with transaction_id={transaction_id} for Order(id={order_id}) was found but it\'s outside ' \
