@@ -1,7 +1,5 @@
 # Payments
 
-**Variable symbol** should be the order's `ID`.
-
 
 ## Installation
 
