@@ -1,2 +1,4 @@
 django==1.10.2
 pytz==2016.7
+flake8==3.0.4
+coverage==4.2
