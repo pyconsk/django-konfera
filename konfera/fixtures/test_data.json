@@ -49,6 +49,21 @@
   }
 },
 {
+  "model": "konfera.order",
+  "pk": 2,
+  "fields": {
+    "uuid": "499c93aa-7a75-4a45-ab09-61a34242819f",
+    "date_created": "2016-10-07T20:43:14.274Z",
+    "date_modified": "2016-10-07T20:43:14.274Z",
+    "price": "0.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "awaiting_payment",
+    "purchase_date": "2016-10-07T20:43:14.275Z",
+    "payment_date": null
+  }
+},
+{
   "model": "konfera.receipt",
   "pk": 1,
   "fields": {
@@ -286,7 +301,8 @@
     "footer_text": "",
     "analytics": "",
     "sponsors": [
-      1
+      1,
+      2
     ]
   }
 },
@@ -365,6 +381,20 @@
   }
 },
 {
+  "model": "konfera.sponsor",
+  "pk": 2,
+  "fields": {
+    "uuid": "d65dd72a-76d2-4a0e-8e3c-6b1e2f50ea04",
+    "date_created": "2016-10-08T05:43:24.383Z",
+    "date_modified": "2016-10-08T05:43:24.384Z",
+    "title": "Erigones",
+    "type": 1,
+    "logo": "erigones-logo.svg",
+    "url": "https://erigones.com",
+    "about_us": "Professional virtualization products and services from Slovakia. Used by companies focused on deploying and maintaining large server farms and scalable server infrastructures. Our product, Erigones SDDC, is THE cloud management software used for deploying, maintaining and automating cloud data centers and their processes."
+  }
+},
+{
   "model": "konfera.speaker",
   "pk": 1,
   "fields": {
@@ -384,6 +414,25 @@
   }
 },
 {
+  "model": "konfera.speaker",
+  "pk": 2,
+  "fields": {
+    "uuid": "05b7bd48-97a4-4834-861c-488fd373ca4d",
+    "date_created": "2016-10-08T05:45:17.924Z",
+    "date_modified": "2016-10-08T05:45:17.924Z",
+    "first_name": "Andrea",
+    "last_name": "\u0160te\u0148ov\u00e1",
+    "title": "ms",
+    "email": "private2@example.com",
+    "phone": "",
+    "bio": "Andrea works on development of server applications since 2012. IT runs in her family, and that was one of the reasons she chose this path. She dislikes bad code and old technologies. Furthermore, she is one of the organizers of Bratislava Scala meetup.",
+    "url": "",
+    "social_url": "https://www.linkedin.com/in/andrea-%C5%A1te%C5%88ov%C3%A1-3b92b050",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
   "model": "konfera.talk",
   "pk": 1,
   "fields": {
@@ -396,6 +445,23 @@
     "status": "approved",
     "duration": 30,
     "primary_speaker": 1,
+    "secondary_speaker": null,
+    "event": 9
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 2,
+  "fields": {
+    "uuid": "464cc993-2c57-4b51-b9c9-5f960d152f76",
+    "date_created": "2016-10-08T05:45:57.903Z",
+    "date_modified": "2016-10-08T05:45:57.903Z",
+    "title": "Basics of functional programming",
+    "abstract": "Functional programming offers a different approach to data and program structure. Originally a domain of academic institutions, however, nowadays it is getting used more and more, particularly thanks to its usefulness in distributed systems. Examples of functional properties in code include: usage of immutable variables, recursion, pattern matching or higher-order functions, which are not always easy to understand for a beginner. In this talk, we will introduce some of the functional programming properties and their usage in Python.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 2,
     "secondary_speaker": null,
     "event": 9
   }
@@ -636,6 +702,25 @@
   }
 },
 {
+  "model": "konfera.ticket",
+  "pk": 2,
+  "fields": {
+    "uuid": "ee19148f-392e-4ea6-97c3-270e0056b931",
+    "date_created": "2016-10-07T20:43:14.276Z",
+    "date_modified": "2016-10-07T20:43:14.276Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "email": "private@example.com",
+    "phone": "",
+    "description": "",
+    "order": 2
+  }
+},
+{
   "model": "konfera.schedule",
   "pk": 1,
   "fields": {
@@ -646,6 +731,21 @@
     "event": 9,
     "description": "",
     "talk": 1,
+    "duration": 30,
+    "room": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 2,
+  "fields": {
+    "uuid": "16dc2ad4-a44c-4cd4-ac96-b5730f2a0a35",
+    "date_created": "2016-10-08T06:55:43.259Z",
+    "date_modified": "2016-10-08T06:55:43.259Z",
+    "start": "2016-03-11T10:00:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 2,
     "duration": 30,
     "room": 1
   }
