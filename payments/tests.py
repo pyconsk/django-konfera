@@ -7,7 +7,7 @@ from django.test.utils import override_settings
 
 from konfera import models
 from payments import utils
-from payments.models import ProcessedTransation
+from payments.models import ProcessedTransaction
 
 
 logging.disable(logging.WARNING)
@@ -37,7 +37,7 @@ class TestGetNotProcessedPayments(TestCase):
 
     def test_processed_payments_filtered(self):
         payments = [{'transaction_id': '1'}, {'transaction_id': '2'}, {'transaction_id': '3'}]
-        ProcessedTransation.objects.create(transaction_id='2')
+        ProcessedTransaction.objects.create(transaction_id='2')
         self.assertEqual(
             list(utils._get_not_processed_payments(payments)),
             [{'transaction_id': '1'}, {'transaction_id': '3'}]
@@ -110,12 +110,12 @@ class TestProcessPayment(TestCase):
         order = models.Order.objects.create(price=100, discount=10)
         payment = {'amount': 80, 'transaction_id': '7'}
 
-        self.assertEqual(ProcessedTransation.objects.count(), 0)
+        self.assertEqual(ProcessedTransaction.objects.count(), 0)
 
         utils._process_payment(order, payment)
 
-        self.assertEqual(ProcessedTransation.objects.count(), 1)
-        self.assertEqual(ProcessedTransation.objects.all()[0].transaction_id, '7')
+        self.assertEqual(ProcessedTransaction.objects.count(), 1)
+        self.assertEqual(ProcessedTransaction.objects.all()[0].transaction_id, '7')
 
 
 class TestCheckPaymentsStatus(TestCase):

@@ -10,7 +10,7 @@ from fiobank import FioBank
 
 from konfera.models import Order
 from konfera.models.order import AWAITING, PAID, PARTLY_PAID
-from payments.models import ProcessedTransation
+from payments.models import ProcessedTransaction
 
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -30,7 +30,7 @@ def _get_last_payments():
 
 
 def _get_not_processed_payments(payments):
-    processed_payments = set(ProcessedTransation.objects.values_list('transaction_id', flat=True))
+    processed_payments = set(ProcessedTransaction.objects.values_list('transaction_id', flat=True))
     return list(filter(
         lambda payment: payment['transaction_id'] not in processed_payments,
         payments
@@ -49,7 +49,7 @@ def _process_payment(order, payment):
     Process the payment
     - change the amount_paid
     - log what happend
-    - add payment to ProcessedTransation
+    - add payment to ProcessedTransaction
     """
     amount_to_pay = order.left_to_pay - payment['amount']
 
@@ -68,7 +68,7 @@ def _process_payment(order, payment):
 
     order.amount_paid += payment['amount']
     order.save()
-    ProcessedTransation.objects.create(transaction_id=payment['transaction_id'])
+    ProcessedTransaction.objects.create(transaction_id=payment['transaction_id'])
 
 
 def check_payments_status():
