@@ -52,4 +52,4 @@ class Order(KonferaModel):
 
     @property
     def variable_symbol(self):
-        return str(self.pk)  # todo: change to something better
+        return str(int(self.uuid))[:10]
