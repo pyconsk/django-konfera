@@ -155,6 +155,13 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
+class OrderedTicketsInline(admin.StackedInline):
+    model = Ticket
+    verbose_name = _('Ordered ticket')
+    verbose_name_plural = _('Ordered tickets')
+    extra = 1
+
+
 class ReceiptInline(admin.StackedInline):
     model = Receipt
 
@@ -175,7 +182,7 @@ class OrderAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [
-        ReceiptInline,
+        ReceiptInline, OrderedTicketsInline
     ]
 
 admin.site.register(Order, OrderAdmin)
@@ -231,14 +238,14 @@ class TicketAdmin(admin.ModelAdmin):
     list_display = ('email', 'type', 'status')
     list_filter = ('status', 'type__event',)
     ordering = ('order__purchase_date', 'email')
-    search_fields = ('=last_name', '=first_name', '=email', )  # case insensitive searching
-    readonly_fields = ('date_created', 'date_modified')
+    search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
+    readonly_fields = ('order', 'date_created', 'date_modified')
     fieldsets = (
         (_('Personal details'), {
             'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
         }),
         (_('Ticket info'), {
-            'fields': ('type', 'discount_code', 'status', 'description')
+            'fields': ('order', 'type', 'discount_code', 'status', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),

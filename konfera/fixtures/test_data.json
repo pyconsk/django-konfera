@@ -64,6 +64,36 @@
   }
 },
 {
+  "model": "konfera.order",
+  "pk": 3,
+  "fields": {
+    "uuid": "7348129d-74e3-4ebb-9003-e8a364744b07",
+    "date_created": "2016-10-08T07:45:40.241Z",
+    "date_modified": "2016-10-08T07:45:40.241Z",
+    "price": "0.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "awaiting_payment",
+    "purchase_date": "2016-10-08T07:45:40.241Z",
+    "payment_date": null
+  }
+},
+{
+  "model": "konfera.order",
+  "pk": 4,
+  "fields": {
+    "uuid": "d3fe7887-ee72-4358-81ae-1d978f603aab",
+    "date_created": "2016-10-08T07:48:15.643Z",
+    "date_modified": "2016-10-08T07:48:15.643Z",
+    "price": "15.00",
+    "amount_paid": "0.00",
+    "discount": "3.75",
+    "status": "awaiting_payment",
+    "purchase_date": "2016-10-08T07:48:15.643Z",
+    "payment_date": null
+  }
+},
+{
   "model": "konfera.receipt",
   "pk": 1,
   "fields": {
@@ -718,6 +748,44 @@
     "phone": "",
     "description": "",
     "order": 2
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 3,
+  "fields": {
+    "uuid": "241102a0-b918-45f0-8511-afff327c4b9d",
+    "date_created": "2016-10-08T07:45:54.048Z",
+    "date_modified": "2016-10-08T07:45:40.242Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Andrea",
+    "last_name": "\u0160te\u0148ov\u00e1",
+    "email": "private2@example.com",
+    "phone": "",
+    "description": "",
+    "order": 3
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 4,
+  "fields": {
+    "uuid": "fb349ad0-d44c-42b6-8e46-00a480f0f518",
+    "date_created": "2016-10-08T07:48:15.644Z",
+    "date_modified": "2016-10-08T07:48:15.644Z",
+    "type": 6,
+    "discount_code": 1,
+    "status": "registered",
+    "title": "ms",
+    "first_name": "Testerka",
+    "last_name": "Testovacka",
+    "email": "testerka.testovacka@example.com",
+    "phone": "",
+    "description": "",
+    "order": 4
   }
 },
 {
