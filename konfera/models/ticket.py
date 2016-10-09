@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
@@ -44,7 +45,14 @@ class Ticket(KonferaModel):
             return self.type.price * self.discount_code.discount / 100
         return 0
 
+    def clean(self):
+        if self.discount_code and self.discount_code.ticket_type != self.type:
+            raise ValidationError(
+                {'discount_code': _('Discount code is not applicable for the selected ticket type.')})
+        super().clean()
+
     def save(self, *args, **kwargs):
+        self.clean()
         if not hasattr(self, 'order'):
             discount = self.discount_calculator()
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
