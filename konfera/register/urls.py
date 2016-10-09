@@ -14,9 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
+
 from konfera.register import views
+
 
 urlpatterns = [
     url(r'^volunteer/event/(?P<slug>[\w, -]+)/$', views.register_volunteer, name='event_register_volunteer'),
-
+    url(r'^meetups/', views.meetup_list, name='list_all_meetups'),
 ]
