@@ -18,5 +18,5 @@ from django.conf.urls import url, include
 
 urlpatterns = [
     url(r'^events/', include('konfera.event.urls'), name='event_list'),
-    url(r'register/', include('konfera.register.urls')),
+    url(r'^register/', include('konfera.register.urls')),
 ]
