@@ -10,7 +10,7 @@ django-konfera
 .. image:: https://codecov.io/gh/pyconsk/django-konfera/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/pyconsk/django-konfera
 
-Yet another event organization app for Django!
+Yet another event organization app for Django.
 ----------------------------------------------
 
 Web application written in python (django) to manage event organization.
