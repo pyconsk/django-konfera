@@ -1,5 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 
+
 COUNTRIES = (
     ('AD', _('Andorra')),
     ('AE', _('United Arab Emirates')),
@@ -241,5 +242,3 @@ COUNTRIES = (
     ('ZW', _('Zimbabwe')),
     ('ZZ', _('Unknown or unspecified country')),
 )
-
-
