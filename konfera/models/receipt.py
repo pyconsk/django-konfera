@@ -15,7 +15,10 @@ class Receipt(KonferaModel):
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
     state = models.CharField(max_length=128)
-    country = models.CharField( choices=COUNTRIES,max_length=2,default=COUNTRY_DEFAULT)
+    country = models.CharField(
+        choices=COUNTRIES,
+        max_length=2,
+        default=COUNTRY_DEFAULT)
     companyid = models.CharField(max_length=32, blank=True)
     taxid = models.CharField(max_length=32, blank=True)
     vatid = models.CharField(max_length=32, blank=True)
