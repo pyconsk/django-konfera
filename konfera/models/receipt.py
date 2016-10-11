@@ -2,6 +2,9 @@ from django.db import models
 from django.core.validators import MinValueValidator
 
 from konfera.models.abstract import KonferaModel
+from konfera.models.countries import COUNTRIES
+
+COUNTRY_DEFAULT = 'SK'
 
 
 class Receipt(KonferaModel):
@@ -12,6 +15,7 @@ class Receipt(KonferaModel):
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
     state = models.CharField(max_length=128)
+    country = models.CharField( choices=COUNTRIES,max_length=2,default=COUNTRY_DEFAULT)
     companyid = models.CharField(max_length=32, blank=True)
     taxid = models.CharField(max_length=32, blank=True)
     vatid = models.CharField(max_length=32, blank=True)

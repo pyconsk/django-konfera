@@ -1,6 +1,9 @@
 from django.db import models
 
 from konfera.models.abstract import KonferaModel
+from konfera.models.countries import COUNTRIES
+
+COUNTRY_DEFAULT = 'SK'
 
 
 class Location(KonferaModel):
@@ -10,6 +13,7 @@ class Location(KonferaModel):
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
     state = models.CharField(max_length=128)
+    country = models.CharField(choices=COUNTRIES,max_length=2,default=COUNTRY_DEFAULT)
     get_here = models.TextField(blank=True)
     capacity = models.IntegerField(blank=True, null=True)
 

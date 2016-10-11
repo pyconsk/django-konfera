@@ -141,7 +141,7 @@ class LocationAdmin(admin.ModelAdmin):
             'fields': ('title', 'capacity',)
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
+            'fields': ('street', 'street2', 'state', 'city', 'postcode','country', 'get_here')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
