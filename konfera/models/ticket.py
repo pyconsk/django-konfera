@@ -7,20 +7,16 @@ from konfera.models.abstract import KonferaModel
 from konfera.models.order import Order, AWAITING
 from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
 
-REQUESTED = 'requested'
-REGISTERED = 'registered'
-CHECKEDIN = 'checked-in'
-CANCELLED = 'cancelled'
-
-TICKET_STATUS = (
-    (REQUESTED, _('Requested')),
-    (REGISTERED, _('Registered')),
-    (CHECKEDIN, _('Checked-in')),
-    (CANCELLED, _('Cancelled')),
-)
-
 
 class Ticket(KonferaModel):
+
+    TICKET_STATUS = (
+        ('requested', _('Requested')),
+        ('registered', _('Registered')),
+        ('checked-in', _('Checked-in')),
+        ('cancelled', _('Cancelled')),
+    )
+
     type = models.ForeignKey('TicketType')
     discount_code = models.ForeignKey('DiscountCode', blank=True, null=True)
     status = models.CharField(choices=TICKET_STATUS, max_length=32)

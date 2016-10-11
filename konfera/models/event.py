@@ -4,33 +4,23 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.abstract import FromToModel
 
 
-CONFERENCE = 'conference'
-MEETUP = 'meetup'
-
-EVENT_TYPE_CHOICES = (
-    (CONFERENCE, _('Conference')),
-    (MEETUP, _('Meetup')),
-)
-
-DRAFT = 'draft'
-PUBLISHED = 'published'
-PRIVATE = 'private'
-EXPIRED = 'expired'
-
-EVENT_STATUS_CHOICES = (
-    (DRAFT, _('Draft')),
-    (PUBLISHED, _('Published')),
-    (PRIVATE, _('Private')),
-    (EXPIRED, _('Expired')),
-)
-
-
 class EventManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(status=PUBLISHED)
+        return self.get_queryset().filter(status='published')
 
 
 class Event(FromToModel):
+    EVENT_TYPE_CHOICES = (
+        ('conference', _('Conference')),
+        ('meetup', _('Meetup')),
+    )
+
+    EVENT_STATUS_CHOICES = (
+        ('draft', _('Draft')),
+        ('published', _('Published')),
+        ('private', _('Private')),
+        ('expired', _('Expired')),
+    )
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
     slug = models.SlugField(verbose_name=_('Event url'), help_text=_('Slug field, relative URL to the event.'))
     description = models.TextField(blank=True)
