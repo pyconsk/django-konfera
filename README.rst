@@ -36,7 +36,7 @@ Work to be done in near future
 Quick start
 -----------
 
-There is example directory, that provides a convenience feature to allow potential users to try the app straight from the app repo without having to create a django project. It can also be used to develop the app in place. You can read more in `README.md <https://github.com/pyconsk/django-konfera/blob/master/example/README.md>_` inside example directory.
+There is example directory, that provides a convenience feature to allow potential users to try the app straight from the app repo without having to create a django project. It can also be used to develop the app in place. You can read more in `README.md <https://github.com/pyconsk/django-konfera/blob/master/example/README.md>`_ inside example directory.
 
 Contributing Guide
 ------------------
@@ -46,4 +46,4 @@ Contributions are welcome, and they are greatly appreciated! Every little bit he
 Disclaimer
 ----------
 
-Django-konfera was designed for `Bratislava Python Meetups <https://pycon.sk/sk/meetup.html>`_ as a workshop, where people are learning Django and will be user for `PyCon SK 2017 <https://pycon.sk/>_` organization.
+Django-konfera was designed for `Bratislava Python Meetups <https://pycon.sk/sk/meetup.html#github>`_ as a workshop, where people are learning Django and will be user for `PyCon SK 2017 <https://pycon.sk#github>`_ organization.
