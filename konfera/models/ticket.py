@@ -40,16 +40,22 @@ class Ticket(KonferaModel):
         ).strip()
 
     def discount_calculator(self):
-
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100
         return 0
 
     def clean(self):
-        if self.discount_code and self.discount_code.ticket_type != self.type:
-            raise ValidationError(
-                {'discount_code': _('Discount code is not applicable for the selected ticket type.')})
+        if self.discount_code:
+            if self.discount_code.ticket_type != self.type:
+                raise ValidationError(
+                    {'discount_code': _('Discount code is not applicable for the selected ticket type.')})
+            if self.discount_code <= 0:
+                raise ValidationError(
+                    {'discount_code': _('The usage number has exceeded the allowed number for the discount code.')})
         super().clean()
+
+    # def discount_counter(self):
+    #     if self.discount_code:
 
     def save(self, *args, **kwargs):
         self.clean()
@@ -59,3 +65,5 @@ class Ticket(KonferaModel):
             order.save()
             self.order = order
         super(Ticket, self).save(*args, **kwargs)
+        if self.discount_code:
+            self.discount_code -= 1
