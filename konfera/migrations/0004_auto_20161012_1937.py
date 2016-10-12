@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('konfera', '0003_auto_20161011_1907'),
+        ('konfera', '0002_schedule_event.py'),
     ]
 
     operations = [
