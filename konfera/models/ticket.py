@@ -54,17 +54,13 @@ class Ticket(KonferaModel):
                     {'discount_code': _('The usage number has exceeded the allowed number for the discount code.')})
         super().clean()
 
-    # def discount_counter(self):
-    #     if self.discount_code:
-
     def save(self, *args, **kwargs):
         self.clean()
-        discount = 0
         if not hasattr(self, 'order'):
             discount = self.discount_calculator()
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
+            if discount:
+                self.discount_code.sub_usage()
         super(Ticket, self).save(*args, **kwargs)
-        if discount:
-            self.discount_code.usage -= 1

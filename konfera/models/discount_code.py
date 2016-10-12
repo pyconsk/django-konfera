@@ -23,6 +23,13 @@ class DiscountCode(FromToModel):
     def __str__(self):
         return self.title
 
+    def sub_usage(self, num=1):
+        if self.usage >= num:
+            self.usage -= num
+            super(DiscountCode, self).save()
+        else:
+            raise ValidationError({'usage': _('Usage cannot be lower than number of discount applied.')})
+
     def clean(self):
         if hasattr(self, 'ticket_type'):
             if not self.date_from:
