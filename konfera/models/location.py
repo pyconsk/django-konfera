@@ -12,8 +12,7 @@ class Location(KonferaModel):
     street2 = models.CharField(max_length=128, blank=True)
     city = models.CharField(max_length=128)
     postcode = models.CharField(max_length=12)
-    state = models.CharField(max_length=128)
-    country = models.CharField(
+    state = models.CharField(
         choices=COUNTRIES,
         max_length=2,
         default=COUNTRY_DEFAULT)
