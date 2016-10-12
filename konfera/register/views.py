@@ -21,6 +21,10 @@ def register_volunteer(request, slug):
             new_ticket.type = volunteer_ticket_type
             new_ticket.save()
 
+            if volunteer_ticket_type.accessibility != 'public':
+                volunteer_ticket_type.accessibility = 'public'
+                volunteer_ticket_type.save()
+
             return redirect('event_details', slug)
     else:
         form = VolunteerRegistrationForm()
