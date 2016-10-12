@@ -244,7 +244,7 @@ class TicketTest(TestCase):
                                                  type=self.ticket_type, email='test@test.com', phone='0912345678',
                                                  discount_code=self.discount_code_2)
         # the discount code has not been applied so the number of allowed usages should stay 1
-        self.assertEquals(self.discount_code_2.usage, 1)
+        self.assertEquals(self.discount_code_2.usage, 100)
         self.assertRaises(ValidationError, ticket_with_invalid_code.save)
 
 
