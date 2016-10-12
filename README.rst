@@ -17,23 +17,26 @@ Web application written in python (django) to manage event organization.
 
 Features in application (for version 0.1)
 
-* manage Events
-* support multiple events (conferences, meetups)
-* manage Sponsors
-* manage Speakers (and talks, or workshops)
-* call for proposals
+* store multiple Events (conferences, meetups) via admin area
+* manage Sponsors, Speakers (and talks, or workshops) per event via admin area
+* manage schedule via admin area
+* manage orders via admin area
+* call for proposals (speaker and talk registration)
+* volunteer registration
+* show event details (speakers, sponsors)
 
 Work to be done in near future
 
 * attendees registration (tickets)
-* order with multiple tickets (receipts)
-* schedule generation
+* order details (receipts) in frontend
 * schedule generation in ics calendar format
+* automated payments processing (PayPal, FIO bank)
+* attendees registration on premise
 
 Quick start
 -----------
 
-There is example directory, that provides a convenience feature to allow potential users to try the app straight from the app repo without having to create a django project. It can also be used to develop the app in place. You can read more in `README.md` inside example directory.
+There is example directory, that provides a convenience feature to allow potential users to try the app straight from the app repo without having to create a django project. It can also be used to develop the app in place. You can read more in `README.md <https://github.com/pyconsk/django-konfera/blob/master/example/README.md>_` inside example directory.
 
 Contributing Guide
 ------------------
@@ -43,4 +46,4 @@ Contributions are welcome, and they are greatly appreciated! Every little bit he
 Disclaimer
 ----------
 
-Django-konfera was designed for `Bratislava Python Meetups <https://pycon.sk/sk/meetup.html>`_ as a workshop, where people are learning Django.
+Django-konfera was designed for `Bratislava Python Meetups <https://pycon.sk/sk/meetup.html>`_ as a workshop, where people are learning Django and will be user for `PyCon SK 2017 <https://pycon.sk/>_` organization.
