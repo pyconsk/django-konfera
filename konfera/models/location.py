@@ -3,7 +3,7 @@ from django.db import models
 from konfera.models.abstract import KonferaModel
 from konfera.models.countries import COUNTRIES
 
-COUNTRY_DEFAULT = 'SK'
+STATE_DEFAULT = 'SK'
 
 
 class Location(KonferaModel):
@@ -15,7 +15,7 @@ class Location(KonferaModel):
     state = models.CharField(
         choices=COUNTRIES,
         max_length=2,
-        default=COUNTRY_DEFAULT)
+        default=STATE_DEFAULT)
     get_here = models.TextField(blank=True)
     capacity = models.IntegerField(blank=True, null=True)
 

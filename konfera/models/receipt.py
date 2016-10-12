@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator
 from konfera.models.abstract import KonferaModel
 from konfera.models.countries import COUNTRIES
 
-COUNTRY_DEFAULT = 'SK'
+STATE_DEFAULT = 'SK'
 
 
 class Receipt(KonferaModel):
@@ -17,7 +17,7 @@ class Receipt(KonferaModel):
     state = models.CharField(
         choices=COUNTRIES,
         max_length=2,
-        default=COUNTRY_DEFAULT)
+        default=STATE_DEFAULT)
     companyid = models.CharField(max_length=32, blank=True)
     taxid = models.CharField(max_length=32, blank=True)
     vatid = models.CharField(max_length=32, blank=True)
