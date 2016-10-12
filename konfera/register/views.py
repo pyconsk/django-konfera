@@ -32,7 +32,7 @@ def register_volunteer(request, slug):
 
 
 def meetup_list(request):
-    meetups = Event.objects.filter(event_type=MEETUP).order_by('date_from')
+    meetups = Event.objects.filter(event_type=MEETUP).order_by('date_from').reverse()
     context = dict()
 
     if meetups.count() == 1:
