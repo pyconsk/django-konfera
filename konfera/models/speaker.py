@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.models.countries import COUNTRIES
 from konfera.models.abstract import KonferaModel
 
-
 TITLE_UNSET = 'none'
+COUNTRY_DEFAULT = 'SK'
 
 TITLE_CHOICES = (
     (TITLE_UNSET, ''),
@@ -26,7 +27,11 @@ class Speaker(KonferaModel):
     bio = models.TextField(blank=True)
     url = models.URLField(blank=True)
     social_url = models.URLField(blank=True)
-    country = models.CharField(max_length=64)
+    country = models.CharField(
+        choices=COUNTRIES,
+        max_length=2,
+        default=COUNTRY_DEFAULT
+    )
     sponsor = models.ForeignKey('Sponsor', blank=True, null=True, related_name='sponsored_speakers')
 
     def __str__(self):
