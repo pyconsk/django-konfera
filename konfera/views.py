@@ -3,6 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from konfera.models.event import Event, MEETUP
 
+
 def meetup_list(request):
     meetups = Event.objects.filter(event_type=MEETUP).order_by('date_from').reverse()
     context = dict()
