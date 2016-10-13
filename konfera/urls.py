@@ -14,10 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
-
+from konfera import views
 
 urlpatterns = [
     url(r'^events/', include('konfera.event.urls'), name='event_list'),
     url(r'^register/', include('konfera.register.urls')),
-    url(r'^meetups/', 'views.meetup_list', name='list_all_meetups'),
+    url(r'^meetups/', views.meetup_list, name='list_all_meetups'),
 ]

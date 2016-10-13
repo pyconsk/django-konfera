@@ -20,5 +20,4 @@ from konfera.register import views
 
 urlpatterns = [
     url(r'^volunteer/event/(?P<slug>[\w, -]+)/$', views.register_volunteer, name='event_register_volunteer'),
-    # url(r'^meetups/', views.meetup_list, name='list_all_meetups'),
 ]
