@@ -238,6 +238,12 @@ class TicketTest(TestCase):
         # if discount code has been applied, the number of allowed usages should 0
         self.assertEquals(self.discount_code.usage, 0)
 
+        # if saved with a code that matches the ticket type of the ticket, the ticket should save successfully
+        ticket_with_used_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
+                                               type=self.ticket_type, email='test@test.com', phone='0912345678',
+                                               discount_code=self.discount_code)
+        self.assertRaises(ValidationError, ticket_with_used_code.save)
+
         # if saved with a code that does not match the ticket type of the ticket, the ticket should
         # raise a validationError
         ticket_with_invalid_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
