@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from konfera.models.event import Event
 from konfera.models.ticket import REQUESTED
 from konfera.models.ticket_type import TicketType, VOLUNTEER
 from konfera.register.forms import VolunteerRegistrationForm
