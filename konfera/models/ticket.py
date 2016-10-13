@@ -51,7 +51,7 @@ class Ticket(KonferaModel):
                     {'discount_code': _('Discount code is not applicable for the selected ticket type.')})
             if self.discount_code.usage <= 0:
                 raise ValidationError(
-                    {'discount_code': _('The usage number has exceeded the allowed number for the discount code.')})
+                    {'discount_code': _('The allowed usage number has been exceeded.')})
         super().clean()
 
     def save(self, *args, **kwargs):
