@@ -1,9 +1,11 @@
 from datetime import timedelta
 from decimal import Decimal
 import logging
+import requests
 
 from django.db.models import Q
 from django.conf import settings
+
 from django.utils import timezone
 
 from fiobank import FioBank
@@ -26,7 +28,14 @@ def _get_last_payments():
     today = timezone.now()
     date_from = (today - timedelta(days=3)).strftime(DATE_FORMAT)
     date_to = today.strftime(DATE_FORMAT)
-    return list(client.period(date_from, date_to))
+
+    try:
+        data = list(client.period(date_from, date_to))
+    except (requests.exceptions.HTTPError, requests.exceptions.ConnectionError) as e:
+        logger.error('{} in _get_last_payments'.format(e))
+        data = []
+
+    return data
 
 
 def _get_not_processed_payments(payments):
@@ -58,7 +67,7 @@ def _process_payment(order, payment):
 
         msg = 'Order(id={order_id}) was paid in payment with transaction_id={transaction_id}'.format(
             order_id=order.pk, transaction_id=payment['transaction_id'])
-        logger.warning(msg)
+        logger.info(msg)
     else:
         order.status = PARTLY_PAID
 
