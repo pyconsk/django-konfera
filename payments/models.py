@@ -1,6 +1,6 @@
 from django.db import models
+from konfera.models.abstract import KonferaModel
 
 
-class ProcessedTransaction(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+class ProcessedTransaction(KonferaModel):
     transaction_id = models.CharField(max_length=20, unique=True)

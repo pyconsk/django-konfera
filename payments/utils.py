@@ -5,7 +5,6 @@ import requests
 
 from django.db.models import Q
 from django.conf import settings
-
 from django.utils import timezone
 
 from fiobank import FioBank
