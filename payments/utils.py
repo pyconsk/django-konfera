@@ -59,7 +59,14 @@ def _process_payment(order, payment):
     - log what happend
     - add payment to ProcessedTransaction
     """
-    amount_to_pay = order.left_to_pay - payment['amount']
+
+    # >>> Decimal(3.3)
+    # Decimal('3.29999999999999982236431605997495353221893310546875')
+    # >>> Decimal(str(3.3))
+    # Decimal('3.3')
+    amount = Decimal(str(payment['amount']))
+
+    amount_to_pay = order.left_to_pay - amount
 
     if amount_to_pay <= order.to_pay * Decimal(settings.PAYMENT_ERROR_RATE / 100):
         order.status = PAID
@@ -74,9 +81,16 @@ def _process_payment(order, payment):
               'of error rate'.format(order_id=order.pk, transaction_id=payment['transaction_id'])
         logger.warning(msg)
 
-    order.amount_paid += payment['amount']
+    order.amount_paid += amount
     order.save()
-    ProcessedTransaction.objects.create(transaction_id=payment['transaction_id'])
+    ProcessedTransaction.objects.create(
+        transaction_id=payment['transaction_id'],
+        amount=amount,
+        variable_symbol=payment['variable_symbol'],
+        date=payment['date'],
+        currency=payment['currency'],
+        comment=payment['comment']
+    )
 
 
 def check_payments_status():
