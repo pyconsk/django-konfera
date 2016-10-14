@@ -10,6 +10,20 @@ from payments import utils
 from payments.models import ProcessedTransaction
 
 
+def make_payment(new_data):
+    data = {
+        'date': datetime.date(2015, 10, 5),
+        'variable_symbol': '1234',
+        'transaction_id': '1234',
+        'amount': 0.0,
+        'currency': 'EUR',
+        'comment': '',
+        'executor': '',
+    }
+    data.update(new_data)
+    return data
+
+
 logging.disable(logging.WARNING)
 
 
@@ -29,18 +43,28 @@ class TestGetLastPayements(TestCase):
 
 class TestGetNotProcessedPayments(TestCase):
     def test_no_processed_payment_is_available(self):
-        payments = [{'transaction_id': '1'}, {'transaction_id': '2'}]
+        payments = [
+            make_payment({'transaction_id': '1'}),
+            make_payment({'transaction_id': '2'}),
+        ]
         self.assertEqual(
             list(utils._get_not_processed_payments(payments)),
             payments
         )
 
     def test_processed_payments_filtered(self):
-        payments = [{'transaction_id': '1'}, {'transaction_id': '2'}, {'transaction_id': '3'}]
-        ProcessedTransaction.objects.create(transaction_id='2')
+        payments = [
+            make_payment({'transaction_id': '1'}),
+            make_payment({'transaction_id': '2'}),
+            make_payment({'transaction_id': '3'}),
+        ]
+        ProcessedTransaction.objects.create(transaction_id='2', amount=0)
         self.assertEqual(
             list(utils._get_not_processed_payments(payments)),
-            [{'transaction_id': '1'}, {'transaction_id': '3'}]
+            [
+                make_payment({'transaction_id': '1'}),
+                make_payment({'transaction_id': '3'}),
+            ]
         )
 
 
@@ -57,8 +81,8 @@ class TestGetPaymentsForOrder(TestCase):
 
     def test_payments_for_different_orders(self):
         payments = [
-            {'variable_symbol': str(self.order.pk + 7)},
-            {'variable_symbol': str(self.order.pk + 13)},
+            make_payment({'variable_symbol': str(self.order.pk + 7)}),
+            make_payment({'variable_symbol': str(self.order.pk + 13)}),
         ]
         self.assertEqual(
             list(utils._get_payments_for_order(self.order, payments)),
@@ -67,30 +91,33 @@ class TestGetPaymentsForOrder(TestCase):
 
     def test_payment_found_for_order(self):
         payments = [
-            {'variable_symbol': self.order.variable_symbol},
-            {'variable_symbol': str(self.order.pk + 13)},
+            make_payment({'variable_symbol': self.order.variable_symbol}),
+            make_payment({'variable_symbol': str(self.order.pk + 13)}),
         ]
         self.assertEqual(
             list(utils._get_payments_for_order(self.order, payments)),
-            [{'variable_symbol': self.order.variable_symbol}]
+            [make_payment({'variable_symbol': self.order.variable_symbol})]
         )
 
     def test_multiple_payments_found_for_order(self):
         payments = [
-            {'variable_symbol': self.order.variable_symbol},
-            {'variable_symbol': str(self.order.pk + 13)},
-            {'variable_symbol': self.order.variable_symbol},
+            make_payment({'variable_symbol': self.order.variable_symbol}),
+            make_payment({'variable_symbol': str(self.order.pk + 13)}),
+            make_payment({'variable_symbol': self.order.variable_symbol}),
         ]
         self.assertEqual(
             list(utils._get_payments_for_order(self.order, payments)),
-            [{'variable_symbol': self.order.variable_symbol}, {'variable_symbol': self.order.variable_symbol}]
+            [
+                make_payment({'variable_symbol': self.order.variable_symbol}),
+                make_payment({'variable_symbol': self.order.variable_symbol}),
+            ]
         )
 
 
 class TestProcessPayment(TestCase):
     def test_attendee_paid_less(self):
         order = models.Order.objects.create(price=100, discount=10)
-        payment = {'amount': 80, 'transaction_id': '7'}
+        payment = make_payment({'amount': 80, 'transaction_id': '7'})
 
         utils._process_payment(order, payment)
 
@@ -99,7 +126,7 @@ class TestProcessPayment(TestCase):
 
     def test_attendee_paid_enough(self):
         order = models.Order.objects.create(price=100, discount=10, amount_paid=5, status=models.order.PARTLY_PAID)
-        payment = {'amount': 85, 'transaction_id': '7'}
+        payment = make_payment({'amount': 85, 'transaction_id': '7'})
 
         utils._process_payment(order, payment)
 
@@ -108,7 +135,7 @@ class TestProcessPayment(TestCase):
 
     def test_payment_marked_as_processed(self):
         order = models.Order.objects.create(price=100, discount=10)
-        payment = {'amount': 80, 'transaction_id': '7'}
+        payment = make_payment({'amount': 80, 'transaction_id': '7'})
 
         self.assertEqual(ProcessedTransaction.objects.count(), 0)
 
@@ -139,7 +166,7 @@ class TestCheckPaymentsStatus(TestCase):
     def test_one_order_is_paid(self, mock_api_call):
         """ FioBank doesn't have a payment for order1 - order's status was changed """
         mock_api_call.return_value = [
-            {'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'},
+            make_payment({'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'}),
         ]
         utils.check_payments_status()
 
@@ -153,8 +180,8 @@ class TestCheckPaymentsStatus(TestCase):
     @patch('payments.utils._get_last_payments')
     def test_all_orders_are_paid(self, mock_api_call):
         mock_api_call.return_value = [
-            {'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'},
-            {'variable_symbol': self.order2.variable_symbol, 'amount': 200, 'transaction_id': '8'},
+            make_payment({'variable_symbol': self.order1.variable_symbol, 'amount': 200, 'transaction_id': '7'}),
+            make_payment({'variable_symbol': self.order2.variable_symbol, 'amount': 200, 'transaction_id': '8'}),
         ]
 
         utils.check_payments_status()
@@ -169,9 +196,9 @@ class TestCheckPaymentsStatus(TestCase):
     @patch('payments.utils._get_last_payments')
     def test_order_is_paid_in_multiple_payments(self, mock_api_call):
         mock_api_call.return_value = [
-            {'variable_symbol': self.order1.variable_symbol, 'amount': 150, 'transaction_id': '7'},
-            {'variable_symbol': self.order1.variable_symbol, 'amount': 50, 'transaction_id': '79'},
-            {'variable_symbol': self.order2.variable_symbol, 'amount': 30, 'transaction_id': '80'},
+            make_payment({'variable_symbol': self.order1.variable_symbol, 'amount': 150, 'transaction_id': '7'}),
+            make_payment({'variable_symbol': self.order1.variable_symbol, 'amount': 50, 'transaction_id': '79'}),
+            make_payment({'variable_symbol': self.order2.variable_symbol, 'amount': 30, 'transaction_id': '80'}),
         ]
 
         utils.check_payments_status()

@@ -88,6 +88,7 @@ def _process_payment(order, payment):
         amount=amount,
         variable_symbol=payment['variable_symbol'],
         date=payment['date'],
+        executor=payment['executor'],
         currency=payment['currency'],
         comment=payment['comment']
     )
