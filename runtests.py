@@ -1,5 +1,6 @@
 import sys
 
+
 try:
     from django.conf import settings
     from django.test.utils import get_runner
@@ -36,8 +37,10 @@ try:
             "django.contrib.sites",
             "django.contrib.messages",
             "konfera",
+            "payments",
         ],
         SITE_ID=1,
+        PAYMENT_ERROR_RATE=0,
         MIDDLEWARE_CLASSES=(
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
@@ -61,7 +64,7 @@ except ImportError:
 
 def run_tests(*test_args):
     if not test_args:
-        test_args = ['konfera.tests']
+        test_args = ['konfera.tests', 'payments.tests']
 
     # Run tests
     TestRunner = get_runner(settings)
