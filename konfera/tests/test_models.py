@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.text import slugify
+from django.db import IntegrityError
 
 from konfera import models
 from konfera.models.discount_code import DiscountCode
@@ -11,6 +13,7 @@ from konfera.models.event import Event, MEETUP, PUBLISHED
 from konfera.models.order import AWAITING
 from konfera.models.speaker import TITLE_CHOICES
 from konfera.models.ticket_type import TicketType, STATUSES, NOT_AVAILABLE, ACTIVE, EXPIRED
+from .utils import random_string
 
 
 class DiscountCodeTest(TestCase):
@@ -58,6 +61,7 @@ class DiscountCodeTest(TestCase):
 
 
 class EventTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
         entry = models.Event(title="Test Event title")
@@ -68,6 +72,25 @@ class EventTest(TestCase):
         event.date_to = timezone.now()
         event.date_from = event.date_to + datetime.timedelta(+3)
         self.assertRaises(ValidationError, event.clean)
+
+    def test_slug(self):
+        title_length = Event._meta.get_field('title').max_length
+        slug_length = Event._meta.get_field('slug').max_length
+        self.assertGreaterEqual(slug_length, title_length)
+
+        title = random_string(title_length)
+        slug = slugify(title)
+        date_to = timezone.now()
+        date_from = date_to + datetime.timedelta(seconds=1)
+        location = models.Location.objects.order_by('?').first()
+        event1 = Event(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to,
+                       location=location)
+        event1.save()
+        self.assertEqual(Event.objects.get(slug=slug).title, title)
+
+        event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=MEETUP, date_from=date_from,
+                       date_to=date_to, location=location)
+        self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
 
 class LocationTest(TestCase):
