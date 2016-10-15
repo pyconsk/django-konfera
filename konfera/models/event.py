@@ -32,7 +32,8 @@ class EventManager(models.Manager):
 
 class Event(FromToModel):
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
-    slug = models.SlugField(verbose_name=_('Event url'), help_text=_('Slug field, relative URL to the event.'))
+    slug = models.SlugField(verbose_name=_('Event url'), max_length=128, unique=True,
+                            help_text=_('Slug field, relative URL to the event.'))
     description = models.TextField(blank=True)
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
