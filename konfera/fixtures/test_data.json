@@ -11,7 +11,7 @@
     "street2": "Ilkovi\u010dova 2",
     "city": "Bratislava",
     "postcode": "842 16",
-    "state": "Slovak Republic",
+    "state": "SK",
     "get_here": "",
     "capacity": 400
   }
@@ -28,7 +28,7 @@
     "street2": "",
     "city": "Bratislava",
     "postcode": "83102",
-    "state": "Slovak Republic",
+    "state": "SK",
     "get_here": "",
     "capacity": 40
   }
@@ -121,7 +121,7 @@
     "street2": "",
     "city": "Bratislava",
     "postcode": "83102",
-    "state": "Slovakia",
+    "state": "SK",
     "companyid": "",
     "taxid": "",
     "vatid": "",
