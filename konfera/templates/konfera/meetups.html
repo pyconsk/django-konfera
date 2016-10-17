@@ -3,35 +3,40 @@
 
 
 {% block title %}
-  {% trans "Meetups List" %}
+    {% trans "Meetups List" %}
 {% endblock %}
 
+
 {% block content %}
-  <ul>
-    {% for meetup in meetups %}
-    <li style="list-style: none;">
-      <a href="" class="list-group-item">
-        <h4 class="list-group-item-heading">{{ meetup.title}}</h4>
-        <p class="list-group-item-text">{{ meetup.date_from}} {{ meetup.location}}</p>
-     </a>
-    </li>
-    {% endfor %}
-  </ul>
-  <div class="pagination">
-  <span class="step-links">
-      {% if meetups.has_previous %}
-          <a href="?page={{ meetups.previous_page_number }}">{% trans "previous" %}</a>
-      {% endif %}
+    <div class="list-group">
+        {% for meetup in meetups %}
+            <a href="{% url 'event_details' meetup.slug %}" class="list-group-item">
+                <h4 class="list-group-item-heading"> {{ meetup.title }} </h4>
+                <p class="list-group-item-text">{{ meetup.date_from|date:"d. F Y – H:m"}} - {{ meetup.location}}</p>
+            </a>
+        {%  endfor %}
+    </div>
 
-      <span class="current">
-          {% blocktrans with number=meetups.number total=meetups.paginator.num_pages %}
-          Page {{ number }} of {{ total }}.
-          {% endblocktrans %}
-      </span>
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if meetups.has_previous %}
+                <li>
+                    <a href="?page={{ meetups.previous_page_number }}" aria-label="Previous" >
+                    <span aria-hidden="true">&laquo;</span></a>
+                </li>
+            {% endif %}
 
-      {% if meetups.has_next %}
-          <a href="?page={{ meetups.next_page_number }}">{% trans "next" %}</a>
-      {% endif %}
-  </span>
-  </div>
+            {% for page in meetups.paginator.page_range %}
+                <li><a href="?page={{ page }}"> {{ page }} </a></li>
+            {% endfor %}
+
+            {% if meetups.has_next %}
+                <li>
+                    <a href="?page={{ meetups.next_page_number }}" aria-label="Next" >
+                    <span aria-hidden="true">&raquo;</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
 {% endblock %}
