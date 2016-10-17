@@ -12,6 +12,7 @@ from konfera.models.discount_code import DiscountCode
 from konfera.models.event import Event, MEETUP, PUBLISHED
 from konfera.models.order import AWAITING
 from konfera.models.speaker import TITLE_CHOICES
+from konfera.models.sponsor import Sponsor
 from konfera.models.ticket_type import TicketType, STATUSES, NOT_AVAILABLE, ACTIVE, EXPIRED
 from .utils import random_string
 
@@ -176,10 +177,14 @@ class SpeakerTest(TestCase):
 
 
 class SponsorTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
-        entry = models.Sponsor(title="Test Sponsor title")
-        self.assertEqual(str(entry), entry.title)
+        """
+        String representation of model instance have to be equal to its title
+        """
+        sponsor = Sponsor.objects.get(title='Erigones')
+        self.assertEqual(str(sponsor), sponsor.title)
 
 
 class TalkTest(TestCase):
