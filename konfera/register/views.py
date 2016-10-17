@@ -11,8 +11,8 @@ from konfera.register.forms import VolunteerRegistrationForm
 def register_volunteer(request, slug):
     context = dict()
     event = get_object_or_404(Event, slug=slug)
-    volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER,\
-                                                accessibility=PUBLIC)
+    volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER,
+                                              accessibility=PUBLIC)
 
     form = VolunteerRegistrationForm(request.POST or None)
 
