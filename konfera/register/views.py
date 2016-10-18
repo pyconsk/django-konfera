@@ -5,7 +5,7 @@ from django.contrib import messages
 from konfera.models.event import Event
 from konfera.models.ticket import REQUESTED
 from konfera.models.ticket_type import TicketType, VOLUNTEER, PUBLIC
-from konfera.register.forms import VolunteerRegistrationForm
+from konfera.register.forms import RegistrationForm
 
 
 def register_volunteer(request, slug):
@@ -14,7 +14,7 @@ def register_volunteer(request, slug):
     volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER,
                                               accessibility=PUBLIC)
 
-    form = VolunteerRegistrationForm(request.POST or None)
+    form = RegistrationForm(request.POST or None)
 
     if form.is_valid():
         new_ticket = form.save(commit=False)
@@ -27,7 +27,7 @@ def register_volunteer(request, slug):
 
         return redirect('event_details', slug)
     else:
-        form = VolunteerRegistrationForm()
+        form = RegistrationForm()
 
     context['form'] = form
     context['type'] = VOLUNTEER
