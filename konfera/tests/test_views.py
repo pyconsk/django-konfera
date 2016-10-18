@@ -35,7 +35,7 @@ class TestEventRedirect(TestCase):
 
         self.assertEquals(len(Event.objects.published()), 2)
         self.assertTemplateUsed(response, 'konfera/events.html')
-        self.assertEquals(list(response.context['events']), [self.one, two])
+        self.assertEquals(list(response.context['events']), [two, self.one])
 
 
 class TestEventList(TestCase):
