@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event
 from konfera.models.talk import APPROVED, CFP
+from konfera.models.ticket_type import PUBLIC
 from konfera.utils import set_event_ga_to_context
 
 
@@ -123,3 +124,23 @@ class ScheduleView(DetailView):
         set_event_ga_to_context(event, context)
 
         return context
+
+
+def event_public_tickets(request, slug):
+    context = dict()
+
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    context['event'] = event
+    available_tickets = event.tickettype_set.filter(accessibility=PUBLIC)
+    paginator = Paginator(available_tickets, 10)
+    page = request.GET.get('page')
+
+    try:
+        available_tickets = paginator.page(page)
+    except PageNotAnInteger:
+        available_tickets = paginator.page(1)
+    except EmptyPage:
+        available_tickets = paginator.page(paginator.num_pages)
+
+    context['tickets'] = available_tickets
+    return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
