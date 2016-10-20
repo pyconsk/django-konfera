@@ -89,4 +89,4 @@ Development metodology
 Continous Integration
 ---------------------
 
-Once developer changes create `pull request <https://help.github.com/articles/using-pull-requests>`_ we do automated test for supported Python and Django versions and execute all unit tests in our `Travis CI <https://travis-ci.org/pyconsk/django-konfera>`_. Once the pull request is merged to the master `staging server <https://staging.pycon.sk>`_ is updated automatically, so you can see your changes in project on server.
+Once developer changes create `pull request <https://help.github.com/articles/using-pull-requests>`_ we do automated test for supported Python and Django versions and execute all unit tests in our `Travis CI <https://travis-ci.org/pyconsk/django-konfera>`_. Once the pull request is merged to the master `staging server <https://staging.pycon.sk>`_ is updated automatically, so you can see your changes in project on server immediatelly.
