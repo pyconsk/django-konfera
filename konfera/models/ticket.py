@@ -58,8 +58,12 @@ class Ticket(KonferaModel):
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
+            super(Ticket, self).save(*args, **kwargs)
         else:
-            self.order.price += self.type.price
-            self.order.discount += self.discount_calculator()
+            super(Ticket, self).save(*args, **kwargs)
+            self.order.price = 0
+            self.order.discount = 0
+            for ticket in self.order.ticket_set.all():
+                self.order.price += ticket.type.price
+                self.order.discount += ticket.discount_calculator()
             self.order.save()
-        super(Ticket, self).save(*args, **kwargs)
