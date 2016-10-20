@@ -13,7 +13,7 @@ def private_registration(request, event_slug, ticket_uuid):
     context = dict()
     event = get_object_or_404(Event, slug=event_slug)
     ticket_type = get_object_or_404(TicketType, event=event.id, uuid=ticket_uuid, accessibility=PRIVATE)
-    if ticket_type.status != ACTIVE:
+    if ticket_type._get_current_status() != ACTIVE:
         messages.error(request, _('This ticket type is not available'))
         return redirect('event_details', event_slug)
 
