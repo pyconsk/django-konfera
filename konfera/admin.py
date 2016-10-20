@@ -173,6 +173,7 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('=uuid',)
     readonly_fields = (
         'purchase_date', 'payment_date', 'amount_paid', 'uuid', 'date_created', 'date_modified', 'variable_symbol',
+        'price', 'discount',
     )
     fieldsets = (
         (_('Details'), {

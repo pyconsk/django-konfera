@@ -58,4 +58,8 @@ class Ticket(KonferaModel):
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
+        else:
+            self.order.price += self.type.price
+            self.order.discount += self.discount_calculator()
+            self.order.save()
         super(Ticket, self).save(*args, **kwargs)
