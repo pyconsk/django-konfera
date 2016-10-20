@@ -10,7 +10,7 @@
 {% block content %}
     <div class="list-group">
         {% for event in events %}
-            <a href="{% url 'event_sponsors' event.slug %}" class="list-group-item">
+            <a href="{% url 'event_details' event.slug %}" class="list-group-item">
                 <h4 class="list-group-item-heading"> {{ event.title }} </h4>
                 <p class="list-group-item-text">{{event.date_from|date:"d. F Y – H:m" }} - {{ event.location }}</p>
             </a>

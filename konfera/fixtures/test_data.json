@@ -11,7 +11,7 @@
     "street2": "Ilkovi\u010dova 2",
     "city": "Bratislava",
     "postcode": "842 16",
-    "state": "Slovak Republic",
+    "state": "SK",
     "get_here": "",
     "capacity": 400
   }
@@ -28,7 +28,7 @@
     "street2": "",
     "city": "Bratislava",
     "postcode": "83102",
-    "state": "Slovak Republic",
+    "state": "SK",
     "get_here": "",
     "capacity": 40
   }
@@ -94,6 +94,21 @@
   }
 },
 {
+  "model": "konfera.order",
+  "pk": 5,
+  "fields": {
+    "uuid": "73a83141-3b36-4bea-82b7-ebe3356f9ef6",
+    "date_created": "2016-10-09T20:16:56.097Z",
+    "date_modified": "2016-10-09T20:16:56.097Z",
+    "price": "0.00",
+    "amount_paid": "0.00",
+    "discount": "0.00",
+    "status": "awaiting_payment",
+    "purchase_date": "2016-10-09T20:16:56.097Z",
+    "payment_date": null
+  }
+},
+{
   "model": "konfera.receipt",
   "pk": 1,
   "fields": {
@@ -106,7 +121,7 @@
     "street2": "",
     "city": "Bratislava",
     "postcode": "83102",
-    "state": "Slovakia",
+    "state": "SK",
     "companyid": "",
     "taxid": "",
     "vatid": "",
@@ -332,7 +347,13 @@
     "analytics": "",
     "sponsors": [
       1,
-      2
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
     ]
   }
 },
@@ -401,12 +422,12 @@
   "pk": 1,
   "fields": {
     "uuid": "5c987866-100c-4fe9-8404-47ea5f75986f",
-    "date_created": "2016-10-07T20:36:56.690Z",
+    "date_created": "2016-10-09T20:30:59.658Z",
     "date_modified": "2016-10-07T20:36:56.690Z",
     "title": "Red Hat",
     "type": 1,
     "logo": "redhat-logo.svg",
-    "url": "http://www.redhat.com",
+    "url": "https://www.redhat.com",
     "about_us": "Red Hat is the world's leading provider of open source enterprise technology, including cloud, virtualization, storage, Linux, and middleware. In addition to enterprise software, we offer award-winning support, training, and consulting services. We're a rapidly growing company supporting more than 90&#37; of Fortune 500 companies."
   }
 },
@@ -422,6 +443,90 @@
     "logo": "erigones-logo.svg",
     "url": "https://erigones.com",
     "about_us": "Professional virtualization products and services from Slovakia. Used by companies focused on deploying and maintaining large server farms and scalable server infrastructures. Our product, Erigones SDDC, is THE cloud management software used for deploying, maintaining and automating cloud data centers and their processes."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 3,
+  "fields": {
+    "uuid": "e037a3cc-0bdb-49e7-9847-8e95acefde68",
+    "date_created": "2016-10-09T20:27:27.506Z",
+    "date_modified": "2016-10-09T20:27:27.506Z",
+    "title": "Python Software Foundation",
+    "type": 2,
+    "logo": "psf-logo.svg",
+    "url": "https://www.python.org/psf",
+    "about_us": "The Python Software Foundation is a 501(c)(3) nonprofit dedicated to advancing and promoting Python. The PSF supports and encourages Python events world-wide to advance its mission of growing the international community of Python programmers, and hosts the North American PyCon conference as its flagship annual event."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 4,
+  "fields": {
+    "uuid": "de625fc2-4a9b-4b3b-9eb4-1f5c232118e4",
+    "date_created": "2016-10-09T20:31:10.644Z",
+    "date_modified": "2016-10-09T20:28:29.646Z",
+    "title": "VNET",
+    "type": 2,
+    "logo": "vnet-logo.svg",
+    "url": "https://www.vnet.sk",
+    "about_us": "We have extensive experience in providing comprehensive telecommunication solutions, from guaranteed internet connections, through cloud services, webhosting, voice solutions to comprehensive services for your home. We offer cutting-edge technology space for client equipment in 3 data centres."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 5,
+  "fields": {
+    "uuid": "2d790e0f-47ef-4c66-870c-acda5e855bb3",
+    "date_created": "2016-10-09T20:31:05.811Z",
+    "date_modified": "2016-10-09T20:29:24.792Z",
+    "title": "Eset",
+    "type": 2,
+    "logo": "eset-logo.svg",
+    "url": "https://www.eset.com",
+    "about_us": "Since 1987, ESET has been developing award-winning security software that now helps over 100 million users to Enjoy Safer Technology. Its broad security product portfolio covers all popular platforms and provides businesses and consumers around the world with the perfect balance of performance and proactive protection. The company has a global sales network covering 180 countries, and regional offices in Bratislava, San Diego, Singapore and Buenos Aires."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 6,
+  "fields": {
+    "uuid": "fcb09af4-7967-48b5-b324-62af5145fca7",
+    "date_created": "2016-10-09T20:32:11.406Z",
+    "date_modified": "2016-10-09T20:32:11.406Z",
+    "title": "GridMarkets",
+    "type": 3,
+    "logo": "gridmarkets-logo.svg",
+    "url": "https://www.gridmarkets.com/",
+    "about_us": "GridMarkets is a \u201csharing economy\u201d startup incorporated in Singapore and Malaysia and operating out of several global offices. We have established a patent pending platform that permits the convenient and affordable sharing of excess Cloud computing capacities. At the push of a GridMarkets button, animators, engineers, researchers, et al can leverage the power of many globally positioned computers to work on computationally complex problems."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 7,
+  "fields": {
+    "uuid": "566e7ed3-3a8d-4e57-84fe-c3c7f3c57dfb",
+    "date_created": "2016-10-09T20:33:01.597Z",
+    "date_modified": "2016-10-09T20:33:01.597Z",
+    "title": "WebSupport",
+    "type": 3,
+    "logo": "websupport-logo.svg",
+    "url": "https://www.websupport.sk/",
+    "about_us": "Websupport is looking for a Python Backend Developer who has experience with Linux administration and will be developing in REST API and use Flask, SQLAlchemy, Celey, ZeroMQ and OpenStack."
+  }
+},
+{
+  "model": "konfera.sponsor",
+  "pk": 8,
+  "fields": {
+    "uuid": "56678c5f-34d4-48ef-9336-5f445ad3a908",
+    "date_created": "2016-10-09T20:34:01.948Z",
+    "date_modified": "2016-10-09T20:34:01.948Z",
+    "title": "Switzerlab",
+    "type": 3,
+    "logo": "switzerlab-logo.svg",
+    "url": "https://example.com",
+    "about_us": ""
   }
 },
 {
@@ -463,6 +568,44 @@
   }
 },
 {
+  "model": "konfera.speaker",
+  "pk": 3,
+  "fields": {
+    "uuid": "469bf83d-080a-4c44-9b93-b69beae52963",
+    "date_created": "2016-10-09T20:00:59.704Z",
+    "date_modified": "2016-10-09T20:00:59.704Z",
+    "first_name": "Andrej",
+    "last_name": "Mo\u0161a\u0165",
+    "title": "mr",
+    "email": "private3@example.com",
+    "phone": "",
+    "bio": "Andrej is searching for the ultimate tricorder, a device which can see and tell your health, discover dangers in your environment and enhance your senses to cyborg levels. His first employment project was to build a chromatographic column to extract elements from human blood plasma. He created first open source spectrometer, which was then distributed to all corners of earth and above, launching from ISS station onboard of two microsatellites. Andrej advocates micropython, python for small microcontrollers which allows for prototyping of electronic devices at unprecedented speeds. His dream is to create tricorder for the first man on Mars.",
+    "url": "",
+    "social_url": "https://twitter.com/amosat",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 4,
+  "fields": {
+    "uuid": "cdcfcc58-42bc-4cff-aba6-5198c776f0cc",
+    "date_created": "2016-10-09T20:45:58.645Z",
+    "date_modified": "2016-10-09T20:45:03.472Z",
+    "first_name": "Miroslav",
+    "last_name": "Beka",
+    "title": "mr",
+    "email": "private4@example.com",
+    "phone": "",
+    "bio": "He graduated from Comenius University, majoring in Applied Informatics. Python helped him with his master thesis and this was the first time he used it for a development of a larger application. After graduation he had worked as a web developer for a Netherland-based startup, where he gained authentic work experiences with Ruby on Rails and JavaScript. Later he moved on to join ESET as test automation engineer, where he was dedicated to testing automation using a robot frameworku. After several years he decided to change his job again. He's chosen Kistler, where he works on similar projects.",
+    "url": "",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
   "model": "konfera.talk",
   "pk": 1,
   "fields": {
@@ -492,6 +635,40 @@
     "status": "approved",
     "duration": 30,
     "primary_speaker": 2,
+    "secondary_speaker": null,
+    "event": 9
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 3,
+  "fields": {
+    "uuid": "334a55bf-f54a-4f6f-ac35-a8ec6cea5384",
+    "date_created": "2016-10-09T20:01:14.219Z",
+    "date_modified": "2016-10-09T20:01:14.219Z",
+    "title": "MicroPython",
+    "abstract": "Micropython is a minimal implementation of Python 3 on embedded processors like ARM, x86. It allows developers to quickly and effectively write code directly for hardware without the need for compiling.\r\n\r\nThe advantage of an interpreted language is mainly in removing the compilation time. Errors appear when executing the program, the response is immediate. The disadvantages include an increased demand for memory and unscheduled pause due to the garbage collector. I will introduce development platforms running interpreted languages, their advantages and disadvantages.\r\n\r\nThe main part of the lecture will be devoted to basic hardware development using examples such as switches, LEDs, potentiometers and interruptions.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 3,
+    "secondary_speaker": null,
+    "event": 9
+  }
+},
+{
+  "model": "konfera.talk",
+  "pk": 4,
+  "fields": {
+    "uuid": "50027967-153d-4a1e-9e1d-8247b50e6f07",
+    "date_created": "2016-10-09T20:45:14.886Z",
+    "date_modified": "2016-10-09T20:45:14.886Z",
+    "title": "Virtualenv, Flask, Vagrant, etc.",
+    "abstract": "Large organizations have traditionally used languages such as C ++, .NET and Java development for enterprise applications. \"Scripting\" languages like Python were considered risky. Not sufficiently robust with the lack of the tools around them (framework). Times have, however, changed and the Python language has become surrounded by the huge open source community that takes care of the maintenance of the ecosystem. We see increasing use of dynamic languages for web applications development. But what is meant by productive enterprise or web application? These applications should meet several requirements. Scalability, zero down time deployments, short release cycles and many other properties.",
+    "type": "talk",
+    "status": "approved",
+    "duration": 30,
+    "primary_speaker": 4,
     "secondary_speaker": null,
     "event": 9
   }
@@ -789,6 +966,25 @@
   }
 },
 {
+  "model": "konfera.ticket",
+  "pk": 5,
+  "fields": {
+    "uuid": "b216a71b-5b3d-40a1-b98f-2a8c04c3e613",
+    "date_created": "2016-10-09T20:16:56.099Z",
+    "date_modified": "2016-10-09T20:16:56.099Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Andrej",
+    "last_name": "Mo\u0161a\u0165",
+    "email": "private3@example.com",
+    "phone": "",
+    "description": "",
+    "order": 5
+  }
+},
+{
   "model": "konfera.schedule",
   "pk": 1,
   "fields": {
@@ -814,6 +1010,51 @@
     "event": 9,
     "description": "",
     "talk": 2,
+    "duration": 30,
+    "room": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 3,
+  "fields": {
+    "uuid": "3e410860-9653-4bf7-a3d7-44d0aab91785",
+    "date_created": "2016-10-09T20:48:02.946Z",
+    "date_modified": "2016-10-09T20:02:29.571Z",
+    "start": "2016-03-11T10:40:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 3,
+    "duration": 30,
+    "room": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 4,
+  "fields": {
+    "uuid": "0f275831-4d80-41ad-8a18-80309f5c9166",
+    "date_created": "2016-10-09T20:03:32.720Z",
+    "date_modified": "2016-10-09T20:03:32.720Z",
+    "start": "2016-03-11T09:00:00Z",
+    "event": 9,
+    "description": "Opening",
+    "talk": null,
+    "duration": 20,
+    "room": 1
+  }
+},
+{
+  "model": "konfera.schedule",
+  "pk": 5,
+  "fields": {
+    "uuid": "23158594-05ca-4e0f-8570-1217738c8be7",
+    "date_created": "2016-10-09T20:48:14.256Z",
+    "date_modified": "2016-10-09T20:47:39.493Z",
+    "start": "2016-03-11T11:25:00Z",
+    "event": 9,
+    "description": "",
+    "talk": 4,
     "duration": 30,
     "room": 1
   }

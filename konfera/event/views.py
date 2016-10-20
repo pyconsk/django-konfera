@@ -39,7 +39,7 @@ def event_speakers_list_view(request, slug):
 def event_list(request):
     context = dict()
 
-    events = Event.objects.published().order_by('date_from')
+    events = Event.objects.published().order_by('-date_from')
 
     if events.count() == 1:
         return redirect('event_details', slug=events[0].slug)

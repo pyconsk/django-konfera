@@ -30,6 +30,7 @@ envs3
 *.sqlite3
 
 # Installer logs
+doc/current-commit.txt
 pip-log.txt
 
 # Unit test / coverage reports

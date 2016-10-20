@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
 import os
 
 from django.utils.translation import ugettext_lazy as _
@@ -41,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'konfera',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -135,5 +135,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+FIO_BANK_TOKEN = 'token'
+PAYMENT_ERROR_RATE = 0  # percentage
 
 GOOGLE_ANALYTICS = 'UA-XXXXXXXX-X'

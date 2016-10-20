@@ -38,7 +38,7 @@ class ModelAdminTests(TestCase):
         ordr = OrderAdmin(Order, self.site)
         # order = Event.objects.get(uuid='PyCon SK 2016')
         ordr_default_fields = ['price', 'discount', 'status', 'purchase_date', 'payment_date', 'amount_paid', 'uuid',
-                               'date_created', 'date_modified']
+                               'date_created', 'date_modified', 'variable_symbol']
 
         self.assertEqual(list(ordr.get_fields(request)), ordr_default_fields)
         # self.assertEqual(list(ordr.get_fields(request, order)), ordr_default_fields)
@@ -68,7 +68,7 @@ class ModelAdminTests(TestCase):
         order = OrderAdmin(Event, self.site)
         order_default_fieldsets = (
             (_('Details'), {
-                'fields': ('uuid', 'price', 'discount', 'status', 'amount_paid'),
+                'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'status', 'amount_paid'),
             }),
             (_('Modifications'), {
                 'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'),
