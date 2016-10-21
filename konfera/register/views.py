@@ -9,13 +9,13 @@ from konfera.models.ticket_type import TicketType, VOLUNTEER, PUBLIC, PRIVATE, A
 from konfera.register.forms import RegistrationForm
 
 
-def private_registration(request, event_slug, ticket_uuid):
+def private_registration(request, slug, ticket_uuid):
     context = dict()
-    event = get_object_or_404(Event, slug=event_slug)
+    event = get_object_or_404(Event, slug=slug)
     ticket_type = get_object_or_404(TicketType, event=event.id, uuid=ticket_uuid, accessibility=PRIVATE)
     if ticket_type._get_current_status() != ACTIVE:
         messages.error(request, _('This ticket type is not available'))
-        return redirect('event_details', event_slug)
+        return redirect('event_details', slug)
 
     description_required = ticket_type in (VOLUNTEER, PRESS, AID)
     form = RegistrationForm(request.POST or None, description_required=description_required)
@@ -28,7 +28,7 @@ def private_registration(request, event_slug, ticket_uuid):
 
         messages.success(request, _('Thanks for registering...'))
 
-        return redirect('event_details', event_slug)
+        return redirect('event_details', slug)
 
     context['form'] = form
     context['type'] = ticket_type.attendee_type
@@ -36,13 +36,13 @@ def private_registration(request, event_slug, ticket_uuid):
     return render(request, 'konfera/registration_form.html', context=context)
 
 
-def public_registration(request, event_slug, ticket_uuid):
+def public_registration(request, slug, ticket_uuid):
     context = dict()
-    event = get_object_or_404(Event, slug=event_slug)
+    event = get_object_or_404(Event, slug=slug)
     ticket_type = get_object_or_404(TicketType, event=event.id, uuid=ticket_uuid, accessibility=PUBLIC)
     if ticket_type._get_current_status() != ACTIVE:
         messages.error(request, _('This ticket type is not available'))
-        return redirect('event_details', event_slug)
+        return redirect('event_details', slug)
 
     form = RegistrationForm(request.POST or None, description_required=False)
 
@@ -53,7 +53,7 @@ def public_registration(request, event_slug, ticket_uuid):
         new_ticket.save()
 
         messages.success(request, _('Thanks for registering...'))
-        return redirect('event_details', event_slug)
+        return redirect('event_details', slug)
 
     context['form'] = form
     context['type'] = ticket_type.attendee_type
