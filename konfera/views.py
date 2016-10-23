@@ -1,26 +1,36 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.shortcuts import redirect
+from django.views.generic import ListView
 
-from konfera.models.event import Event, MEETUP
+from konfera.models.event import Event, MEETUP, CONFERENCE
 
 
-def meetup_list(request):
-    meetups = Event.objects.filter(event_type=MEETUP).order_by('date_from').reverse()
-    context = dict()
+class EventsByTypeListView(ListView):
+    event_type = None
+    queryset = Event.objects.all()
+    paginate_by = 5
 
-    if meetups.count() == 1:
-        return redirect('meetup_detail', event_slug=meetups[0].slug)
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
 
-    paginator = Paginator(meetups, 5)
-    page = request.GET.get('page')
+        if queryset.count() == 1:
+            return redirect('event_details', slug=queryset[0].slug)
 
-    try:
-        meetups = paginator.page(page)
-    except PageNotAnInteger:
-        meetups = paginator.page(1)
-    except EmptyPage:
-        meetups = paginator.page(paginator.num_pages)
+        return super().get(request, *args, **kwargs)
 
-    context['meetups'] = meetups
+    def get_queryset(self):
+        queryset = self.queryset
 
-    return render(request, 'konfera/meetups.html', context=context)
+        if self.event_type is not None:
+            queryset = queryset.filter(event_type=self.event_type)
+
+        return queryset
+
+
+class MeetupsListView(EventsByTypeListView):
+    event_type = MEETUP
+    template_name = 'konfera/meetups.html'
+
+
+class ConferencesListView(EventsByTypeListView):
+    event_type = CONFERENCE
+    template_name = 'konfera/conferences.html'
