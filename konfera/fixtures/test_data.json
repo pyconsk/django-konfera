@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "uuid": "dc81d075-e7ba-42ae-a081-1c0a6bf935c3",
-    "date_created": "2016-10-01T18:00:00Z",
+    "date_created": "2016-10-23T21:27:42.090Z",
     "date_modified": "2016-10-01T18:00:00Z",
     "title": "Slovak University of Technology in Bratislava",
     "street": "Faculty of Informatics and Information Technologies",
@@ -13,7 +13,8 @@
     "postcode": "842 16",
     "state": "SK",
     "get_here": "",
-    "capacity": 400
+    "capacity": 400,
+    "website": "http://www.fiit.stuba.sk/"
   }
 },
 {
@@ -21,7 +22,7 @@
   "pk": 2,
   "fields": {
     "uuid": "aa741ce8-736e-4918-993c-7941e197901d",
-    "date_created": "2016-10-01T18:00:00Z",
+    "date_created": "2016-10-23T21:26:57.646Z",
     "date_modified": "2016-10-01T18:00:00Z",
     "title": "ProgressBar Hackerspace",
     "street": "Michalsk\u00e1 3",
@@ -30,7 +31,8 @@
     "postcode": "83102",
     "state": "SK",
     "get_here": "",
-    "capacity": 40
+    "capacity": 40,
+    "website": "https://progressbar.sk/calendar/"
   }
 },
 {
