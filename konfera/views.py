@@ -1,26 +1,15 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
 
-from konfera.models.event import Event, MEETUP
+from konfera.models.event import Event
 
 
-def meetup_list(request):
-    meetups = Event.objects.filter(event_type=MEETUP).order_by('date_from').reverse()
-    context = dict()
+class EventsByTypeListView(ListView):
+    event_type = None
+    queryset = Event.objects.all()
+    paginate_by = 5
 
-    if meetups.count() == 1:
-        return redirect('meetup_detail', event_slug=meetups[0].slug)
-
-    paginator = Paginator(meetups, 5)
-    page = request.GET.get('page')
-
-    try:
-        meetups = paginator.page(page)
-    except PageNotAnInteger:
-        meetups = paginator.page(1)
-    except EmptyPage:
-        meetups = paginator.page(paginator.num_pages)
-
-    context['meetups'] = meetups
-
-    return render(request, 'konfera/meetups.html', context=context)
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.event_type is not None:
+            queryset = queryset.filter(event_type=self.event_type)
+        return queryset
