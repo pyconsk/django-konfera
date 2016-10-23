@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.models.event import Event
+from konfera.models.event import Event, MEETUP
 from konfera.models.talk import APPROVED, CFP
 from konfera.utils import set_event_ga_to_context
 
@@ -64,11 +64,14 @@ def event_details_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.all()
+    context['sponsors'] = event.sponsors.filter(type__in=(1, 2, 3))
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_details.html', context=context)
+    if event.event_type == MEETUP:
+        return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
+
+    return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
 def cfp_form_view(request, slug):
