@@ -15,13 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from konfera import views
-from konfera.models import event
 
 urlpatterns = [
     url(r'^events/', include('konfera.event.urls'), name='event_list'),
     url(r'^register/', include('konfera.register.urls')),
-    url(r'^meetups/', views.EventsByTypeListView.as_view(template_name='konfera/meetups.html',
-                                                         event_type=event.MEETUP), name='list_all_meetups'),
-    url(r'^conferences/', views.EventsByTypeListView.as_view(template_name='konfera/conferences.html',
-                                                             event_type=event.CONFERENCE), name='conference_list'),
+    url(r'^meetups/', views.MeetupsListView.as_view(), name='meetup_list'),
+    url(r'^conferences/', views.ConferencesListView.as_view(), name='conference_list'),
 ]

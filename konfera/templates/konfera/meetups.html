@@ -12,7 +12,14 @@
     {% for meetup in object_list %}
     <a href="{% url 'event_details' meetup.slug %}" class="list-group-item">
         <h4 class="list-group-item-heading"> {{ meetup.title }} </h4>
-        <p class="list-group-item-text">{{ meetup.date_from|date:"d. F Y – H:m"}} - {{ meetup.location}}</p>
+        <p class="list-group-item-text">
+            {% if meetup.duration > 1 %}
+                {{ meetup.date_from|date:"d F Y" }} - {{ meetup.date_to|date:"d F Y" }}
+            {% else %}
+                {{ meetup.date_from|date:"d F Y H:m" }} - {{ meetup.date_to|date:"d F Y H:m" }}
+            {% endif %}
+            - {{ meetup.location }}
+        </p>
     </a>
     {% endfor %}
 </div>
