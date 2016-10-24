@@ -138,7 +138,7 @@ class LocationAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
-            'fields': ('title', 'capacity',)
+            'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
             'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')

@@ -3,22 +3,25 @@
 
 
 {% block title %}
-{% trans "Conferences List" %}
+{% trans "Events List" %}
 {% endblock %}
 
 
 {% block content %}
 <div class="list-group">
-    {% for conference in object_list %}
-    <a href="{% url 'event_details' conference.slug %}" class="list-group-item">
-        <h4 class="list-group-item-heading"> {{ conference.title }} </h4>
+
+    {% block description %}{% endblock %}
+
+    {% for event in object_list %}
+    <a href="{% url 'event_details' event.slug %}" class="list-group-item">
+        <h4 class="list-group-item-heading"> {{ event.title }} </h4>
         <p class="list-group-item-text">
-            {% if conference.duration > 1 %}
-                {{ conference.date_from|date:"d F Y" }} - {{ conference.date_to|date:"d F Y" }}
+            {% if event.duration > 1 %}
+                {{ event.date_from|date:"d F Y" }} - {{ event.date_to|date:"d F Y" }}
             {% else %}
-                {{ conference.date_from|date:"d F Y H:m" }} - {{ conference.date_to|date:"d F Y H:m" }}
+                {{ event.date_from|date:"d F Y H:m" }} - {{ event.date_to|date:"d F Y H:m" }}
             {% endif %}
-            - {{ conference.location }}
+            - {{ event.location }}
         </p>
     </a>
     {% endfor %}
@@ -29,7 +32,7 @@
     <ul class="pagination">
         {% if page_obj.has_previous %}
         <li>
-            <a href="?page={{ meetups.previous_page_number }}" aria-label="Previous">
+            <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span></a>
         </li>
         {% endif %}
@@ -40,7 +43,7 @@
 
         {% if page_obj.has_next %}
         <li>
-            <a href="?page={{ meetups.next_page_number }}" aria-label="Next">
+            <a href="?page={{ page_obj.next_page_number }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span></a>
         </li>
         {% endif %}

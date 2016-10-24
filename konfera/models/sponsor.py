@@ -3,14 +3,20 @@ from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import KonferaModel
 
+PLATINUM = 1
+GOLD = 2
+SILVER = 3
+BRONZE = 4
+OTHER = 5
+DJANGO_GIRLS = 6
 
 SPONSOR_TYPE = (
-    (1, _('Platinum')),
-    (2, _('Gold')),
-    (3, _('Silver')),
-    (4, _('Bronze')),
-    (5, _('Other')),
-    (6, _('Django girls')),
+    (PLATINUM, _('Platinum')),
+    (GOLD, _('Gold')),
+    (SILVER, _('Silver')),
+    (BRONZE, _('Bronze')),
+    (OTHER, _('Other')),
+    (DJANGO_GIRLS, _('Django girls')),
 )
 
 

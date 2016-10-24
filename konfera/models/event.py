@@ -27,7 +27,7 @@ EVENT_STATUS_CHOICES = (
 
 class EventManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(status=PUBLISHED)
+        return self.get_queryset().filter(status=PUBLISHED).select_related('location')
 
 
 class Event(FromToModel):

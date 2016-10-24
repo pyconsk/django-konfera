@@ -18,6 +18,7 @@ class Location(KonferaModel):
         default=STATE_DEFAULT)
     get_here = models.TextField(blank=True)
     capacity = models.IntegerField(blank=True, null=True)
+    website = models.URLField(blank=True)
 
     def __str__(self):
         return self.title
