@@ -480,6 +480,26 @@
   }
 },
 {
+  "model": "konfera.event",
+  "pk": 16,
+  "fields": {
+    "uuid": "901edbd1-0bdd-4e6f-b880-46918d3e6d2e",
+    "date_created": "2016-10-24T19:04:15.489Z",
+    "date_modified": "2016-10-24T20:01:48.292Z",
+    "date_from": "2017-03-10T09:00:00Z",
+    "date_to": "2017-03-12T18:00:00Z",
+    "title": "PyCon SK 2017",
+    "slug": "2017",
+    "description": "<h1>We are pleased to announce the PyCon SK 2017.</h1>\r\n\r\n<p class=\"lead\">PyCon SK is a community-organized conference for the Python programming language. The conference will be held <strong> in Bratislava on 10th - 12th March, 2017</strong>.</p>\r\n\r\n<p class=\"lead\">\r\n  <a href=\"https://www.python.org/\" target=\"_blank\" title=\"Python homepage\">\r\n    <img src=\"/static/images/logo/pycon_long.svg\" alt=\"PyCon SK\" class=\"img-responsive center-block\">\r\n  </a>\r\n</p>",
+    "event_type": "conference",
+    "status": "published",
+    "location": 1,
+    "footer_text": "",
+    "analytics": "",
+    "sponsors": []
+  }
+},
+{
   "model": "konfera.sponsor",
   "pk": 1,
   "fields": {
@@ -1829,7 +1849,7 @@
   "pk": 6,
   "fields": {
     "uuid": "68f65ef9-ab80-4155-b69d-b62a0170ac7c",
-    "date_created": "2016-10-01T18:00:00Z",
+    "date_created": "2016-10-24T19:01:53.377Z",
     "date_modified": "2016-10-01T18:00:00Z",
     "date_from": "2016-01-24T00:00:00Z",
     "date_to": "2016-03-01T00:00:00Z",
@@ -1837,7 +1857,7 @@
     "description": "Please select this ticket if you are a student. Valid student ID might be requested when you arrive at the conference.",
     "price": "15.00",
     "attendee_type": "attendee",
-    "accessibility": "private",
+    "accessibility": "public",
     "usage": 10,
     "event": 9
   }
