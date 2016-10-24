@@ -21,7 +21,7 @@ from konfera import views
 urlpatterns = [
     url(r'^conferences/', views.ConferencesListView.as_view(), name='conference_list'),
     url(r'^meetups/', views.MeetupsListView.as_view(), name='meetup_list'),
-    url(r'^events/', views.EventsListView.as_view(), name='events_list'),
+    url(r'^events/', views.EventsListView.as_view(), name='event_list'),
     url(r'^register/', include('konfera.register.urls')),
     url(r'^', include('konfera.event.urls')),
 ]
