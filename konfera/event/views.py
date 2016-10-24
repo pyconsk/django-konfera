@@ -36,29 +36,6 @@ def event_speakers_list_view(request, slug):
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
 
 
-def event_list(request):
-    context = dict()
-
-    events = Event.objects.published().order_by('-date_from')
-
-    if events.count() == 1:
-        return redirect('event_details', slug=events[0].slug)
-
-    paginator = Paginator(events, 10)
-    page = request.GET.get('page')
-
-    try:
-        events = paginator.page(page)
-    except PageNotAnInteger:
-        events = paginator.page(1)
-    except EmptyPage:
-        events = paginator.page(paginator.num_pages)
-
-    context['events'] = events
-
-    return render(request=request, template_name='konfera/events.html', context=context)
-
-
 def event_details_view(request, slug):
     context = dict()
 

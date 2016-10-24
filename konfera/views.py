@@ -26,6 +26,10 @@ class EventsByTypeListView(ListView):
         return queryset
 
 
+class EventsListView(EventsByTypeListView):
+    template_name = 'konfera/conferences.html'
+
+
 class MeetupsListView(EventsByTypeListView):
     event_type = MEETUP
     template_name = 'konfera/meetups.html'
