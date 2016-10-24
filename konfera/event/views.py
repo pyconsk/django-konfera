@@ -3,12 +3,14 @@ from datetime import timedelta
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.models.event import Event
+from konfera.models.event import Event, MEETUP
+from konfera.models.sponsor import PLATINUM, GOLD, SILVER
 from konfera.models.talk import APPROVED, CFP
+from konfera.models.ticket_type import PUBLIC, ACTIVE, PRESS, AID, VOLUNTEER
 from konfera.utils import set_event_ga_to_context
 
 
@@ -36,39 +38,19 @@ def event_speakers_list_view(request, slug):
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
 
 
-def event_list(request):
-    context = dict()
-
-    events = Event.objects.published().order_by('-date_from')
-
-    if events.count() == 1:
-        return redirect('event_details', slug=events[0].slug)
-
-    paginator = Paginator(events, 10)
-    page = request.GET.get('page')
-
-    try:
-        events = paginator.page(page)
-    except PageNotAnInteger:
-        events = paginator.page(1)
-    except EmptyPage:
-        events = paginator.page(paginator.num_pages)
-
-    context['events'] = events
-
-    return render(request=request, template_name='konfera/events.html', context=context)
-
-
 def event_details_view(request, slug):
     context = dict()
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.all()
+    context['sponsors'] = event.sponsors.filter(type__in=(PLATINUM, GOLD, SILVER))
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_details.html', context=context)
+    if event.event_type == MEETUP:
+        return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
+
+    return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
 def cfp_form_view(request, slug):
@@ -123,3 +105,25 @@ class ScheduleView(DetailView):
         set_event_ga_to_context(event, context)
 
         return context
+
+
+def event_public_tickets(request, slug):
+    context = dict()
+
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    context['event'] = event
+    available_tickets = event.tickettype_set.filter(accessibility=PUBLIC).exclude(attendee_type=AID)\
+        .exclude(attendee_type=VOLUNTEER).exclude(attendee_type=PRESS)
+    available_tickets = [t for t in available_tickets if t._get_current_status() == ACTIVE]
+    paginator = Paginator(available_tickets, 10)
+    page = request.GET.get('page')
+
+    try:
+        available_tickets = paginator.page(page)
+    except PageNotAnInteger:
+        available_tickets = paginator.page(1)
+    except EmptyPage:
+        available_tickets = paginator.page(paginator.num_pages)
+
+    context['tickets'] = available_tickets
+    return render(request=request, template_name='konfera/event_public_tickets.html', context=context)

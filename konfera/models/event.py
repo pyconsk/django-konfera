@@ -27,7 +27,7 @@ EVENT_STATUS_CHOICES = (
 
 class EventManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(status=PUBLISHED)
+        return self.get_queryset().filter(status=PUBLISHED).select_related('location')
 
 
 class Event(FromToModel):
@@ -44,8 +44,15 @@ class Event(FromToModel):
 
     objects = EventManager()
 
+    class Meta:
+        ordering = ('-date_from',)
+
     def __str__(self):
         return self.title
+
+    @property
+    def duration(self):
+        return (self.date_to - self.date_from).days + 1
 
 
 Event._meta.get_field('date_from').blank = False
