@@ -40,11 +40,13 @@ TICKET_TYPE_CHOICES = (
 PUBLIC = 'public'
 PRIVATE = 'private'
 DISABLED = 'disabled'
+NOT_LISTED = 'not_listed'
 
 ACCESSIBILITY = (
     (PUBLIC, _('Public')),
     (PRIVATE, _('Private')),
     (DISABLED, _('Disabled')),
+    (NOT_LISTED, _('Not listed')),
 )
 
 

@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/cfp/$', views.cfp_form_view, name='event_cfp_form'),
     url(r'^(?P<slug>[\w, -]+)/schedule/$', views.schedule_redirect, name='schedule'),
     url(r'^(?P<slug>[\w, -]+)/schedule/(?P<day>[\d, -]+)$', views.ScheduleView.as_view(), name='schedule'),
+    url(r'^(?P<slug>[\w, -]+)/tickets/$', views.event_public_tickets, name='event_tickets'),
     url(r'^(?P<slug>[\w, -]+)/$', views.event_details_view, name='event_details'),
 ]
