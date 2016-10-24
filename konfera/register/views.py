@@ -39,6 +39,7 @@ def register_ticket(request, slug, ticket_uuid):
 
     return _register_ticket(request, event, ticket_type)
 
+
 def _register_ticket_attendee(request, slug, attendee_type):
     event = get_object_or_404(Event, slug=slug)
     ticket_types = TicketType.objects.filter(event=event, attendee_type=attendee_type)

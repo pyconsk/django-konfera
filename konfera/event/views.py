@@ -133,7 +133,7 @@ def event_public_tickets(request, slug):
     context['event'] = event
     available_tickets = event.tickettype_set.filter(accessibility=PUBLIC).exclude(attendee_type=AID)\
         .exclude(attendee_type=VOLUNTEER).exclude(attendee_type=PRESS)
-    available_tickets = [t for t in available_tickets if t.status==ACTIVE]
+    available_tickets = [t for t in available_tickets if t.status == ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
 
