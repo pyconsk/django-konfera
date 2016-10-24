@@ -24,7 +24,7 @@ class TestEventRedirect(TestCase):
     def test_redirects(self):
         response = self.client.get('/events/')
         self.assertEquals(len(Event.objects.published()), 1)
-        self.assertRedirects(response, '/events/one/')
+        self.assertRedirects(response, '/one/')
 
         two = Event.objects.create(
             title='Two', slug='two', description='Second one', event_type=CONFERENCE, status=PUBLISHED,
@@ -34,8 +34,8 @@ class TestEventRedirect(TestCase):
         response = self.client.get('/events/')
 
         self.assertEquals(len(Event.objects.published()), 2)
-        self.assertTemplateUsed(response, 'konfera/events.html')
-        self.assertEquals(list(response.context['events']), [two, self.one])
+        self.assertTemplateUsed(response, 'konfera/list_events.html')
+        self.assertEquals(list(response.context['event_list']), [two, self.one])
 
 
 class TestEventList(TestCase):
