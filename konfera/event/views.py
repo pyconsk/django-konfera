@@ -1,9 +1,10 @@
 from datetime import timedelta
 
 from django.contrib import messages
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event, MEETUP
@@ -113,7 +114,7 @@ def event_public_tickets(request, slug):
     context['event'] = event
     available_tickets = event.tickettype_set.filter(accessibility=PUBLIC).exclude(attendee_type=AID)\
         .exclude(attendee_type=VOLUNTEER).exclude(attendee_type=PRESS)
-    available_tickets = [t for t in available_tickets if t.status == ACTIVE]
+    available_tickets = [t for t in available_tickets if t._get_current_status() == ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
 
