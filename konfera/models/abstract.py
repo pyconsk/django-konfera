@@ -11,8 +11,8 @@ class KonferaModel(models.Model):
         abstract = True
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
-    date_created = models.DateTimeField(verbose_name=_('Created'), auto_now=True)
-    date_modified = models.DateTimeField(verbose_name=_('Last modified'), auto_now_add=True)
+    date_created = models.DateTimeField(verbose_name=_('Created'), auto_now_add=True)
+    date_modified = models.DateTimeField(verbose_name=_('Last modified'), auto_now=True)
 
 
 class FromToModel(KonferaModel):

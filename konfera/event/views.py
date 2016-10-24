@@ -1,13 +1,13 @@
 from datetime import timedelta
 
 from django.contrib import messages
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event, MEETUP
+from konfera.models.sponsor import PLATINUM, GOLD, SILVER
 from konfera.models.talk import APPROVED, CFP
 from konfera.utils import set_event_ga_to_context
 
@@ -41,7 +41,7 @@ def event_details_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.filter(type__in=(1, 2, 3))
+    context['sponsors'] = event.sponsors.filter(type__in=(PLATINUM, GOLD, SILVER))
 
     set_event_ga_to_context(event, context)
 
