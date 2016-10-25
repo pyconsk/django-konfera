@@ -1,13 +1,93 @@
 {% extends 'konfera/base.html' %}
+{% load i18n %}
+{% load custom_filters %}
+
+{% block title %}
+{% trans "Order Detail" %}
+{% endblock %}
 
 {% block content %}
-  <div>
-    <p>UUID: {{ order.uuid }}</p>
-    <p>Price: {{ order.price }}</p>
-    <p>Amount paid: {{ order.amount_paid }}</p>
-    <p>Discount: {{ order.discount }}</p>
-    <p>Status: {{ order.status }}</p>
-    <p>Purchase date: {{ order.purchase_date }}</p>
-    <p>Payment date: {{ order.payment_date }}</p>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="text-center">
+          <i class="fa fa-search-plus pull-left icon"></i>
+          <h2>Details for order #{{ order.variable_symbol }}</h2>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">Order Details</div>
+              <div class="panel-body">
+                <strong>Event: </strong>{{ event.title }}<br>
+                <strong>Price: </strong>{{ order.price|currency }}<br>
+                <strong>Amount paid: </strong>{{ order.amount_paid|currency }}<br>
+                <strong>Discount: </strong>{{ order.discount|currency }}<br>
+                <strong>Status: </strong>{{ order.status }}<br>
+                <strong>Purchase date: </strong>{{ order.purchase_date }}<br>
+                <strong>Payment date: </strong>{{ order.payment_date }}<br>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <div class="panel panel-info">
+              <div class="panel-heading">Receipt</div>
+              <div class="panel-body">
+                <strong>Title: </strong>{{ order.receipt_of.title }}<br>
+                <strong>Amount: </strong>{{ order.receipt_of.amount|currency }}<br>
+                <strong>Street: </strong>{{ order.receipt_of.street }}<br>
+                <strong>Street2: </strong>{{ order.receipt_of.street2 }}<br>
+                <strong>City: </strong>{{ order.receipt_of.city }}<br>
+                <strong>Postal code: </strong>{{ order.receipt_of.postcode }}<br>
+                <strong>State: </strong>{{ order.receipt_of.state }}<br>
+                <strong>Company Id: </strong>{{ order.receipt_of.companyid }}<br>
+                <strong>TAX Id: </strong>{{ order.receipt_of.taxid }}<br>
+                <strong>VAT Id: </strong>{{ order.receipt_of.vatid }}<br>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="text-center panel-title">Ordered tickets</h3>
+          </div>
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                  <td><strong>Name</strong></td>
+                  <td class="text-center"><strong>Email</strong></td>
+                  <td class="text-center"><strong>Phone</strong></td>
+                  <td class="text-center"><strong>Discount Code</strong></td>
+                  <td class="text-center"><strong>Description</strong></td>
+                  <td class="text-center"><strong>Type</strong></td>
+                  <td class="text-right"><strong>Status</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ticket in order.ticket_set.all %}
+                  <tr>
+                    <td><div class="text-capitalize">{{ ticket.title }}.</div> {{ ticket.first_name }} {{ ticket.last_name }}</td>
+                    <td class="text-center">{{ ticket.email }}</td>
+                    <td class="text-center">{{ ticket.phone }}</td>
+                    <td class="text-center">{{ ticket.discount_code.title }}</td>
+                    <td class="text-center">{{ ticket.description }}</td>
+                    <td class="text-center">{{ ticket.type.title }}</td>
+                    <td class="text-right">{{ ticket.status }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
