@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.event import Event
 from konfera.models.ticket import REQUESTED
-from konfera.models.ticket_type import TicketType, ACTIVE, PRESS, AID, VOLUNTEER
+from konfera.models.ticket_type import TicketType, ACTIVE, PRESS, AID, VOLUNTEER, STATUSES
 from konfera.register.forms import RegistrationForm
 
 
@@ -44,7 +44,7 @@ def _register_ticket_attendee(request, slug, attendee_type):
     event = get_object_or_404(Event, slug=slug)
     ticket_types = TicketType.objects.filter(event=event, attendee_type=attendee_type)
 
-    if ticket_types and len(ticket_types) == 1 and ticket_types[0].status == ACTIVE:
+    if ticket_types and len(ticket_types) == 1 and ticket_types[0].status == STATUSES[ACTIVE]:
         return _register_ticket(request, event, ticket_types[0])
     else:
         messages.warning(request, _('The ticket type is not available!'))

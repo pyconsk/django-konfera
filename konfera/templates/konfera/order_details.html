@@ -1,0 +1,13 @@
+{% extends 'konfera/base.html' %}
+
+{% block content %}
+  <div>
+    <p>UUID: {{ order.uuid }}</p>
+    <p>Price: {{ order.price }}</p>
+    <p>Amount paid: {{ order.amount_paid }}</p>
+    <p>Discount: {{ order.discount }}</p>
+    <p>Status: {{ order.status }}</p>
+    <p>Purchase date: {{ order.purchase_date }}</p>
+    <p>Payment date: {{ order.payment_date }}</p>
+  </div>
+{% endblock %}

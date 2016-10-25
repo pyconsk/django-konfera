@@ -11,6 +11,7 @@ from konfera.models.event import Event, MEETUP
 from konfera.models.sponsor import PLATINUM, GOLD, SILVER
 from konfera.models.talk import APPROVED, CFP
 from konfera.models.ticket_type import PUBLIC, ACTIVE, PRESS, AID, VOLUNTEER
+from konfera.models.order import Order
 from konfera.utils import set_event_ga_to_context
 
 
@@ -127,3 +128,13 @@ def event_public_tickets(request, slug):
 
     context['tickets'] = available_tickets
     return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
+
+
+def event_order_detail(request, slug, order_uuid):
+    context = dict()
+    order = get_object_or_404(Order, uuid=order_uuid)
+    context['order'] = order
+    if order:
+        return render(request=request,
+                      template_name='konfera/order_details.html',
+                      context=context)
