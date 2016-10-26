@@ -137,7 +137,4 @@ def event_order_detail(request, slug, order_uuid):
     order = get_object_or_404(Order, uuid=order_uuid)
     context['order'] = order
 
-    if order:
-        return render(request=request,
-                      template_name='konfera/order_details.html',
-                      context=context)
+    return render(request=request, template_name='konfera/order_details.html', context=context)

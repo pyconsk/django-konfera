@@ -11,39 +11,38 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="text-center">
-          <i class="fa fa-search-plus pull-left icon"></i>
-          <h2>Details for order #{{ order.variable_symbol }}</h2>
+          <h2>{% trans "Details for order" %} #{{ order.variable_symbol }}</h2>
         </div>
         <hr>
         <div class="row">
           <div class="col-xs-12 col-md-6">
             <div class="panel panel-default">
-              <div class="panel-heading">Order Details</div>
+              <div class="panel-heading">{% trans "Order Details" %}</div>
               <div class="panel-body">
-                <strong>Event: </strong>{{ event.title }}<br>
-                <strong>Price: </strong>{{ order.price|currency }}<br>
-                <strong>Amount paid: </strong>{{ order.amount_paid|currency }}<br>
-                <strong>Discount: </strong>{{ order.discount|currency }}<br>
-                <strong>Status: </strong>{{ order.status }}<br>
-                <strong>Purchase date: </strong>{{ order.purchase_date }}<br>
-                <strong>Payment date: </strong>{{ order.payment_date }}<br>
+                <strong>{% trans "Event: " %}</strong>{{ event.title }}<br>
+                <strong>{% trans "Price: " %}</strong>{{ order.price|currency }}<br>
+                <strong>{% trans "Amount paid: " %}</strong>{{ order.amount_paid|currency }}<br>
+                <strong>{% trans "Discount: " %}</strong>{{ order.discount|currency }}<br>
+                <strong>{% trans "Status: " %}</strong>{{ order.status }}<br>
+                <strong>{% trans "Purchase date: " %}</strong>{{ order.purchase_date }}<br>
+                <strong>{% trans "Payment date: " %}</strong>{{ order.payment_date }}<br>
               </div>
             </div>
           </div>
           <div class="col-xs-12 col-md-6">
             <div class="panel panel-info">
-              <div class="panel-heading">Receipt</div>
+              <div class="panel-heading">{% trans "Receipt" %}</div>
               <div class="panel-body">
-                <strong>Title: </strong>{{ order.receipt_of.title }}<br>
-                <strong>Amount: </strong>{{ order.receipt_of.amount|currency }}<br>
-                <strong>Street: </strong>{{ order.receipt_of.street }}<br>
-                <strong>Street2: </strong>{{ order.receipt_of.street2 }}<br>
-                <strong>City: </strong>{{ order.receipt_of.city }}<br>
-                <strong>Postal code: </strong>{{ order.receipt_of.postcode }}<br>
-                <strong>State: </strong>{{ order.receipt_of.state }}<br>
-                <strong>Company Id: </strong>{{ order.receipt_of.companyid }}<br>
-                <strong>TAX Id: </strong>{{ order.receipt_of.taxid }}<br>
-                <strong>VAT Id: </strong>{{ order.receipt_of.vatid }}<br>
+                <strong>{% trans "Title: " %}</strong>{{ order.receipt_of.title }}<br>
+                <strong>{% trans "Amount: " %}</strong>{{ order.receipt_of.amount|currency }}<br>
+                <strong>{% trans "Street: " %}</strong>{{ order.receipt_of.street }}<br>
+                <strong>{% trans "Street2: " %}</strong>{{ order.receipt_of.street2 }}<br>
+                <strong>{% trans "City: " %}</strong>{{ order.receipt_of.city }}<br>
+                <strong>{% trans "Postal code: " %}</strong>{{ order.receipt_of.postcode }}<br>
+                <strong>{% trans "State: " %}</strong>{{ order.receipt_of.state }}<br>
+                <strong>{% trans "Company Id: " %}</strong>{{ order.receipt_of.companyid }}<br>
+                <strong>{% trans "TAX Id: " %}</strong>{{ order.receipt_of.taxid }}<br>
+                <strong>{% trans "VAT Id: " %}</strong>{{ order.receipt_of.vatid }}<br>
               </div>
             </div>
           </div>
@@ -54,20 +53,20 @@
       <div class="col-md-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="text-center panel-title">Ordered tickets</h3>
+            <h3 class="text-center panel-title">{% trans "Ordered tickets" %}</h3>
           </div>
           <div class="panel-body">
             <div class="table-responsive">
               <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                  <td><strong>Name</strong></td>
-                  <td class="text-center"><strong>Email</strong></td>
-                  <td class="text-center"><strong>Phone</strong></td>
-                  <td class="text-center"><strong>Discount Code</strong></td>
-                  <td class="text-center"><strong>Description</strong></td>
-                  <td class="text-center"><strong>Type</strong></td>
-                  <td class="text-right"><strong>Status</strong></td>
+                  <td><strong>{% trans "Name" %}</strong></td>
+                  <td class="text-center"><strong>{% trans "Email" %}</strong></td>
+                  <td class="text-center"><strong>{% trans "Phone" %}</strong></td>
+                  <td class="text-center"><strong>{% trans "Discount Code" %}</strong></td>
+                  <td class="text-center"><strong>{% trans "Description" %}</strong></td>
+                  <td class="text-center"><strong>{% trans "Type" %}</strong></td>
+                  <td class="text-right"><strong>{% trans "Status" %}</strong></td>
                 </tr>
                 </thead>
                 <tbody>
