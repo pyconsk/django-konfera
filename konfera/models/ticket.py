@@ -58,4 +58,8 @@ class Ticket(KonferaModel):
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
+        else:
+            exist_ticket = self.order.ticket_set.first()
+            if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
+                raise ValidationError(_('All tickets must be for same event.'))
         super(Ticket, self).save(*args, **kwargs)
