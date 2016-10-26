@@ -14,7 +14,7 @@ class TestCurrencyTag(TestCase):
     def test_value_float(self):
         user_locale = locale.setlocale(locale.LC_ALL, '')
         if user_locale in ['C', None]:
-            locale.setlocale(locale.LC_ALL, 'en_US')
+            locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
         self.assertEqual(currency(self.value_float), locale.currency(self.value_float, grouping=True))
 
 
@@ -24,10 +24,10 @@ class TestSetUserLocale(TestCase):
         self.locale_none = None
 
     def test_locale_is_c(self):
-        self.assertEqual(set_user_locale(self.locale_c), 'en_US')
+        self.assertEqual(set_user_locale(self.locale_c), 'en_US.UTF-8')
 
     def test_locale_is_none(self):
-        self.assertEqual(set_user_locale(self.locale_none), 'en_US')
+        self.assertEqual(set_user_locale(self.locale_none), 'en_US.UTF-8')
 
     def test_user_locale(self):
         user_locale = locale.setlocale(locale.LC_ALL, '')
