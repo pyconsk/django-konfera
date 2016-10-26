@@ -133,6 +133,26 @@ class OrderTest(TestCase):
         entry = models.Order(price=155.5, discount=5.5, amount_paid=200)
         self.assertEqual(entry.left_to_pay, 0)
 
+    def test_order_event_with_ticket(self):
+        entry = models.Order.objects.create(price=155.5, discount=5.5)
+        # Create Event
+        title = random_string(16)
+        slug = slugify(title)
+        date_to = timezone.now()
+        date_from = date_to + datetime.timedelta(days=1)
+        location = models.Location.objects.create(title="Test Location title")
+        event = Event.objects.create(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to, location=location,
+                                     status=PUBLISHED)
+        # Create TicketType for Event
+        ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from, date_to=date_to)
+        # Create Ticket with TicketType
+        models.Ticket.objects.create(title='Test Ticket', type=ticket_type, order=entry)
+        self.assertEqual(entry.event, event)
+
+    def test_order_event_without_ticket(self):
+        entry = models.Order(price=155.5, discount=5.5)
+        self.assertEqual(entry.event, None)
+
 
 class ReceiptTest(TestCase):
 

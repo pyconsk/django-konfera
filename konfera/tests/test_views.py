@@ -1,7 +1,8 @@
 from django import VERSION
 from django.test import TestCase
 
-from konfera.models import Event, Location, Talk
+from konfera.models import Event, Location, Talk, TicketType, Ticket
+from konfera.models.order import Order, CANCELLED, EXPIRED, PAID, AWAITING
 from konfera.models.talk import CFP, TALK
 from konfera.models.event import PUBLISHED, CONFERENCE
 
@@ -102,3 +103,61 @@ class TestEventList(TestCase):
 
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+
+
+class TestOrderDetail(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+        )
+        self.one = Event.objects.create(
+            title='One', slug='one', description='First one', event_type='conference', status='published',
+            location=self.location, date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
+        )
+        self.volunteer = TicketType.objects.create(
+            title='Volunteer', description='Volunteer ticket', price=0, attendee_type='volunteer', usage=10,
+            accessibility='public', event=self.one, date_from='2016-07-01 01:01:01+01:00',
+            date_to='2016-12-01 01:01:01+01:00'
+        )
+        self.order_cancelled = Order.objects.create(price=200, discount=0, status=CANCELLED)
+        self.order_expired = Order.objects.create(price=200, discount=0, status=EXPIRED)
+        self.order_paid = Order.objects.create(price=200, discount=0, status=PAID)
+        self.order_await = Order.objects.create(price=200, discount=0, status=AWAITING)
+
+    def test_ticket_register_redirect(self):
+        response = self.client.get('/register/event/one/ticket/volunteer/')
+
+        # Check that the response is 200 OK.
+        self.assertEqual(response.status_code, 200)
+
+        # Register for event as volunteer
+        response = self.client.post('/register/event/one/ticket/volunteer/', {
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com'
+        })
+
+        # Check that the response is 302 FOUND.
+        self.assertEqual(response.status_code, 302)
+        ticket = Ticket.objects.get(type_id=self.volunteer.id, email='test.testovac@example.com')
+
+        # Check if redirect to the correct order detail page
+        self.assertRedirects(response, reverse('order_details', kwargs={'order_uuid': ticket.order.uuid}))
+
+    def test_order_status_cancelled(self):
+        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_cancelled.uuid}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['status_label'], 'label-danger')
+
+    def test_order_status_expired(self):
+        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_expired.uuid}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['status_label'], 'label-danger')
+
+    def test_order_status_paid(self):
+        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_paid.uuid}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['status_label'], 'label-success')
+
+    def test_order_status_await(self):
+        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_await.uuid}))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['status_label'], 'label-warning')
