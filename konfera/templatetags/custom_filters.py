@@ -3,9 +3,14 @@ import locale
 
 register = template.Library()
 
-user_locale = locale.setlocale(locale.LC_ALL, '')
-if user_locale == 'C' or user_locale is None:
-    locale.setlocale(locale.LC_ALL, 'en_US')
+
+def set_user_locale(loc=''):
+    user_locale = locale.setlocale(locale.LC_ALL, loc)
+    if user_locale in ['C', None]:
+        user_locale = locale.setlocale(locale.LC_ALL, 'en_US')
+    return user_locale
+
+set_user_locale()
 
 
 @register.filter

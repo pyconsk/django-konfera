@@ -53,3 +53,10 @@ class Order(KonferaModel):
     @property
     def variable_symbol(self):
         return str(int(self.uuid))[:10]
+
+    @property
+    def event(self):
+        if len(self.ticket_set.all()) > 0:
+            return self.ticket_set.all()[0].type.event
+        else:
+            return None

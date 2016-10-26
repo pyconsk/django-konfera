@@ -25,7 +25,7 @@ def _register_ticket(request, event, ticket_type):
 
         messages.success(request, _('Thanks for registering...'))
 
-        return redirect('order_details', event.slug, new_ticket.order.uuid)
+        return redirect('order_details', new_ticket.order.uuid)
 
     context['form'] = form
     context['type'] = ticket_type.attendee_type
