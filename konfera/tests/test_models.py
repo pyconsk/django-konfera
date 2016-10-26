@@ -141,10 +141,11 @@ class OrderTest(TestCase):
         date_to = timezone.now()
         date_from = date_to + datetime.timedelta(days=1)
         location = models.Location.objects.create(title="Test Location title")
-        event = Event.objects.create(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to, location=location,
-                                     status=PUBLISHED)
+        event = Event.objects.create(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to,
+                                     location=location, status=PUBLISHED)
         # Create TicketType for Event
-        ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from, date_to=date_to)
+        ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from,
+                                                date_to=date_to)
         # Create Ticket with TicketType
         models.Ticket.objects.create(title='Test Ticket', type=ticket_type, order=entry)
         self.assertEqual(entry.event, event)
