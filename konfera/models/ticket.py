@@ -52,7 +52,7 @@ class Ticket(KonferaModel):
         if hasattr(self, 'order'):
             exist_ticket = self.order.ticket_set.first()
             if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
-                raise ValidationError(_('All tickets must be for same event.'))
+                raise ValidationError(_('All tickets must be for the same event.'))
         super().clean()
 
     def save(self, *args, **kwargs):
