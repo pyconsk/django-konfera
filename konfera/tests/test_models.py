@@ -275,7 +275,8 @@ class TicketTest(TestCase):
         date_from = date_to + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
         date_kwargs = {'date_from': date_from, 'date_to': date_to}
-        event_kwargs = {'event_type': MEETUP, 'location': location, **date_kwargs}
+        event_kwargs = {'event_type': MEETUP, 'location': location}
+        event_kwargs.update(date_kwargs)
         event1 = Event.objects.create(title=title1, slug=slugify(title1), **event_kwargs)
         event2 = Event.objects.create(title=title2, slug=slugify(title2), **event_kwargs)
         ticket_type1 = TicketType.objects.create(title=title1, event=event1, price=0, **date_kwargs)
