@@ -11,5 +11,5 @@ urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/schedule/(?P<day>[\d, -]+)$', views.ScheduleView.as_view(), name='schedule'),
     url(r'^(?P<slug>[\w, -]+)/tickets/$', views.event_public_tickets, name='event_tickets'),
     url(r'^(?P<slug>[\w, -]+)/$', views.event_details_view, name='event_details'),
-    url(r'^order/(?P<order_uuid>[\w, -]+)/', views.event_order_detail, name='order_details'),
+    url(r'^order/(?P<order_uuid>[\w, -]+)/$', views.event_order_detail, name='order_details'),
 ]

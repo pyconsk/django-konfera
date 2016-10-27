@@ -3,7 +3,7 @@
 {% load custom_filters %}
 
 {% block title %}
-{% trans "Order Detail" %}
+  {% trans "Order Detail" %}
 {% endblock %}
 
 {% block content %}
@@ -19,13 +19,30 @@
             <div class="panel panel-default">
               <div class="panel-heading">{% trans "Order Details" %}</div>
               <div class="panel-body">
-                {% if order.event %}<strong>{% trans "Event: " %}</strong>{{ order.event }}<br>{% endif %}
-                {% if order.price %}<strong>{% trans "Price: " %}</strong>{{ order.price|currency }}<br>{% endif %}
-                {% if order.amount_paid %}<strong>{% trans "Amount paid: " %}</strong>{{ order.amount_paid|currency }}<br>{% endif %}
-                {% if order.discount %}<strong>{% trans "Discount: " %}</strong>{{ order.discount|currency }}<br>{% endif %}
-                {% if order.status %}<strong>{% trans "Status: " %}</strong><span class="label {{ status_label }}">{{ order.get_status_display }}</span><br>{% endif %}
-                {% if order.purchase_date %}<strong>{% trans "Purchase date: " %}</strong>{{ order.purchase_date }}<br>{% endif %}
-                {% if order.payment_date %}<strong>{% trans "Payment date: " %}</strong>{{ order.payment_date }}<br>{% endif %}
+                {% if order.event %}
+                  <strong>{% trans "Event: " %}</strong>{{ order.event }}<br>
+                {% endif %}
+                {% if order.price %}
+                  <strong>{% trans "Price: " %}</strong>{{ order.price|currency }}<br>
+                {% endif %}
+                {% if order.amount_paid %}
+                  <strong>{% trans "Amount paid: " %}</strong>{{ order.amount_paid|currency }}<br>
+                {% endif %}
+                {% if order.discount %}
+                  <strong>{% trans "Discount: " %}</strong>{{ order.discount|currency }}<br>
+                {% endif %}
+                {% if order.status %}
+                  <strong>{% trans "Status: " %}</strong>
+                  <span class="label {{ status_label }}">
+                    {{ order.get_status_display }}
+                  </span><br>
+                {% endif %}
+                {% if order.purchase_date %}
+                  <strong>{% trans "Purchase date: " %}</strong>{{ order.purchase_date }}<br>
+                {% endif %}
+                {% if order.payment_date %}
+                  <strong>{% trans "Payment date: " %}</strong>{{ order.payment_date }}<br>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -33,16 +50,36 @@
             <div class="panel panel-info">
               <div class="panel-heading">{% trans "Receipt" %}</div>
               <div class="panel-body">
-                {% if order.receipt_of.title %}<strong>{% trans "Title: " %}</strong>{{ order.receipt_of.title }}<br>{% endif %}
-                {% if order.receipt_of.amount %}<strong>{% trans "Amount: " %}</strong>{{ order.receipt_of.amount|currency }}<br>{% endif %}
-                {% if order.receipt_of.street %}<strong>{% trans "Street: " %}</strong>{{ order.receipt_of.street }}<br>{% endif %}
-                {% if order.receipt_of.street2 %}<strong>{% trans "Street2: " %}</strong>{{ order.receipt_of.street2 }}<br>{% endif %}
-                {% if order.receipt_of.city %}<strong>{% trans "City: " %}</strong>{{ order.receipt_of.city }}<br>{% endif %}
-                {% if order.receipt_of.postcode %}<strong>{% trans "Postal code: " %}</strong>{{ order.receipt_of.postcode }}<br>{% endif %}
-                {% if order.receipt_of.state %}<strong>{% trans "State: " %}</strong>{{ order.receipt_of.state }}<br>{% endif %}
-                {% if order.receipt_of.companyid %}<strong>{% trans "Company Id: " %}</strong>{{ order.receipt_of.companyid }}<br>{% endif %}
-                {% if order.receipt_of.taxid %}<strong>{% trans "TAX Id: " %}</strong>{{ order.receipt_of.taxid }}<br>{% endif %}
-                {% if order.receipt_of.vatid %}<strong>{% trans "VAT Id: " %}</strong>{{ order.receipt_of.vatid }}<br>{% endif %}
+                {% if order.receipt_of.title %}
+                  <strong>{% trans "Title: " %}</strong>{{ order.receipt_of.title }}<br>
+                {% endif %}
+                {% if order.receipt_of.amount %}
+                  <strong>{% trans "Amount: " %}</strong>{{ order.receipt_of.amount|currency }}<br>
+                {% endif %}
+                {% if order.receipt_of.street %}
+                  <strong>{% trans "Street: " %}</strong>{{ order.receipt_of.street }}<br>
+                {% endif %}
+                {% if order.receipt_of.street2 %}
+                  <strong>{% trans "Street2: " %}</strong>{{ order.receipt_of.street2 }}<br>
+                {% endif %}
+                {% if order.receipt_of.city %}
+                  <strong>{% trans "City: " %}</strong>{{ order.receipt_of.city }}<br>
+                {% endif %}
+                {% if order.receipt_of.postcode %}
+                  <strong>{% trans "Postal code: " %}</strong>{{ order.receipt_of.postcode }}<br>
+                {% endif %}
+                {% if order.receipt_of.state %}
+                  <strong>{% trans "State: " %}</strong>{{ order.receipt_of.state }}<br>
+                {% endif %}
+                {% if order.receipt_of.companyid %}
+                  <strong>{% trans "Company Id: " %}</strong>{{ order.receipt_of.companyid }}<br>
+                {% endif %}
+                {% if order.receipt_of.taxid %}
+                  <strong>{% trans "TAX Id: " %}</strong>{{ order.receipt_of.taxid }}<br>
+                {% endif %}
+                {% if order.receipt_of.vatid %}
+                  <strong>{% trans "VAT Id: " %}</strong>{{ order.receipt_of.vatid }}<br>
+                {% endif %}
               </div>
             </div>
           </div>
@@ -72,7 +109,7 @@
                 <tbody>
                 {% for ticket in order.ticket_set.all %}
                   <tr>
-                    <td><div class="text-capitalize">{{ ticket.title }}.</div> {{ ticket.first_name }} {{ ticket.last_name }}</td>
+                    <td>{{ ticket.get_title_display }} {{ ticket.first_name }} {{ ticket.last_name }}</td>
                     <td class="text-center">{{ ticket.email }}</td>
                     <td class="text-center">{{ ticket.phone }}</td>
                     <td class="text-center">{{ ticket.discount_code.title }}</td>

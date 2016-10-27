@@ -56,7 +56,5 @@ class Order(KonferaModel):
 
     @property
     def event(self):
-        if len(self.ticket_set.all()) > 0:
-            return self.ticket_set.all()[0].type.event
-        else:
-            return None
+        if self.ticket_set.exists():
+            return self.ticket_set.first().type.event
