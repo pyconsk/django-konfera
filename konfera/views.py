@@ -4,6 +4,11 @@ from django.views.generic import ListView
 from konfera.models.event import Event, MEETUP, CONFERENCE
 
 
+def index(request):
+    latest_conference = Event.objects.published().filter(event_type=CONFERENCE).latest('date_from')
+    return redirect('event_details', slug=latest_conference.slug)
+
+
 class EventsByTypeListView(ListView):
     event_type = None
     queryset = Event.objects.all()
