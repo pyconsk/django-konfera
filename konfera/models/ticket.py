@@ -49,6 +49,10 @@ class Ticket(KonferaModel):
         if self.discount_code and self.discount_code.ticket_type != self.type:
             raise ValidationError(
                 {'discount_code': _('Discount code is not applicable for the selected ticket type.')})
+        if hasattr(self, 'order'):
+            exist_ticket = self.order.ticket_set.first()
+            if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
+                raise ValidationError(_('All tickets must be for same event.'))
         super().clean()
 
     def save(self, *args, **kwargs):
@@ -58,8 +62,4 @@ class Ticket(KonferaModel):
             order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
             order.save()
             self.order = order
-        else:
-            exist_ticket = self.order.ticket_set.first()
-            if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
-                raise ValidationError(_('All tickets must be for same event.'))
         super(Ticket, self).save(*args, **kwargs)

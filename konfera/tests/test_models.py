@@ -96,12 +96,14 @@ class EventTest(TestCase):
 
 
 class LocationTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Location(title="Test Location title")
         self.assertEqual(str(entry), entry.title)
 
 
 class OrderTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Order(price=155.5, discount=5.5)
         self.assertEqual(str(entry), str(entry.price - entry.discount))
@@ -133,18 +135,21 @@ class OrderTest(TestCase):
 
 
 class ReceiptTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Receipt(title="Test Receipt title")
         self.assertEqual(str(entry), entry.title)
 
 
 class RoomModelTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Room(title="My Room title")
         self.assertEqual(str(entry), entry.title)
 
 
 class ScheduleTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Schedule(start="2015-01-01 01:01:01", duration=15)
         self.assertEqual(str(entry), '%s (%s min)' % (entry.start, entry.duration))
@@ -161,6 +166,7 @@ class ScheduleTest(TestCase):
 
 
 class SpeakerTest(TestCase):
+
     def test_string_representation(self):
         entry = models.Speaker(first_name="Test", last_name="Tester")
         self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
@@ -205,6 +211,7 @@ class TalkTest(TestCase):
 
 
 class TicketTest(TestCase):
+
     def setUp(self):
         time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
@@ -269,8 +276,8 @@ class TicketTest(TestCase):
         self.assertRaises(ValidationError, ticket_with_invalid_code.save)
 
     def test_save_tickets_for_different_event(self):
-        title1 = random_string(128)
-        title2 = random_string(128)
+        title1 = 'First title'
+        title2 = 'Second title'
         date_to = timezone.now()
         date_from = date_to + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
