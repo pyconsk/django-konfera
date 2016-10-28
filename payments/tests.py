@@ -125,13 +125,14 @@ class TestProcessPayment(TestCase):
         self.assertEqual(order.status, models.order.Order.PARTLY_PAID)
 
     def test_attendee_paid_enough(self):
-        order = models.Order.objects.create(price=100, discount=10, amount_paid=5, status=models.order.Order.PARTLY_PAID)
+        order = models.Order.objects.create(price=100, discount=10, amount_paid=5,
+                                            status=models.order.Order.PARTLY_PAID)
         payment = make_payment({'amount': 85, 'transaction_id': '7'})
 
         utils._process_payment(order, payment)
 
         self.assertEqual(order.amount_paid, 90)
-        self.assertEqual(order.status, models.order.PAID)
+        self.assertEqual(order.status, models.order.Order.PAID)
 
     def test_payment_marked_as_processed(self):
         order = models.Order.objects.create(price=100, discount=10)
