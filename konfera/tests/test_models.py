@@ -252,7 +252,7 @@ class TicketTest(TestCase):
                                type=self.ticket_type, email='test@test.com', phone='0912345678',
                                discount_code=self.discount_code)
         ticket.save()
-        self.assertEquals(ticket.order.status, 'Order.awaiting_payment')
+        self.assertEquals(ticket.order.status, 'awaiting_payment')
         self.assertEquals(ticket.order.price, self.ticket_type.price)
         self.assertEquals(ticket.order.discount, 60)
 

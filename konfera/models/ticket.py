@@ -60,7 +60,7 @@ class Ticket(KonferaModel):
         if not hasattr(self, 'order'):
             discount = self.discount_calculator()
             order = Order(price=self.type.price, discount=discount, status=Order.AWAITING,
-                purchase_date=timezone.now())
+                          purchase_date=timezone.now())
             order.save()
             self.order = order
         super(Ticket, self).save(*args, **kwargs)
