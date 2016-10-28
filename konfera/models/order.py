@@ -34,7 +34,7 @@ class Order(KonferaModel):
         return str(self.price - self.discount)
 
     def save(self, *args, **kwargs):
-        if self.status == PAID and self.payment_date is None:
+        if self.status == Order.PAID and self.payment_date is None:
             self.payment_date = timezone.now()
 
         super().save(*args, **kwargs)

@@ -63,10 +63,10 @@ class TicketType(FromToModel):
 
     def _get_current_status(self):
         now = timezone.now()
-        status = ACTIVE
+        status = TicketType.ACTIVE
 
         if not self.date_from or not self.date_to or now < self.date_from:
-            status = NOT_AVAILABLE
+            status = TicketType.NOT_AVAILABLE
         elif self.date_to < now:
             status = EXPIRED
 
@@ -74,7 +74,7 @@ class TicketType(FromToModel):
 
     @property
     def status(self):
-        return STATUSES[self._get_current_status()]
+        return TicketType.STATUSES[self._get_current_status()]
 
     def clean(self):
         now = timezone.now()

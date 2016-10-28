@@ -6,7 +6,7 @@ from konfera.models.countries import COUNTRIES
 
 class Location(KonferaModel):
     STATE_DEFAULT = 'SK'
-    
+
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     street2 = models.CharField(max_length=128, blank=True)

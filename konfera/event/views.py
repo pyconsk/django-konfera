@@ -112,8 +112,9 @@ def event_public_tickets(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC).exclude(attendee_type=TicketType.AID)\
-        .exclude(attendee_type=TicketType.VOLUNTEER).exclude(attendee_type=TicketType.PRESS)
+    available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
+        .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
+        .exclude(attendee_type=TicketType.PRESS)
     available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
