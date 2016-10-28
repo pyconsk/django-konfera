@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
                             Room, Schedule)
 
@@ -160,6 +161,7 @@ class OrderedTicketsInline(admin.StackedInline):
     verbose_name = _('Ordered ticket')
     verbose_name_plural = _('Ordered tickets')
     extra = 1
+    formset = OrderedTicketsInlineFormSet
 
 
 class ReceiptInline(admin.StackedInline):
