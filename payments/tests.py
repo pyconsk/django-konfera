@@ -122,10 +122,10 @@ class TestProcessPayment(TestCase):
         utils._process_payment(order, payment)
 
         self.assertEqual(order.amount_paid, 80)
-        self.assertEqual(order.status, models.order.PARTLY_PAID)
+        self.assertEqual(order.status, models.order.Order.PARTLY_PAID)
 
     def test_attendee_paid_enough(self):
-        order = models.Order.objects.create(price=100, discount=10, amount_paid=5, status=models.order.PARTLY_PAID)
+        order = models.Order.objects.create(price=100, discount=10, amount_paid=5, status=models.order.Order.PARTLY_PAID)
         payment = make_payment({'amount': 85, 'transaction_id': '7'})
 
         utils._process_payment(order, payment)
@@ -159,8 +159,8 @@ class TestCheckPaymentsStatus(TestCase):
         order2 = models.Order.objects.get(pk=self.order2.pk)
 
         self.assertEqual(mock_api_call.call_count, 1)
-        self.assertEqual(order1.status, models.order.AWAITING)
-        self.assertEqual(order2.status, models.order.AWAITING)
+        self.assertEqual(order1.status, models.order.Order.AWAITING)
+        self.assertEqual(order2.status, models.order.Order.AWAITING)
 
     @patch('payments.utils._get_last_payments')
     def test_one_order_is_paid(self, mock_api_call):
@@ -174,8 +174,8 @@ class TestCheckPaymentsStatus(TestCase):
         order2 = models.Order.objects.get(pk=self.order2.pk)
 
         self.assertEqual(mock_api_call.call_count, 1)
-        self.assertEqual(order1.status, models.order.PAID)
-        self.assertEqual(order2.status, models.order.AWAITING)
+        self.assertEqual(order1.status, models.order.Order.PAID)
+        self.assertEqual(order2.status, models.order.Order.AWAITING)
 
     @patch('payments.utils._get_last_payments')
     def test_all_orders_are_paid(self, mock_api_call):
@@ -190,8 +190,8 @@ class TestCheckPaymentsStatus(TestCase):
         order2 = models.Order.objects.get(pk=self.order2.pk)
 
         self.assertEqual(mock_api_call.call_count, 1)
-        self.assertEqual(order1.status, models.order.PAID)
-        self.assertEqual(order2.status, models.order.PAID)
+        self.assertEqual(order1.status, models.order.Order.PAID)
+        self.assertEqual(order2.status, models.order.Order.PAID)
 
     @patch('payments.utils._get_last_payments')
     def test_order_is_paid_in_multiple_payments(self, mock_api_call):
@@ -206,5 +206,5 @@ class TestCheckPaymentsStatus(TestCase):
         order1 = models.Order.objects.get(pk=self.order1.pk)
         order2 = models.Order.objects.get(pk=self.order2.pk)
 
-        self.assertEqual(order1.status, models.order.PAID)
-        self.assertEqual(order2.status, models.order.PARTLY_PAID)
+        self.assertEqual(order1.status, models.order.Order.PAID)
+        self.assertEqual(order2.status, models.order.Order.PARTLY_PAID)
