@@ -4,13 +4,18 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
+from django.utils.text import slugify
+from django.db import IntegrityError
 
 from konfera import models
 from konfera.models.discount_code import DiscountCode
 from konfera.models.event import Event, MEETUP, PUBLISHED
 from konfera.models.order import AWAITING
 from konfera.models.speaker import TITLE_CHOICES
+from konfera.models.sponsor import Sponsor
+from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType, STATUSES, NOT_AVAILABLE, ACTIVE, EXPIRED
+from .utils import random_string
 
 
 class DiscountCodeTest(TestCase):
@@ -58,6 +63,7 @@ class DiscountCodeTest(TestCase):
 
 
 class EventTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
         entry = models.Event(title="Test Event title")
@@ -68,6 +74,25 @@ class EventTest(TestCase):
         event.date_to = timezone.now()
         event.date_from = event.date_to + datetime.timedelta(+3)
         self.assertRaises(ValidationError, event.clean)
+
+    def test_slug(self):
+        title_length = Event._meta.get_field('title').max_length
+        slug_length = Event._meta.get_field('slug').max_length
+        self.assertGreaterEqual(slug_length, title_length)
+
+        title = random_string(title_length)
+        slug = slugify(title)
+        date_to = timezone.now()
+        date_from = date_to + datetime.timedelta(seconds=1)
+        location = models.Location.objects.order_by('?').first()
+        event1 = Event(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to,
+                       location=location)
+        event1.save()
+        self.assertEqual(Event.objects.get(slug=slug).title, title)
+
+        event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=MEETUP, date_from=date_from,
+                       date_to=date_to, location=location)
+        self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
 
 class LocationTest(TestCase):
@@ -153,13 +178,25 @@ class SpeakerTest(TestCase):
 
 
 class SponsorTest(TestCase):
+    fixtures = ['test_data.json']
 
     def test_string_representation(self):
-        entry = models.Sponsor(title="Test Sponsor title")
-        self.assertEqual(str(entry), entry.title)
+        """
+        String representation of model instance have to be equal to its title
+        """
+        sponsor = Sponsor.objects.get(title='Erigones')
+        self.assertEqual(str(sponsor), sponsor.title)
 
 
 class TalkTest(TestCase):
+    fixtures = ['test_data.json']
+
+    def test_string_representation(self):
+        """
+        String representation of model instance have to be equal to its title
+        """
+        talk = Talk.objects.get(title='How import works')
+        self.assertEqual(str(talk), talk.title)
 
     def test_different_speakers(self):
         speaker1 = models.Speaker(first_name="Test", last_name="Tester")
@@ -172,12 +209,30 @@ class TalkTest(TestCase):
         talk.secondary_speaker = speaker1
         self.assertRaises(ValidationError, talk.clean)
 
-    def test_string_representation(self):
-        entry = models.Talk(title="Test Talk title")
-        self.assertEqual(str(entry), entry.title)
-
 
 class TicketTest(TestCase):
+
+    def setUp(self):
+        time = timezone.now()
+        location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
+                                   state='test_state', capacity=20)
+        location.save()
+        event = models.Event(title='test_event', description='test', event_type='meetup',
+                             status=models.event.PUBLISHED, location=location, date_from=time, date_to=time)
+        event.save()
+        self.ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
+                                             date_from=time, date_to=time)
+        self.ticket_type.save()
+        self.ticket_type_2 = models.TicketType(title='secondType', description='otherType', price=7, event=event,
+                                               date_from=time, date_to=time)
+        self.ticket_type_2.save()
+        self.discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
+                                                 date_from=time, date_to=time, usage=1,
+                                                 ticket_type=self.ticket_type)
+        self.discount_code.save()
+        self.discount_code_2 = models.DiscountCode(title='discount_2', hash='otherCode', discount=4,
+                                                   date_from=time, date_to=time, usage=100,
+                                                   ticket_type=self.ticket_type_2)
 
     def test_string_representation(self):
         """
@@ -193,26 +248,51 @@ class TicketTest(TestCase):
         )
 
     def test_automatic_order_generator(self):
-        time = timezone.now()
-        location = models.Location(title='test_title', street='test_street', city='test_city', postcode=000000,
-                                   state='test_state', capacity=20)
-        location.save()
-        event = models.Event(title='test_event', description='test', event_type='meetup',
-                             status=models.event.PUBLISHED, location=location, date_from=time, date_to=time)
-        event.save()
-        ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
-                                        date_from=timezone.now(), date_to=timezone.now())
-        ticket_type.save()
-        discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
-                                            date_from=time, date_to=time, usage=1,
-                                            ticket_type=ticket_type)
-        discount_code.save()
-        ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test", type=ticket_type,
-                               email='test@test.com', phone='0912345678', discount_code=discount_code)
+        ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
+                               type=self.ticket_type, email='test@test.com', phone='0912345678',
+                               discount_code=self.discount_code)
         ticket.save()
         self.assertEquals(ticket.order.status, 'awaiting_payment')
-        self.assertEquals(ticket.order.price, ticket_type.price)
+        self.assertEquals(ticket.order.price, self.ticket_type.price)
         self.assertEquals(ticket.order.discount, 60)
+
+    def test_clean_and_save_ticket_discount_code(self):
+        # if saved with no discount_code, the ticket should save successfully
+        ticket_no_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
+                                       type=self.ticket_type, email='test@test.com', phone='0912345678')
+        ticket_no_code.save()
+
+        # if saved with a code that matches the ticket type of the ticket, the ticket should save successfully
+        ticket_with_valid_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
+                                               type=self.ticket_type, email='test@test.com', phone='0912345678',
+                                               discount_code=self.discount_code)
+        ticket_with_valid_code.save()
+
+        # if saved with a code that does not match the ticket type of the ticket, the ticket should
+        # raise a validationError
+        ticket_with_invalid_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
+                                                 type=self.ticket_type, email='test@test.com', phone='0912345678',
+                                                 discount_code=self.discount_code_2)
+        self.assertRaises(ValidationError, ticket_with_invalid_code.save)
+
+    def test_save_tickets_for_different_event(self):
+        title1 = 'First title'
+        title2 = 'Second title'
+        date_to = timezone.now()
+        date_from = date_to + datetime.timedelta(seconds=1)
+        location = models.Location.objects.order_by('?').first()
+        date_kwargs = {'date_from': date_from, 'date_to': date_to}
+        event_kwargs = {'event_type': MEETUP, 'location': location}
+        event_kwargs.update(date_kwargs)
+        event1 = Event.objects.create(title=title1, slug=slugify(title1), **event_kwargs)
+        event2 = Event.objects.create(title=title2, slug=slugify(title2), **event_kwargs)
+        ticket_type1 = TicketType.objects.create(title=title1, event=event1, price=0, **date_kwargs)
+        ticket_type2 = TicketType.objects.create(title=title2, event=event2, price=0, **date_kwargs)
+        ticket_kwargs = {'status': 'requested', 'title': 'mr', 'first_name': 'test', 'last_name': 'Test',
+                         'email': 'test@test.com', 'phone': '0912345678'}
+        ticket1 = models.Ticket.objects.create(type=ticket_type1, **ticket_kwargs)
+        ticket2 = models.Ticket(type=ticket_type2, order=ticket1.order, **ticket_kwargs)
+        self.assertRaises(ValidationError, ticket2.save)
 
 
 class TicketTypeTest(TestCase):

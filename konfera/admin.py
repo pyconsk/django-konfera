@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
                             Room, Schedule)
 
@@ -138,7 +139,7 @@ class LocationAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
-            'fields': ('title', 'capacity',)
+            'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
             'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
@@ -155,6 +156,14 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
+class OrderedTicketsInline(admin.StackedInline):
+    model = Ticket
+    verbose_name = _('Ordered ticket')
+    verbose_name_plural = _('Ordered tickets')
+    extra = 1
+    formset = OrderedTicketsInlineFormSet
+
+
 class ReceiptInline(admin.StackedInline):
     model = Receipt
 
@@ -164,10 +173,12 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     ordering = ('purchase_date',)
     search_fields = ('=uuid',)
-    readonly_fields = ('purchase_date', 'payment_date', 'amount_paid', 'uuid', 'date_created', 'date_modified')
+    readonly_fields = (
+        'purchase_date', 'payment_date', 'amount_paid', 'uuid', 'date_created', 'date_modified', 'variable_symbol',
+    )
     fieldsets = (
         (_('Details'), {
-            'fields': ('uuid', 'price', 'discount', 'status', 'amount_paid'),
+            'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'status', 'amount_paid'),
         }),
         (_('Modifications'), {
             'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'),
@@ -175,8 +186,9 @@ class OrderAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [
-        ReceiptInline,
+        ReceiptInline, OrderedTicketsInline
     ]
+
 
 admin.site.register(Order, OrderAdmin)
 
@@ -191,7 +203,7 @@ class TicketTypeAdmin(admin.ModelAdmin):
             'fields': ('title', 'description', 'uuid', 'price', 'attendee_type', 'event',)
         }),
         (_('Availability'), {
-            'fields': ('date_from', 'date_to', 'status'),
+            'fields': ('date_from', 'date_to', 'status', 'accessibility'),
             'classes': ('collapse',),
         }),
         (_('Modifications'), {
@@ -231,14 +243,14 @@ class TicketAdmin(admin.ModelAdmin):
     list_display = ('email', 'type', 'status')
     list_filter = ('status', 'type__event',)
     ordering = ('order__purchase_date', 'email')
-    search_fields = ('=last_name', '=first_name', '=email', )  # case insensitive searching
-    readonly_fields = ('date_created', 'date_modified')
+    search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
+    readonly_fields = ('order', 'date_created', 'date_modified')
     fieldsets = (
         (_('Personal details'), {
             'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
         }),
         (_('Ticket info'), {
-            'fields': ('type', 'discount_code', 'status', 'description')
+            'fields': ('order', 'type', 'discount_code', 'status', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -252,7 +264,7 @@ admin.site.register(Ticket, TicketAdmin)
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('start', 'duration', 'talk', 'room')
     list_filter = ('talk__event', 'room')
-    ordering = ('start', 'room', 'talk__event')
+    ordering = ('start', 'room', 'event')
     search_fields = ('=description',)
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
@@ -260,7 +272,7 @@ class ScheduleAdmin(admin.ModelAdmin):
             'fields': ('start', 'duration'),
         }),
         (_('Details'), {
-            'fields': ('talk', 'room', 'description')
+            'fields': ('event', 'talk', 'room', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),

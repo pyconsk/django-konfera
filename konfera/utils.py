@@ -11,3 +11,8 @@ def collect_view_data(request):
         view_data['ga'] = settings.GOOGLE_ANALYTICS
 
     return view_data
+
+
+def set_event_ga_to_context(event, context):
+    if event.analytics:
+        context['ga'] = event.analytics

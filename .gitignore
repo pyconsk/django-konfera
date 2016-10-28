@@ -6,6 +6,7 @@ local_settings.py
 local_config.py
 local_gunicorn.py
 config.cfg
+*.mo
 
 # Packages
 *.egg
@@ -18,6 +19,7 @@ sdist
 develop-eggs
 .installed.cfg
 MANIFEST
+env
 envs
 envs3
 .initialized
@@ -28,6 +30,7 @@ envs3
 *.sqlite3
 
 # Installer logs
+doc/current-commit.txt
 pip-log.txt
 
 # Unit test / coverage reports

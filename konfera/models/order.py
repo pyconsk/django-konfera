@@ -49,3 +49,7 @@ class Order(KonferaModel):
     def to_pay(self):
         """ Ticket's price after discount """
         return self.price - self.discount
+
+    @property
+    def variable_symbol(self):
+        return str(int(self.uuid))[:10]

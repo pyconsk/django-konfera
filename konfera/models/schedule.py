@@ -7,6 +7,7 @@ from konfera.models.abstract import KonferaModel
 
 class Schedule(KonferaModel):
     start = models.DateTimeField()
+    event = models.ForeignKey('Event', related_name='schedules')
     description = models.TextField(
         blank=True,
         help_text=_('Description will be displayed, only if there is no related talk, eg. coffee break, lunch etc...'))
@@ -21,4 +22,4 @@ class Schedule(KonferaModel):
     room = models.ForeignKey('Room', blank=True, null=True, related_name='scheduled_rooms')
 
     def __str__(self):
-        return _('%s (%s min)') % (self.start, self.duration)
+        return _('%(start)s (%(duration)s min)') % {'start': self.start, 'duration': self.duration}

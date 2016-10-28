@@ -1,5 +1,6 @@
 # Project dependencies
 django>=1.10
+pytz==2016.7
 
 # The app itself in editable mode
 -e ../

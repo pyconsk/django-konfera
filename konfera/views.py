@@ -1,36 +1,46 @@
-from django.contrib import messages
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import redirect
+from django.views.generic import ListView
 
-from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.forms import VolunteerRegistrationForm
-from konfera.models.event import Event
-from konfera.models.talk import CFP
-from konfera.models.ticket import REQUESTED
-from konfera.models.ticket_type import TicketType, VOLUNTEER
+from konfera.models.event import Event, MEETUP, CONFERENCE
 
 
-def register_volunteer(request, event_slug):
-    context = dict()
-    event = get_object_or_404(Event, slug=event_slug)
-    volunteer_ticket_type = get_object_or_404(TicketType, event=event.id, attendee_type=VOLUNTEER)
+def index(request):
+    latest_conference = Event.objects.published().filter(event_type=CONFERENCE).latest('date_from')
+    return redirect('event_details', slug=latest_conference.slug)
 
-    if request.method == "POST":
-        form = VolunteerRegistrationForm(request.POST)
 
-        if form.is_valid():
-            new_ticket = form.save(commit=False)
-            new_ticket.status = REQUESTED
-            new_ticket.type = volunteer_ticket_type
-            new_ticket.save()
+class EventsByTypeListView(ListView):
+    event_type = None
+    queryset = Event.objects.all()
+    paginate_by = 10
 
-            return redirect('event_details', event_slug)
-    else:
-        form = VolunteerRegistrationForm()
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
 
-    context['form'] = form
-    context['type'] = VOLUNTEER
+        if queryset.count() == 1:
+            return redirect('event_details', slug=queryset[0].slug)
 
-    return render(request, 'konfera/registration_form.html', context=context)
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        if self.event_type is not None:
+            queryset = queryset.filter(event_type=self.event_type)
+
+        return queryset
+
+
+class EventsListView(EventsByTypeListView):
+    template_name = 'konfera/list_events.html'
+
+
+class MeetupsListView(EventsByTypeListView):
+    paginate_by = 15
+    event_type = MEETUP
+    template_name = 'konfera/list_meetups.html'
+
+
+class ConferencesListView(EventsByTypeListView):
+    event_type = CONFERENCE
+    template_name = 'konfera/list_conferences.html'

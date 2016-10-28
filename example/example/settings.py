@@ -9,8 +9,10 @@ https://docs.djangoproject.com/en/1.10/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
-
 import os
+
+from django.utils.translation import ugettext_lazy as _
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'konfera',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +118,14 @@ USE_L10N = True
 
 USE_TZ = True
 
+LANGUAGES = (
+    ('en', _('English')),
+    ('sk', _('Slovak')),
+)
+
+LOCALE_PATHS = [
+    os.path.join(BASE_DIR, '..', 'konfera', 'locale'),
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
@@ -124,5 +135,8 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+FIO_BANK_TOKEN = 'token'
+PAYMENT_ERROR_RATE = 0  # percentage
 
 GOOGLE_ANALYTICS = 'UA-XXXXXXXX-X'
