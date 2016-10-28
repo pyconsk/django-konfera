@@ -136,10 +136,10 @@ class OrderTest(TestCase):
     def test_order_event_with_ticket(self):
         entry = models.Order.objects.create(price=155.5, discount=5.5)
         # Create Event
-        title = random_string(16)
+        title = 'Test Event title'
         slug = slugify(title)
-        date_to = timezone.now()
-        date_from = date_to + datetime.timedelta(days=1)
+        date_from = timezone.now()
+        date_to = date_from + datetime.timedelta(days=1)
         location = models.Location.objects.create(title="Test Location title")
         event = Event.objects.create(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to,
                                      location=location, status=PUBLISHED)
