@@ -3,10 +3,10 @@ from django.db import models
 from konfera.models.abstract import KonferaModel
 from konfera.models.countries import COUNTRIES
 
-STATE_DEFAULT = 'SK'
-
 
 class Location(KonferaModel):
+    STATE_DEFAULT = 'SK'
+    
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     street2 = models.CharField(max_length=128, blank=True)

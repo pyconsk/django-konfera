@@ -4,36 +4,36 @@ from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import KonferaModel
 
-CFP = 'cfp'
-DRAFT = 'draft'
-APPROVED = 'approved'
-REJECTED = 'rejected'
-WITHDRAWN = 'withdrawn'
-
-TALK_STATUS = (
-    (CFP, _('Call For Proposals')),
-    (DRAFT, _('Draft')),
-    (APPROVED, _('Approved')),
-    (REJECTED, _('Rejected')),
-    (WITHDRAWN, _('Withdrawn')),
-)
-
-TALK = 'talk'
-WORKSHOP = 'workshop'
-
-TALK_TYPE = (
-    (TALK, _('Talk')),
-    (WORKSHOP, _('Workshop')),
-)
-
-TALK_DURATION = (
-    (5, _('5 min')),
-    (30, _('30 min')),
-    (45, _('45 min')),
-)
-
 
 class Talk(KonferaModel):
+    CFP = 'cfp'
+    DRAFT = 'draft'
+    APPROVED = 'approved'
+    REJECTED = 'rejected'
+    WITHDRAWN = 'withdrawn'
+
+    TALK_STATUS = (
+        (CFP, _('Call For Proposals')),
+        (DRAFT, _('Draft')),
+        (APPROVED, _('Approved')),
+        (REJECTED, _('Rejected')),
+        (WITHDRAWN, _('Withdrawn')),
+    )
+
+    TALK = 'talk'
+    WORKSHOP = 'workshop'
+
+    TALK_TYPE = (
+        (TALK, _('Talk')),
+        (WORKSHOP, _('Workshop')),
+    )
+
+    TALK_DURATION = (
+        (5, _('5 min')),
+        (30, _('30 min')),
+        (45, _('45 min')),
+    )
+
     title = models.CharField(max_length=256)
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32, default=TALK)
