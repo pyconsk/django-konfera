@@ -2,8 +2,6 @@ from django import VERSION
 from django.test import TestCase
 
 from konfera.models import Event, Location, Talk
-from konfera.models.talk import Talk
-from konfera.models.event import Event
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
