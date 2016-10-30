@@ -61,6 +61,7 @@ class CFPView(TemplateView):
 
     def dispatch(self, *args, **kwargs):
         get_object_or_404(Event, slug=kwargs.get('slug'))
+
         return super().dispatch(*args, **kwargs)
 
     def post(self, *args, **kwargs):
