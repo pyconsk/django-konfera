@@ -1,11 +1,11 @@
 from django.shortcuts import redirect
 from django.views.generic import ListView
 
-from konfera.models.event import Event, MEETUP, CONFERENCE
+from konfera.models.event import Event
 
 
 def index(request):
-    latest_conference = Event.objects.published().filter(event_type=CONFERENCE).latest('date_from')
+    latest_conference = Event.objects.published().filter(event_type=Event.CONFERENCE).latest('date_from')
     return redirect('event_details', slug=latest_conference.slug)
 
 
@@ -37,10 +37,10 @@ class EventsListView(EventsByTypeListView):
 
 class MeetupsListView(EventsByTypeListView):
     paginate_by = 15
-    event_type = MEETUP
+    event_type = Event.MEETUP
     template_name = 'konfera/list_meetups.html'
 
 
 class ConferencesListView(EventsByTypeListView):
-    event_type = CONFERENCE
+    event_type = Event.CONFERENCE
     template_name = 'konfera/list_conferences.html'

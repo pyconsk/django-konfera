@@ -9,10 +9,12 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.models.event import Event, MEETUP
-from konfera.models.sponsor import PLATINUM, GOLD, SILVER
-from konfera.models.talk import APPROVED, CFP, DRAFT, Talk
-from konfera.models.ticket_type import PUBLIC, ACTIVE, PRESS, AID, VOLUNTEER
+
+from konfera.models.event import Event
+from konfera.models.sponsor import Sponsor
+from konfera.models.talk import Talk
+from konfera.models.ticket_type import TicketType
+
 from konfera.utils import set_event_ga_to_context
 
 
@@ -33,7 +35,7 @@ def event_speakers_list_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
+    context['talks'] = event.talk_set.filter(status=Talk.APPROVED).order_by('primary_speaker__last_name')
 
     set_event_ga_to_context(event, context)
 
@@ -45,11 +47,11 @@ def event_details_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.filter(type__in=(PLATINUM, GOLD, SILVER))
+    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
 
     set_event_ga_to_context(event, context)
 
-    if event.event_type == MEETUP:
+    if event.event_type == Event.MEETUP:
         return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
 
     return render(request=request, template_name='konfera/event/details_conference.html', context=context)
@@ -71,7 +73,7 @@ class CFPView(TemplateView):
             talk_instance = context['talk_form'].save(commit=False)
             talk_instance.primary_speaker = speaker_instance
             talk_instance.event = context['event']
-            talk_instance.status = talk_instance.status or CFP
+            talk_instance.status = talk_instance.status or Talk.CFP
             talk_instance.save()
             messages.success(self.request, self.message_text)
 
@@ -110,7 +112,7 @@ class CFPEditView(CFPView):
         except (Talk.DoesNotExist, ValueError):
             raise Http404
 
-        if talk.status not in [CFP, DRAFT]:
+        if talk.status not in [Talk.CFP, Talk.DRAFT]:
             raise Http404
 
         return super().dispatch(*args, **kwargs)
@@ -149,9 +151,10 @@ def event_public_tickets(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    available_tickets = event.tickettype_set.filter(accessibility=PUBLIC).exclude(attendee_type=AID)\
-        .exclude(attendee_type=VOLUNTEER).exclude(attendee_type=PRESS)
-    available_tickets = [t for t in available_tickets if t._get_current_status() == ACTIVE]
+    available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
+        .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
+        .exclude(attendee_type=TicketType.PRESS)
+    available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
 
