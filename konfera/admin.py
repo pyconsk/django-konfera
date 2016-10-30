@@ -72,13 +72,13 @@ class TalkAdmin(admin.ModelAdmin):
     list_filter = ('type', 'duration', 'event', 'status',)
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
     ordering = ('title', 'event')
-    readonly_fields = ('date_created', 'date_modified')
+    readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
             'fields': ('title', 'abstract', 'event',)
         }),
         (_('Details'), {
-            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
+            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
