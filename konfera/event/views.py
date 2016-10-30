@@ -5,7 +5,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
+
 
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event, MEETUP
@@ -54,62 +56,62 @@ def event_details_view(request, slug):
     return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
+class CFPView(TemplateView):
+    template_name = 'konfera/cfp_form.html'
+    message_text = _("Your talk proposal was successfully created.")
 
-def cfp_edit_form_view(request, slug, uuid):
-    event = get_object_or_404(Event.objects.published(), slug=slug)
-    context = dict()
-    talk = Talk.objects.get(uuid=uuid)
+    def post(self, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
 
-    if talk.status not in [CFP, DRAFT]:
-        raise Http404
+        if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
+            speaker_instance = context['speaker_form'].save()
+            talk_instance = context['talk_form'].save(commit=False)
+            talk_instance.primary_speaker = speaker_instance
+            talk_instance.event = context['event']
+            talk_instance.save()
+            messages.success(self.request, self.message_text)
 
-    speaker_form = SpeakerForm(request.POST or None, instance=talk.primary_speaker, prefix='speaker')
-    talk_form = TalkForm(request.POST or None, instance=talk, prefix='talk')
+            return redirect('event_details', slug=context['event'].slug)
 
-    if speaker_form.is_valid() and talk_form.is_valid():
-        speaker_instance = speaker_form.save()
-        talk_instance = talk_form.save(commit=False)
-        talk_instance.primary_speaker = speaker_instance
-        talk_instance.event = event
-        talk_instance.save()
-        message_text = _("Your talk proposal successfully created.")
-        messages.success(request, message_text)
+        return super().get(*args, **kwargs)
 
-        return redirect('event_details', slug=event.slug)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    context['speaker_form'] = speaker_form
-    context['talk_form'] = talk_form
+        context['event'] = Event.objects.get(slug=kwargs['slug'])
+        context['speaker_form'] = SpeakerForm(self.request.POST or None, prefix='speaker')
+        context['talk_form'] = TalkForm(self.request.POST or None, prefix='talk')
 
-    set_event_ga_to_context(event, context)
+        set_event_ga_to_context(context['event'], context)
 
-    return render(request=request, template_name='konfera/cfp_form.html', context=context)
+        return context
 
 
+class CFPEditView(CFPView):
+    message_text = _("Your talk proposal was successfully updated.")
 
-def cfp_form_view(request, slug):
-    event = get_object_or_404(Event.objects.published(), slug=slug)
-    context = dict()
-    speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
-    talk_form = TalkForm(request.POST or None, prefix='talk')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    if speaker_form.is_valid() and talk_form.is_valid():
-        speaker_instance = speaker_form.save()
-        talk_instance = talk_form.save(commit=False)
-        talk_instance.primary_speaker = speaker_instance
-        talk_instance.status = CFP
-        talk_instance.event = Event.objects.get(slug=slug)
-        talk_instance.save()
-        message_text = _("Your talk proposal successfully created.")
-        messages.success(request, message_text)
+        talk = Talk.objects.get(uuid=context['uuid'])
 
-        return redirect('event_details', slug=event.slug)
+        context['speaker_form'] = SpeakerForm(
+            self.request.POST or None, instance=talk.primary_speaker, prefix='speaker')
+        context['talk_form'] = TalkForm(self.request.POST or None, instance=talk, prefix='talk')
 
-    context['speaker_form'] = speaker_form
-    context['talk_form'] = talk_form
+        return context
 
-    set_event_ga_to_context(event, context)
+    def dispatch(self, *args, **kwargs):
 
-    return render(request=request, template_name='konfera/cfp_form.html', context=context)
+        try:
+            talk = Talk.objects.get(uuid=kwargs['uuid'])
+        except (Talk.DoesNotExist, ValueError):
+            raise Http404
+
+        if talk.status not in [CFP, DRAFT]:
+            raise Http404
+
+        return super().dispatch(*args, **kwargs)
 
 
 def schedule_redirect(request, slug):
