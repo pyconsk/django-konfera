@@ -60,8 +60,7 @@ class CFPView(TemplateView):
     message_text = _("Your talk proposal was successfully created.")
 
     def dispatch(self, *args, **kwargs):
-        if not Event.objects.filter(slug=kwargs.get('slug')).exists():
-            raise Http404
+        get_object_or_404(Event, slug=kwargs.get('slug'))
         return super().dispatch(*args, **kwargs)
 
     def post(self, *args, **kwargs):
