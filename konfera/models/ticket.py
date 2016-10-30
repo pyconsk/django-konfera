@@ -4,27 +4,27 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils import timezone
 
 from konfera.models.abstract import KonferaModel
-from konfera.models.order import Order, AWAITING
-from konfera.models.speaker import TITLE_UNSET, TITLE_CHOICES
-
-REQUESTED = 'requested'
-REGISTERED = 'registered'
-CHECKEDIN = 'checked-in'
-CANCELLED = 'cancelled'
-
-TICKET_STATUS = (
-    (REQUESTED, _('Requested')),
-    (REGISTERED, _('Registered')),
-    (CHECKEDIN, _('Checked-in')),
-    (CANCELLED, _('Cancelled')),
-)
+from konfera.models.order import Order
+from konfera.models.speaker import Speaker
 
 
 class Ticket(KonferaModel):
+    REQUESTED = 'requested'
+    REGISTERED = 'registered'
+    CHECKEDIN = 'checked-in'
+    CANCELLED = 'cancelled'
+
+    TICKET_STATUS = (
+        (REQUESTED, _('Requested')),
+        (REGISTERED, _('Registered')),
+        (CHECKEDIN, _('Checked-in')),
+        (CANCELLED, _('Cancelled')),
+    )
+
     type = models.ForeignKey('TicketType')
     discount_code = models.ForeignKey('DiscountCode', blank=True, null=True)
     status = models.CharField(choices=TICKET_STATUS, max_length=32)
-    title = models.CharField(choices=TITLE_CHOICES, max_length=4, default=TITLE_UNSET)
+    title = models.CharField(choices=Speaker.TITLE_CHOICES, max_length=4, default=Speaker.TITLE_UNSET)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     email = models.EmailField()
@@ -34,7 +34,7 @@ class Ticket(KonferaModel):
 
     def __str__(self):
         return '{title} {first_name} {last_name}'.format(
-            title=dict(TITLE_CHOICES)[self.title],
+            title=dict(Speaker.TITLE_CHOICES)[self.title],
             first_name=self.first_name,
             last_name=self.last_name
         ).strip()
@@ -59,7 +59,8 @@ class Ticket(KonferaModel):
         self.clean()
         if not hasattr(self, 'order'):
             discount = self.discount_calculator()
-            order = Order(price=self.type.price, discount=discount, status=AWAITING, purchase_date=timezone.now())
+            order = Order(price=self.type.price, discount=discount, status=Order.AWAITING,
+                          purchase_date=timezone.now())
             order.save()
             self.order = order
         super(Ticket, self).save(*args, **kwargs)

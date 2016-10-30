@@ -7,10 +7,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.models.event import Event, MEETUP
-from konfera.models.sponsor import PLATINUM, GOLD, SILVER
-from konfera.models.talk import APPROVED, CFP
-from konfera.models.ticket_type import PUBLIC, ACTIVE, PRESS, AID, VOLUNTEER
+from konfera.models.event import Event
+from konfera.models.sponsor import Sponsor
+from konfera.models.talk import Talk
+from konfera.models.ticket_type import TicketType
 from konfera.utils import set_event_ga_to_context
 
 
@@ -31,7 +31,7 @@ def event_speakers_list_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
+    context['talks'] = event.talk_set.filter(status=Talk.APPROVED).order_by('primary_speaker__last_name')
 
     set_event_ga_to_context(event, context)
 
@@ -43,11 +43,11 @@ def event_details_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.filter(type__in=(PLATINUM, GOLD, SILVER))
+    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
 
     set_event_ga_to_context(event, context)
 
-    if event.event_type == MEETUP:
+    if event.event_type == Event.MEETUP:
         return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
 
     return render(request=request, template_name='konfera/event/details_conference.html', context=context)
@@ -63,7 +63,7 @@ def cfp_form_view(request, slug):
         speaker_instance = speaker_form.save()
         talk_instance = talk_form.save(commit=False)
         talk_instance.primary_speaker = speaker_instance
-        talk_instance.status = CFP
+        talk_instance.status = Talk.CFP
         talk_instance.event = Event.objects.get(slug=slug)
         talk_instance.save()
         message_text = _("Your talk proposal successfully created.")
@@ -112,9 +112,10 @@ def event_public_tickets(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    available_tickets = event.tickettype_set.filter(accessibility=PUBLIC).exclude(attendee_type=AID)\
-        .exclude(attendee_type=VOLUNTEER).exclude(attendee_type=PRESS)
-    available_tickets = [t for t in available_tickets if t._get_current_status() == ACTIVE]
+    available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
+        .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
+        .exclude(attendee_type=TicketType.PRESS)
+    available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
 

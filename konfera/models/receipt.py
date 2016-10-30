@@ -4,10 +4,10 @@ from django.core.validators import MinValueValidator
 from konfera.models.abstract import KonferaModel
 from konfera.models.countries import COUNTRIES
 
-STATE_DEFAULT = 'SK'
-
 
 class Receipt(KonferaModel):
+    STATE_DEFAULT = 'SK'
+
     order = models.OneToOneField('Order', on_delete=models.DO_NOTHING, related_name='receipt_of')
     title = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
