@@ -9,12 +9,10 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
-
 from konfera.models.event import Event
 from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
-
 from konfera.utils import set_event_ga_to_context
 
 
