@@ -8,7 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
-
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event, MEETUP
 from konfera.models.sponsor import PLATINUM, GOLD, SILVER
@@ -60,6 +59,11 @@ class CFPView(TemplateView):
     template_name = 'konfera/cfp_form.html'
     message_text = _("Your talk proposal was successfully created.")
 
+    def dispatch(self, *args, **kwargs):
+        if not Event.objects.filter(slug=kwargs.get('slug')).exists():
+            raise Http404
+        return super().dispatch(*args, **kwargs)
+
     def post(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
 
@@ -68,6 +72,7 @@ class CFPView(TemplateView):
             talk_instance = context['talk_form'].save(commit=False)
             talk_instance.primary_speaker = speaker_instance
             talk_instance.event = context['event']
+            talk_instance.status = talk_instance.status or CFP
             talk_instance.save()
             messages.success(self.request, self.message_text)
 
@@ -92,7 +97,6 @@ class CFPEditView(CFPView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         talk = Talk.objects.get(uuid=context['uuid'])
 
         context['speaker_form'] = SpeakerForm(
@@ -102,7 +106,6 @@ class CFPEditView(CFPView):
         return context
 
     def dispatch(self, *args, **kwargs):
-
         try:
             talk = Talk.objects.get(uuid=kwargs['uuid'])
         except (Talk.DoesNotExist, ValueError):
