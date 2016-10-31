@@ -4,17 +4,17 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.countries import COUNTRIES
 from konfera.models.abstract import KonferaModel
 
-TITLE_UNSET = 'none'
-COUNTRY_DEFAULT = 'SK'
-
-TITLE_CHOICES = (
-    (TITLE_UNSET, ''),
-    ('mr', _('Mr.')),
-    ('ms', _('Ms.')),
-)
-
 
 class Speaker(KonferaModel):
+    TITLE_UNSET = 'none'
+    COUNTRY_DEFAULT = 'SK'
+
+    TITLE_CHOICES = (
+        (TITLE_UNSET, ''),
+        ('mr', _('Mr.')),
+        ('ms', _('Ms.')),
+    )
+
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     title = models.CharField(
@@ -36,7 +36,7 @@ class Speaker(KonferaModel):
 
     def __str__(self):
         return '{title} {first_name} {last_name}'.format(
-            title=dict(TITLE_CHOICES)[self.title],
+            title=dict(Speaker.TITLE_CHOICES)[self.title],
             first_name=self.first_name,
             last_name=self.last_name
         ).strip()

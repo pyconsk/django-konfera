@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
                             Room, Schedule)
 
@@ -71,13 +72,13 @@ class TalkAdmin(admin.ModelAdmin):
     list_filter = ('type', 'duration', 'event', 'status',)
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
     ordering = ('title', 'event')
-    readonly_fields = ('date_created', 'date_modified')
+    readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
             'fields': ('title', 'abstract', 'event',)
         }),
         (_('Details'), {
-            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
+            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -160,6 +161,7 @@ class OrderedTicketsInline(admin.StackedInline):
     verbose_name = _('Ordered ticket')
     verbose_name_plural = _('Ordered tickets')
     extra = 1
+    formset = OrderedTicketsInlineFormSet
 
 
 class ReceiptInline(admin.StackedInline):

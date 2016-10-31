@@ -7,50 +7,49 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.abstract import FromToModel
 
 
-NOT_AVAILABLE = 'na'
-ACTIVE = 'active'
-EXPIRED = 'expired'
-
-STATUSES = {
-    NOT_AVAILABLE: _('Not available yet'),
-    ACTIVE: _('Active'),
-    EXPIRED: _('Expired'),
-}
-
-VOLUNTEER = 'volunteer'
-PRESS = 'press'
-STUDENT = 'student'
-ATTENDEE = 'attendee'
-SUPPORTER = 'supporter'
-SPEAKER = 'speaker'
-SPONSOR = 'sponsor'
-AID = 'aid'
-
-TICKET_TYPE_CHOICES = (
-    (VOLUNTEER, _('Volunteer')),
-    (PRESS, _('Press')),
-    (STUDENT, _('Student')),
-    (ATTENDEE, _('Attendee')),
-    (SUPPORTER, _('Supporter')),
-    (SPEAKER, _('Speaker')),
-    (SPONSOR, _('Sponsor')),
-    (AID, _('Aid')),
-)
-
-PUBLIC = 'public'
-PRIVATE = 'private'
-DISABLED = 'disabled'
-NOT_LISTED = 'not_listed'
-
-ACCESSIBILITY = (
-    (PUBLIC, _('Public')),
-    (PRIVATE, _('Private')),
-    (DISABLED, _('Disabled')),
-    (NOT_LISTED, _('Not listed')),
-)
-
-
 class TicketType(FromToModel):
+    NOT_AVAILABLE = 'na'
+    ACTIVE = 'active'
+    EXPIRED = 'expired'
+
+    STATUSES = {
+        NOT_AVAILABLE: _('Not available yet'),
+        ACTIVE: _('Active'),
+        EXPIRED: _('Expired'),
+    }
+
+    VOLUNTEER = 'volunteer'
+    PRESS = 'press'
+    STUDENT = 'student'
+    ATTENDEE = 'attendee'
+    SUPPORTER = 'supporter'
+    SPEAKER = 'speaker'
+    SPONSOR = 'sponsor'
+    AID = 'aid'
+
+    TICKET_TYPE_CHOICES = (
+        (VOLUNTEER, _('Volunteer')),
+        (PRESS, _('Press')),
+        (STUDENT, _('Student')),
+        (ATTENDEE, _('Attendee')),
+        (SUPPORTER, _('Supporter')),
+        (SPEAKER, _('Speaker')),
+        (SPONSOR, _('Sponsor')),
+        (AID, _('Aid')),
+    )
+
+    PUBLIC = 'public'
+    PRIVATE = 'private'
+    DISABLED = 'disabled'
+    NOT_LISTED = 'not_listed'
+
+    ACCESSIBILITY = (
+        (PUBLIC, _('Public')),
+        (PRIVATE, _('Private')),
+        (DISABLED, _('Disabled')),
+        (NOT_LISTED, _('Not listed')),
+    )
+
     title = models.CharField(max_length=128)
     description = models.TextField(blank=True)
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
@@ -64,18 +63,18 @@ class TicketType(FromToModel):
 
     def _get_current_status(self):
         now = timezone.now()
-        status = ACTIVE
+        status = TicketType.ACTIVE
 
         if not self.date_from or not self.date_to or now < self.date_from:
-            status = NOT_AVAILABLE
+            status = TicketType.NOT_AVAILABLE
         elif self.date_to < now:
-            status = EXPIRED
+            status = TicketType.EXPIRED
 
         return status
 
     @property
     def status(self):
-        return STATUSES[self._get_current_status()]
+        return TicketType.STATUSES[self._get_current_status()]
 
     def clean(self):
         now = timezone.now()
