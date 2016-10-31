@@ -2,9 +2,7 @@ from django import VERSION
 from django.test import TestCase
 
 from konfera.models import Event, Location, Talk, TicketType, Ticket
-from konfera.models.order import Order, CANCELLED, EXPIRED, PAID, AWAITING
-from konfera.models.talk import CFP, TALK
-from konfera.models.event import PUBLISHED, CONFERENCE
+from konfera.models.order import Order
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -18,7 +16,7 @@ class TestEventRedirect(TestCase):
             title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
         )
         self.one = Event.objects.create(
-            title='One', slug='one', description='First one', event_type=CONFERENCE, status=PUBLISHED,
+            title='One', slug='one', description='First one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
 
@@ -28,7 +26,7 @@ class TestEventRedirect(TestCase):
         self.assertRedirects(response, '/one/')
 
         two = Event.objects.create(
-            title='Two', slug='two', description='Second one', event_type=CONFERENCE, status=PUBLISHED,
+            title='Two', slug='two', description='Second one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
             location=self.location, date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
         )
 
@@ -72,7 +70,7 @@ class TestEventList(TestCase):
         return {
             'talk-title': 'Interesting talk',
             'talk-abstract': 'More text about interesting talk',
-            'talk-type': TALK,
+            'talk-type': Talk.TALK,
             'talk-duration': 30,
             # 'primary_speaker': 'TBD',
             # 'event': 'TBD',
@@ -99,7 +97,7 @@ class TestEventList(TestCase):
         talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
         self.assertEquals(talk_in_db.count(), 1)
         self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
-        self.assertEquals(talk_in_db[0].status, CFP)
+        self.assertEquals(talk_in_db[0].status, Talk.CFP)
 
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
@@ -119,10 +117,10 @@ class TestOrderDetail(TestCase):
             accessibility='public', event=self.one, date_from='2016-07-01 01:01:01+01:00',
             date_to='2016-12-01 01:01:01+01:00'
         )
-        self.order_cancelled = Order.objects.create(price=200, discount=0, status=CANCELLED)
-        self.order_expired = Order.objects.create(price=200, discount=0, status=EXPIRED)
-        self.order_paid = Order.objects.create(price=200, discount=0, status=PAID)
-        self.order_await = Order.objects.create(price=200, discount=0, status=AWAITING)
+        self.order_cancelled = Order.objects.create(price=200, discount=0, status=Order.CANCELLED)
+        self.order_expired = Order.objects.create(price=200, discount=0, status=Order.EXPIRED)
+        self.order_paid = Order.objects.create(price=200, discount=0, status=Order.PAID)
+        self.order_await = Order.objects.create(price=200, discount=0, status=Order.AWAITING)
 
     def test_ticket_register_redirect(self):
         response = self.client.get('/register/event/one/ticket/volunteer/')

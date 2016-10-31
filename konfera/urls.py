@@ -24,4 +24,5 @@ urlpatterns = [
     url(r'^events/', views.EventsListView.as_view(), name='event_list'),
     url(r'^register/', include('konfera.register.urls')),
     url(r'^', include('konfera.event.urls')),
+    url(r'^$', views.index, name='index'),
 ]
