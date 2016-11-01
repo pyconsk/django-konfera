@@ -1,4 +1,3 @@
-from django.utils.translation import to_locale, get_language
 from django import template
 import locale
 

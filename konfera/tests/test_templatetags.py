@@ -1,6 +1,6 @@
 from django.test import TestCase
 from ..templatetags.custom_filters import currency, set_default_locale
-from django.utils.translation import to_locale, get_language, override
+from django.utils.translation import override
 import locale
 
 
