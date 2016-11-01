@@ -44,7 +44,7 @@ def _register_ticket_attendee(request, slug, attendee_type):
     event = get_object_or_404(Event, slug=slug)
     ticket_types = TicketType.objects.filter(event=event, attendee_type=attendee_type)
 
-    if ticket_types and len(ticket_types) == 1 and ticket_types[0].status == TicketType.ACTIVE:
+    if ticket_types and len(ticket_types) == 1 and ticket_types[0].status == TicketType.STATUSES[TicketType.ACTIVE]:
         return _register_ticket(request, event, ticket_types[0])
     else:
         messages.warning(request, _('The ticket type is not available!'))

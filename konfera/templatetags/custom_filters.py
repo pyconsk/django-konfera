@@ -5,17 +5,14 @@ import locale
 register = template.Library()
 
 
-def set_user_locale(loc=''):
-    user_locale = locale.setlocale(locale.LC_ALL, loc)
-    if user_locale in ['C', None]:
-        user_locale = locale.setlocale(locale.LC_ALL, 'en_US')
+def set_default_locale():
+    user_locale = locale.setlocale(locale.LC_ALL, ('en_US', 'UTF-8'))
     return user_locale
 
 
 @register.filter
 def currency(value):
-    user_locale = to_locale(get_language())
-    set_user_locale(user_locale)
+    set_default_locale()
     try:
         value = float(value)
     except ValueError:
