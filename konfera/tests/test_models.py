@@ -141,8 +141,8 @@ class OrderTest(TestCase):
         date_from = timezone.now()
         date_to = date_from + datetime.timedelta(days=1)
         location = models.Location.objects.create(title="Test Location title")
-        event = Event.objects.create(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from, date_to=date_to,
-                                     location=location, status=Event.PUBLISHED)
+        event = Event.objects.create(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from,
+                                     date_to=date_to, location=location, status=Event.PUBLISHED)
         # Create TicketType for Event
         ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from,
                                                 date_to=date_to)
