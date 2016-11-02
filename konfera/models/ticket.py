@@ -63,4 +63,12 @@ class Ticket(KonferaModel):
                           purchase_date=timezone.now())
             order.save()
             self.order = order
-        super(Ticket, self).save(*args, **kwargs)
+            super(Ticket, self).save(*args, **kwargs)
+        else:
+            super(Ticket, self).save(*args, **kwargs)
+            self.order.price = 0
+            self.order.discount = 0
+            for ticket in self.order.ticket_set.all():
+                self.order.price += ticket.type.price
+                self.order.discount += ticket.discount_calculator()
+            self.order.save()
