@@ -9,12 +9,12 @@ from django.db import IntegrityError
 
 from konfera import models
 from konfera.models.discount_code import DiscountCode
-from konfera.models.event import Event, MEETUP, PUBLISHED
-from konfera.models.order import AWAITING
-from konfera.models.speaker import TITLE_CHOICES
+from konfera.models.event import Event
+from konfera.models.order import Order
+from konfera.models.speaker import Speaker
 from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
-from konfera.models.ticket_type import TicketType, STATUSES, NOT_AVAILABLE, ACTIVE, EXPIRED
+from konfera.models.ticket_type import TicketType
 from .utils import random_string
 
 
@@ -85,12 +85,12 @@ class EventTest(TestCase):
         date_to = timezone.now()
         date_from = date_to + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
-        event1 = Event(title=title, slug=slug, event_type=MEETUP, date_from=date_from, date_to=date_to,
+        event1 = Event(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from, date_to=date_to,
                        location=location)
         event1.save()
         self.assertEqual(Event.objects.get(slug=slug).title, title)
 
-        event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=MEETUP, date_from=date_from,
+        event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=Event.MEETUP, date_from=date_from,
                        date_to=date_to, location=location)
         self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
@@ -112,7 +112,7 @@ class OrderTest(TestCase):
         entry = models.Order(price=155.5, discount=5.5)
         entry.save()
         self.assertIsNone(entry.payment_date)
-        self.assertEqual(entry.status, AWAITING)
+        self.assertEqual(entry.status, Order.AWAITING)
 
     def test_paid_order_save(self):
         entry = models.Order(price=155.5, discount=5.5, status='paid')
@@ -173,7 +173,7 @@ class SpeakerTest(TestCase):
         entry.title = 'mr'
         self.assertEqual(
             str(entry),
-            '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
+            '%s %s %s' % (dict(Speaker.TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
         )
 
 
@@ -211,13 +211,14 @@ class TalkTest(TestCase):
 
 
 class TicketTest(TestCase):
+
     def setUp(self):
         time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
                                    state='test_state', capacity=20)
         location.save()
-        event = models.Event(title='test_event', description='test', event_type='meetup',
-                             status=models.event.PUBLISHED, location=location, date_from=time, date_to=time)
+        event = models.Event(title='test_event', description='test', event_type='Event.meetup',
+                             status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
         event.save()
         self.ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
                                              date_from=time, date_to=time)
@@ -243,11 +244,10 @@ class TicketTest(TestCase):
         entry.title = 'mr'
         self.assertEqual(
             str(entry),
-            '%s %s %s' % (dict(TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
+            '%s %s %s' % (dict(Speaker.TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
         )
 
     def test_automatic_order_generator(self):
-
         ticket = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
                                type=self.ticket_type, email='test@test.com', phone='0912345678',
                                discount_code=self.discount_code)
@@ -257,7 +257,6 @@ class TicketTest(TestCase):
         self.assertEquals(ticket.order.discount, 60)
 
     def test_clean_and_save_ticket_discount_code(self):
-
         # if saved with no discount_code, the ticket should save successfully
         ticket_no_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
                                        type=self.ticket_type, email='test@test.com', phone='0912345678')
@@ -285,6 +284,25 @@ class TicketTest(TestCase):
         # the discount code has not been applied so the number of allowed usages should stay 100
         self.assertEquals(self.discount_code_2.usage, 100)
         self.assertRaises(ValidationError, ticket_with_invalid_code.save)
+
+    def test_save_tickets_for_different_event(self):
+        title1 = 'First title'
+        title2 = 'Second title'
+        date_to = timezone.now()
+        date_from = date_to + datetime.timedelta(seconds=1)
+        location = models.Location.objects.order_by('?').first()
+        date_kwargs = {'date_from': date_from, 'date_to': date_to}
+        event_kwargs = {'event_type': Event.MEETUP, 'location': location}
+        event_kwargs.update(date_kwargs)
+        event1 = Event.objects.create(title=title1, slug=slugify(title1), **event_kwargs)
+        event2 = Event.objects.create(title=title2, slug=slugify(title2), **event_kwargs)
+        ticket_type1 = TicketType.objects.create(title=title1, event=event1, price=0, **date_kwargs)
+        ticket_type2 = TicketType.objects.create(title=title2, event=event2, price=0, **date_kwargs)
+        ticket_kwargs = {'status': 'requested', 'title': 'mr', 'first_name': 'test', 'last_name': 'Test',
+                         'email': 'test@test.com', 'phone': '0912345678'}
+        ticket1 = models.Ticket.objects.create(type=ticket_type1, **ticket_kwargs)
+        ticket2 = models.Ticket(type=ticket_type2, order=ticket1.order, **ticket_kwargs)
+        self.assertRaises(ValidationError, ticket2.save)
 
 
 class TicketTypeTest(TestCase):
@@ -325,8 +343,8 @@ class TicketTypeTest(TestCase):
         tt.save()
 
         # PyCon SK 2054 is in the future
-        future_event = Event.objects.create(title='PyCon SK 2054', description='test', event_type=MEETUP,
-                                            status=PUBLISHED, location=event.location,
+        future_event = Event.objects.create(title='PyCon SK 2054', description='test', event_type=Event.MEETUP,
+                                            status=Event.PUBLISHED, location=event.location,
                                             date_from=parse_datetime('2054-03-11T09:00:00Z'),
                                             date_to=parse_datetime('2054-03-13T18:00:00Z'))
         ftt = TicketType(title='Test Future Ticket', price=120, event=future_event)
@@ -343,17 +361,17 @@ class TicketTypeTest(TestCase):
         tt = TicketType(title='Test Ticket', price=12, event=event)
 
         # Dates are not set or are in future ticket type is not available
-        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
         tt.date_from = now + datetime.timedelta(days=1)
-        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
         tt.date_to = now + datetime.timedelta(days=3)
-        self.assertEquals(tt.status, STATUSES[NOT_AVAILABLE])
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
 
-        # ticket type is within the date range so it is active
+        # ticket type is within the date range so it is TicketType.active
         tt.date_from = now - datetime.timedelta(days=1)
-        self.assertEquals(tt.status, STATUSES[ACTIVE])
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.ACTIVE])
 
-        # passed ticket types we consider as expired
+        # passed ticket types we consider as TicketType.expired
         tt.date_from = now - datetime.timedelta(days=3)
         tt.date_to = now - datetime.timedelta(days=1)
-        self.assertEquals(tt.status, STATUSES[EXPIRED])
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.EXPIRED])

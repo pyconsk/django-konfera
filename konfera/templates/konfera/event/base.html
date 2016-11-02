@@ -1,0 +1,42 @@
+{% extends 'konfera/base.html' %}
+{% load i18n %}
+
+{% block title %}
+    {{ event }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-{% if sponsors %}8{% else %}12{% endif %}">
+    {% block event_details %}{% endblock %}
+  </div>
+
+  {% if sponsors %}
+  <div class="col-md-4">
+  <!-- right_nav -->
+    <div class="text-center right-nav hidden-print">
+      {% for sponsor in sponsors %}
+        {% ifchanged sponsor.type %}
+          {% if not forloop.first %}
+      </ul>
+      <br><hr>
+          {% endif %}
+      <h4><mark class="{{ sponsor.get_type_display|lower }}">{{ sponsor.get_type_display }}:</mark></h4>
+      <ul class="list-unstyled">
+        {% endifchanged %}
+        <li>
+          <a href="{{ sponsor.url }}" target="_blank">
+            <img src="{{ sponsor.logo }}" alt="{{ sponsor }}" style="width:230px" />
+          </a>
+        </li>
+        {% if forloop.last %}
+      </ul>
+      <br><hr>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

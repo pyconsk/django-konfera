@@ -4,33 +4,32 @@ from django.utils.translation import ugettext_lazy as _
 from konfera.models.abstract import FromToModel
 
 
-CONFERENCE = 'conference'
-MEETUP = 'meetup'
-
-EVENT_TYPE_CHOICES = (
-    (CONFERENCE, _('Conference')),
-    (MEETUP, _('Meetup')),
-)
-
-DRAFT = 'draft'
-PUBLISHED = 'published'
-PRIVATE = 'private'
-EXPIRED = 'expired'
-
-EVENT_STATUS_CHOICES = (
-    (DRAFT, _('Draft')),
-    (PUBLISHED, _('Published')),
-    (PRIVATE, _('Private')),
-    (EXPIRED, _('Expired')),
-)
-
-
 class EventManager(models.Manager):
     def published(self):
-        return self.get_queryset().filter(status=PUBLISHED)
+        return self.get_queryset().filter(status=Event.PUBLISHED).select_related('location')
 
 
 class Event(FromToModel):
+    CONFERENCE = 'conference'
+    MEETUP = 'meetup'
+
+    EVENT_TYPE_CHOICES = (
+        (CONFERENCE, _('Conference')),
+        (MEETUP, _('Meetup')),
+    )
+
+    DRAFT = 'draft'
+    PUBLISHED = 'published'
+    PRIVATE = 'private'
+    EXPIRED = 'expired'
+
+    EVENT_STATUS_CHOICES = (
+        (DRAFT, _('Draft')),
+        (PUBLISHED, _('Published')),
+        (PRIVATE, _('Private')),
+        (EXPIRED, _('Expired')),
+    )
+
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
     slug = models.SlugField(verbose_name=_('Event url'), max_length=128, unique=True,
                             help_text=_('Slug field, relative URL to the event.'))
@@ -44,8 +43,15 @@ class Event(FromToModel):
 
     objects = EventManager()
 
+    class Meta:
+        ordering = ('-date_from',)
+
     def __str__(self):
         return self.title
+
+    @property
+    def duration(self):
+        return (self.date_to - self.date_from).days + 1
 
 
 Event._meta.get_field('date_from').blank = False
