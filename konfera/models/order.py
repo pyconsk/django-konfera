@@ -52,3 +52,8 @@ class Order(KonferaModel):
     @property
     def variable_symbol(self):
         return str(int(self.uuid))[:10]
+
+    @property
+    def event(self):
+        if self.ticket_set.exists():
+            return self.ticket_set.first().type.event
