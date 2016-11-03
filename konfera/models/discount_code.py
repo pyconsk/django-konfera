@@ -4,11 +4,12 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
+from konfera.models.ticket import Ticket
 
 
 class DiscountCode(FromToModel):
     title = models.CharField(max_length=128)
-    hash = models.CharField(max_length=64)
+    hash = models.CharField(max_length=64, unique=True)
     discount = models.IntegerField(
         default=0,
         validators=[
@@ -22,6 +23,16 @@ class DiscountCode(FromToModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def issued_tickets(self):
+        tickets = Ticket.objects.filter(discount_code__hash=self.hash)
+
+        return len(tickets)
+
+    @property
+    def is_available(self):
+        return (self.usage - self.issued_tickets) > 0
 
     def clean(self):
         if hasattr(self, 'ticket_type'):
