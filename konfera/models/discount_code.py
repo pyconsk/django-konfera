@@ -4,10 +4,11 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
+from konfera.models.ticket import Ticket
 
 
 class DiscountCode(FromToModel):
-    title = models.CharField(max_length=128)
+    title = models.CharField(max_length=128, unique=True)
     hash = models.CharField(max_length=64)
     discount = models.IntegerField(
         default=0,
@@ -23,12 +24,12 @@ class DiscountCode(FromToModel):
     def __str__(self):
         return self.title
 
-    def sub_usage(self, num=1):
-        if self.usage >= num:
-            self.usage -= num
-            super(DiscountCode, self).save()
-        else:
-            raise ValidationError({'usage': _('Usage cannot be lower than number of discount applied.')})
+    def get_usage(self):
+        return len(Ticket.objects.get(discount_code=self.title))
+
+    @property
+    def is_available(self):
+        return (self.usage - self.get_usage()) >= 0
 
     def clean(self):
         if hasattr(self, 'ticket_type'):
