@@ -1,18 +1,22 @@
+import logging
 import paypalrestsdk
 
+from django.contrib import messages
 from django.http.response import Http404
-from django.http.request import HttpRequest
-
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
+from django.utils.translation import ugettext as _
 
 from konfera.models import Order
 
 
+logger = logging.getLogger(__name__)
+
+# todo: move constants to settings
 paypalrestsdk.configure({
   "mode": "sandbox", # sandbox or live
-  "client_id": "ccccc",
-  "client_secret": "xxxxx"
+  "client_id": "xxx",
+  "client_secret": "xxx"
 })
 
 
@@ -43,10 +47,10 @@ class PayOrderByPaypal(TemplateView):
             "transactions": [
                 {
                     "amount": {
-                        "total": str(order.to_pay),  # todo: increase by 2%
-                        "currency": "EUR",  # todo: set currency
+                        "total": str(order.to_pay),  # todo: increase by 2% or so
+                        "currency": "EUR",  # todo: make it configurable
                     },
-                    "description": "Payment for order {vs}".format(vs=order.variable_symbol)
+                    "description": _("Payment for order with variable symbol: {vs}".format(vs=order.variable_symbol))
                 },
             ]
         })
@@ -58,23 +62,42 @@ class PayOrderByPaypal(TemplateView):
                     approval_url = str(link.href)
                     break
 
+            request.session['paypal_payment_id'] = payment['id']
+
             return redirect(approval_url)
         else:
-            # todo. log error (payment.error) & raise a 500
-            pass
+            logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(order=order.pk, err=payment.error))
+            raise AssertionError  # todo: show an error message instead?
 
-    def success(self, request):
+    def success(self, request, order):
         payment_id = request.session.get('paypal_payment_id')
         payment = paypalrestsdk.Payment.find(payment_id)
 
         payer_id = payment['payer']['payer_info']['payer_id']
 
-        if payment.execute({"payer_id": payer_id}) and payment['state'] == 'approved':
-            # todo: log it was successful, pay the order
-            pass
-        else:
-            # todo: log error!
-            self.template_name = 'payments/order_payment_failed.html'
+        if not payment.execute({"payer_id": payer_id}):
+            logger.error("Payment for order order(pk={order}) couldn't be paid! Error: {err}".format(order=order.pk, err=payment.error))
+            return False
+
+        from .utils import _process_payment
+
+        payment_dict = {
+            'payment_method': 'paypal',  # todo: save it to DB!
+            'amount': payment['transactions'][0]['amount']['total'],
+            'currency': payment['transactions'][0]['amount']['currency'],
+            'transaction_id': payment['id'],
+            'variable_symbol': order.variable_symbol,
+            'date': payment['create_time'].split('T')[0],
+            'executor': '{first} {last} <{email}>'.format(
+                first=payment['payer']['payer_info']['first_name'],
+                last=payment['payer']['payer_info']['last_name'],
+                email=payment['payer']['payer_info']['email']
+            ),
+            'comment': '',
+        }
+
+        _process_payment(order, payment_dict)
+        return True
 
     def get(self, request, *args, **kwargs):
         status = request.GET.get('status')
@@ -84,15 +107,12 @@ class PayOrderByPaypal(TemplateView):
         except (Order.DoesNotExist, ValueError):
             raise Http404
 
-        if status == 'success':
-            self.template_name = 'payments/order_payment_success.html'
-            self.success(request)
-            return super().get(request, *args, **kwargs)
-        elif status == 'failed':
-            self.template_name = 'payments/order_payment_failed.html'
-            return super().get(request, *args, **kwargs)
-
-        if order.left_to_pay > 0:
+        if status not in ['success', 'failed'] and order.left_to_pay > 0:
             return self.pay(request, order)
 
-        return redirect('/')
+        if status == 'success' and self.success(request, order):
+            messages.success(request, _('Order successfully paid!'))
+        else:
+            messages.warning(request, _('Something went wrong, try again later.'))
+
+        return redirect('order_details', order_uuid=str(order.uuid))
