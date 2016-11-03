@@ -40,7 +40,6 @@ class Ticket(KonferaModel):
         ).strip()
 
     def discount_calculator(self):
-
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100
         return 0
@@ -53,6 +52,8 @@ class Ticket(KonferaModel):
             exist_ticket = self.order.ticket_set.first()
             if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
                 raise ValidationError(_('All tickets must be for the same event.'))
+        if self.discount_code and not self.discount_code.is_available:
+            raise ValidationError(_('Usage of the discount code has already exceeded allowed number.'))
         super().clean()
 
     def save(self, *args, **kwargs):

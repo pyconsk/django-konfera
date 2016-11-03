@@ -1,4 +1,4 @@
-from django.conf import settings
+from konfera.settings import GOOGLE_ANALYTICS
 
 
 def collect_view_data(request):
@@ -7,8 +7,8 @@ def collect_view_data(request):
     """
     view_data = dict()
 
-    if hasattr(settings, 'GOOGLE_ANALYTICS'):
-        view_data['ga'] = settings.GOOGLE_ANALYTICS
+    if GOOGLE_ANALYTICS:
+        view_data['ga'] = GOOGLE_ANALYTICS
 
     return view_data
 

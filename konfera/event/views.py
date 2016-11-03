@@ -13,6 +13,7 @@ from konfera.models.event import Event
 from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
+from konfera.models.order import Order
 from konfera.utils import set_event_ga_to_context
 
 
@@ -166,3 +167,16 @@ def event_public_tickets(request, slug):
 
     context['tickets'] = available_tickets
     return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
+
+
+def event_order_detail(request, order_uuid):
+    context = dict()
+    order = get_object_or_404(Order, uuid=order_uuid)
+    context['order'] = order
+    if order.status == Order.PAID:
+        context['status_label'] = 'label-success'
+    elif order.status in [Order.CANCELLED, Order.EXPIRED]:
+        context['status_label'] = 'label-danger'
+    else:
+        context['status_label'] = 'label-warning'
+    return render(request=request, template_name='konfera/order_details.html', context=context)

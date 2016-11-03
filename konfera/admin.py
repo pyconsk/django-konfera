@@ -216,7 +216,7 @@ admin.site.register(TicketType, TicketTypeAdmin)
 
 
 class DiscountCodeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'discount', 'ticket_type', 'usage')
+    list_display = ('title', 'discount', 'ticket_type', 'usage', 'issued_tickets')
     ordering = ('title', 'ticket_type')
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
@@ -224,7 +224,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
             'fields': ('title', 'hash', 'ticket_type')
         }),
         (_('Discount'), {
-            'fields': ('discount', 'usage')
+            'fields': ('discount', 'usage', 'issued_tickets')
         }),
         (_('Availability'), {
             'fields': ('date_from', 'date_to'),
