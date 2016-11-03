@@ -24,13 +24,15 @@ class DiscountCode(FromToModel):
     def __str__(self):
         return self.title
 
-    def get_usage(self):
+    @property
+    def issued_tickets(self):
         tickets = Ticket.objects.filter(discount_code__hash=self.hash)
+
         return len(tickets)
 
     @property
     def is_available(self):
-        return (self.usage - self.get_usage()) > 0
+        return (self.usage - self.issued_tickets) > 0
 
     def clean(self):
         if hasattr(self, 'ticket_type'):
