@@ -1,0 +1,19 @@
+{% extends 'konfera/base.html' %}
+
+
+{% block content %}
+    <h2>Pay by bank transfer</h2>
+    <p> todo: bank account details</p>
+
+
+    <h2>Pay by paypal</h2>
+
+    <p class="label-warning">
+        Be aware! we charge additional 2% for paypal payments.
+    </p>
+
+    <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-info">
+        Pay by paypal
+    </a>
+
+{% endblock %}
