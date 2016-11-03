@@ -334,7 +334,7 @@ class TicketTypeTest(TestCase):
         """
         String representation of model instance have to be equal to its title
         """
-        tt = TicketType.objects.get(title='Standard Early Bird')
+        tt = TicketType.objects.get(title='Standard Last Moment')
         self.assertEqual(str(tt), tt.title)
 
     def test_clean_dates(self):
