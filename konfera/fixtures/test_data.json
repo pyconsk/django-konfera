@@ -155,6 +155,595 @@
   }
 },
 {
+  "model": "konfera.speaker",
+  "pk": 1,
+  "fields": {
+    "uuid": "ab29954a-a98b-4f2d-ab00-7897ac173d8e",
+    "date_created": "2016-10-07T20:36:56.694Z",
+    "date_modified": "2016-10-07T20:36:56.694Z",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "title": "mr",
+    "email": "private@example.com",
+    "phone": "",
+    "bio": "He's a software engineer at Red Hat. When I'm not writing Python code, I help organize meetups, mentor PyLadies, and attend conferences.",
+    "url": "http://encukou.cz/blog/",
+    "social_url": "https://twitter.com/encukou",
+    "country": "CZ",
+    "sponsor": 1
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 2,
+  "fields": {
+    "uuid": "05b7bd48-97a4-4834-861c-488fd373ca4d",
+    "date_created": "2016-10-08T05:45:17.924Z",
+    "date_modified": "2016-10-08T05:45:17.924Z",
+    "first_name": "Andrea",
+    "last_name": "\u0160te\u0148ov\u00e1",
+    "title": "ms",
+    "email": "private2@example.com",
+    "phone": "",
+    "bio": "Andrea works on development of server applications since 2012. IT runs in her family, and that was one of the reasons she chose this path. She dislikes bad code and old technologies. Furthermore, she is one of the organizers of Bratislava Scala meetup.",
+    "url": "",
+    "social_url": "https://www.linkedin.com/in/andrea-%C5%A1te%C5%88ov%C3%A1-3b92b050",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 3,
+  "fields": {
+    "uuid": "469bf83d-080a-4c44-9b93-b69beae52963",
+    "date_created": "2016-10-09T20:00:59.704Z",
+    "date_modified": "2016-10-09T20:00:59.704Z",
+    "first_name": "Andrej",
+    "last_name": "Mo\u0161a\u0165",
+    "title": "mr",
+    "email": "private3@example.com",
+    "phone": "",
+    "bio": "Andrej is searching for the ultimate tricorder, a device which can see and tell your health, discover dangers in your environment and enhance your senses to cyborg levels. His first employment project was to build a chromatographic column to extract elements from human blood plasma. He created first open source spectrometer, which was then distributed to all corners of earth and above, launching from ISS station onboard of two microsatellites. Andrej advocates micropython, python for small microcontrollers which allows for prototyping of electronic devices at unprecedented speeds. His dream is to create tricorder for the first man on Mars.",
+    "url": "",
+    "social_url": "https://twitter.com/amosat",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 4,
+  "fields": {
+    "uuid": "cdcfcc58-42bc-4cff-aba6-5198c776f0cc",
+    "date_created": "2016-10-09T20:45:58.645Z",
+    "date_modified": "2016-10-09T20:45:03.472Z",
+    "first_name": "Miroslav",
+    "last_name": "Beka",
+    "title": "mr",
+    "email": "private4@example.com",
+    "phone": "",
+    "bio": "He graduated from Comenius University, majoring in Applied Informatics. Python helped him with his master thesis and this was the first time he used it for a development of a larger application. After graduation he had worked as a web developer for a Netherland-based startup, where he gained authentic work experiences with Ruby on Rails and JavaScript. Later he moved on to join ESET as test automation engineer, where he was dedicated to testing automation using a robot frameworku. After several years he decided to change his job again. He's chosen Kistler, where he works on similar projects.",
+    "url": "",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 5,
+  "fields": {
+    "uuid": "eb8c70f6-7844-436b-91f0-b308f90797f9",
+    "date_created": "2016-10-23T19:53:00.145Z",
+    "date_modified": "2016-10-23T19:53:00.145Z",
+    "first_name": "Claus",
+    "last_name": "Aichinger",
+    "title": "mr",
+    "email": "private5@example.com",
+    "phone": "",
+    "bio": "At AIT, he works with Python's scientific stack on a daily basis to deal with research questions requiring data analysis and (statistical) modeling tasks. Before becoming a Python enthusiast he was a MATLAB user and knows about the difficulties one encounters when trying to enter such a rich and complex environment. However, Python is not only fun to learn and to program but it is indeed a very competitive choice for addressing scientific questions. Therefore, he would like to share his experience with those who are interested in computing stuff.",
+    "url": "",
+    "social_url": "",
+    "country": "AT",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 6,
+  "fields": {
+    "uuid": "46497b28-5b37-48c3-9f54-c72b489f0e89",
+    "date_created": "2016-10-23T19:53:00.244Z",
+    "date_modified": "2016-10-23T19:53:00.244Z",
+    "first_name": "Tibor",
+    "last_name": "Arp\u00e1\u0161",
+    "title": "mr",
+    "email": "private6@example.com",
+    "phone": "",
+    "bio": "He has been a freelance programmer mostly working on enterprise software for 10 years, recently recruiting subcontractors and providing outsourcing of small developer teams.\n        He discovered Python in 2008 and it's been my primary language ever since. He is also very much interested in software crowdfunding.\n        He likes a lot of (outdoor) sports, the favourite being flying without engine (gliding).",
+    "url": "",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 7,
+  "fields": {
+    "uuid": "b033b0ca-f5c6-4c8e-8a2c-088f4f92fb86",
+    "date_created": "2016-10-23T19:53:00.369Z",
+    "date_modified": "2016-10-23T19:53:00.369Z",
+    "first_name": "Jes\u00fas",
+    "last_name": "Avi\u00f3n",
+    "title": "mr",
+    "email": "private7@example.com",
+    "phone": "",
+    "bio": "Telecommunication Engineer. Python Lover since 1996, core developer since 2008. Freelance consulting since 2012. Founder of Python Madrid and Python Vigo user groups, and Python Spain association. Interested in Python, Security and almost anything interesting, including podcasting and geocaching.",
+    "url": "https://blog.jcea.es/",
+    "social_url": "https://twitter.com/jcea",
+    "country": "ES",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 8,
+  "fields": {
+    "uuid": "bd4c39db-331a-4bf8-956f-a5e510c3b5d9",
+    "date_created": "2016-10-23T19:53:00.505Z",
+    "date_modified": "2016-10-23T19:53:00.505Z",
+    "first_name": "Cory",
+    "last_name": "Benfield",
+    "title": "mr",
+    "email": "private8@example.com",
+    "phone": "",
+    "bio": "Cory is an open source Python developer working full-time for HPE in the Python HTTP community. He's a Requests core contributor, urllib3 core contributor, and the lead maintainer on the Hyper project, a toolbox of projects for working with HTTP and HTTP/2. He loves computer networks, film and TV, and travel.",
+    "url": "https://lukasa.co.uk/",
+    "social_url": "https://twitter.com/Lukasaoz",
+    "country": "UK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 9,
+  "fields": {
+    "uuid": "e3bc7fe0-2072-436e-a5ce-77d6575598a4",
+    "date_created": "2016-10-23T19:53:00.639Z",
+    "date_modified": "2016-10-23T19:53:00.639Z",
+    "first_name": "Rodolfo",
+    "last_name": "Carvalho",
+    "title": "mr",
+    "email": "private9@example.com",
+    "phone": "",
+    "bio": "Rodolfo is a long time Pythonista coming from Rio de Janeiro, Brazil. His curiosity and avidity has taken him to many places. He lived and engaged with software communities in Lisbon, Beijing, Cracow and now Brno. He currently works on OpenShift, the open source PaaS from Red Hat.",
+    "url": "http://rodolfocarvalho.net/",
+    "social_url": "https://twitter.com/201",
+    "country": "BR",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 10,
+  "fields": {
+    "uuid": "dff6412e-71a1-4dcd-b0a2-c70c8b33b28f",
+    "date_created": "2016-10-23T19:53:00.773Z",
+    "date_modified": "2016-10-23T19:53:00.773Z",
+    "first_name": "Petra",
+    "last_name": "Cross",
+    "title": "ms",
+    "email": "private10@example.com",
+    "phone": "",
+    "bio": "Petra is a senior software developer at Google San Francisco. In her almost 11 years at Google, Petra has worked on Search, Gmail frontend, and her current project is Android Pay. Petra loves coding, taking photos, making stopmotion videos (she is the stopmotionista.com) and traveling.",
+    "url": "",
+    "social_url": "",
+    "country": "US",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 11,
+  "fields": {
+    "uuid": "342381ca-ea4a-4e42-9a02-b32228f83274",
+    "date_created": "2016-10-23T19:53:00.907Z",
+    "date_modified": "2016-10-23T19:53:00.907Z",
+    "first_name": "Bjarni",
+    "last_name": "Einarsson",
+    "title": "mr",
+    "email": "private11@example.com",
+    "phone": "",
+    "bio": "Bjarni R\u00fanar Einarsson is an Icelandic Free Software developer and systems administrator. He has been writing code and slinging servers since the mid-90s, including a 6 year stint fighting spam and viruses and 3 years behind the scenes on Google's site reliability team. All this time Bjarni's passion has been Free Software and Digital Freedom; in 2010 he received the Nordic Free Software award for his dedication. Since 2009, Bjarni has worked full-time as a Free Software developer, mostly on his two projects, PageKite  and Mailpile.",
+    "url": "http://bre.klaki.net/",
+    "social_url": "https://twitter.com/HerraBRE",
+    "country": "IS",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 12,
+  "fields": {
+    "uuid": "39149e5f-eaa9-49bf-a153-65ddc9080f00",
+    "date_created": "2016-10-23T19:53:01.041Z",
+    "date_modified": "2016-10-23T19:53:01.041Z",
+    "first_name": "V\u011bro\u0161",
+    "last_name": "Kaplan",
+    "title": "mr",
+    "email": "private12@example.com",
+    "phone": "",
+    "bio": "V\u011bro\u0161 works from Brno for the company Inuits, where he takes care of the management and deployment of servers and applications. He met Python sometime in the last century and has stayed with it. He is torn between Dev and Ops and believe in DevOps (whatever it means).",
+    "url": "",
+    "social_url": "https://twitter.com/verosk",
+    "country": "CZ",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 13,
+  "fields": {
+    "uuid": "3a5c3240-7c04-45bd-9ffc-d99f32d3c9d4",
+    "date_created": "2016-10-23T19:53:01.184Z",
+    "date_modified": "2016-10-23T19:53:01.184Z",
+    "first_name": "Michal",
+    "last_name": "Kauki\u010d",
+    "title": "mr",
+    "email": "private13@example.com",
+    "phone": "",
+    "bio": "He has been teaching (and learning) for four decades, mostly in \u017dilina (northern Slovakia).A heavy Linux user since 1994. He came across Python when working with Pascal and C.Today, Python is his programming language of choice. Although he's supposed to be a mathematician,he loves to explore beauty in thinking, drawing and fiddling with computers.",
+    "url": "http://feelmath.eu",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 14,
+  "fields": {
+    "uuid": "21e9412a-480f-47f0-b74b-2eaef948578a",
+    "date_created": "2016-10-23T19:53:01.319Z",
+    "date_modified": "2016-10-23T19:53:01.319Z",
+    "first_name": "B\u00fc\u015fra",
+    "last_name": "K\u00f6ken",
+    "title": "ms",
+    "email": "private14@example.com",
+    "phone": "",
+    "bio": "B\u00fcsra works for Ericsson R&D, in Budapest as a Cloud System Engineer. Interested in back-end development, cloud, big data and new technologies. Had experience on Python, OpenStack, Zabbix, Rsyslog, and Ansible. She is a big enthusiast of Python! Also she is the founder of a social entrepreneurship bikokorec.com and a blogger. She loves coding, taking photos, and blogging.",
+    "url": "https://hu.linkedin.com/in/busrakoken/en",
+    "social_url": "https://twitter.com/busrakoken",
+    "country": "TR",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 15,
+  "fields": {
+    "uuid": "8de1a2bd-b302-4d0a-8c4e-e6f19a51ace5",
+    "date_created": "2016-10-23T19:53:01.436Z",
+    "date_modified": "2016-10-23T19:53:01.436Z",
+    "first_name": "Michal",
+    "last_name": "Kuffa",
+    "title": "mr",
+    "email": "private15@example.com",
+    "phone": "",
+    "bio": "Working with Python on daily basis for last 5 years. At Vnet he is responsible for developing internal applications and automation of company's processes. He is interested in back-end developement, IoT, IT security and enthusiastic about open source technologies.",
+    "url": "https://sk.linkedin.com/in/michalkuffa",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 16,
+  "fields": {
+    "uuid": "b551048a-4ed7-4f0c-b809-6210b4eeba2c",
+    "date_created": "2016-10-23T19:53:01.561Z",
+    "date_modified": "2016-10-23T19:53:01.561Z",
+    "first_name": "Svetlana",
+    "last_name": "Margetov\u00e1",
+    "title": "ms",
+    "email": "private16@example.com",
+    "phone": "",
+    "bio": "Svetlana is devoted to programming in Python and Django, she works at Brainity, where she develops mainly backend solutions for mobile applications. In her spare time she mainly develops mobile applications for the iOS platform. She likes the new technology, UI/UX and tries to optimize each task and program as much as possible.",
+    "url": "",
+    "social_url": "https://twitter.com/Mandragora258",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 17,
+  "fields": {
+    "uuid": "461e6c7f-ce2b-4897-afcd-512e52e933e5",
+    "date_created": "2016-10-23T19:53:01.679Z",
+    "date_modified": "2016-10-23T19:53:01.679Z",
+    "first_name": "Tatiana",
+    "last_name": "Martins",
+    "title": "ms",
+    "email": "private17@example.com",
+    "phone": "",
+    "bio": "Tatiana started programming in 2002. She already developed from medical imaging applications to recommendation platforms empowered by web semantic - mostly using Python. After having worked for the Ministry of Science and Technology of Brazil and the largest media company of Latin America (Globo), she current lives in London and works for Education Firsti (EF), developing educational applications.",
+    "url": "",
+    "social_url": "https://twitter.com/tati_alchueyr",
+    "country": "BR",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 18,
+  "fields": {
+    "uuid": "d26d0815-990e-4b09-985a-d81a7a2fd5cd",
+    "date_created": "2016-10-23T19:53:01.814Z",
+    "date_modified": "2016-10-23T19:53:01.814Z",
+    "first_name": "Peter",
+    "last_name": "Matkovski",
+    "title": "mr",
+    "email": "private18@example.com",
+    "phone": "",
+    "bio": "Peter works in company ESET as Security Consultant & White hat hacker and use Python in a ways as bad guys does. First steps with Python as security tool were done in cryptography field at Slovak Technical University and later at position of Security Software Analyst at ESET.\nPeter is organizer of security awareness event for wide public about practical security and encryption called Cryptoparty at hackerspace Progressbar in Bratislava.",
+    "url": "https://www.linkedin.com/in/pmatkovski",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 19,
+  "fields": {
+    "uuid": "2c0a9d83-2fcd-4948-b98a-bba91d2f5674",
+    "date_created": "2016-10-23T19:53:01.957Z",
+    "date_modified": "2016-10-23T19:53:01.957Z",
+    "first_name": "Daniele",
+    "last_name": "Procida",
+    "title": "mr",
+    "email": "private19@example.com",
+    "phone": "",
+    "bio": "Daniele Procida works at Divio, on Django CMS, Aldryn and other Django-based projects. He\u2019s a member of the Django Project core team, and has been involved in organising numerous Python/Django conferences, including DjangoCon Europe 2015 and PyCon Namibia 2016.",
+    "url": "",
+    "social_url": "https://twitter.com/evildmp",
+    "country": "UK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 20,
+  "fields": {
+    "uuid": "9a7e3f8e-c9da-43a4-84b0-442541e046f1",
+    "date_created": "2016-10-23T19:53:02.108Z",
+    "date_modified": "2016-10-23T19:53:02.108Z",
+    "first_name": "Mat\u00fa\u0161",
+    "last_name": "Reh\u00e1k",
+    "title": "mr",
+    "email": "private20@example.com",
+    "phone": "",
+    "bio": "Matus is a PhD student at Faculty of Mathematics, Physics and Informatics of Comenius University in Bratislava. He investigates quantum phenomena in mesoscopic structures using high frequency methods at cryogenic temperatures. He uses Python in the laboratories for all what as a physicist needs: communication with measurement devices, data collection and processing, simulations.",
+    "url": "https://sk.linkedin.com/in/matus-rehak-3b6b1725",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 21,
+  "fields": {
+    "uuid": "e8c870f2-d929-4bd8-997f-3c03915765d1",
+    "date_created": "2016-10-23T19:53:02.251Z",
+    "date_modified": "2016-10-23T19:53:02.251Z",
+    "first_name": "Michael",
+    "last_name": "Scherer",
+    "title": "mr",
+    "email": "private21@example.com",
+    "phone": "",
+    "bio": "Michael works on the Open Source and Standards team at Red Hat, focusing on infrastructure issues of various communities as a system administrator . A long time packager and python coder, he lives in Paris when he is not traveling to speak at free software events around",
+    "url": "https://community.redhat.com/blog/author/misc/",
+    "social_url": "",
+    "country": "FR",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 22,
+  "fields": {
+    "uuid": "e3ba3bbb-e048-443d-9ca1-2568045c6dca",
+    "date_created": "2016-10-23T19:53:02.369Z",
+    "date_modified": "2016-10-23T19:53:02.369Z",
+    "first_name": "Tom\u00e1\u0161",
+    "last_name": "Sirn\u00fd",
+    "title": "mr",
+    "email": "private22@example.com",
+    "phone": "",
+    "bio": "Back-end program\u00e1tor so z\u00e1ujmom o big data a machine learning, ktor\u00e9ho \u010fal\u0161ou m\u00e9tou je data science. Python a Django pou\u017e\u00edva pri v\u00fdvoji webov\u00fdch slu\u017eieb a ich back-endov\u00fdch \u010dast\u00ed u\u017e viac ako p\u00e4\u0165 rokov. Postupom \u010dasu sa dostal aj k spracov\u00e1vaniu a ukladaniu v\u00e4\u010d\u0161\u00edch d\u00e1t. Za\u010dalo to pou\u017eit\u00edm Elasticsearch na vyh\u013ead\u00e1vanie vo filmovej datab\u00e1ze a nesk\u00f4r v in\u00fdch typoch d\u00e1t. Vyu\u017e\u00edva Hadoop a Spark pri v\u00fdvoji produktov pre klientov v r\u00e1mci firmy Exponea.",
+    "url": "",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 23,
+  "fields": {
+    "uuid": "2b12de8e-6d43-4377-a21c-1e51778d4237",
+    "date_created": "2016-10-23T19:53:02.478Z",
+    "date_modified": "2016-10-23T19:53:02.478Z",
+    "first_name": "Jakub",
+    "last_name": "\u0160evcech",
+    "title": "mr",
+    "email": "private23@example.com",
+    "phone": "",
+    "bio": "Jakub is a PhD student at Slovak University of Technology in Bratislava where he received his Master's degree in Software Engineering. Currently teaching a Functional and logic programming course at the university. He spent great time working at Sli.do. He is professionally interested in data analysis, data science, BigData processing and machine learning. Privately in hiking, travelling and cycling.",
+    "url": "",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 24,
+  "fields": {
+    "uuid": "02c2def8-fef9-406f-9e1d-3aa5142e9f78",
+    "date_created": "2016-10-23T19:53:02.587Z",
+    "date_modified": "2016-10-23T19:53:02.588Z",
+    "first_name": "Martina",
+    "last_name": "\u0160turd\u00edkov\u00e1",
+    "title": "ms",
+    "email": "private24@example.com",
+    "phone": "",
+    "bio": "Martina Sturdikova is a senior software engineer with an outstanding 10+ year track record in delivering enterprise level software. Over the last 4 years, she has been working as a senior developer at JP Morgan Chase using python for real time trading and risk analysis. Martina is passionate about empowering and advancing women in technology as well as inspiring girls to enter the IT field. She actively promotes technology to girls and women in Slovakia where she acts as an advisor for a non-for-profit organization Aj Ty v IT.",
+    "url": "https://www.linkedin.com/in/martinasturdikova",
+    "social_url": "",
+    "country": "SK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 25,
+  "fields": {
+    "uuid": "4bd8894d-fa75-401b-b59b-ecc972981e6f",
+    "date_created": "2016-10-23T19:53:02.704Z",
+    "date_modified": "2016-10-23T19:53:02.704Z",
+    "first_name": "Nicholas",
+    "last_name": "Tollervey",
+    "title": "mr",
+    "email": "private25@example.com",
+    "phone": "",
+    "bio": "Nicholas is a classically trained musician, philosophy graduate, teacher, writer and software developer. He's a Python Software Foundation fellow and a recipient of the PSF's community award for his work in education. He's just like this biography: concise, honest and full of useful information.",
+    "url": "http://ntoll.org/",
+    "social_url": "https://twitter.com/ntoll",
+    "country": "UK",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.speaker",
+  "pk": 26,
+  "fields": {
+    "uuid": "b6126b2f-f40e-4725-9901-1d732f07498f",
+    "date_created": "2016-10-23T19:53:02.822Z",
+    "date_modified": "2016-10-23T19:53:02.822Z",
+    "first_name": "Johannes",
+    "last_name": "Wachs",
+    "title": "mr",
+    "email": "private26@example.com",
+    "phone": "",
+    "bio": "Johannes Wachs is a PhD student at the Center for Network Science at Central European University. He is also affiliated with the Corruption Research Center Budapest, a nonprofit using data driven methods to investigate corruption risks in government. He has used network science as a consultant for Bondweaver, advising firms on internal communication and collaboration. Python is his preferred ecosystem in all these roles.",
+    "url": "",
+    "social_url": "https://twitter.com/johannes_wachs",
+    "country": "DE",
+    "sponsor": null
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 1,
+  "fields": {
+    "uuid": "146af5b6-42a7-4777-ba02-ea86df9cc544",
+    "date_created": "2016-10-07T20:27:45.246Z",
+    "date_modified": "2016-10-07T20:27:45.247Z",
+    "type": 5,
+    "discount_code": null,
+    "status": "registered",
+    "title": "mr",
+    "first_name": "Test",
+    "last_name": "Testovac",
+    "email": "test.testovac@example.com",
+    "phone": "",
+    "description": "",
+    "order": 1
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 2,
+  "fields": {
+    "uuid": "ee19148f-392e-4ea6-97c3-270e0056b931",
+    "date_created": "2016-10-07T20:43:14.276Z",
+    "date_modified": "2016-10-07T20:43:14.276Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Petr",
+    "last_name": "Viktorin",
+    "email": "private@example.com",
+    "phone": "",
+    "description": "",
+    "order": 2
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 3,
+  "fields": {
+    "uuid": "241102a0-b918-45f0-8511-afff327c4b9d",
+    "date_created": "2016-10-08T07:45:54.048Z",
+    "date_modified": "2016-10-08T07:45:40.242Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Andrea",
+    "last_name": "\u0160te\u0148ov\u00e1",
+    "email": "private2@example.com",
+    "phone": "",
+    "description": "",
+    "order": 3
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 4,
+  "fields": {
+    "uuid": "fb349ad0-d44c-42b6-8e46-00a480f0f518",
+    "date_created": "2016-10-08T07:48:15.644Z",
+    "date_modified": "2016-10-08T07:48:15.644Z",
+    "type": 6,
+    "discount_code": 1,
+    "status": "registered",
+    "title": "ms",
+    "first_name": "Testerka",
+    "last_name": "Testovacka",
+    "email": "testerka.testovacka@example.com",
+    "phone": "",
+    "description": "",
+    "order": 4
+  }
+},
+{
+  "model": "konfera.ticket",
+  "pk": 5,
+  "fields": {
+    "uuid": "b216a71b-5b3d-40a1-b98f-2a8c04c3e613",
+    "date_created": "2016-10-09T20:16:56.099Z",
+    "date_modified": "2016-10-09T20:16:56.099Z",
+    "type": 11,
+    "discount_code": null,
+    "status": "checked-in",
+    "title": "mr",
+    "first_name": "Andrej",
+    "last_name": "Mo\u0161a\u0165",
+    "email": "private3@example.com",
+    "phone": "",
+    "description": "",
+    "order": 5
+  }
+},
+{
   "model": "konfera.discountcode",
   "pk": 1,
   "fields": {
@@ -836,500 +1425,6 @@
   }
 },
 {
-  "model": "konfera.speaker",
-  "pk": 1,
-  "fields": {
-    "uuid": "ab29954a-a98b-4f2d-ab00-7897ac173d8e",
-    "date_created": "2016-10-07T20:36:56.694Z",
-    "date_modified": "2016-10-07T20:36:56.694Z",
-    "first_name": "Petr",
-    "last_name": "Viktorin",
-    "title": "mr",
-    "email": "private@example.com",
-    "phone": "",
-    "bio": "He's a software engineer at Red Hat. When I'm not writing Python code, I help organize meetups, mentor PyLadies, and attend conferences.",
-    "url": "http://encukou.cz/blog/",
-    "social_url": "https://twitter.com/encukou",
-    "country": "CZ",
-    "sponsor": 1
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 2,
-  "fields": {
-    "uuid": "05b7bd48-97a4-4834-861c-488fd373ca4d",
-    "date_created": "2016-10-08T05:45:17.924Z",
-    "date_modified": "2016-10-08T05:45:17.924Z",
-    "first_name": "Andrea",
-    "last_name": "\u0160te\u0148ov\u00e1",
-    "title": "ms",
-    "email": "private2@example.com",
-    "phone": "",
-    "bio": "Andrea works on development of server applications since 2012. IT runs in her family, and that was one of the reasons she chose this path. She dislikes bad code and old technologies. Furthermore, she is one of the organizers of Bratislava Scala meetup.",
-    "url": "",
-    "social_url": "https://www.linkedin.com/in/andrea-%C5%A1te%C5%88ov%C3%A1-3b92b050",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 3,
-  "fields": {
-    "uuid": "469bf83d-080a-4c44-9b93-b69beae52963",
-    "date_created": "2016-10-09T20:00:59.704Z",
-    "date_modified": "2016-10-09T20:00:59.704Z",
-    "first_name": "Andrej",
-    "last_name": "Mo\u0161a\u0165",
-    "title": "mr",
-    "email": "private3@example.com",
-    "phone": "",
-    "bio": "Andrej is searching for the ultimate tricorder, a device which can see and tell your health, discover dangers in your environment and enhance your senses to cyborg levels. His first employment project was to build a chromatographic column to extract elements from human blood plasma. He created first open source spectrometer, which was then distributed to all corners of earth and above, launching from ISS station onboard of two microsatellites. Andrej advocates micropython, python for small microcontrollers which allows for prototyping of electronic devices at unprecedented speeds. His dream is to create tricorder for the first man on Mars.",
-    "url": "",
-    "social_url": "https://twitter.com/amosat",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 4,
-  "fields": {
-    "uuid": "cdcfcc58-42bc-4cff-aba6-5198c776f0cc",
-    "date_created": "2016-10-09T20:45:58.645Z",
-    "date_modified": "2016-10-09T20:45:03.472Z",
-    "first_name": "Miroslav",
-    "last_name": "Beka",
-    "title": "mr",
-    "email": "private4@example.com",
-    "phone": "",
-    "bio": "He graduated from Comenius University, majoring in Applied Informatics. Python helped him with his master thesis and this was the first time he used it for a development of a larger application. After graduation he had worked as a web developer for a Netherland-based startup, where he gained authentic work experiences with Ruby on Rails and JavaScript. Later he moved on to join ESET as test automation engineer, where he was dedicated to testing automation using a robot frameworku. After several years he decided to change his job again. He's chosen Kistler, where he works on similar projects.",
-    "url": "",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 5,
-  "fields": {
-    "uuid": "eb8c70f6-7844-436b-91f0-b308f90797f9",
-    "date_created": "2016-10-23T19:53:00.145Z",
-    "date_modified": "2016-10-23T19:53:00.145Z",
-    "first_name": "Claus",
-    "last_name": "Aichinger",
-    "title": "mr",
-    "email": "private5@example.com",
-    "phone": "",
-    "bio": "At AIT, he works with Python's scientific stack on a daily basis to deal with research questions requiring data analysis and (statistical) modeling tasks. Before becoming a Python enthusiast he was a MATLAB user and knows about the difficulties one encounters when trying to enter such a rich and complex environment. However, Python is not only fun to learn and to program but it is indeed a very competitive choice for addressing scientific questions. Therefore, he would like to share his experience with those who are interested in computing stuff.",
-    "url": "",
-    "social_url": "",
-    "country": "AT",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 6,
-  "fields": {
-    "uuid": "46497b28-5b37-48c3-9f54-c72b489f0e89",
-    "date_created": "2016-10-23T19:53:00.244Z",
-    "date_modified": "2016-10-23T19:53:00.244Z",
-    "first_name": "Tibor",
-    "last_name": "Arp\u00e1\u0161",
-    "title": "mr",
-    "email": "private6@example.com",
-    "phone": "",
-    "bio": "He has been a freelance programmer mostly working on enterprise software for 10 years, recently recruiting subcontractors and providing outsourcing of small developer teams.\n        He discovered Python in 2008 and it's been my primary language ever since. He is also very much interested in software crowdfunding.\n        He likes a lot of (outdoor) sports, the favourite being flying without engine (gliding).",
-    "url": "",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 7,
-  "fields": {
-    "uuid": "b033b0ca-f5c6-4c8e-8a2c-088f4f92fb86",
-    "date_created": "2016-10-23T19:53:00.369Z",
-    "date_modified": "2016-10-23T19:53:00.369Z",
-    "first_name": "Jes\u00fas",
-    "last_name": "Avi\u00f3n",
-    "title": "mr",
-    "email": "private7@example.com",
-    "phone": "",
-    "bio": "Telecommunication Engineer. Python Lover since 1996, core developer since 2008. Freelance consulting since 2012. Founder of Python Madrid and Python Vigo user groups, and Python Spain association. Interested in Python, Security and almost anything interesting, including podcasting and geocaching.",
-    "url": "https://blog.jcea.es/",
-    "social_url": "https://twitter.com/jcea",
-    "country": "ES",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 8,
-  "fields": {
-    "uuid": "bd4c39db-331a-4bf8-956f-a5e510c3b5d9",
-    "date_created": "2016-10-23T19:53:00.505Z",
-    "date_modified": "2016-10-23T19:53:00.505Z",
-    "first_name": "Cory",
-    "last_name": "Benfield",
-    "title": "mr",
-    "email": "private8@example.com",
-    "phone": "",
-    "bio": "Cory is an open source Python developer working full-time for HPE in the Python HTTP community. He's a Requests core contributor, urllib3 core contributor, and the lead maintainer on the Hyper project, a toolbox of projects for working with HTTP and HTTP/2. He loves computer networks, film and TV, and travel.",
-    "url": "https://lukasa.co.uk/",
-    "social_url": "https://twitter.com/Lukasaoz",
-    "country": "UK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 9,
-  "fields": {
-    "uuid": "e3bc7fe0-2072-436e-a5ce-77d6575598a4",
-    "date_created": "2016-10-23T19:53:00.639Z",
-    "date_modified": "2016-10-23T19:53:00.639Z",
-    "first_name": "Rodolfo",
-    "last_name": "Carvalho",
-    "title": "mr",
-    "email": "private9@example.com",
-    "phone": "",
-    "bio": "Rodolfo is a long time Pythonista coming from Rio de Janeiro, Brazil. His curiosity and avidity has taken him to many places. He lived and engaged with software communities in Lisbon, Beijing, Cracow and now Brno. He currently works on OpenShift, the open source PaaS from Red Hat.",
-    "url": "http://rodolfocarvalho.net/",
-    "social_url": "https://twitter.com/201",
-    "country": "BR",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 10,
-  "fields": {
-    "uuid": "dff6412e-71a1-4dcd-b0a2-c70c8b33b28f",
-    "date_created": "2016-10-23T19:53:00.773Z",
-    "date_modified": "2016-10-23T19:53:00.773Z",
-    "first_name": "Petra",
-    "last_name": "Cross",
-    "title": "ms",
-    "email": "private10@example.com",
-    "phone": "",
-    "bio": "Petra is a senior software developer at Google San Francisco. In her almost 11 years at Google, Petra has worked on Search, Gmail frontend, and her current project is Android Pay. Petra loves coding, taking photos, making stopmotion videos (she is the stopmotionista.com) and traveling.",
-    "url": "",
-    "social_url": "",
-    "country": "US",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 11,
-  "fields": {
-    "uuid": "342381ca-ea4a-4e42-9a02-b32228f83274",
-    "date_created": "2016-10-23T19:53:00.907Z",
-    "date_modified": "2016-10-23T19:53:00.907Z",
-    "first_name": "Bjarni",
-    "last_name": "Einarsson",
-    "title": "mr",
-    "email": "private11@example.com",
-    "phone": "",
-    "bio": "Bjarni R\u00fanar Einarsson is an Icelandic Free Software developer and systems administrator. He has been writing code and slinging servers since the mid-90s, including a 6 year stint fighting spam and viruses and 3 years behind the scenes on Google's site reliability team. All this time Bjarni's passion has been Free Software and Digital Freedom; in 2010 he received the Nordic Free Software award for his dedication. Since 2009, Bjarni has worked full-time as a Free Software developer, mostly on his two projects, PageKite  and Mailpile.",
-    "url": "http://bre.klaki.net/",
-    "social_url": "https://twitter.com/HerraBRE",
-    "country": "IS",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 12,
-  "fields": {
-    "uuid": "39149e5f-eaa9-49bf-a153-65ddc9080f00",
-    "date_created": "2016-10-23T19:53:01.041Z",
-    "date_modified": "2016-10-23T19:53:01.041Z",
-    "first_name": "V\u011bro\u0161",
-    "last_name": "Kaplan",
-    "title": "mr",
-    "email": "private12@example.com",
-    "phone": "",
-    "bio": "V\u011bro\u0161 works from Brno for the company Inuits, where he takes care of the management and deployment of servers and applications. He met Python sometime in the last century and has stayed with it. He is torn between Dev and Ops and believe in DevOps (whatever it means).",
-    "url": "",
-    "social_url": "https://twitter.com/verosk",
-    "country": "CZ",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 13,
-  "fields": {
-    "uuid": "3a5c3240-7c04-45bd-9ffc-d99f32d3c9d4",
-    "date_created": "2016-10-23T19:53:01.184Z",
-    "date_modified": "2016-10-23T19:53:01.184Z",
-    "first_name": "Michal",
-    "last_name": "Kauki\u010d",
-    "title": "mr",
-    "email": "private13@example.com",
-    "phone": "",
-    "bio": "He has been teaching (and learning) for four decades, mostly in \u017dilina (northern Slovakia).A heavy Linux user since 1994. He came across Python when working with Pascal and C.Today, Python is his programming language of choice. Although he's supposed to be a mathematician,he loves to explore beauty in thinking, drawing and fiddling with computers.",
-    "url": "http://feelmath.eu",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 14,
-  "fields": {
-    "uuid": "21e9412a-480f-47f0-b74b-2eaef948578a",
-    "date_created": "2016-10-23T19:53:01.319Z",
-    "date_modified": "2016-10-23T19:53:01.319Z",
-    "first_name": "B\u00fc\u015fra",
-    "last_name": "K\u00f6ken",
-    "title": "ms",
-    "email": "private14@example.com",
-    "phone": "",
-    "bio": "B\u00fcsra works for Ericsson R&D, in Budapest as a Cloud System Engineer. Interested in back-end development, cloud, big data and new technologies. Had experience on Python, OpenStack, Zabbix, Rsyslog, and Ansible. She is a big enthusiast of Python! Also she is the founder of a social entrepreneurship bikokorec.com and a blogger. She loves coding, taking photos, and blogging.",
-    "url": "https://hu.linkedin.com/in/busrakoken/en",
-    "social_url": "https://twitter.com/busrakoken",
-    "country": "TR",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 15,
-  "fields": {
-    "uuid": "8de1a2bd-b302-4d0a-8c4e-e6f19a51ace5",
-    "date_created": "2016-10-23T19:53:01.436Z",
-    "date_modified": "2016-10-23T19:53:01.436Z",
-    "first_name": "Michal",
-    "last_name": "Kuffa",
-    "title": "mr",
-    "email": "private15@example.com",
-    "phone": "",
-    "bio": "Working with Python on daily basis for last 5 years. At Vnet he is responsible for developing internal applications and automation of company's processes. He is interested in back-end developement, IoT, IT security and enthusiastic about open source technologies.",
-    "url": "https://sk.linkedin.com/in/michalkuffa",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 16,
-  "fields": {
-    "uuid": "b551048a-4ed7-4f0c-b809-6210b4eeba2c",
-    "date_created": "2016-10-23T19:53:01.561Z",
-    "date_modified": "2016-10-23T19:53:01.561Z",
-    "first_name": "Svetlana",
-    "last_name": "Margetov\u00e1",
-    "title": "ms",
-    "email": "private16@example.com",
-    "phone": "",
-    "bio": "Svetlana is devoted to programming in Python and Django, she works at Brainity, where she develops mainly backend solutions for mobile applications. In her spare time she mainly develops mobile applications for the iOS platform. She likes the new technology, UI/UX and tries to optimize each task and program as much as possible.",
-    "url": "",
-    "social_url": "https://twitter.com/Mandragora258",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 17,
-  "fields": {
-    "uuid": "461e6c7f-ce2b-4897-afcd-512e52e933e5",
-    "date_created": "2016-10-23T19:53:01.679Z",
-    "date_modified": "2016-10-23T19:53:01.679Z",
-    "first_name": "Tatiana",
-    "last_name": "Martins",
-    "title": "ms",
-    "email": "private17@example.com",
-    "phone": "",
-    "bio": "Tatiana started programming in 2002. She already developed from medical imaging applications to recommendation platforms empowered by web semantic - mostly using Python. After having worked for the Ministry of Science and Technology of Brazil and the largest media company of Latin America (Globo), she current lives in London and works for Education Firsti (EF), developing educational applications.",
-    "url": "",
-    "social_url": "https://twitter.com/tati_alchueyr",
-    "country": "BR",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 18,
-  "fields": {
-    "uuid": "d26d0815-990e-4b09-985a-d81a7a2fd5cd",
-    "date_created": "2016-10-23T19:53:01.814Z",
-    "date_modified": "2016-10-23T19:53:01.814Z",
-    "first_name": "Peter",
-    "last_name": "Matkovski",
-    "title": "mr",
-    "email": "private18@example.com",
-    "phone": "",
-    "bio": "Peter works in company ESET as Security Consultant & White hat hacker and use Python in a ways as bad guys does. First steps with Python as security tool were done in cryptography field at Slovak Technical University and later at position of Security Software Analyst at ESET.\nPeter is organizer of security awareness event for wide public about practical security and encryption called Cryptoparty at hackerspace Progressbar in Bratislava.",
-    "url": "https://www.linkedin.com/in/pmatkovski",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 19,
-  "fields": {
-    "uuid": "2c0a9d83-2fcd-4948-b98a-bba91d2f5674",
-    "date_created": "2016-10-23T19:53:01.957Z",
-    "date_modified": "2016-10-23T19:53:01.957Z",
-    "first_name": "Daniele",
-    "last_name": "Procida",
-    "title": "mr",
-    "email": "private19@example.com",
-    "phone": "",
-    "bio": "Daniele Procida works at Divio, on Django CMS, Aldryn and other Django-based projects. He\u2019s a member of the Django Project core team, and has been involved in organising numerous Python/Django conferences, including DjangoCon Europe 2015 and PyCon Namibia 2016.",
-    "url": "",
-    "social_url": "https://twitter.com/evildmp",
-    "country": "UK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 20,
-  "fields": {
-    "uuid": "9a7e3f8e-c9da-43a4-84b0-442541e046f1",
-    "date_created": "2016-10-23T19:53:02.108Z",
-    "date_modified": "2016-10-23T19:53:02.108Z",
-    "first_name": "Mat\u00fa\u0161",
-    "last_name": "Reh\u00e1k",
-    "title": "mr",
-    "email": "private20@example.com",
-    "phone": "",
-    "bio": "Matus is a PhD student at Faculty of Mathematics, Physics and Informatics of Comenius University in Bratislava. He investigates quantum phenomena in mesoscopic structures using high frequency methods at cryogenic temperatures. He uses Python in the laboratories for all what as a physicist needs: communication with measurement devices, data collection and processing, simulations.",
-    "url": "https://sk.linkedin.com/in/matus-rehak-3b6b1725",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 21,
-  "fields": {
-    "uuid": "e8c870f2-d929-4bd8-997f-3c03915765d1",
-    "date_created": "2016-10-23T19:53:02.251Z",
-    "date_modified": "2016-10-23T19:53:02.251Z",
-    "first_name": "Michael",
-    "last_name": "Scherer",
-    "title": "mr",
-    "email": "private21@example.com",
-    "phone": "",
-    "bio": "Michael works on the Open Source and Standards team at Red Hat, focusing on infrastructure issues of various communities as a system administrator . A long time packager and python coder, he lives in Paris when he is not traveling to speak at free software events around",
-    "url": "https://community.redhat.com/blog/author/misc/",
-    "social_url": "",
-    "country": "FR",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 22,
-  "fields": {
-    "uuid": "e3ba3bbb-e048-443d-9ca1-2568045c6dca",
-    "date_created": "2016-10-23T19:53:02.369Z",
-    "date_modified": "2016-10-23T19:53:02.369Z",
-    "first_name": "Tom\u00e1\u0161",
-    "last_name": "Sirn\u00fd",
-    "title": "mr",
-    "email": "private22@example.com",
-    "phone": "",
-    "bio": "Back-end program\u00e1tor so z\u00e1ujmom o big data a machine learning, ktor\u00e9ho \u010fal\u0161ou m\u00e9tou je data science. Python a Django pou\u017e\u00edva pri v\u00fdvoji webov\u00fdch slu\u017eieb a ich back-endov\u00fdch \u010dast\u00ed u\u017e viac ako p\u00e4\u0165 rokov. Postupom \u010dasu sa dostal aj k spracov\u00e1vaniu a ukladaniu v\u00e4\u010d\u0161\u00edch d\u00e1t. Za\u010dalo to pou\u017eit\u00edm Elasticsearch na vyh\u013ead\u00e1vanie vo filmovej datab\u00e1ze a nesk\u00f4r v in\u00fdch typoch d\u00e1t. Vyu\u017e\u00edva Hadoop a Spark pri v\u00fdvoji produktov pre klientov v r\u00e1mci firmy Exponea.",
-    "url": "",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 23,
-  "fields": {
-    "uuid": "2b12de8e-6d43-4377-a21c-1e51778d4237",
-    "date_created": "2016-10-23T19:53:02.478Z",
-    "date_modified": "2016-10-23T19:53:02.478Z",
-    "first_name": "Jakub",
-    "last_name": "\u0160evcech",
-    "title": "mr",
-    "email": "private23@example.com",
-    "phone": "",
-    "bio": "Jakub is a PhD student at Slovak University of Technology in Bratislava where he received his Master's degree in Software Engineering. Currently teaching a Functional and logic programming course at the university. He spent great time working at Sli.do. He is professionally interested in data analysis, data science, BigData processing and machine learning. Privately in hiking, travelling and cycling.",
-    "url": "",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 24,
-  "fields": {
-    "uuid": "02c2def8-fef9-406f-9e1d-3aa5142e9f78",
-    "date_created": "2016-10-23T19:53:02.587Z",
-    "date_modified": "2016-10-23T19:53:02.588Z",
-    "first_name": "Martina",
-    "last_name": "\u0160turd\u00edkov\u00e1",
-    "title": "ms",
-    "email": "private24@example.com",
-    "phone": "",
-    "bio": "Martina Sturdikova is a senior software engineer with an outstanding 10+ year track record in delivering enterprise level software. Over the last 4 years, she has been working as a senior developer at JP Morgan Chase using python for real time trading and risk analysis. Martina is passionate about empowering and advancing women in technology as well as inspiring girls to enter the IT field. She actively promotes technology to girls and women in Slovakia where she acts as an advisor for a non-for-profit organization Aj Ty v IT.",
-    "url": "https://www.linkedin.com/in/martinasturdikova",
-    "social_url": "",
-    "country": "SK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 25,
-  "fields": {
-    "uuid": "4bd8894d-fa75-401b-b59b-ecc972981e6f",
-    "date_created": "2016-10-23T19:53:02.704Z",
-    "date_modified": "2016-10-23T19:53:02.704Z",
-    "first_name": "Nicholas",
-    "last_name": "Tollervey",
-    "title": "mr",
-    "email": "private25@example.com",
-    "phone": "",
-    "bio": "Nicholas is a classically trained musician, philosophy graduate, teacher, writer and software developer. He's a Python Software Foundation fellow and a recipient of the PSF's community award for his work in education. He's just like this biography: concise, honest and full of useful information.",
-    "url": "http://ntoll.org/",
-    "social_url": "https://twitter.com/ntoll",
-    "country": "UK",
-    "sponsor": null
-  }
-},
-{
-  "model": "konfera.speaker",
-  "pk": 26,
-  "fields": {
-    "uuid": "b6126b2f-f40e-4725-9901-1d732f07498f",
-    "date_created": "2016-10-23T19:53:02.822Z",
-    "date_modified": "2016-10-23T19:53:02.822Z",
-    "first_name": "Johannes",
-    "last_name": "Wachs",
-    "title": "mr",
-    "email": "private26@example.com",
-    "phone": "",
-    "bio": "Johannes Wachs is a PhD student at the Center for Network Science at Central European University. He is also affiliated with the Corruption Research Center Budapest, a nonprofit using data driven methods to investigate corruption risks in government. He has used network science as a consultant for Bondweaver, advising firms on internal communication and collaboration. Python is his preferred ecosystem in all these roles.",
-    "url": "",
-    "social_url": "https://twitter.com/johannes_wachs",
-    "country": "DE",
-    "sponsor": null
-  }
-},
-{
   "model": "konfera.talk",
   "pk": 1,
   "fields": {
@@ -1971,98 +2066,93 @@
   }
 },
 {
-  "model": "konfera.ticket",
-  "pk": 1,
+  "model": "konfera.tickettype",
+  "pk": 13,
   "fields": {
-    "uuid": "146af5b6-42a7-4777-ba02-ea86df9cc544",
-    "date_created": "2016-10-07T20:27:45.246Z",
-    "date_modified": "2016-10-07T20:27:45.247Z",
-    "type": 5,
-    "discount_code": null,
-    "status": "registered",
-    "title": "mr",
-    "first_name": "Test",
-    "last_name": "Testovac",
-    "email": "test.testovac@example.com",
-    "phone": "",
-    "description": "",
-    "order": 1
+    "uuid": "eb010644-6565-4943-92f4-e20337c7edd2",
+    "date_created": "2016-11-03T19:57:34.965Z",
+    "date_modified": "2016-11-03T19:58:01.342Z",
+    "date_from": "2016-12-01T00:00:00Z",
+    "date_to": "2017-03-12T18:00:00Z",
+    "title": "Student Early Bird",
+    "description": "Please select this ticket if you are a student. Valid student ID might be requested when you arrive at the conference.",
+    "price": "15.00",
+    "attendee_type": "attendee",
+    "accessibility": "public",
+    "usage": 10,
+    "event": 16
   }
 },
 {
-  "model": "konfera.ticket",
-  "pk": 2,
+  "model": "konfera.tickettype",
+  "pk": 14,
   "fields": {
-    "uuid": "ee19148f-392e-4ea6-97c3-270e0056b931",
-    "date_created": "2016-10-07T20:43:14.276Z",
-    "date_modified": "2016-10-07T20:43:14.276Z",
-    "type": 11,
-    "discount_code": null,
-    "status": "checked-in",
-    "title": "mr",
-    "first_name": "Petr",
-    "last_name": "Viktorin",
-    "email": "private@example.com",
-    "phone": "",
-    "description": "",
-    "order": 2
+    "uuid": "ad44f194-5204-44a9-95be-e686ed2bd036",
+    "date_created": "2016-11-03T19:59:12.175Z",
+    "date_modified": "2016-11-03T19:59:54.205Z",
+    "date_from": "2016-12-01T00:00:00Z",
+    "date_to": "2017-03-12T18:00:00Z",
+    "title": "Standard Early Bird",
+    "description": "Standard conference ticket.",
+    "price": "30.00",
+    "attendee_type": "attendee",
+    "accessibility": "public",
+    "usage": 10,
+    "event": 16
   }
 },
 {
-  "model": "konfera.ticket",
-  "pk": 3,
+  "model": "konfera.tickettype",
+  "pk": 15,
   "fields": {
-    "uuid": "241102a0-b918-45f0-8511-afff327c4b9d",
-    "date_created": "2016-10-08T07:45:54.048Z",
-    "date_modified": "2016-10-08T07:45:40.242Z",
-    "type": 11,
-    "discount_code": null,
-    "status": "checked-in",
-    "title": "mr",
-    "first_name": "Andrea",
-    "last_name": "\u0160te\u0148ov\u00e1",
-    "email": "private2@example.com",
-    "phone": "",
-    "description": "",
-    "order": 3
+    "uuid": "7775b9bf-399c-4fd8-97f7-cdc19e7f4ea3",
+    "date_created": "2016-11-03T20:00:38.975Z",
+    "date_modified": "2016-11-03T20:00:59.238Z",
+    "date_from": "2016-12-01T00:00:00Z",
+    "date_to": "2017-03-12T18:00:00Z",
+    "title": "Supporter Early Bird",
+    "description": "Please select this ticket if you want to be listed on our website as a supporter.",
+    "price": "80.00",
+    "attendee_type": "attendee",
+    "accessibility": "public",
+    "usage": 10,
+    "event": 16
   }
 },
 {
-  "model": "konfera.ticket",
-  "pk": 4,
+  "model": "konfera.tickettype",
+  "pk": 16,
   "fields": {
-    "uuid": "fb349ad0-d44c-42b6-8e46-00a480f0f518",
-    "date_created": "2016-10-08T07:48:15.644Z",
-    "date_modified": "2016-10-08T07:48:15.644Z",
-    "type": 6,
-    "discount_code": 1,
-    "status": "registered",
-    "title": "ms",
-    "first_name": "Testerka",
-    "last_name": "Testovacka",
-    "email": "testerka.testovacka@example.com",
-    "phone": "",
-    "description": "",
-    "order": 4
+    "uuid": "3499b94d-42ff-4ec8-a49c-f7a8d08d43ff",
+    "date_created": "2016-11-03T20:01:47.928Z",
+    "date_modified": "2016-11-03T20:02:23.570Z",
+    "date_from": "2016-11-01T00:00:00Z",
+    "date_to": "2017-03-01T00:00:00Z",
+    "title": "Volunteer",
+    "description": "Free ticket for people who are helping with the conference. There is an optional donation when registering for the conference.",
+    "price": "0.00",
+    "attendee_type": "attendee",
+    "accessibility": "private",
+    "usage": 10,
+    "event": 16
   }
 },
 {
-  "model": "konfera.ticket",
-  "pk": 5,
+  "model": "konfera.tickettype",
+  "pk": 17,
   "fields": {
-    "uuid": "b216a71b-5b3d-40a1-b98f-2a8c04c3e613",
-    "date_created": "2016-10-09T20:16:56.099Z",
-    "date_modified": "2016-10-09T20:16:56.099Z",
-    "type": 11,
-    "discount_code": null,
-    "status": "checked-in",
-    "title": "mr",
-    "first_name": "Andrej",
-    "last_name": "Mo\u0161a\u0165",
-    "email": "private3@example.com",
-    "phone": "",
-    "description": "",
-    "order": 5
+    "uuid": "a226762f-e88f-4ada-9b8c-32134c7a8cb6",
+    "date_created": "2016-11-03T20:07:41.130Z",
+    "date_modified": "2016-11-03T20:09:03.313Z",
+    "date_from": "2016-11-01T00:00:00Z",
+    "date_to": "2017-03-10T08:00:00Z",
+    "title": "Freebie",
+    "description": "Tickets issued for attendees for free.",
+    "price": "0.00",
+    "attendee_type": "aid",
+    "accessibility": "private",
+    "usage": 10,
+    "event": 16
   }
 },
 {
