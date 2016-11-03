@@ -267,8 +267,9 @@ class TicketTest(TestCase):
                                                type=self.ticket_type, email='test@test.com', phone='0912345678',
                                                discount_code=self.discount_code)
         ticket_with_valid_code.save()
-        # if discount code has been applied, the number of allowed usages should 0
-        self.assertEquals(self.discount_code.usage, 0)
+        # if discount code has been applied, the discount code should not be available
+        self.assertEquals(self.discount_code.get_usage(), 1)
+        self.assertIs(self.discount_code.is_available, False)
 
         # if saved with a code that matches the ticket type of the ticket, the ticket should save successfully
         ticket_with_used_code = models.Ticket(status='requested', title='mr', first_name="test", last_name="Test",
@@ -282,7 +283,7 @@ class TicketTest(TestCase):
                                                  type=self.ticket_type, email='test@test.com', phone='0912345678',
                                                  discount_code=self.discount_code_2)
         # the discount code has not been applied so the number of allowed usages should stay 100
-        self.assertEquals(self.discount_code_2.usage, 100)
+        self.assertEquals(self.discount_code_2.get_usage(), 0)
         self.assertRaises(ValidationError, ticket_with_invalid_code.save)
 
     def test_save_tickets_for_different_event(self):

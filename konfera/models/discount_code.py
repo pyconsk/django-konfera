@@ -8,8 +8,8 @@ from konfera.models.ticket import Ticket
 
 
 class DiscountCode(FromToModel):
-    title = models.CharField(max_length=128, unique=True)
-    hash = models.CharField(max_length=64)
+    title = models.CharField(max_length=128)
+    hash = models.CharField(max_length=64, unique=True)
     discount = models.IntegerField(
         default=0,
         validators=[
@@ -25,11 +25,12 @@ class DiscountCode(FromToModel):
         return self.title
 
     def get_usage(self):
-        return len(Ticket.objects.get(discount_code=self.title))
+        tickets = Ticket.objects.filter(discount_code__hash=self.hash)
+        return len(tickets)
 
     @property
     def is_available(self):
-        return (self.usage - self.get_usage()) >= 0
+        return (self.usage - self.get_usage()) > 0
 
     def clean(self):
         if hasattr(self, 'ticket_type'):

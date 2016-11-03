@@ -52,7 +52,7 @@ class Ticket(KonferaModel):
             exist_ticket = self.order.ticket_set.first()
             if exist_ticket and exist_ticket.type.event.id != self.type.event.id:
                 raise ValidationError(_('All tickets must be for the same event.'))
-        if not self.discount_code.is_available:
+        if self.discount_code and self.discount_code.is_available is False:
             raise ValidationError(_('Usage of the discount code has already exceeded allowed number.'))
         super().clean()
 
