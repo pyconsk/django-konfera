@@ -43,4 +43,6 @@ notifications:
     on_success: change
     on_failure: always
     on_start: never
-  slack: django-konfera:b9GUe4UHZMg4VnwuxbiOA0Yo
+  slack:
+    rooms:
+      - pyconsk:itD3xMGpyFdaNubLLCwwFinz#django-konfera
