@@ -1,8 +1,7 @@
-{% extends 'konfera/base.html' %}{% load i18n %}
+{% extends 'konfera/event/base.html' %}
+{% load i18n %}
 
-{% block content %}
-<div class="row">
-  <div class="col-md-8">
+{% block event_details %}
 
     {% block top_cfp %}{% endblock %}
     <form method="POST" action="" class="cfp">{% csrf_token %}
@@ -16,6 +15,4 @@
     </form>
     {% block bottom_cfp %}{% endblock %}
 
-  </div>
-</div>
 {% endblock %}

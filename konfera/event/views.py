@@ -84,11 +84,13 @@ class CFPView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['event'] = Event.objects.get(slug=kwargs['slug'])
+        context['event'] = event = Event.objects.get(slug=kwargs['slug'])
+        context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
+
         context['speaker_form'] = SpeakerForm(self.request.POST or None, prefix='speaker')
         context['talk_form'] = TalkForm(self.request.POST or None, prefix='talk')
 
-        set_event_ga_to_context(context['event'], context)
+        set_event_ga_to_context(event, context)
 
         return context
 
