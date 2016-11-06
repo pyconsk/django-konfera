@@ -159,3 +159,49 @@ class TestOrderDetail(TestCase):
         response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_await.uuid}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-warning')
+
+
+class TestIndexRedirect(TestCase):
+
+    def setUp(self):
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+        )
+
+    def test_no_conference(self):
+        self.old_meetup = Event.objects.create(
+            title='Old meetup', slug='old-meetup', description='Old meetup', event_type='meetup',
+            status='published', location=self.location,
+            date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-01 01:01:01+01:00',
+        )
+        self.new_meetup = Event.objects.create(
+            title='New meetup', slug='new-meetup', description='New meetup', event_type='meetup',
+            status='published', location=self.location,
+            date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-01 01:01:01+01:00',
+        )
+        response = self.client.get('')
+        # Check if status is OK and correct template is used
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/list_events.html')
+
+    def test_one_conference(self):
+        self.old_conference = Event.objects.create(
+            title='Old conference', slug='old-conference', description='Old conference', event_type='conference',
+            status='published', location=self.location,
+            date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
+        )
+        response = self.client.get('')
+        # Check if the response is 302: redirect to the only existing conference
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/old-conference/')
+
+    def test_latest_conference(self):
+        self.new_conference = Event.objects.create(
+            title='New conference', slug='new-conference', description='New conference', event_type='conference',
+            status='published', location=self.location,
+            date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
+        )
+        response = self.client.get('')
+        # Check if the response is 302: redirect to the latest conference (default LANDING_PAGE = latest_conference)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, '/new-conference/')

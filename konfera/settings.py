@@ -11,5 +11,9 @@ TALK_DURATION = getattr(settings, 'TALK_DURATION',
                             (45, _('45 min')),
                         ))
 
-# LANDING PAGE should be something like latest_conference or earliest_meetup or similar combinations
+"""LANDING PAGE is a composite of two keywords: <timewise>_<event>
+<timewise> can be: latest or earliest
+<event> can be (at the moment): conference or meetup
+possible combinations: latest_conference (DEFAULT), latest_meetup, earliest_conference, earliest_meetup
+"""
 LANDING_PAGE = getattr(settings, 'LANDING_PAGE', 'latest_conference')

@@ -1,8 +1,7 @@
-from django.shortcuts import redirect
-from django.views.generic import ListView
-from django.shortcuts import render
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.views.generic import ListView
 
 from konfera.models.event import Event
 from konfera.settings import LANDING_PAGE
@@ -14,12 +13,12 @@ def index(request):
         timewise = timewise.lower()
         event_type = event_type.upper()
     except BaseException as be:
-        raise (_('%s\nIncorrect LANDING_PAGE setting, need latest|earliest_conference|meetup', be))
+        raise ('%s\nIncorrect LANDING_PAGE setting, need latest|earliest_conference|meetup', be)
 
     events = Event.objects.published().filter(event_type=getattr(Event, event_type))
-    selected_event = getattr(events, timewise)('date_from')
+    selected_event = getattr(events, timewise)('date_from') if events else None
     if not selected_event:
-        messages.info(request, _('No %s event has been found. Redirected to default list.' % event_type))
+        messages.info(request, 'No %s event has been found. Redirected to default list.' % event_type)
         return render(request=request, template_name='konfera/list_events.html')
 
     return redirect('event_details', slug=selected_event.slug)
