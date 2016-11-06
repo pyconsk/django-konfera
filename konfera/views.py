@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 
 from konfera.models.event import Event
@@ -18,7 +19,7 @@ def index(request):
     events = Event.objects.published().filter(event_type=getattr(Event, event_type))
     selected_event = getattr(events, timewise)('date_from') if events else None
     if not selected_event:
-        messages.info(request, 'No %s event has been found. Redirected to default list.' % event_type)
+        messages.info(request, _('No %s event has been found. Redirected to default list.' % event_type))
         return render(request=request, template_name='konfera/list_events.html')
 
     return redirect('event_details', slug=selected_event.slug)

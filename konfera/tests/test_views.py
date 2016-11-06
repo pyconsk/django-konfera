@@ -169,15 +169,15 @@ class TestIndexRedirect(TestCase):
         )
 
     def test_no_conference(self):
+        response = self.client.get('')
+        # Check if status is OK and correct template is used
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/list_events.html')
+
         self.old_meetup = Event.objects.create(
-            title='Old meetup', slug='old-meetup', description='Old meetup', event_type='meetup',
+            title='Old meetup', slug='old-meetup', description='Old meetup', event_type=Event.MEETUP,
             status='published', location=self.location,
             date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-01 01:01:01+01:00',
-        )
-        self.new_meetup = Event.objects.create(
-            title='New meetup', slug='new-meetup', description='New meetup', event_type='meetup',
-            status='published', location=self.location,
-            date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-01 01:01:01+01:00',
         )
         response = self.client.get('')
         # Check if status is OK and correct template is used
@@ -186,7 +186,7 @@ class TestIndexRedirect(TestCase):
 
     def test_one_conference(self):
         self.old_conference = Event.objects.create(
-            title='Old conference', slug='old-conference', description='Old conference', event_type='conference',
+            title='Old conference', slug='old-conference', description='Old conference', event_type=Event.CONFERENCE,
             status='published', location=self.location,
             date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
         )
@@ -197,7 +197,7 @@ class TestIndexRedirect(TestCase):
 
     def test_latest_conference(self):
         self.new_conference = Event.objects.create(
-            title='New conference', slug='new-conference', description='New conference', event_type='conference',
+            title='New conference', slug='new-conference', description='New conference', event_type=Event.CONFERENCE,
             status='published', location=self.location,
             date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
         )
