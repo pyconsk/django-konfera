@@ -57,7 +57,7 @@ def event_details_view(request, slug):
 
 
 class CFPView(TemplateView):
-    template_name = 'konfera/cfp_form.html'
+    template_name = 'konfera/event/cfp_form.html'
     message_text = _("Your talk proposal was successfully created.")
 
     def dispatch(self, *args, **kwargs):
