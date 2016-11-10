@@ -192,7 +192,7 @@ COUNTRIES = (
     ('SH', _('St. Helena')),
     ('SI', _('Slovenia')),
     ('SJ', _('Svalbard & Jan Mayen Islands')),
-    ('SK', _('Slovakia Republic')),
+    ('SK', _('Slovak Republic')),
     ('SL', _('Sierra Leone')),
     ('SM', _('San Marino')),
     ('SN', _('Senegal')),
