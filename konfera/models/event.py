@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,6 +42,17 @@ class Event(FromToModel):
     footer_text = models.TextField(blank=True)
     analytics = models.TextField(blank=True)
 
+    cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
+    cfp_end = models.DatetimeField(verbose_name=_('CFP deadline'),
+                                   help_text=_('Call for proposals deadline.'))
+    contact_email = models.EmailField(verbose_name=_('E-mail'),
+                                      help_text=_('Publicly displayed email to contact organizers.'))
+    coc = models.TextField(verbose_name=_('Code of Conduct'))
+    coc_phone = models.CharField(verbose_name=_('Code of Conduct contact'),
+                                 help_text=_('Publicly displayed phone to contact organizers.'))
+    coc_phone2 = models.CharField(verbose_name=_('Code of Conduct contact 2'),
+                                  help_text=_('Publicly displayed phone to contact organizers.'))
+
     objects = EventManager()
 
     class Meta:
@@ -53,6 +65,13 @@ class Event(FromToModel):
     def duration(self):
         return (self.date_to - self.date_from).days + 1
 
+    def clean(self):
+        if self.cfp_allowed and not self.cfp_end:
+            raise ValidationError(_('CFP deadline has to be defined if CFP is allowed.'))
+        # at this point cfp_end is defined
+        if self.cfp_end >= self.date_from:
+            raise ValidationError(_('CFP deadline should be before the event starts.'))
+        super(Event, self).clean()
 
 Event._meta.get_field('date_from').blank = False
 Event._meta.get_field('date_from').verbose_name = _('Event beginning')
