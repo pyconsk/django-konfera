@@ -29,7 +29,8 @@ class ModelAdminTests(TestCase):
         ev = EventAdmin(Event, self.site)
         event = Event.objects.get(title='PyCon SK 2016')
         ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status',
-                             'location', 'sponsors', 'footer_text', 'analytics', 'uuid', 'date_created',
+                             'location', 'sponsors', 'footer_text', 'analytics', 'cfp_allowed', 'cfp_end',
+                             'contact_email', 'coc', 'coc_phone', 'coc_phone2', 'uuid', 'date_created',
                              'date_modified']
 
         self.assertEqual(list(ev.get_fields(request)), ev_default_fields)
@@ -51,7 +52,7 @@ class ModelAdminTests(TestCase):
                 'fields': ('title', 'slug', 'description'),
             }),
             (_('Dates'), {
-                'fields': ('date_from', 'date_to'),
+                'fields': ('date_from', 'date_to', 'cfp_end'),
             }),
             (_('Details'), {
                 'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),

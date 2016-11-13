@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -61,7 +61,10 @@ class CFPView(TemplateView):
     message_text = _("Your talk proposal was successfully created.")
 
     def dispatch(self, *args, **kwargs):
-        get_object_or_404(Event, slug=kwargs.get('slug'))
+        event = get_object_or_404(Event, slug=kwargs.get('slug'))
+
+        if not event.cfp_allowed:
+            raise Http404
 
         return super().dispatch(*args, **kwargs)
 

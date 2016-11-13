@@ -1,6 +1,7 @@
 {% extends 'konfera/base.html' %}{% load i18n %}
 
 {% block content %}
+{% if event.cfp_open %}
 <div class="row">
 
   <div class="col-md-8">
@@ -17,4 +18,18 @@
 
   </div>
 </div>
+{% else %}
+<div class="row">
+  <div class="col-md-8">
+    <p>
+      {% trans "Thank you for your interest, but unfortunately call for proposals deadline was at: "
+      {{ event.cfp_end }}.
+      <br/>
+      {% trans "However, if you feel like you have to submit your talk anyway, feel free to contact us:"
+      {{ event.contact_email }}
+      <br/>
+    </p>
+  </div>
+</div>
+{% endif %}
 {% endblock %}
