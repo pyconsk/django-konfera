@@ -97,7 +97,6 @@ class EventTest(TestCase):
     def test_cfp(self):
         now = datetime.datetime.now()
         today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=1)
         tomorrow = today + datetime.timedelta(days=1)
         event = Event(title='Test event', date_from=today, date_to=tomorrow, cfp_allowed=True)
         self.assertRaises(ValidationError, event.clean)
