@@ -19,6 +19,7 @@
 
 </head>
 <body>
+  {% block navbar %}{% endblock %}
 
   <div class="container" id="content" role="main">
   <!-- content -->
@@ -39,33 +40,7 @@
   <!-- content end -->
     <footer class="hidden-print">
       <div class="row">
-        <div class="col-md-12">
-          <ul class="list-unstyled">
-            <!--
-            TODO: Prepopulate social_media_list from #88
-
-            <li><a href="https://facebook.com/pyconsk">Facebook</a></li>
-            <li><a href="https://twitter.com/pyconsk">Twitter</a></li>
-            <li><a href="https://www.linkedin.com/company/spy-o--z-">LinkedIn</a></li>
-            <li>
-              <a href="https://plus.google.com/u/0/b/114745643590416178453/114745643590416178453/posts">Google+</a>
-            </li>
-            <li><a href="https://pyconsk.slack.com">Slack</a></li>
-            <li><a href="https://github.com/pyconsk">GitHub</a></li>
-            <li><a href="spy.html">Civic association</a></li>
-            <li>
-              <a href="https://groups.google.com/d/forum/pycon-sk"><span class="glyphicon glyphicon-envelope"
-              aria-hidden="true"></span> Mailing list</a>
-            </li>
-            <li>
-              <a href="mailto:info%40pycon.sk"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
-              info@pycon.sk</a>
-            </li>
-            <li class="hide"><a href="../sitemap.xml">sitemap.xml</a></li>
-            -->
-          </ul>
-
-        </div>
+        {% block footer %}{% endblock %}
       </div>
 
       {% if event %}

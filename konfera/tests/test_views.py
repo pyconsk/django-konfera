@@ -104,7 +104,7 @@ class TestEventList(TestCase):
 
     def test_cfp_existing_event(self):
         url, response = self._get_existing_event()
-        self.assertTemplateUsed(response, 'konfera/cfp_form.html')
+        self.assertTemplateUsed(response, 'konfera/event/cfp_form.html')
 
     def test_cfp_successful_form_submit(self):
         url, response = self._get_existing_event()

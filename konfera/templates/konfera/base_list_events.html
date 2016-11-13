@@ -17,9 +17,9 @@
         <h4 class="list-group-item-heading"> {{ event.title }} </h4>
         <p class="list-group-item-text">
             {% if event.duration > 1 %}
-                {{ event.date_from|date:"d F Y" }} - {{ event.date_to|date:"d F Y" }}
+                {{ event.date_from|date:"d F" }} - {{ event.date_to|date:"d F Y" }}
             {% else %}
-                {{ event.date_from|date:"d F Y H:m" }} - {{ event.date_to|date:"d F Y H:m" }}
+                {{ event.date_from|date:"d F Y H:i" }} - {{ event.date_to|date:"H:i" }}
             {% endif %}
             - {{ event.location }}
         </p>
