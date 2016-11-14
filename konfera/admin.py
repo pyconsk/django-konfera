@@ -39,6 +39,7 @@ class EventAdmin(admin.ModelAdmin):
         'slug': ('title',),
     }
 
+
 admin.site.register(Event, EventAdmin)
 
 
@@ -64,6 +65,7 @@ class SpeakerAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(Speaker, SpeakerAdmin)
 
 
@@ -85,6 +87,7 @@ class TalkAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
 
 admin.site.register(Talk, TalkAdmin)
 
@@ -124,6 +127,7 @@ class SponsorAdmin(admin.ModelAdmin):
         SponsoredSpeakersInline,
     ]
 
+
 admin.site.register(Sponsor, SponsorAdmin)
 
 
@@ -152,6 +156,7 @@ class LocationAdmin(admin.ModelAdmin):
     inlines = [
         RoomsInline,
     ]
+
 
 admin.site.register(Location, LocationAdmin)
 
@@ -212,6 +217,7 @@ class TicketTypeAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(TicketType, TicketTypeAdmin)
 
 
@@ -236,6 +242,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 
 
@@ -258,6 +265,7 @@ class TicketAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(Ticket, TicketAdmin)
 
 
@@ -279,5 +287,6 @@ class ScheduleAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
 
 admin.site.register(Schedule, ScheduleAdmin)
