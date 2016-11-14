@@ -96,13 +96,15 @@ class EventTest(TestCase):
 
     def test_cfp(self):
         now = datetime.datetime.now()
+        tomorrow = now + datetime.timedelta(days=1)
         today = datetime.date.today()
-        tomorrow = today + datetime.timedelta(days=1)
-        event = Event(title='Test event', date_from=today, date_to=tomorrow, cfp_allowed=True)
+        intwodays = today + datetime.timedelta(days=2)
+        event = Event(title='Test event', date_from=today, date_to=intwodays, cfp_allowed=True)
         self.assertRaises(ValidationError, event.clean)
-        event1 = Event(title='Test event', date_from=today, date_to=tomorrow, cfp_allowed=True, cfp_end=now)
+        event1 = Event(title='Test event', date_from=today, date_to=intwodays, cfp_allowed=True, cfp_end=now)
         self.assertRaises(ValidationError, event1.clean)
-
+        Event(title='Test normal event', date_from=intwodays, date_to=intwodays, cfp_end=tomorrow)
+        self.assert_(True)
 
 class LocationTest(TestCase):
 

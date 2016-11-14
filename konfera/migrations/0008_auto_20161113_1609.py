@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 import datetime
 from django.db import migrations, models
+from django.utils import timezone
 
 
 class Migration(migrations.Migration):
@@ -21,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='cfp_end',
-            field=models.DateTimeField(default=datetime.datetime(2000, 1, 1, 0, 0), help_text='Call for proposals deadline.', verbose_name='CFP deadline'),
+            field=models.DateTimeField(default=datetime.datetime(2000, 1, 1, 0, 0, tzinfo=timezone.utc), help_text='Call for proposals deadline.', verbose_name='CFP deadline'),
         ),
         migrations.AddField(
             model_name='event',
