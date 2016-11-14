@@ -10,7 +10,7 @@ from django.utils import timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('konfera', '0007_auto_20161103_2213'),
+        ('konfera', '0007_auto_20161110_0910'),
     ]
 
     operations = [
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='cfp_end',
-            field=models.DateTimeField(default=datetime.datetime(2000, 1, 1, 0, 0, tzinfo=timezone.utc), help_text='Call for proposals deadline.', verbose_name='CFP deadline'),
+            field=models.DateTimeField(null=True, verbose_name='Call for proposals deadline'),
         ),
         migrations.AddField(
             model_name='event',

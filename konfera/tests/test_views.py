@@ -100,7 +100,7 @@ class TestEventList(TestCase):
     def test_cfp_after_deadline(self):
         url = reverse('event_cfp_form', kwargs={'slug': 'passed-cfp'})
         response = self.client.get(url)
-        self.assertIn('{% trans "Thank you for your interest, but unfortunately', str(response.content))
+        self.assertIn('Thank you for your interest, but unfortunately call for proposals', str(response.content))
 
     def test_cfp_existing_event(self):
         url, response = self._get_existing_event()

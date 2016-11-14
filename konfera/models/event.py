@@ -45,9 +45,7 @@ class Event(FromToModel):
     analytics = models.TextField(blank=True)
 
     cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
-    cfp_end = models.DateTimeField(verbose_name=_('CFP deadline'),
-                                   default=datetime(2000, 1, 1, 0, 0, tzinfo=timezone.utc),
-                                   help_text=_('Call for proposals deadline.'))
+    cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True)
     contact_email = models.EmailField(verbose_name=_('E-mail'), blank=True,
                                       help_text=_('Publicly displayed email to contact organizers.'))
     coc = models.TextField(verbose_name=_('Code of Conduct'), blank=True)
@@ -72,10 +70,10 @@ class Event(FromToModel):
 
     @property
     def cfp_open(self):
-        return self.cfp_allowed and self.cfp_end >= datetime.now(tz=timezone.utc)
+        return self.cfp_allowed and self.cfp_end and self.cfp_end >= timezone.now()
 
     def clean(self):
-        if self.cfp_allowed and self.cfp_end == datetime(2000, 1, 1, 0, 0, tzinfo=timezone.utc):
+        if self.cfp_allowed and not self.cfp_end:
             raise ValidationError(_('CFP deadline has to be defined if CFP is allowed.'))
         # at this point cfp_end is defined
         if self.cfp_end.date() >= self.date_from:
