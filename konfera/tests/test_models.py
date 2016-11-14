@@ -106,6 +106,7 @@ class EventTest(TestCase):
         Event(title='Test normal event', date_from=intwodays, date_to=intwodays, cfp_end=tomorrow)
         self.assert_(True)
 
+
 class LocationTest(TestCase):
 
     def test_string_representation(self):
