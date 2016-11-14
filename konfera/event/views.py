@@ -17,6 +17,21 @@ from konfera.models.order import Order
 from konfera.utils import set_event_ga_to_context
 
 
+def event_venue_view(request, slug):
+    context = dict()
+
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    if not event.location or not event.location.get_here:
+        raise Http404
+
+    context['event'] = event
+    context['venue'] = event.location.get_here
+
+    set_event_ga_to_context(event, context)
+
+    return render(request=request, template_name='konfera/event_venue.html', context=context)
+
+
 def event_sponsors_list_view(request, slug):
     context = dict()
 

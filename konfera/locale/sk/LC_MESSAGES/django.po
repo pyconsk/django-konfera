@@ -445,3 +445,8 @@ msgstr ""
 #, python-format
 msgid " Register as a %(type)s "
 msgstr ""
+
+#: templates/konfera/venue_view.html:6
+#, python-format
+msgid "How to get here"
+msgstr ""
