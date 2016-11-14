@@ -103,8 +103,8 @@ class EventTest(TestCase):
         self.assertRaises(ValidationError, event.clean)
         event1 = Event(title='Test event', date_from=today, date_to=intwodays, cfp_allowed=True, cfp_end=now)
         self.assertRaises(ValidationError, event1.clean)
-        Event(title='Test normal event', date_from=intwodays, date_to=intwodays, cfp_end=tomorrow)
-        self.assert_(True)
+        event2 = Event(title='Test normal event', date_from=intwodays, date_to=intwodays, cfp_end=tomorrow)
+        self.assertIsNone(event2.clean())
 
 
 class LocationTest(TestCase):
