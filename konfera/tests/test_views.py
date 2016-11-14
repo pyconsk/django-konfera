@@ -205,3 +205,40 @@ class TestIndexRedirect(TestCase):
         # Check if the response is 302: redirect to the latest conference (default LANDING_PAGE = latest_conference)
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/new-conference/')
+
+
+class TestEventVenue(TestCase):
+    def setUp(self):
+        self.html_code = '<strong>test</strong>'
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+        )
+        self.location_with_venue = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            get_here=self.html_code,
+        )
+
+    def test_venue_non_existing_event(self):
+        url = reverse('event_venue', kwargs={'slug': 'non-existing-event'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_venue_get_here_not_filled(self):
+        one = Event.objects.create(
+            title='One', slug='one', description='First one', event_type='conference', status='published',
+            location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+        )
+        url = reverse('event_venue', kwargs={'slug': 'one'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_venue_get_here_filled_not_escaped(self):
+        one = Event.objects.create(
+            title='Second', slug='second-one', description='Second one', event_type='conference', status='published',
+            location=self.location_with_venue, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+        )
+        url = reverse('event_venue', kwargs={'slug': 'second-one'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/event_venue.html')
+        self.assertTrue(self.html_code in response.content.decode('utf-8'))
