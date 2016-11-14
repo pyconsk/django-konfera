@@ -224,7 +224,7 @@ class TestEventVenue(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_venue_get_here_not_filled(self):
-        one = Event.objects.create(
+        Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
@@ -233,9 +233,10 @@ class TestEventVenue(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_venue_get_here_filled_not_escaped(self):
-        one = Event.objects.create(
+        Event.objects.create(
             title='Second', slug='second-one', description='Second one', event_type='conference', status='published',
-            location=self.location_with_venue, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            location=self.location_with_venue,
         )
         url = reverse('event_venue', kwargs={'slug': 'second-one'})
         response = self.client.get(url)
