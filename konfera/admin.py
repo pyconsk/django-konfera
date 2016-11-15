@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
                             Room, Schedule)
 
@@ -11,7 +12,7 @@ class SponsorshipInline(admin.TabularInline):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_from', 'date_to', 'event_type', 'status')
+    list_display = ('title', 'date_from', 'date_to', 'cfp_end', 'event_type', 'status')
     list_filter = ('event_type', 'status')
     ordering = ('date_from', 'date_to', 'title')
     search_fields = ('=title',)
@@ -21,7 +22,7 @@ class EventAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'description'),
         }),
         (_('Dates'), {
-            'fields': ('date_from', 'date_to'),
+            'fields': ('date_from', 'date_to', 'cfp_end'),
         }),
         (_('Details'), {
             'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),
@@ -37,6 +38,7 @@ class EventAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ('title',),
     }
+
 
 admin.site.register(Event, EventAdmin)
 
@@ -63,6 +65,7 @@ class SpeakerAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(Speaker, SpeakerAdmin)
 
 
@@ -71,19 +74,20 @@ class TalkAdmin(admin.ModelAdmin):
     list_filter = ('type', 'duration', 'event', 'status',)
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
     ordering = ('title', 'event')
-    readonly_fields = ('date_created', 'date_modified')
+    readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
             'fields': ('title', 'abstract', 'event',)
         }),
         (_('Details'), {
-            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',),)
+            'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
             'classes': ('collapse',),
         }),
     )
+
 
 admin.site.register(Talk, TalkAdmin)
 
@@ -123,6 +127,7 @@ class SponsorAdmin(admin.ModelAdmin):
         SponsoredSpeakersInline,
     ]
 
+
 admin.site.register(Sponsor, SponsorAdmin)
 
 
@@ -138,7 +143,7 @@ class LocationAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
-            'fields': ('title', 'capacity',)
+            'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
             'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
@@ -152,6 +157,7 @@ class LocationAdmin(admin.ModelAdmin):
         RoomsInline,
     ]
 
+
 admin.site.register(Location, LocationAdmin)
 
 
@@ -160,6 +166,7 @@ class OrderedTicketsInline(admin.StackedInline):
     verbose_name = _('Ordered ticket')
     verbose_name_plural = _('Ordered tickets')
     extra = 1
+    formset = OrderedTicketsInlineFormSet
 
 
 class ReceiptInline(admin.StackedInline):
@@ -194,9 +201,9 @@ admin.site.register(Order, OrderAdmin)
 
 
 class TicketTypeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'attendee_type', 'event', 'status')
-    list_filter = ('attendee_type',)
-    ordering = ('title', 'event')
+    list_display = ('title', 'price', 'attendee_type', 'event', 'status', 'accessibility')
+    list_filter = ('attendee_type', 'accessibility')
+    ordering = ('event', 'title', 'date_from')
     readonly_fields = ('status', 'uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Details'), {
@@ -212,11 +219,12 @@ class TicketTypeAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(TicketType, TicketTypeAdmin)
 
 
 class DiscountCodeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'discount', 'ticket_type', 'usage')
+    list_display = ('title', 'discount', 'ticket_type', 'usage', 'issued_tickets')
     ordering = ('title', 'ticket_type')
     readonly_fields = ('date_created', 'date_modified')
     fieldsets = (
@@ -224,7 +232,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
             'fields': ('title', 'hash', 'ticket_type')
         }),
         (_('Discount'), {
-            'fields': ('discount', 'usage')
+            'fields': ('discount', 'usage', 'issued_tickets')
         }),
         (_('Availability'), {
             'fields': ('date_from', 'date_to'),
@@ -235,6 +243,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
 
 admin.site.register(DiscountCode, DiscountCodeAdmin)
 
@@ -258,6 +267,7 @@ class TicketAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(Ticket, TicketAdmin)
 
 
@@ -279,5 +289,6 @@ class ScheduleAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
 
 admin.site.register(Schedule, ScheduleAdmin)

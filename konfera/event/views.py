@@ -2,14 +2,34 @@ from datetime import timedelta
 
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic.detail import DetailView
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
 
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.event import Event
-from konfera.models.talk import APPROVED, CFP
+from konfera.models.sponsor import Sponsor
+from konfera.models.talk import Talk
+from konfera.models.ticket_type import TicketType
+from konfera.models.order import Order
 from konfera.utils import set_event_ga_to_context
+
+
+def event_venue_view(request, slug):
+    context = dict()
+
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    if not event.location or not event.location.get_here:
+        raise Http404
+
+    context['event'] = event
+    context['venue'] = event.location.get_here
+
+    set_event_ga_to_context(event, context)
+
+    return render(request=request, template_name='konfera/event_venue.html', context=context)
 
 
 def event_sponsors_list_view(request, slug):
@@ -29,34 +49,11 @@ def event_speakers_list_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['talks'] = event.talk_set.filter(status=APPROVED).order_by('primary_speaker__last_name')
+    context['talks'] = event.talk_set.filter(status=Talk.APPROVED).order_by('primary_speaker__last_name')
 
     set_event_ga_to_context(event, context)
 
     return render(request=request, template_name='konfera/event_speakers.html', context=context)
-
-
-def event_list(request):
-    context = dict()
-
-    events = Event.objects.published().order_by('-date_from')
-
-    if events.count() == 1:
-        return redirect('event_details', slug=events[0].slug)
-
-    paginator = Paginator(events, 10)
-    page = request.GET.get('page')
-
-    try:
-        events = paginator.page(page)
-    except PageNotAnInteger:
-        events = paginator.page(1)
-    except EmptyPage:
-        events = paginator.page(paginator.num_pages)
-
-    context['events'] = events
-
-    return render(request=request, template_name='konfera/events.html', context=context)
 
 
 def event_details_view(request, slug):
@@ -64,37 +61,81 @@ def event_details_view(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
-    context['sponsors'] = event.sponsors.all()
+    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_details.html', context=context)
+    if event.event_type == Event.MEETUP:
+        return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
+
+    return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
-def cfp_form_view(request, slug):
-    event = get_object_or_404(Event.objects.published(), slug=slug)
-    context = dict()
-    speaker_form = SpeakerForm(request.POST or None, prefix='speaker')
-    talk_form = TalkForm(request.POST or None, prefix='talk')
+class CFPView(TemplateView):
+    template_name = 'konfera/event/cfp_form.html'
+    message_text = _("Your talk proposal was successfully created.")
 
-    if speaker_form.is_valid() and talk_form.is_valid():
-        speaker_instance = speaker_form.save()
-        talk_instance = talk_form.save(commit=False)
-        talk_instance.primary_speaker = speaker_instance
-        talk_instance.status = CFP
-        talk_instance.event = Event.objects.get(slug=slug)
-        talk_instance.save()
-        message_text = _("Your talk proposal successfully created.")
-        messages.success(request, message_text)
+    def dispatch(self, *args, **kwargs):
+        event = get_object_or_404(Event, slug=kwargs.get('slug'))
 
-        return redirect('event_details', slug=event.slug)
+        if not event.cfp_allowed:
+            raise Http404
 
-    context['speaker_form'] = speaker_form
-    context['talk_form'] = talk_form
+        return super().dispatch(*args, **kwargs)
 
-    set_event_ga_to_context(event, context)
+    def post(self, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
 
-    return render(request=request, template_name='konfera/cfp_form.html', context=context)
+        if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
+            speaker_instance = context['speaker_form'].save()
+            talk_instance = context['talk_form'].save(commit=False)
+            talk_instance.primary_speaker = speaker_instance
+            talk_instance.event = context['event']
+            talk_instance.status = talk_instance.status or Talk.CFP
+            talk_instance.save()
+            messages.success(self.request, self.message_text)
+
+            return redirect('event_details', slug=context['event'].slug)
+
+        return super().get(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['event'] = event = Event.objects.get(slug=kwargs['slug'])
+        context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
+
+        context['speaker_form'] = SpeakerForm(self.request.POST or None, prefix='speaker')
+        context['talk_form'] = TalkForm(self.request.POST or None, prefix='talk')
+
+        set_event_ga_to_context(event, context)
+
+        return context
+
+
+class CFPEditView(CFPView):
+    message_text = _("Your talk proposal was successfully updated.")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        talk = Talk.objects.get(uuid=context['uuid'])
+
+        context['speaker_form'] = SpeakerForm(
+            self.request.POST or None, instance=talk.primary_speaker, prefix='speaker')
+        context['talk_form'] = TalkForm(self.request.POST or None, instance=talk, prefix='talk')
+
+        return context
+
+    def dispatch(self, *args, **kwargs):
+        try:
+            talk = Talk.objects.get(uuid=kwargs['uuid'])
+        except (Talk.DoesNotExist, ValueError):
+            raise Http404
+
+        if talk.status not in [Talk.CFP, Talk.DRAFT]:
+            raise Http404
+
+        return super().dispatch(*args, **kwargs)
 
 
 def schedule_redirect(request, slug):
@@ -123,3 +164,39 @@ class ScheduleView(DetailView):
         set_event_ga_to_context(event, context)
 
         return context
+
+
+def event_public_tickets(request, slug):
+    context = dict()
+
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    context['event'] = event
+    available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
+        .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
+        .exclude(attendee_type=TicketType.PRESS)
+    available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
+    paginator = Paginator(available_tickets, 10)
+    page = request.GET.get('page')
+
+    try:
+        available_tickets = paginator.page(page)
+    except PageNotAnInteger:
+        available_tickets = paginator.page(1)
+    except EmptyPage:
+        available_tickets = paginator.page(paginator.num_pages)
+
+    context['tickets'] = available_tickets
+    return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
+
+
+def event_order_detail(request, order_uuid):
+    context = dict()
+    order = get_object_or_404(Order, uuid=order_uuid)
+    context['order'] = order
+    if order.status == Order.PAID:
+        context['status_label'] = 'label-success'
+    elif order.status in [Order.CANCELLED, Order.EXPIRED]:
+        context['status_label'] = 'label-danger'
+    else:
+        context['status_label'] = 'label-warning'
+    return render(request=request, template_name='konfera/order_details.html', context=context)

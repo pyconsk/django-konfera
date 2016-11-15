@@ -10,7 +10,6 @@ from django.utils import timezone
 from fiobank import FioBank
 
 from konfera.models import Order
-from konfera.models.order import AWAITING, PAID, PARTLY_PAID
 from payments.models import ProcessedTransaction
 
 
@@ -69,13 +68,13 @@ def _process_payment(order, payment):
     amount_to_pay = order.left_to_pay - amount
 
     if amount_to_pay <= order.to_pay * Decimal(settings.PAYMENT_ERROR_RATE / 100):
-        order.status = PAID
+        order.status = Order.PAID
 
         msg = 'Order(id={order_id}) was paid in payment with transaction_id={transaction_id}'.format(
             order_id=order.pk, transaction_id=payment['transaction_id'])
         logger.info(msg)
     else:
-        order.status = PARTLY_PAID
+        order.status = Order.PARTLY_PAID
 
         msg = 'Payment with transaction_id={transaction_id} for Order(id={order_id}) was found but it\'s outside ' \
               'of error rate'.format(order_id=order.pk, transaction_id=payment['transaction_id'])
@@ -97,7 +96,7 @@ def _process_payment(order, payment):
 def check_payments_status():
     """ Process every awaiting and partly paid order """
 
-    orders = Order.objects.filter(Q(status=AWAITING) | Q(status=PARTLY_PAID))
+    orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
     new_payments = _get_not_processed_payments(_get_last_payments())
 
     for order in orders:

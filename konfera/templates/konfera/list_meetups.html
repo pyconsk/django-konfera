@@ -1,0 +1,19 @@
+{% extends 'konfera/base_list_events.html' %}
+{% load i18n %}
+
+
+{% block title %}
+{% trans "Meetups list" %}
+{% endblock %}
+
+
+{% block description %}
+<h1>{% trans "Python Meetup" %}</h1>
+  <p class="text-justify">
+  Ďakujeme všetkým, ktorí sa zúčastňujú na pravidelných stretnutiach a tešíme sa na vás na ďalšom meetupe. Python meetup je stretnutie ľudí, ktoré nejakým spôsobom súvisí s programovacím jazykom Python. Momentálne sa konajú pravidelné meetupy v Bratislave, <u>každý prvý pracovný utorok v mesiaci</u>. Pokiaľ by ste chceli zorganizovať meetup vo vašom meste, neváhajte nás kontaktovať a radi vám pomôžeme.
+  <br><br>
+  <strong>{% trans "Admission is free of charge" %}</strong>
+  <br>
+  {% trans "Approximate duration: two hours (one hour presentation, one hour or more: discussion)." %}
+  </p>
+{% endblock %}

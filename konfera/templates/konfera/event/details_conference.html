@@ -1,0 +1,5 @@
+{% extends 'konfera/event/base.html' %}
+
+{% block event_details %}
+  {% autoescape off %}{{ event.description }}{% endautoescape %}
+{% endblock %}
