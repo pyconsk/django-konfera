@@ -24,7 +24,7 @@ class FromToModel(KonferaModel):
     date_to = models.DateTimeField(verbose_name=_('Available to'), blank=True)
 
     def clean(self):
-        if self.date_from and self.date_to and self.date_from > self.date_to:
+        if self.date_from and self.date_to and self.date_from >= self.date_to:
             msg = _('%(date_from)s have to be before %(date_to)s.') % {
                 'date_from': self._meta.get_field('date_from').verbose_name,
                 'date_to': self._meta.get_field('date_to').verbose_name

@@ -97,13 +97,13 @@ class EventTest(TestCase):
     def test_cfp(self):
         now = datetime.datetime.now()
         tomorrow = now + datetime.timedelta(days=1)
-        today = datetime.date.today()
-        intwodays = today + datetime.timedelta(days=2)
-        event = Event(title='Test event', date_from=today, date_to=intwodays, cfp_allowed=True)
+        in_two_days = now + datetime.timedelta(days=2)
+        later = in_two_days + datetime.timedelta(hours=1)
+        event = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True)
         self.assertRaises(ValidationError, event.clean)
-        event1 = Event(title='Test event', date_from=today, date_to=intwodays, cfp_allowed=True, cfp_end=now)
+        event1 = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True, cfp_end=now)
         self.assertRaises(ValidationError, event1.clean)
-        event2 = Event(title='Test normal event', date_from=intwodays, date_to=intwodays, cfp_end=tomorrow)
+        event2 = Event(title='Test normal event', date_from=in_two_days, date_to=later, cfp_end=tomorrow)
         self.assertIsNone(event2.clean())
 
 
