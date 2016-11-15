@@ -57,3 +57,12 @@ class Order(KonferaModel):
     def event(self):
         if self.ticket_set.exists():
             return self.ticket_set.first().type.event
+
+    def recalculate_ticket_price(self):
+        self.price = 0
+        self.discount = 0
+
+        for ticket in self.ticket_set.all():
+            self.price += ticket.type.price
+            self.discount += ticket.discount_calculator()
+        self.save()
