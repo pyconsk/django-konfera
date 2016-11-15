@@ -1,11 +1,11 @@
 import datetime
 
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.utils.text import slugify
-from django.db import IntegrityError
 
 from konfera import models
 from konfera.models.discount_code import DiscountCode
@@ -93,6 +93,18 @@ class EventTest(TestCase):
         event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=Event.MEETUP, date_from=date_from,
                        date_to=date_to, location=location)
         self.assertRaises(IntegrityError, event2.save)  # slug must be unique
+
+    def test_cfp(self):
+        now = datetime.datetime.now()
+        tomorrow = now + datetime.timedelta(days=1)
+        in_two_days = now + datetime.timedelta(days=2)
+        later = in_two_days + datetime.timedelta(hours=1)
+        event = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True)
+        self.assertRaises(ValidationError, event.clean)
+        event1 = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True, cfp_end=now)
+        self.assertRaises(ValidationError, event1.clean)
+        event2 = Event(title='Test normal event', date_from=in_two_days, date_to=later, cfp_end=tomorrow)
+        self.assertIsNone(event2.clean())
 
 
 class LocationTest(TestCase):

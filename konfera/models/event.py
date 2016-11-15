@@ -1,4 +1,7 @@
+from datetime import datetime
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
@@ -41,6 +44,18 @@ class Event(FromToModel):
     footer_text = models.TextField(blank=True)
     analytics = models.TextField(blank=True)
 
+    cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
+    cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True)
+    contact_email = models.EmailField(verbose_name=_('E-mail'), blank=True,
+                                      help_text=_('Publicly displayed email to contact organizers.'))
+    coc = models.TextField(verbose_name=_('Code of Conduct'), blank=True)
+    coc_phone = models.CharField(verbose_name=_('Code of Conduct contact'),
+                                 help_text=_('Publicly displayed phone to contact organizers.'),
+                                 max_length=20, blank=True)
+    coc_phone2 = models.CharField(verbose_name=_('Code of Conduct contact 2'),
+                                  help_text=_('Publicly displayed phone to contact organizers.'),
+                                  max_length=20, blank=True)
+
     objects = EventManager()
 
     class Meta:
@@ -52,6 +67,18 @@ class Event(FromToModel):
     @property
     def duration(self):
         return (self.date_to - self.date_from).days + 1
+
+    @property
+    def cfp_open(self):
+        return self.cfp_allowed and self.cfp_end and self.cfp_end >= timezone.now()
+
+    def clean(self):
+        if self.cfp_allowed and not self.cfp_end:
+            raise ValidationError(_('CFP deadline has to be defined if CFP is allowed.'))
+        # at this point cfp_end is defined
+        if self.cfp_end >= self.date_from:
+            raise ValidationError(_('CFP deadline should be before the event starts.'))
+        super(Event, self).clean()
 
 
 Event._meta.get_field('date_from').blank = False

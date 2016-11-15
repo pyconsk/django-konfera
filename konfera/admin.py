@@ -12,7 +12,7 @@ class SponsorshipInline(admin.TabularInline):
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_from', 'date_to', 'event_type', 'status')
+    list_display = ('title', 'date_from', 'date_to', 'cfp_end', 'event_type', 'status')
     list_filter = ('event_type', 'status')
     ordering = ('date_from', 'date_to', 'title')
     search_fields = ('=title',)
@@ -22,7 +22,7 @@ class EventAdmin(admin.ModelAdmin):
             'fields': ('title', 'slug', 'description'),
         }),
         (_('Dates'), {
-            'fields': ('date_from', 'date_to'),
+            'fields': ('date_from', 'date_to', 'cfp_end'),
         }),
         (_('Details'), {
             'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),

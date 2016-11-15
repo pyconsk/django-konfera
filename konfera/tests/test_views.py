@@ -1,5 +1,6 @@
 from django import VERSION
 from django.test import TestCase
+from django.utils.translation import ugettext_lazy as _
 
 from konfera.models import Event, Location, Talk, TicketType, Ticket
 from konfera.models.order import Order
@@ -46,6 +47,16 @@ class TestEventList(TestCase):
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
         )
+        self.event_not_allowed_cfp = Event.objects.create(
+            title='CFP not allowed at this event', slug='cfp-not-allowed', description='CFP not allowed',
+            event_type='conference', status='published', cfp_allowed=False,
+            location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00'
+        )
+        self.event_after_cfp_deadline = Event.objects.create(
+            title='Passed CFP deadline', slug='passed-cfp', description='Passed deadline',
+            event_type='conference', status='published', cfp_end='2015-01-01 01:01:01+01:00',
+            location=self.location, date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00'
+        )
 
     def _get_existing_event(self):
         url = reverse('event_cfp_form', kwargs={'slug': 'one'})
@@ -80,6 +91,16 @@ class TestEventList(TestCase):
         url = reverse('event_cfp_form', kwargs={'slug': 'non-existing-event'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
+
+    def test_cfp_not_allowed(self):
+        url = reverse('event_cfp_form', kwargs={'slug': 'cfp-not-allowed'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+
+    def test_cfp_after_deadline(self):
+        url = reverse('event_cfp_form', kwargs={'slug': 'passed-cfp'})
+        response = self.client.get(url)
+        self.assertIn('Thank you for your interest, but unfortunately call for proposals', str(response.content))
 
     def test_cfp_existing_event(self):
         url, response = self._get_existing_event()
