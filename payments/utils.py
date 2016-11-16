@@ -4,12 +4,13 @@ import logging
 import requests
 
 from django.db.models import Q
-from django.conf import settings
 from django.utils import timezone
 
 from fiobank import FioBank
 
 from konfera.models import Order
+
+from payments import settings
 from payments.models import ProcessedTransaction
 
 

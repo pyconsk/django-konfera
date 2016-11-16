@@ -9,14 +9,16 @@ from django.utils.translation import ugettext as _
 
 from konfera.models import Order
 
+from payments import settings
+
 
 logger = logging.getLogger(__name__)
 
-# todo: move constants to settings
+
 paypalrestsdk.configure({
-  "mode": "sandbox", # sandbox or live
-  "client_id": "xxx",
-  "client_secret": "xxx"
+  "mode": settings.PAYPAL_MODE,
+  "client_id": settings.PAYPAL_CLIENT_ID,
+  "client_secret": settings.PAYPAL_CLIENT_SECRET,
 })
 
 
@@ -48,7 +50,7 @@ class PayOrderByPaypal(TemplateView):
                 {
                     "amount": {
                         "total": str(order.to_pay),  # todo: increase by 2% or so
-                        "currency": "EUR",  # todo: make it configurable
+                        "currency": settings.PAYPAL_CURRENCY,
                     },
                     "description": _("Payment for order with variable symbol: {vs}".format(vs=order.variable_symbol))
                 },
