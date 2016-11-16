@@ -25,18 +25,23 @@ paypalrestsdk.configure({
 class PaymentOptions(TemplateView):
     template_name = 'payments/order_payment.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
+    def get_order(self, uuid):
         try:
-            order = Order.objects.get(uuid=kwargs['order_uuid'])
+            return Order.objects.get(uuid=uuid)
         except (Order.DoesNotExist, ValueError):
             raise Http404
 
+    def dispatch(self, request, *args, **kwargs):
+
+        order = self.get_order(kwargs['order_uuid'])
         if order.status == Order.PAID:
             return redirect('order_details', order_uuid=str(order.uuid))
 
-        context['order'] = order
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['order'] = self.get_order(kwargs['order_uuid'])
 
         return context
 
