@@ -29,9 +29,14 @@ class PaymentOptions(TemplateView):
         context = super().get_context_data(**kwargs)
 
         try:
-            context['order'] = Order.objects.get(uuid=kwargs['order_uuid'])
+            order = Order.objects.get(uuid=kwargs['order_uuid'])
         except (Order.DoesNotExist, ValueError):
             raise Http404
+
+        if order.status == Order.PAID:
+            return redirect('order_details', order_uuid=str(order.uuid))
+
+        context['order'] = order
 
         return context
 
@@ -109,12 +114,15 @@ class PayOrderByPaypal(TemplateView):
         except (Order.DoesNotExist, ValueError):
             raise Http404
 
+        if order.status == Order.PAID:
+            return redirect('order_details', order_uuid=str(order.uuid))
+
         if status not in ['success', 'failed'] and order.left_to_pay > 0:
             return self.pay(request, order)
 
         if status == 'success' and self.success(request, order):
             messages.success(request, _('Order successfully paid!'))
         else:
-            messages.warning(request, _('Something went wrong, try again later.'))
+            messages.error(request, _('Something went wrong, try again later.'))
 
         return redirect('order_details', order_uuid=str(order.uuid))
