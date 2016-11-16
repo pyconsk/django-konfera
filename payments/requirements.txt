@@ -1,1 +1,2 @@
 fiobank==1.2.0
+paypalrestsdk==1.11.7
