@@ -184,8 +184,7 @@ class OrderAdmin(admin.ModelAdmin):
     )
     fieldsets = (
         (_('Details'), {
-            'fields': ('uuid', 'variable_symbol', 'price', 'discount',
-            'to_pay', 'status', 'amount_paid'),
+            'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'to_pay', 'status', 'amount_paid'),
         }),
         (_('Modifications'), {
             'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'),
