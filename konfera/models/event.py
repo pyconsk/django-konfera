@@ -40,6 +40,7 @@ class Event(FromToModel):
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
     location = models.ForeignKey('Location', related_name='events')
+    organizer = models.ForeignKey('Organizer', related_name='organized_events', blank=True)
     sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
     footer_text = models.TextField(blank=True)
     analytics = models.TextField(blank=True)

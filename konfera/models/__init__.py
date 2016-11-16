@@ -10,3 +10,4 @@ from .talk import Talk
 from .ticket_type import TicketType
 from .ticket import Ticket
 from .schedule import Schedule
+from .organizer import Organizer
