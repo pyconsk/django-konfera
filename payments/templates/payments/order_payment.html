@@ -1,19 +1,120 @@
 {% extends 'konfera/base.html' %}
+{% load i18n %}
+{% load custom_filters %}
 
+{% block title %}
+  {% trans "Order Detail" %}
+{% endblock %}
 
 {% block content %}
-    <h2>Pay by bank transfer</h2>
-    <p> todo: bank account details</p>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="text-center">
+          <h2>{% trans "Pay the order" %} #{{ order.variable_symbol }}</h2>
+        </div>
+        <hr>
+        <div class="row">
+          {# todo: render is separately in future and display it only when it responses to signal #}
+          <div class="col-md-12">
+            <h3>{% trans "Pay by bank transfer" %}</h3>
+            <div class="alert alert-success" role="alert">
+              {% blocktrans with amount=order.to_pay|currency variable_symbol=order.variable_symbol %}
+                Transfer {{ amount }} to the account bellow and fill the variable symbol to {{ variable_symbol }}.
+              {% endblocktrans %}
+            </div>
 
+            <p>
+              <strong>{% trans "Account name:" %}</strong> SPy<br>
+              <strong>{% trans "Bank name:" %}</strong> Fio banka, a. s., pobočka zahraničnej banky<br>
+              <strong>{% trans "Bank account EUR (SK):" %}</strong> 2300870269/8330<br>
+              <strong>{% trans "Bank account EUR (CZ):" %}</strong> 2300870269/2010<br>
+              <strong>{% trans "Bank account EUR (IBAN / international):" %}</strong> SK48 8330 0000 0023 0087 0269<br>
+              <strong>{% trans "SWIFT/BIC:" %}</strong> FIOZSKBAXXX
+            </p>
 
-    <h2>Pay by paypal</h2>
+            <h3>{% trans "Pay by PayPal" %}</h3>
+            <div class="alert alert-warning" role="alert">
+              {% trans "<strong>Warning!</strong> We charge additional 2% for PayPal payments." %}
+            </div>
 
-    <p class="label-warning">
-        Be aware! we charge additional 2% for paypal payments.
-    </p>
-
-    <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-info">
-        Pay by paypal
-    </a>
-
+            <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-success">
+                {% trans "Pay by PayPal" %}
+            </a>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-xs-12 col-md-6">
+            <div class="panel panel-default">
+              <div class="panel-heading">{% trans "Order Details" %}</div>
+              <div class="panel-body">
+                {% if order.event %}
+                  <strong>{% trans "Event: " %}</strong>{{ order.event }}<br>
+                {% endif %}
+                {% if order.price %}
+                  <strong>{% trans "Price: " %}</strong>{{ order.price|currency }}<br>
+                {% endif %}
+                {% if order.amount_paid %}
+                  <strong>{% trans "Amount paid: " %}</strong>{{ order.amount_paid|currency }}<br>
+                {% endif %}
+                {% if order.discount %}
+                  <strong>{% trans "Discount: " %}</strong>{{ order.discount|currency }}<br>
+                {% endif %}
+                {% if order.status %}
+                  <strong>{% trans "Status: " %}</strong>
+                  <span class="label {{ status_label }}">
+                    {{ order.get_status_display }}
+                  </span><br>
+                {% endif %}
+                {% if order.purchase_date %}
+                  <strong>{% trans "Purchase date: " %}</strong>{{ order.purchase_date }}<br>
+                {% endif %}
+                {% if order.payment_date %}
+                  <strong>{% trans "Payment date: " %}</strong>{{ order.payment_date }}<br>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-12 col-md-6">
+            <div class="panel panel-info">
+              <div class="panel-heading">{% trans "Receipt" %}</div>
+              <div class="panel-body">
+                {% if order.receipt_of.title %}
+                  <strong>{% trans "Title: " %}</strong>{{ order.receipt_of.title }}<br>
+                {% endif %}
+                {% if order.receipt_of.amount %}
+                  <strong>{% trans "Amount: " %}</strong>{{ order.receipt_of.amount|currency }}<br>
+                {% endif %}
+                {% if order.receipt_of.street %}
+                  <strong>{% trans "Street: " %}</strong>{{ order.receipt_of.street }}<br>
+                {% endif %}
+                {% if order.receipt_of.street2 %}
+                  <strong>{% trans "Street2: " %}</strong>{{ order.receipt_of.street2 }}<br>
+                {% endif %}
+                {% if order.receipt_of.city %}
+                  <strong>{% trans "City: " %}</strong>{{ order.receipt_of.city }}<br>
+                {% endif %}
+                {% if order.receipt_of.postcode %}
+                  <strong>{% trans "Postal code: " %}</strong>{{ order.receipt_of.postcode }}<br>
+                {% endif %}
+                {% if order.receipt_of.state %}
+                  <strong>{% trans "State: " %}</strong>{{ order.receipt_of.state }}<br>
+                {% endif %}
+                {% if order.receipt_of.companyid %}
+                  <strong>{% trans "Company Id: " %}</strong>{{ order.receipt_of.companyid }}<br>
+                {% endif %}
+                {% if order.receipt_of.taxid %}
+                  <strong>{% trans "TAX Id: " %}</strong>{{ order.receipt_of.taxid }}<br>
+                {% endif %}
+                {% if order.receipt_of.vatid %}
+                  <strong>{% trans "VAT Id: " %}</strong>{{ order.receipt_of.vatid }}<br>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
