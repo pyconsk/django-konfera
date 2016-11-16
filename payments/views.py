@@ -1,3 +1,4 @@
+from decimal import Decimal
 import logging
 import paypalrestsdk
 
@@ -49,6 +50,7 @@ class PaymentOptions(TemplateView):
 class PayOrderByPaypal(TemplateView):
 
     def pay(self, request, order):
+        paypal_additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
         payment = paypalrestsdk.Payment({
             "intent": "sale",
             "payer": {"payment_method": "paypal"},
@@ -59,7 +61,7 @@ class PayOrderByPaypal(TemplateView):
             "transactions": [
                 {
                     "amount": {
-                        "total": str(order.to_pay),  # todo: increase by 2% or so
+                        "total": str(order.left_to_pay + paypal_additional_charge),
                         "currency": settings.PAYPAL_CURRENCY,
                     },
                     "description": _("Payment for order with variable symbol: {vs}".format(vs=order.variable_symbol))
@@ -79,7 +81,8 @@ class PayOrderByPaypal(TemplateView):
             return redirect(approval_url)
         else:
             logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(order=order.pk, err=payment.error))
-            raise AssertionError  # todo: show an error message instead?
+            messages.error(request, _('Something went wrong, try again later.'))
+            return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
 
     def success(self, request, order):
         payment_id = request.session.get('paypal_payment_id')

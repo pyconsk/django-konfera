@@ -19,7 +19,7 @@
           <div class="col-md-12">
             <h3>{% trans "Pay by bank transfer" %}</h3>
             <div class="alert alert-success" role="alert">
-              {% blocktrans with amount=order.to_pay|currency variable_symbol=order.variable_symbol %}
+              {% blocktrans with amount=order.left_to_pay|currency variable_symbol=order.variable_symbol %}
                 Transfer {{ amount }} to the account bellow and fill the variable symbol to {{ variable_symbol }}.
               {% endblocktrans %}
             </div>
