@@ -58,16 +58,15 @@ class Ticket(KonferaModel):
 
     def save(self, *args, **kwargs):
         self.clean()
-        recalculate_tickets = False
+        recalculate_tickets = True
 
         if not hasattr(self, 'order'):
+            recalculate_tickets = False
             discount = self.discount_calculator()
             order = Order(price=self.type.price, discount=discount, status=Order.AWAITING,
                           purchase_date=timezone.now())
             order.save()
             self.order = order
-        else:
-            recalculate_tickets = True
 
         super(Ticket, self).save(*args, **kwargs)
 
