@@ -90,7 +90,8 @@ def _process_payment(order, payment):
         date=payment['date'],
         executor=payment['executor'],
         currency=payment['currency'],
-        comment=payment['comment']
+        comment=payment['comment'],
+        method=payment.get('payment_method', 'fiobank-transfer'),
     )
 
 

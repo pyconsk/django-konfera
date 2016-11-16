@@ -84,7 +84,7 @@ class PayOrderByPaypal(TemplateView):
         from .utils import _process_payment
 
         payment_dict = {
-            'payment_method': 'paypal',  # todo: save it to DB!
+            'payment_method': 'paypal',
             'amount': payment['transactions'][0]['amount']['total'],
             'currency': payment['transactions'][0]['amount']['currency'],
             'transaction_id': payment['id'],

@@ -10,3 +10,4 @@ class ProcessedTransaction(KonferaModel):
     currency = models.CharField(max_length=10, blank=True)
     executor = models.CharField(max_length=100, blank=True)
     comment = models.TextField(blank=True)
+    method = models.CharField(max_length=100, default='unknown')
