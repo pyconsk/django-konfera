@@ -17,9 +17,9 @@ logger = logging.getLogger(__name__)
 
 
 paypalrestsdk.configure({
-  "mode": settings.PAYPAL_MODE,
-  "client_id": settings.PAYPAL_CLIENT_ID,
-  "client_secret": settings.PAYPAL_CLIENT_SECRET,
+    "mode": settings.PAYPAL_MODE,
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET,
 })
 
 
@@ -80,7 +80,8 @@ class PayOrderByPaypal(TemplateView):
 
             return redirect(approval_url)
         else:
-            logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(order=order.pk, err=payment.error))
+            logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(
+                order=order.pk, err=payment.error))
             messages.error(request, _('Something went wrong, try again later.'))
             return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
 
@@ -91,7 +92,8 @@ class PayOrderByPaypal(TemplateView):
         payer_id = payment['payer']['payer_info']['payer_id']
 
         if not payment.execute({"payer_id": payer_id}):
-            logger.error("Payment for order order(pk={order}) couldn't be paid! Error: {err}".format(order=order.pk, err=payment.error))
+            logger.error("Payment for order order(pk={order}) couldn't be paid! Error: {err}".format(
+                order=order.pk, err=payment.error))
             return False
 
         from .utils import _process_payment
