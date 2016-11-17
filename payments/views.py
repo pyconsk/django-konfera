@@ -130,8 +130,6 @@ class PayOrderByPaypal(TemplateView):
         return True
 
     def get(self, request, *args, **kwargs):
-        status = request.GET.get('status')
-
         try:
             order = Order.objects.get(uuid=kwargs['order_uuid'])
         except (Order.DoesNotExist, ValueError):
@@ -140,7 +138,9 @@ class PayOrderByPaypal(TemplateView):
         if order.status == Order.PAID:
             return redirect('order_details', order_uuid=str(order.uuid))
 
-        if status not in ['success', 'failed'] and order.left_to_pay > 0:
+        status = request.GET.get('status')
+
+        if status not in ['success', 'failed']:
             return self.pay(request, order)
 
         if status == 'success' and self.success(request, order):
