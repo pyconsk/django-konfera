@@ -10,7 +10,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('konfera', '0008_auto_20161113_1609'),
+        ('konfera', '0009_auto_20161116_2122'),
     ]
 
     operations = [
