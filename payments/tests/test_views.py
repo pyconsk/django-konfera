@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from django.http import HttpResponse
 from django.test import TestCase
-from django.shortcuts import reverse
+from django.urls import reverse
 
 from konfera.models import Order
 from payments.views import PayOrderByPaypal
