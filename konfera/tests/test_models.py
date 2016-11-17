@@ -409,3 +409,14 @@ class TicketTypeTest(TestCase):
         tt.date_from = now - datetime.timedelta(days=3)
         tt.date_to = now - datetime.timedelta(days=1)
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.EXPIRED])
+
+
+class OrganizerTest(TestCase):
+
+    def setUp(self):
+        self.first_organizer = models.Organizer(title='Mysterious Organizer', street='1 Up street', city='Big City',
+                                                company_id='123',
+                                                about_us="World famous yet unknown conference organizer.")
+
+    def testSave(self):
+        self.assertTrue(self.first_organizer.save)
