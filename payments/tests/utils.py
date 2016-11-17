@@ -1,5 +1,9 @@
 from functools import wraps
-from importlib import reload
+
+try:
+    from importlib import reload
+except ImportError:
+    from imp import reload
 
 from django.test import override_settings
 
