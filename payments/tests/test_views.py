@@ -3,11 +3,17 @@ from unittest.mock import patch
 
 from django.http import HttpResponse
 from django.test import TestCase
-from django.urls import reverse
 
 from konfera.models import Order
 from payments.views import PayOrderByPaypal
 from payments.tests.utils import custom_override_settings
+
+from django import VERSION
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 class TestPaymentOptions(TestCase):
