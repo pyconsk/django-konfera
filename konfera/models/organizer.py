@@ -20,7 +20,5 @@ class Organizer(KonferaModel):
     vat_id = models.CharField(max_length=32)
     about_us = models.TextField(blank=True)
 
-# make a migration and form for admin to be able to modify all of this information.
-
     def __str__(self):
         return self.title
