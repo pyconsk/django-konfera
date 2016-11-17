@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from konfera.models import Order
 
 from payments import settings
+from payments.utils import _process_payment
 
 
 logger = logging.getLogger(__name__)
@@ -49,8 +50,23 @@ class PaymentOptions(TemplateView):
 
 class PayOrderByPaypal(TemplateView):
 
+    @staticmethod
+    def get_paypal_price(order):
+        """ Calculate the total price for order when paid by paypal """
+        additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
+        return order.left_to_pay + additional_charge
+
+    @staticmethod
+    def get_paypal_url(payment):
+        """ Return the PayPal URL where the user can pay for the order """
+        for link in payment.links:
+            if link.method == 'REDIRECT':
+                return str(link.href)
+
+        raise Exception("REDIRECT url not found when creating payment {id}".format(id=payment.id))
+
     def pay(self, request, order):
-        paypal_additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
+        """ Create the payment and redirect to PayPal or back to the order with an error message """
         payment = paypalrestsdk.Payment({
             "intent": "sale",
             "payer": {"payment_method": "paypal"},
@@ -61,7 +77,7 @@ class PayOrderByPaypal(TemplateView):
             "transactions": [
                 {
                     "amount": {
-                        "total": str(order.left_to_pay + paypal_additional_charge),
+                        "total": str(PayOrderByPaypal.get_paypal_price(order)),
                         "currency": settings.PAYPAL_CURRENCY,
                     },
                     "description": _("Payment for order with variable symbol: {vs}".format(vs=order.variable_symbol))
@@ -70,22 +86,21 @@ class PayOrderByPaypal(TemplateView):
         })
 
         if payment.create():
-            approval_url = None
-            for link in payment.links:
-                if link.method == 'REDIRECT':
-                    approval_url = str(link.href)
-                    break
-
             request.session['paypal_payment_id'] = payment['id']
 
-            return redirect(approval_url)
-        else:
-            logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(
-                order=order.pk, err=payment.error))
-            messages.error(request, _('Something went wrong, try again later.'))
-            return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
+            try:
+                return redirect(PayOrderByPaypal.get_paypal_url(payment))
+            except Exception as e:
+                logger.error(str(e))
+
+        logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(
+            order=order.pk, err=payment.error))
+        messages.error(request, _('Something went wrong, try again later.'))
+
+        return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
 
     def success(self, request, order):
+        """ If the payment was successful process it, otherwise show an error and log what went wrong """
         payment_id = request.session.get('paypal_payment_id')
         payment = paypalrestsdk.Payment.find(payment_id)
 
@@ -95,8 +110,6 @@ class PayOrderByPaypal(TemplateView):
             logger.error("Payment for order order(pk={order}) couldn't be paid! Error: {err}".format(
                 order=order.pk, err=payment.error))
             return False
-
-        from .utils import _process_payment
 
         payment_dict = {
             'payment_method': 'paypal',
