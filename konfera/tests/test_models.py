@@ -418,5 +418,6 @@ class OrganizerTest(TestCase):
                                                 company_id='123',
                                                 about_us="World famous yet unknown conference organizer.")
 
-    def testSave(self):
+    def test_save(self):
         self.assertTrue(self.first_organizer.save)
+        self.assertEquals(str(self.first_organizer), 'Mysterious Organizer')
