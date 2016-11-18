@@ -1,4 +1,3 @@
-from datetime import datetime
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -40,7 +39,8 @@ class Event(FromToModel):
     event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
     location = models.ForeignKey('Location', related_name='events')
-    organizer = models.ForeignKey('Organizer', related_name='organized_events', null=True)
+    organizer = models.ForeignKey('Organizer', on_delete=models.deletion.SET_NULL,
+                                  related_name='organized_events', null=True, )
     sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
     footer_text = models.TextField(blank=True)
     analytics = models.TextField(blank=True)
