@@ -417,7 +417,9 @@ class OrganizerTest(TestCase):
         self.first_organizer = models.Organizer(title='Mysterious Organizer', street='1 Up street', city='Big City',
                                                 company_id='123',
                                                 about_us="World famous yet unknown conference organizer.")
+        self.noname_organizer = models.Organizer(street='2 Random', city='Small City')
 
     def test_save(self):
-        self.assertTrue(self.first_organizer.save)
+        self.assertEquals(self.first_organizer.save(), None)
         self.assertEquals(str(self.first_organizer), 'Mysterious Organizer')
+        self.assertRaises(ValidationError, self.noname_organizer.save())
