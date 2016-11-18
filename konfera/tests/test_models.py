@@ -425,4 +425,3 @@ class OrganizerTest(TestCase):
 
     def test_title(self):
         self.assertEquals(str(self.first_organizer), 'Mysterious Organizer')
-
