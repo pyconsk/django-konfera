@@ -31,14 +31,16 @@ class Schedule(KonferaModel):
         if self.talk and self.talk.status != self.talk.APPROVED:
             raise ValidationError({'talk': _('You cannot schedule unapproved talks.')})
 
+        # Make sure date and time is within the event's range
+        if self.event.date_from > self.start or self.start > self.event.date_to:
+            raise ValidationError({'start': _('Schedule start have to be within the event\'s range.')})
+
         # Event is related to location and location has room, make sure selected room belongs to Event's location
         if self.room:
             try:
                 Room.objects.get(location=self.event.location, id=self.room.id)
             except ObjectDoesNotExist:
                 raise ValidationError({'room': _('The room does not belong to event location rooms.')})
-
-        # Make sure date and time is within the event's range
 
         # Make sure system does not allow store two events at the same
         # time in the same room, eg. schedule datetime + duration in room is unique.
