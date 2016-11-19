@@ -1,3 +1,5 @@
+import datetime
+
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
@@ -36,27 +38,25 @@ class Schedule(KonferaModel):
             raise ValidationError({'start': _('Schedule start have to be within the event\'s range.')})
 
         # Event is related to location and location has room, make sure selected room belongs to Event's location
-        if self.room:
-            try:
-                Room.objects.get(location=self.event.location, id=self.room.id)
-            except ObjectDoesNotExist:
-                raise ValidationError({'room': _('The room does not belong to event location rooms.')})
+        if self.room and not Room.objects.filter(location=self.event.location, id=self.room.id).exists():
+            raise ValidationError({'room': _('The room does not belong to event location rooms.')})
 
         # Make sure system does not allow store two events at the same
         # time in the same room, eg. schedule datetime + duration in room is unique.
-        schedules = Schedule.objects.filter(start=self.start, duration=self.duration, room=self.room)
+        schedules = Schedule.objects.filter(start__gte=self.start,
+                                            start__lte=self.start + datetime.timedelta(minutes=self.duration),
+                                            room=self.room)
 
         if schedules.exists():
             # this means that there are events with the same schedule
-            raise ValidationError(_('The events in schedule cannot overlap if they are in the same room.'))
+            raise ValidationError({'start': _('The events in schedule cannot overlap if they are in the same room.')})
 
         return super().clean(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        self.full_clean()
-
         if self.talk:
             # If talk is selected duration is copied from talk
             self.duration = self.talk.duration
 
+        self.full_clean()
         return super().save(*args, **kwargs)
