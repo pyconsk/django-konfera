@@ -1,0 +1,37 @@
+{% extends 'konfera/base.html' %}
+{% load i18n %}
+
+
+{% block title %}
+    {{ event }} | {% trans "Organizer" %}
+{% endblock %}
+
+
+{% block content %}
+    <h2>{{ event }}</h2>
+    <div>
+        <h3>{% trans "About us" %}</h3>
+        <p>
+            {{ organizer.about_us }}
+        </p>
+    </div>
+    <div>
+        <h3>{% trans "Address" %}</h3>
+        <p>
+            {{ organizer.street }}
+            {% if organizer.street2 %}
+                {{ organizer.street2 }}
+            {% endif %}
+            {{ organizer.city }}
+            {{ organizer.country }}
+        </p>
+    </div>
+    <div>
+        <h3>{% trans "Legal details" %}</h3>
+        <p>
+            {{ organizer.company_id }}
+            {{ organizer.tax_id }}
+            {{ organizer.vat_id }}
+        </p>
+    </div>
+{% endblock %}
