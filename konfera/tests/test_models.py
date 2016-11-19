@@ -197,6 +197,14 @@ class ScheduleTest(TestCase):
         entry.duration = 300
         self.assertTrue(entry.full_clean)
 
+    def test_talk_status(self):
+        speaker = models.Speaker(first_name="Test", last_name="Scheduler")
+        talk = models.Talk(title="Test Talk schedule", primary_speaker=speaker, status=Talk.DRAFT)
+        entry = models.Schedule(start=timezone.now(), duration=0, talk=talk)
+        self.assertRaises(ValidationError, entry.full_clean)
+        talk.status = Talk.APPROVED
+        self.assertTrue(entry.full_clean)
+
 
 class SpeakerTest(TestCase):
 

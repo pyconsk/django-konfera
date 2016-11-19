@@ -28,15 +28,15 @@ class Schedule(KonferaModel):
 
     def clean(self, *args, **kwargs):
         # Only approved talk can be scheduled
-        if self.talk.status != self.talk.APPROVED:
+        if self.talk and self.talk.status != self.talk.APPROVED:
             raise ValidationError({'talk': _('You cannot schedule unapproved talks.')})
 
-        # Event is related to location and location has room,
-        # make sure selected room in schedule belongs to Event's location
-        try:
-            Room.objects.get(location=self.event.location, id=self.room.id)
-        except ObjectDoesNotExist:
-            raise ValidationError({'room': _('The room does not belong to event location rooms.')})
+        # Event is related to location and location has room, make sure selected room belongs to Event's location
+        if self.room:
+            try:
+                Room.objects.get(location=self.event.location, id=self.room.id)
+            except ObjectDoesNotExist:
+                raise ValidationError({'room': _('The room does not belong to event location rooms.')})
 
         # Make sure date and time is within the event's range
 
