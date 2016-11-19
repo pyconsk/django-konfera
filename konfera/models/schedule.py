@@ -1,10 +1,10 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.db import models
-from django.db.models.loading import get_model
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import KonferaModel
+from konfera.models.room import Room
 
 
 class Schedule(KonferaModel):
@@ -20,7 +20,7 @@ class Schedule(KonferaModel):
             MaxValueValidator(300),
             MinValueValidator(0)
         ],
-        help_text=_('Duration in minutes.'))
+        help_text=_('Duration in minutes. If talk is selected, value will be generated.'))
     room = models.ForeignKey('Room', blank=True, null=True, related_name='scheduled_rooms')
 
     def __str__(self):
@@ -28,32 +28,33 @@ class Schedule(KonferaModel):
 
     def clean(self, *args, **kwargs):
         # Only approved talk can be scheduled
-        if self.talk.status != 'approved':
-            raise ValidationError(_('You cannot schedule unapproved talks'))
+        if self.talk.status != self.talk.APPROVED:
+            raise ValidationError({'talk': _('You cannot schedule unapproved talks.')})
 
         # Event is related to location and location has room,
         # make sure selected room in schedule belongs to Event's location
-        room = get_model('Room').objects.filter(location=event.location)
-        if location_room.first() != self.room:
-            raise ValidationError(_('The room that you have chosen is '
-                'not part of the scheduled room'))
+        try:
+            Room.objects.get(location=self.event.location, id=self.room.id)
+        except ObjectDoesNotExist:
+            raise ValidationError({'room': _('The room does not belong to event location rooms.')})
 
         # Make sure date and time is within the event's range
 
         # Make sure system does not allow store two events at the same
         # time in the same room, eg. schedule datetime + duration in room is unique.
-        schedules = get_model('Schedule').objects.filter(
-            start=self.start, duration=self.duration, room=self.room)
+        schedules = Schedule.objects.filter(start=self.start, duration=self.duration, room=self.room)
+
         if schedules.exists():
             # this means that there are events with the same schedule
-            raise ValidationError(_('Another event has the same schedule.'))
+            raise ValidationError(_('The events in schedule cannot overlap if they are in the same room.'))
 
-        return super(Schedule, self).clean(*args, **kwargs)
+        return super().clean(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        if not self.id:
+
+        if self.talk:
             # If talk is selected duration is copied from talk
             self.duration = self.talk.duration
 
-        return super(Schedule, self).save(*args, **kwargs)
+        return super().save(*args, **kwargs)
