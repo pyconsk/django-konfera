@@ -200,3 +200,11 @@ def event_order_detail(request, order_uuid):
     else:
         context['status_label'] = 'label-warning'
     return render(request=request, template_name='konfera/order_details.html', context=context)
+
+
+def event_about_us(request, slug):
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    if not event.organizer:
+        raise Http404(_('Organizer has not been set for event %s' % event.title))
+    context = {'event': event, 'organizer': event.organizer}
+    return render(request=request, template_name='konfera/event/event_organizer.html', context=context)

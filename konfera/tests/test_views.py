@@ -2,7 +2,7 @@ from django import VERSION
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.models import Event, Location, Talk, TicketType, Ticket
+from konfera.models import Event, Location, Organizer, Talk, TicketType, Ticket
 from konfera.models.order import Order
 
 if VERSION[1] in (8, 9):
@@ -122,6 +122,33 @@ class TestEventList(TestCase):
 
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+
+
+class TestEventOrganizer(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(title='FIIT', street='Ilkovicova', city='Bratislava', capacity=400)
+
+    def test_event_organizer(self):
+        organizer = Organizer.objects.create(title='Famous Organizer', street='3 Mysterious Lane', city='Far Away',
+                                             about_us='We organize things.')
+        Event.objects.create(title='Great event', slug='great_event', description='Great event', status='published',
+                             event_type='conference', location=self.location, organizer=organizer,
+                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
+        response = self.client.get('/great_event/about_us/')
+
+        # Check that the response is 200 OK.
+        self.assertEqual(response.status_code, 200)
+        # Check if about us text is present
+        self.assertIn('We organize things.', str(response.content))
+
+    def test_event_no_organizer(self):
+        Event.objects.create(title='No Organizer Event', slug='no_org_event', description='No organizer event',
+                             status='published', event_type='conference', location=self.location,
+                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
+        response = self.client.get('/no_org_event/about_us/')
+
+        # Check that the response is 404 - organizer not set.
+        self.assertEqual(response.status_code, 404)
 
 
 class TestOrderDetail(TestCase):
