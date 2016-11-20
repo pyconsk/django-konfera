@@ -1,17 +1,22 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.core.mail import EmailMultiAlternatives
+from django.urls import reverse
 
 from konfera.models.event import Event
 from konfera.models.ticket import Ticket
 from konfera.models.ticket_type import TicketType
 from konfera.register.forms import RegistrationForm
+from konfera import settings
 
 
 def _register_ticket(request, event, ticket_type):
     context = dict()
+
     if ticket_type._get_current_status() != TicketType.ACTIVE:
         messages.error(request, _('This ticket type is not available'))
+
         return redirect('event_details', event.slug)
 
     description_required = ticket_type in (TicketType.VOLUNTEER, TicketType.PRESS, TicketType.AID)
@@ -23,7 +28,30 @@ def _register_ticket(request, event, ticket_type):
         new_ticket.type = ticket_type
         new_ticket.save()
 
-        messages.success(request, _('Thanks for registering...'))
+        if settings.REGISTER_EMAIL_NOTIFY:
+            messages.success(request, _('Thank you for ordering ticket. You will receive confirmation email soon.'))
+
+            event = new_ticket.type.event
+            order_url = request.build_absolute_uri(reverse('order_details', args=[new_ticket.order.uuid]))
+            event_url = request.build_absolute_uri(reverse('event_details', args=[event.slug]))
+            subject = 'Your ticket for {event}.'.format(event=new_ticket.type.event.title)
+            text_content = settings.REGISTER_EMAIL.format(first_name=new_ticket.first_name,
+                                                          last_name=new_ticket.last_name,
+                                                          event=event.title,
+                                                          order_url=order_url,
+                                                          event_url=event_url)
+            html_content = settings.REGISTER_EMAIL_HTML.format(first_name=new_ticket.first_name,
+                                                               last_name=new_ticket.last_name,
+                                                               event=event.title,
+                                                               order_url=order_url,
+                                                               event_url=event_url)
+            msg = EmailMultiAlternatives(subject, text_content, to=[new_ticket.email], bcc=settings.REGISTER_EMAIL_BCC)
+            msg.attach_alternative(html_content, "text/html")
+            msg.send()
+
+        else:
+            messages.success(request, _('Thank you for ordering ticket.'))
+
 
         return redirect('order_details', new_ticket.order.uuid)
 
