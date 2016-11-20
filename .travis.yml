@@ -7,9 +7,9 @@ python:
   - "3.4"
 
 env:
-  - DJANGO_VERSION=1.8.15
-  - DJANGO_VERSION=1.9.10
-  - DJANGO_VERSION=1.10.2
+  - DJANGO_VERSION=1.8.16
+  - DJANGO_VERSION=1.9.11
+  - DJANGO_VERSION=1.10.3
 
 matrix:
   include:
