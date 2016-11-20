@@ -204,6 +204,7 @@ def event_order_detail(request, order_uuid):
 
 def event_about_us(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
-    organizer = get_object_or_404(event.organizer)
-    context = {'event': event, 'organizer': organizer}
-    return render(request=request, template_name='konfera/event_organizer.html', context=context)
+    if not event.organizer:
+        raise Http404(_('Organizer has not been set for event %s' % event.title))
+    context = {'event': event, 'organizer': event.organizer}
+    return render(request=request, template_name='konfera/event/event_organizer.html', context=context)
