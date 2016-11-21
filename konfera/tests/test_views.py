@@ -14,7 +14,7 @@ else:
 class TestEventRedirect(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
         )
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
@@ -259,10 +259,10 @@ class TestEventVenue(TestCase):
     def setUp(self):
         self.html_code = '<strong>test</strong>'
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
         )
         self.location_with_venue = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
             get_here=self.html_code,
         )
 
