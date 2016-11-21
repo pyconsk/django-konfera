@@ -1,14 +1,19 @@
+from django import VERSION
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import EmailMultiAlternatives
-from django.urls import reverse
 
 from konfera.models.event import Event
 from konfera.models.ticket import Ticket
 from konfera.models.ticket_type import TicketType
 from konfera.register.forms import RegistrationForm
 from konfera import settings
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 def _register_ticket(request, event, ticket_type):
