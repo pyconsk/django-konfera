@@ -3,6 +3,7 @@ import uuid
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from konfera.models.countries import COUNTRIES
 
 
 class KonferaModel(models.Model):
@@ -31,3 +32,17 @@ class FromToModel(KonferaModel):
             }
 
             raise ValidationError({'date_from': msg, 'date_to': msg})
+
+
+class AddressModel(KonferaModel):
+    COUNTRY_DEFAULT = 'SK'
+
+    class Meta:
+        abstract = True
+
+    street = models.CharField(max_length=128, blank=True)
+    street2 = models.CharField(max_length=128, blank=True)
+    city = models.CharField(max_length=128, blank=True)
+    postcode = models.CharField(max_length=12, blank=True)
+    state = models.CharField(max_length=128, blank=True)
+    country = models.CharField(choices=COUNTRIES, max_length=2, default=COUNTRY_DEFAULT)
