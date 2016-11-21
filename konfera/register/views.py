@@ -34,7 +34,7 @@ def _register_ticket(request, event, ticket_type):
             event = new_ticket.type.event
             order_url = request.build_absolute_uri(reverse('order_details', args=[new_ticket.order.uuid]))
             event_url = request.build_absolute_uri(reverse('event_details', args=[event.slug]))
-            subject = 'Your ticket for {event}.'.format(event=new_ticket.type.event.title)
+            subject = _('Your ticket for {event}.'.format(event=event.title))
             text_content = settings.REGISTER_EMAIL.format(first_name=new_ticket.first_name,
                                                           last_name=new_ticket.last_name,
                                                           event=event.title,
@@ -51,7 +51,6 @@ def _register_ticket(request, event, ticket_type):
 
         else:
             messages.success(request, _('Thank you for ordering ticket.'))
-
 
         return redirect('order_details', new_ticket.order.uuid)
 
