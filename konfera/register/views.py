@@ -6,10 +6,12 @@ from konfera.models.event import Event
 from konfera.models.ticket import Ticket
 from konfera.models.ticket_type import TicketType
 from konfera.register.forms import RegistrationForm
+from konfera import settings
 
 
 def _register_ticket(request, event, ticket_type):
     context = dict()
+
     if ticket_type._get_current_status() != TicketType.ACTIVE:
         messages.error(request, _('This ticket type is not available'))
         return redirect('event_details', event.slug)
@@ -25,7 +27,7 @@ def _register_ticket(request, event, ticket_type):
 
         messages.success(request, _('Thanks for registering...'))
 
-        return redirect('order_details', new_ticket.order.uuid)
+        return redirect(settings.ORDER_REDIRECT, new_ticket.order.uuid)
 
     context['form'] = form
     context['type'] = ticket_type.attendee_type
