@@ -146,7 +146,7 @@ class LocationAdmin(admin.ModelAdmin):
             'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country', 'get_here')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -304,7 +304,7 @@ class OrganizerAdmin(admin.ModelAdmin):
             'fields': ('title', 'about_us'),
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'city', 'country',),
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country',),
         }),
         (_('Legal details'), {
             'fields': ('company_id', 'tax_id', 'vat_id',),
