@@ -19,13 +19,16 @@ class EventAdmin(admin.ModelAdmin):
     readonly_fields = ('uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'slug', 'description'),
+            'fields': ('title', 'slug', 'organizer', 'description', 'contact_email'),
         }),
         (_('Dates'), {
             'fields': ('date_from', 'date_to', 'cfp_end'),
         }),
         (_('Details'), {
-            'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),
+            'fields': ('uuid', 'event_type', 'status', 'location', 'cfp_allowed', 'footer_text', 'analytics'),
+        }),
+        (_('Code of Conduct'), {
+            'fields': ('coc', 'coc_phone', 'coc_phone2'),
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -146,7 +149,7 @@ class LocationAdmin(admin.ModelAdmin):
             'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country', 'get_here')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -304,7 +307,7 @@ class OrganizerAdmin(admin.ModelAdmin):
             'fields': ('title', 'about_us'),
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'city', 'country',),
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country',),
         }),
         (_('Legal details'), {
             'fields': ('company_id', 'tax_id', 'vat_id',),

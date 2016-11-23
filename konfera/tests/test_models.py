@@ -248,7 +248,7 @@ class TicketTest(TestCase):
     def setUp(self):
         time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
-                                   state='test_state', capacity=20)
+                                   country='test_country', capacity=20)
         location.save()
         event = models.Event(title='test_event', description='test', event_type='Event.meetup',
                              status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
