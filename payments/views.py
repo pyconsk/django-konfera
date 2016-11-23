@@ -44,6 +44,7 @@ class PaymentOptions(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['order'] = self.get_order(kwargs['order_uuid'])
+        context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
 
         return context
 
@@ -65,7 +66,8 @@ class PayOrderByPaypal(TemplateView):
 
         raise Exception("REDIRECT url not found when creating payment {id}".format(id=payment.id))
 
-    def pay(self, request, order):
+    @staticmethod
+    def pay(request, order):
         """ Create the payment and redirect to PayPal or back to the order with an error message """
         payment = paypalrestsdk.Payment({
             "intent": "sale",
@@ -80,7 +82,8 @@ class PayOrderByPaypal(TemplateView):
                         "total": str(PayOrderByPaypal.get_paypal_price(order)),
                         "currency": settings.PAYPAL_CURRENCY,
                     },
-                    "description": _("Payment for order with variable symbol: {vs}".format(vs=order.variable_symbol))
+                    "description": _("Payment for {event} with variable symbol: {vs}".format(
+                        event=order.event, vs=order.variable_symbol))
                 },
             ]
         })
@@ -99,7 +102,8 @@ class PayOrderByPaypal(TemplateView):
 
         return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
 
-    def success(self, request, order):
+    @staticmethod
+    def success(request, order):
         """ If the payment was successful process it, otherwise show an error and log what went wrong """
         payment_id = request.session.get('paypal_payment_id')
         payment = paypalrestsdk.Payment.find(payment_id)
@@ -141,9 +145,9 @@ class PayOrderByPaypal(TemplateView):
         status = request.GET.get('status')
 
         if status not in ['success', 'failed']:
-            return self.pay(request, order)
+            return PayOrderByPaypal.pay(request, order)
 
-        if status == 'success' and self.success(request, order):
+        if status == 'success' and PayOrderByPaypal.success(request, order):
             messages.success(request, _('Order successfully paid!'))
         else:
             messages.error(request, _('Something went wrong, try again later.'))
