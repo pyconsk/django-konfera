@@ -2,7 +2,7 @@ from django import VERSION
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.models import Event, Location, Organizer, Talk, TicketType, Ticket
+from konfera.models import Event, Location, Organizer, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
 
 if VERSION[1] in (8, 9):
@@ -122,6 +122,24 @@ class TestEventList(TestCase):
 
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+
+
+class TestMeetup(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
+        )
+        Event.objects.create(
+            title='Meetup', slug='meetup', description='Fabulous meetup', event_type='meetup', status='published',
+            location=self.location, date_from='2016-01-01 17:00:00+01:00', date_to='2016-01-01 19:00:00+01:00',
+        )
+
+    def test_get_meetup(self):
+        response = self.client.get('/meetup/')
+        # Check that the response is 200 OK.
+        self.assertEqual(response.status_code, 200)
+        # Check if about us text is present
+        self.assertIn('Fabulous meetup', str(response.content))
 
 
 class TestEventOrganizer(TestCase):
@@ -291,3 +309,20 @@ class TestEventVenue(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/event_venue.html')
         self.assertTrue(self.html_code in response.content.decode('utf-8'))
+
+
+class TestSponsorsListView(TestCase):
+    def setUp(self):
+        location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,)
+        Event.objects.create(
+            title='Small Event', slug='small_event', description='Small event', event_type='conference',
+            status='published', date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            location=location,)
+        Sponsor.objects.create(title='Sponsor 1', type=1, about_us='Platinum Sponsor')
+        Sponsor.objects.create(title='Sponsor 2', type=2, about_us='Gold Sponsor')
+
+    def test_sponsors_list(self):
+        response = self.client.get('/small_event/sponsors/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/event_sponsors.html')
