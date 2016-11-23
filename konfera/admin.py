@@ -258,7 +258,7 @@ class TicketAdmin(admin.ModelAdmin):
             'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
         }),
         (_('Ticket info'), {
-            'fields': ('order', 'type', 'discount_code', 'status', 'description')
+            'fields': ('order', 'type', 'discount_code', 'status')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
