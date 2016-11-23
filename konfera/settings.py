@@ -17,3 +17,8 @@ TALK_DURATION = getattr(settings, 'TALK_DURATION',
 possible combinations: latest_conference (DEFAULT), latest_meetup, earliest_conference, earliest_meetup
 """
 LANDING_PAGE = getattr(settings, 'LANDING_PAGE', 'latest_conference')
+
+"""
+Specify url, where user will be redirected after registering the ticket.
+"""
+ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_details')
