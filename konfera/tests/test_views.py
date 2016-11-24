@@ -2,7 +2,7 @@ from django import VERSION
 from django.test import TestCase
 from django.utils.translation import ugettext_lazy as _
 
-from konfera.models import Event, Location, Organizer, Sponsor, Talk, TicketType, Ticket
+from konfera.models import Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
 
 if VERSION[1] in (8, 9):
@@ -315,14 +315,42 @@ class TestSponsorsListView(TestCase):
     def setUp(self):
         location = Location.objects.create(
             title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,)
-        Event.objects.create(
+        sponsor1 = Sponsor.objects.create(title='Sponsor 1', type=1, about_us='Platinum Sponsor')
+        sponsor2 = Sponsor.objects.create(title='Sponsor 2', type=2, about_us='Gold Sponsor')
+        evt = Event.objects.create(
             title='Small Event', slug='small_event', description='Small event', event_type='conference',
             status='published', date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
             location=location,)
-        Sponsor.objects.create(title='Sponsor 1', type=1, about_us='Platinum Sponsor')
-        Sponsor.objects.create(title='Sponsor 2', type=2, about_us='Gold Sponsor')
+        evt.sponsors.add(sponsor1)
+        evt.sponsors.add(sponsor2)
 
     def test_sponsors_list(self):
         response = self.client.get('/small_event/sponsors/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/event_sponsors.html')
+        self.assertIn('Sponsor 1', str(response.content))
+        self.assertIn('Sponsor 2', str(response.content))
+
+
+class TestSpeakersListView(TestCase):
+    def setUp(self):
+        location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,)
+        event = Event.objects.create(
+            title='Tiny Event', slug='tiny_event', description='Tiny event', event_type='conference',
+            status='published', date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
+            location=location,)
+        event.save()
+        speaker1 = Speaker.objects.create(first_name='Nice', last_name='Speaker', email='nice@example.com')
+        speaker2 = Speaker.objects.create(first_name='Talking', last_name='Speaker', email='talk@example.com')
+        Talk.objects.create(
+            title='Talk1', abstract='Talk 1', status=Talk.APPROVED, primary_speaker=speaker1, event=event)
+        Talk.objects.create(
+            title='Talk2', abstract='Talk 2', status=Talk.APPROVED, primary_speaker=speaker2, event=event)
+
+    def test_speakers_list(self):
+        response = self.client.get('/tiny_event/speakers/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/event_speakers.html')
+        self.assertIn('Nice Speaker', str(response.content))
+        self.assertIn('Talking Speaker', str(response.content))
