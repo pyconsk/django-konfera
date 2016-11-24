@@ -346,7 +346,7 @@ class TestSpeakersListView(TestCase):
         Talk.objects.create(
             title='Talk1', abstract='Talk 1', status=Talk.APPROVED, primary_speaker=speaker1, event=event)
         Talk.objects.create(
-            title='Talk1', abstract='Talk 1', status=Talk.APPROVED, primary_speaker=speaker2, event=event)
+            title='Talk2', abstract='Talk 2', status=Talk.APPROVED, primary_speaker=speaker2, event=event)
 
     def test_speakers_list(self):
         response = self.client.get('/tiny_event/speakers/')
