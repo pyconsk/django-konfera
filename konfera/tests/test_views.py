@@ -197,7 +197,8 @@ class TestOrderDetail(TestCase):
 
         # Register for event as volunteer
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com'
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com',
+            'description': 'I want to help.',
         })
 
         # Check that the response is 302 FOUND.

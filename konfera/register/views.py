@@ -25,7 +25,7 @@ def _register_ticket(request, event, ticket_type):
 
         return redirect('event_details', event.slug)
 
-    description_required = ticket_type in (TicketType.VOLUNTEER, TicketType.PRESS, TicketType.AID)
+    description_required = ticket_type.attendee_type in (TicketType.VOLUNTEER, TicketType.PRESS, TicketType.AID)
     form = RegistrationForm(request.POST or None, description_required=description_required)
 
     if form.is_valid():
@@ -68,31 +68,27 @@ def _register_ticket(request, event, ticket_type):
     return render(request, 'konfera/registration_form.html', context=context)
 
 
-def register_ticket(request, slug, ticket_uuid):
+def register_ticket_uuid(request, slug, ticket_uuid):
     event = get_object_or_404(Event, slug=slug)
     ticket_type = get_object_or_404(TicketType, event=event, uuid=ticket_uuid)
 
     return _register_ticket(request, event, ticket_type)
 
 
-def _register_ticket_attendee(request, slug, attendee_type):
+def _pre_process_ticket_registration(request, slug, attendee_type):
     event = get_object_or_404(Event, slug=slug)
-    ticket_types = TicketType.objects.filter(event=event, attendee_type=attendee_type)
+    ticket_type = get_object_or_404(TicketType, event=event, attendee_type=attendee_type)
 
-    if ticket_types and len(ticket_types) == 1 and ticket_types[0].status == TicketType.STATUSES[TicketType.ACTIVE]:
-        return _register_ticket(request, event, ticket_types[0])
-    else:
-        messages.warning(request, _('The ticket type is not available!'))
-        return redirect('event_tickets', slug)
+    return _register_ticket(request, event, ticket_type)
 
 
 def register_ticket_volunteer(request, slug):
-    return _register_ticket_attendee(request, slug, TicketType.VOLUNTEER)
+    return _pre_process_ticket_registration(request, slug, TicketType.VOLUNTEER)
 
 
 def register_ticket_press(request, slug):
-    return _register_ticket_attendee(request, slug, TicketType.PRESS)
+    return _pre_process_ticket_registration(request, slug, TicketType.PRESS)
 
 
 def register_ticket_aid(request, slug):
-    return _register_ticket_attendee(request, slug, TicketType.AID)
+    return _pre_process_ticket_registration(request, slug, TicketType.AID)
