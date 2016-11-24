@@ -29,7 +29,7 @@ def event_venue_view(request, slug):
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_venue.html', context=context)
+    return render(request=request, template_name='konfera/event/venue.html', context=context)
 
 
 def event_sponsors_list_view(request, slug):
@@ -41,7 +41,7 @@ def event_sponsors_list_view(request, slug):
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_sponsors.html', context=context)
+    return render(request=request, template_name='konfera/event/sponsors.html', context=context)
 
 
 def event_speakers_list_view(request, slug):
@@ -53,7 +53,7 @@ def event_speakers_list_view(request, slug):
 
     set_event_ga_to_context(event, context)
 
-    return render(request=request, template_name='konfera/event_speakers.html', context=context)
+    return render(request=request, template_name='konfera/event/speakers.html', context=context)
 
 
 def event_details_view(request, slug):
@@ -144,7 +144,7 @@ def schedule_redirect(request, slug):
 
 class ScheduleView(DetailView):
     model = Event
-    template_name = 'konfera/event_schedule.html'
+    template_name = 'konfera/event/schedule.html'
 
     def get_context_data(self, **kwargs):
         event = kwargs['object']
@@ -171,6 +171,8 @@ def event_public_tickets(request, slug):
 
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context['event'] = event
+    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
+
     available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
         .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
         .exclude(attendee_type=TicketType.PRESS)
@@ -186,7 +188,7 @@ def event_public_tickets(request, slug):
         available_tickets = paginator.page(paginator.num_pages)
 
     context['tickets'] = available_tickets
-    return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
+    return render(request=request, template_name='konfera/event/public_tickets.html', context=context)
 
 
 def event_order_detail(request, order_uuid):
