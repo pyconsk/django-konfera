@@ -1,7 +1,10 @@
 {% extends 'konfera/base.html' %}{% load i18n %}
 
-{% block content %}
+{% block content_top %}
     <h2>{% blocktrans %} Registration of a {{ type }} {% endblocktrans %}</h2>
+{% endblock %}
+
+{% block content_details %}
     <form method="post" action="">
         {% csrf_token %}
         {{ form.as_p }}
