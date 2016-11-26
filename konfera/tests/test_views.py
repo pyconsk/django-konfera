@@ -131,9 +131,6 @@ class TestEventList(TestCase):
 
 class TestOrderDetail(TestCase):
     def setUp(self):
-        year_ago = timezone.now() - timedelta(days=365)
-        year_and_day = timezone.now() - timedelta(days=366)
-
         self.location = Location.objects.create(
             title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
         )
@@ -141,18 +138,11 @@ class TestOrderDetail(TestCase):
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
         )
-        self.two = Event.objects.create(
-            title='Two', slug='two', description='Second', event_type='conference', status='published',
-            location=self.location, date_from=year_and_day, date_to=year_ago,
-        )
         self.volunteer = TicketType.objects.create(
             title='Volunteer', description='Volunteer ticket', price=0, attendee_type='volunteer', usage=10,
             accessibility='public', event=self.one, date_from='2016-07-01 01:01:01+01:00',
             date_to='2016-12-01 01:01:01+01:00'
         )
-        self.factory = RequestFactory()
-        self.ticket_type = TicketType.objects.create(title='ExpiredTicket', price=1, event=self.two,
-                                                     date_from=year_and_day, date_to=year_ago)
         self.order_cancelled = Order.objects.create(price=200, discount=0, status=Order.CANCELLED)
         self.order_expired = Order.objects.create(price=200, discount=0, status=Order.EXPIRED)
         self.order_paid = Order.objects.create(price=200, discount=0, status=Order.PAID)
@@ -196,26 +186,6 @@ class TestOrderDetail(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-warning')
 
-    def test_error_message(self):
-        entry = models.Order.objects.create(price=155.5, discount=5.5)
-        ticket = models.Ticket.objects.create(title='Expired Ticket', type=self.ticket_type, order=entry)
-        ticket.clean()
-        # import pdb;pdb.set_trace()
-        response = self.client.get('')
-        self.assertEqual(response.status_code, 302)
-        # self.assertRedirects(response, '/two/')   # redirects to  /one/
-
-    def test_error_message_2(self):
-        request = self.factory.get('')
-        # import pdb; pdb.set_trace()
-        setattr(request, 'session', 'session')
-        msg = FallbackStorage(request)
-        setattr(request, '_messages', msg)
-        messages.error(request, 'Test error message')
-        response = self.client.get('')
-        self.assertEqual(response.status_code, 302)
-        # self.assertIn('alert-error', response.body)   # body is empty
-
 
 class TestIndexRedirect(TestCase):
 
@@ -229,6 +199,8 @@ class TestIndexRedirect(TestCase):
         # Check if status is OK and correct template is used
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/list_events.html')
+        # test correct alert class
+        self.assertIn('alert alert-info', str(response.content))
 
         self.old_meetup = Event.objects.create(
             title='Old meetup', slug='old-meetup', description='Old meetup', event_type=Event.MEETUP,
