@@ -29,7 +29,7 @@ try:
                 },
             },
         ],
-        ROOT_URLCONF="konfera.urls",
+        ROOT_URLCONF="runtests_urls",
         INSTALLED_APPS=[
             "django.contrib.auth",
             "django.contrib.contenttypes",
