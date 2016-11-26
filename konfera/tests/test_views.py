@@ -139,6 +139,7 @@ class TestMeetup(TestCase):
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
         # Check if about us text is present
+        print(response.content)
         self.assertIn('Fabulous meetup', str(response.content))
 
 
@@ -196,7 +197,8 @@ class TestOrderDetail(TestCase):
 
         # Register for event as volunteer
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com'
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com',
+            'description': 'I want to help.',
         })
 
         # Check that the response is 302 FOUND.
@@ -307,7 +309,7 @@ class TestEventVenue(TestCase):
         url = reverse('event_venue', kwargs={'slug': 'second-one'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'konfera/event_venue.html')
+        self.assertTemplateUsed(response, 'konfera/event/venue.html')
         self.assertTrue(self.html_code in response.content.decode('utf-8'))
 
 
@@ -327,7 +329,7 @@ class TestSponsorsListView(TestCase):
     def test_sponsors_list(self):
         response = self.client.get('/small_event/sponsors/')
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'konfera/event_sponsors.html')
+        self.assertTemplateUsed(response, 'konfera/event/sponsors.html')
         self.assertIn('Sponsor 1', str(response.content))
         self.assertIn('Sponsor 2', str(response.content))
 
@@ -351,6 +353,6 @@ class TestSpeakersListView(TestCase):
     def test_speakers_list(self):
         response = self.client.get('/tiny_event/speakers/')
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'konfera/event_speakers.html')
+        self.assertTemplateUsed(response, 'konfera/event/speakers.html')
         self.assertIn('Nice Speaker', str(response.content))
         self.assertIn('Talking Speaker', str(response.content))
