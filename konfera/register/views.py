@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import EmailMultiAlternatives
+from django.conf import settings as django_settings
 
 from konfera.models.email_template import EmailTemplate
 from konfera.models.sponsor import Sponsor
@@ -19,6 +20,8 @@ else:
 
 
 def _register_ticket(request, event, ticket_type):
+    # this approach has been chosen to allow testing with different settings
+    notify = getattr(django_settings, 'REGISTER_EMAIL_NOTIFY', getattr(settings, 'REGISTER_EMAIL_NOTIFY'))
     context = dict()
     template = EmailTemplate.objects.get(name='register_email')
 
@@ -36,7 +39,7 @@ def _register_ticket(request, event, ticket_type):
         new_ticket.type = ticket_type
         new_ticket.save()
 
-        if settings.REGISTER_EMAIL_NOTIFY:
+        if notify:
             messages.success(request, _('Thank you for ordering ticket. You will receive confirmation email soon.'))
 
             event = new_ticket.type.event
@@ -58,6 +61,7 @@ def _register_ticket(request, event, ticket_type):
             msg.send()
             # increase count on email_template
             template.add_count()
+
         else:
             messages.success(request, _('Thank you for ordering ticket.'))
 

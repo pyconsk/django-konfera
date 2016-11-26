@@ -437,6 +437,7 @@ class EmailTemplateTest(TestCase):
         et = EmailTemplate.objects.get(name='register_email')
         self.assertTrue(hasattr(et, 'text_template'))
         self.assertIn('Looking forward to see you.', et.text_template)
+        self.assertEquals(str(et), 'register_email')
 
     def test_save(self):
         self.new_template.text_template = 'Hello world'

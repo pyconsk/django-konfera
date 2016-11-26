@@ -14,3 +14,4 @@ class EmailTemplate(KonferaModel):
 
     def add_count(self, add=1):
         self.counter += add
+        self.save()
