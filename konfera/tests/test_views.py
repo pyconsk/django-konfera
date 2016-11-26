@@ -248,7 +248,6 @@ class TestOrderDetail(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': two.slug}))
 
-
     def test_order_status_cancelled(self):
         response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_cancelled.uuid}))
         self.assertEqual(response.status_code, 200)
