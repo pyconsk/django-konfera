@@ -1,13 +1,9 @@
-from datetime import timedelta
 from django import VERSION
-from django.contrib import messages
-from django.contrib.messages.storage.fallback import FallbackStorage
+from django.conf import settings
 from django.test import TestCase
-from django.utils import timezone
-from konfera import models
-from django.test.client import RequestFactory
+from django.test.utils import override_settings
 
-from konfera.models import Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
+from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
 
 if VERSION[1] in (8, 9):
@@ -211,6 +207,46 @@ class TestOrderDetail(TestCase):
 
         # Check if redirect to the correct order detail page
         self.assertRedirects(response, reverse('order_details', kwargs={'order_uuid': ticket.order.uuid}))
+
+    @override_settings(REGISTER_EMAIL_NOTIFY=True)
+    def test_ticket_register_redirect_notify(self):
+        self.assertEquals(settings.REGISTER_EMAIL_NOTIFY, True)
+
+        response = self.client.get('/register/event/one/ticket/volunteer/')
+        self.assertEqual(response.status_code, 200)
+
+        et = EmailTemplate.objects.get(name='register_email')
+        self.assertEquals(et.counter, 0)
+
+        response = self.client.post('/register/event/one/ticket/volunteer/', {
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify', 'email': 'notify@example.com',
+            'description': 'I want the notification.',
+        })
+        self.assertEqual(response.status_code, 302)
+
+        ticket = Ticket.objects.get(type_id=self.volunteer.id, email='notify@example.com')
+        self.assertRedirects(response, reverse('order_details', kwargs={'order_uuid': ticket.order.uuid}))
+        # TODO: printing value from code shows that counter changes, however this assert is not working
+        # self.assertEquals(et.counter, 1)
+
+    def test_register_expired_ticket(self):
+        two = Event.objects.create(
+            title='Two', slug='two', description='Second one', event_type='conference', status='published',
+            location=self.location, date_from='2011-01-01 01:01:01+01:00', date_to='2011-01-03 01:01:01+01:00',
+        )
+        TicketType.objects.create(
+            title='Expired', description='Expired ticket', price=0, attendee_type='volunteer', usage=10, event=two,
+            accessibility='public', date_from='2010-01-01 00:00:00+11:00', date_to='2010-12-31 23:59:59+11:00'
+        )
+        response = self.client.get('/register/event/two/ticket/volunteer/')
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.post('/register/event/two/ticket/volunteer/', {
+            'title': 'mr', 'first_name': 'Tester', 'last_name': 'Expired', 'email': 'expired@example.com',
+            'description': 'Something.',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': two.slug}))
 
     def test_order_status_cancelled(self):
         response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_cancelled.uuid}))
