@@ -13,6 +13,11 @@ def collect_view_data(request):
     return view_data
 
 
-def set_event_ga_to_context(event, context):
+def update_event_context(event, context, show_sponsors=True):
+    context['event'] = event
+
+    if show_sponsors:
+        context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+
     if event.analytics:
         context['ga'] = event.analytics
