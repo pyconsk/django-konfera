@@ -324,19 +324,19 @@ admin.site.register(Organizer, OrganizerAdmin)
 
 
 class EmailTemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'text_template', 'html_template', 'counter')
+    list_display = ('name', 'text_template', 'counter')
     ordering = ('name',)
     search_fields = ('=name',)
     readonly_fields = ('date_created', 'date_modified', 'counter')
     fieldsets = (
         (_('Basic Info'), {
-            'fields': ('name',),
+            'fields': ('name', 'counter'),
         }),
         (_('Templates'), {
             'fields': ('text_template', 'html_template',),
         }),
         (_('Modifications'), {
-            'fields': ('counter', 'date_created', 'date_modified',),
+            'fields': ('date_created', 'date_modified',),
             'classes': ('collapse',),
         }),
     )
