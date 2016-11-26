@@ -29,18 +29,3 @@ Register email notification.
 """
 REGISTER_EMAIL_NOTIFY = getattr(settings, 'REGISTER_EMAIL_NOTIFY', False)
 REGISTER_EMAIL_BCC = getattr(settings, 'REGISTER_EMAIL_BCC', [])
-REGISTER_EMAIL = getattr(settings, 'REGISTER_EMAIL',
-                         'Dear {first_name} {last_name},\n\n'
-                         'thank you for purchasing ticket for {event}. Your order details are available at url: '
-                         '{order_url}\n\n\n'
-                         'Looking forward to see you.\n\n'
-                         'PyCon SK team.\n\n'
-                         '{event_url}')
-
-REGISTER_EMAIL_HTML = getattr(settings, 'REGISTER_EMAIL_HTML',
-                              'Dear {first_name} {last_name},<br /><br />'
-                              'thank you for purchasing ticket for <strong><a href="{event_url}">{event}</a>'
-                              '</strong>.vYour order details are available at url: <a href="{order_url}">{order_url}'
-                              '</a><br /><br /><br />'
-                              'Looking forward to see you.<br /><br />'
-                              'PyCon SK team.')

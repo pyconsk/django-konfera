@@ -11,3 +11,4 @@ from .ticket_type import TicketType
 from .ticket import Ticket
 from .schedule import Schedule
 from .organizer import Organizer
+from .email_template import EmailTemplate

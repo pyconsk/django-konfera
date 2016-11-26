@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
-                            Room, Schedule, Organizer)
+                            Room, Schedule, Organizer, EmailTemplate)
 
 
 class SponsorshipInline(admin.TabularInline):
@@ -321,3 +321,25 @@ class OrganizerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Organizer, OrganizerAdmin)
+
+
+class EmailTemplateAdmin(admin.ModelAdmin):
+    list_display = ('name', 'text_template', 'html_template', 'counter')
+    ordering = ('name',)
+    search_fields = ('=name',)
+    readonly_fields = ('date_created', 'date_modified', 'counter')
+    fieldsets = (
+        (_('Basic Info'), {
+            'fields': ('name',),
+        }),
+        (_('Templates'), {
+            'fields': ('text_template', 'html_template',),
+        }),
+        (_('Modifications'), {
+            'fields': ('counter', 'date_created', 'date_modified',),
+            'classes': ('collapse',),
+        }),
+    )
+
+
+admin.site.register(EmailTemplate, EmailTemplateAdmin)
