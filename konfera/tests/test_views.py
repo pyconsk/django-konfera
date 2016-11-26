@@ -281,6 +281,8 @@ class TestIndexRedirect(TestCase):
         # Check if status is OK and correct template is used
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/list_events.html')
+        # test correct alert class
+        self.assertIn('alert alert-info', str(response.content))
 
         self.old_meetup = Event.objects.create(
             title='Old meetup', slug='old-meetup', description='Old meetup', event_type=Event.MEETUP,

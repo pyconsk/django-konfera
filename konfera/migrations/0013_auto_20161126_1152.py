@@ -6,8 +6,6 @@ from django.db import migrations
 
 
 def forwards_func(apps, schema_editor):
-    # We get the model from the versioned app registry;
-    # if we directly import it, it'll be the wrong version
     EmailTemplate = apps.get_model("konfera", "EmailTemplate")
     db_alias = schema_editor.connection.alias
     text = """Dear {first_name} {last_name},\n\n
@@ -27,8 +25,6 @@ def forwards_func(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    # forwards_func() creates two Country instances,
-    # so reverse_func() should delete them.
     EmailTemplate = apps.get_model("konfera", "EmailTemplate")
     db_alias = schema_editor.connection.alias
     EmailTemplate.objects.using(db_alias).filter(name="register_email").delete()
