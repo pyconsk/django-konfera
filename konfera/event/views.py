@@ -178,7 +178,9 @@ def event_public_tickets(request, slug):
 def event_order_detail(request, order_uuid):
     order = get_object_or_404(Order, uuid=order_uuid)
     context = dict()
-    update_event_context(order.event, context, show_sponsors=False)
+
+    if order.event:
+        update_event_context(order.event, context, show_sponsors=False)
     context['order'] = order
 
     if order.status == Order.PAID:
