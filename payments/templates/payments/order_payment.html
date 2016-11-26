@@ -1,4 +1,4 @@
-{% extends 'konfera/base.html' %}
+{% extends 'konfera/order_details.html' %}
 {% load i18n %}
 {% load custom_filters %}
 
@@ -6,7 +6,7 @@
   {% trans "Order Detail" %}
 {% endblock %}
 
-{% block content %}
+{% block content_top %}
   <div class="container">
     <div class="row">
       <div class="col-xs-12">
@@ -16,7 +16,7 @@
         <hr>
         <div class="row">
           {# todo: render is separately in future and display it only when it responses to signal #}
-          <div class="col-md-12">
+          <div class="col-md-6">
             <h3>{% trans "Pay by bank transfer" %}</h3>
             <div class="alert alert-success" role="alert">
               {% blocktrans with amount=order.left_to_pay|currency variable_symbol=order.variable_symbol %}
@@ -32,14 +32,15 @@
               <strong>{% trans "Bank account EUR (IBAN / international):" %}</strong> SK48 8330 0000 0023 0087 0269<br>
               <strong>{% trans "SWIFT/BIC:" %}</strong> FIOZSKBAXXX
             </p>
-
+        </div>
+	<div class="col-md-6">
             <h3>{% trans "Pay by PayPal" %}</h3>
             <div class="alert alert-warning" role="alert">
               {% blocktrans %}
                 <strong>Warning!</strong> We charge additional {{ PAYPAL_ADDITIONAL_CHARGE }}% for PayPal payments.
               {% endblocktrans %}
             </div>
-
+	    <p>{% trans "You will be redirected to the PayPal site to finish the payment." %}</p>
             <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-success">
                 {% trans "Pay by PayPal" %}
             </a>

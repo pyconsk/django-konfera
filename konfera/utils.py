@@ -1,3 +1,4 @@
+from konfera.models.order import Order
 from konfera.settings import GOOGLE_ANALYTICS
 
 
@@ -13,6 +14,15 @@ def collect_view_data(request):
     return view_data
 
 
+def update_order_status_context(status, context):
+    if status == Order.PAID:
+        context['status_label'] = 'label-success'
+    elif status in [Order.CANCELLED, Order.EXPIRED]:
+        context['status_label'] = 'label-danger'
+    else:
+        context['status_label'] = 'label-warning'
+
+
 def update_event_context(event, context, show_sponsors=True):
     context['event'] = event
 
@@ -21,3 +31,4 @@ def update_event_context(event, context, show_sponsors=True):
 
     if event.analytics:
         context['ga'] = event.analytics
+
