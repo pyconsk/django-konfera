@@ -431,7 +431,7 @@ class OrganizerTest(TestCase):
 class EmailTemplateTest(TestCase):
     def setUp(self):
         self.new_template = EmailTemplate.objects.create(name='New Template', text_template='Hello',
-                                                    html_template='Hello<br/>')
+                                                         html_template='Hello<br/>')
 
     def test_template(self):
         et = EmailTemplate.objects.get(name='register_email')
