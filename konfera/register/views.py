@@ -19,6 +19,8 @@ if VERSION[1] in (8, 9):
 else:
     from django.urls import reverse
 
+logger = logging.getLogger(__name__)
+
 
 def _register_ticket(request, event, ticket_type):
     context = dict()
@@ -60,10 +62,11 @@ def _register_ticket(request, event, ticket_type):
                 msg.send()
             except SMTPException as e:
                 messages.success(request, _('Thank you for ordering ticket.'))
-                messages.error(request, _('There was an error while sending email! Copy this url, to access this order again.'))
+                messages.error(request, _('There was an error while sending email! Copy this url, to access this order\
+                                           again.'))
                 logger.critical('Sending email raised an exception: %s', e)
             else:
-                messages.success(request, _('Thank you for ordering ticket. You will receive confirmation email soon.'))
+                messages.success(request, _('Thank you for ordering ticket. You\'ll receive confirmation email soon.'))
 
         else:
             messages.success(request, _('Thank you for ordering ticket.'))
