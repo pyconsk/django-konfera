@@ -23,7 +23,7 @@ class Order(KonferaModel):
         (CANCELLED, _('Cancelled')),
     )
 
-    price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
+    price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     amount_paid = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     discount = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)], default=0)
     status = models.CharField(choices=ORDER_CHOICES, default=AWAITING, max_length=20)
@@ -57,3 +57,12 @@ class Order(KonferaModel):
     def event(self):
         if self.ticket_set.exists():
             return self.ticket_set.first().type.event
+
+    def recalculate_ticket_price(self):
+        self.price = 0
+        self.discount = 0
+
+        for ticket in self.ticket_set.all():
+            self.price += ticket.type.price
+            self.discount += ticket.discount_calculator()
+        self.save()

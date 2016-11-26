@@ -14,56 +14,44 @@ from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
-from konfera.utils import set_event_ga_to_context
+from konfera.utils import update_event_context
 
 
 def event_venue_view(request, slug):
-    context = dict()
-
     event = get_object_or_404(Event.objects.published(), slug=slug)
+
     if not event.location or not event.location.get_here:
         raise Http404
 
-    context['event'] = event
+    context = dict()
     context['venue'] = event.location.get_here
+    update_event_context(event, context)
 
-    set_event_ga_to_context(event, context)
-
-    return render(request=request, template_name='konfera/event_venue.html', context=context)
+    return render(request=request, template_name='konfera/event/venue.html', context=context)
 
 
 def event_sponsors_list_view(request, slug):
-    context = dict()
-
     event = get_object_or_404(Event.objects.published(), slug=slug)
-    context['event'] = event
-    context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+    context = dict()
+    update_event_context(event, context)
 
-    set_event_ga_to_context(event, context)
-
-    return render(request=request, template_name='konfera/event_sponsors.html', context=context)
+    return render(request=request, template_name='konfera/event/sponsors.html', context=context)
 
 
 def event_speakers_list_view(request, slug):
-    context = dict()
-
     event = get_object_or_404(Event.objects.published(), slug=slug)
-    context['event'] = event
+    context = dict()
     context['talks'] = event.talk_set.filter(status=Talk.APPROVED).order_by('primary_speaker__last_name')
 
-    set_event_ga_to_context(event, context)
+    update_event_context(event, context)
 
-    return render(request=request, template_name='konfera/event_speakers.html', context=context)
+    return render(request=request, template_name='konfera/event/speakers.html', context=context)
 
 
 def event_details_view(request, slug):
-    context = dict()
-
     event = get_object_or_404(Event.objects.published(), slug=slug)
-    context['event'] = event
-    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
-
-    set_event_ga_to_context(event, context)
+    context = dict()
+    update_event_context(event, context)
 
     if event.event_type == Event.MEETUP:
         return render(request=request, template_name='konfera/event/details_meetup.html', context=context)
@@ -72,13 +60,14 @@ def event_details_view(request, slug):
 
 
 class CFPView(TemplateView):
+    event = None
     template_name = 'konfera/event/cfp_form.html'
     message_text = _("Your talk proposal was successfully created.")
 
     def dispatch(self, *args, **kwargs):
-        event = get_object_or_404(Event, slug=kwargs.get('slug'))
+        self.event = get_object_or_404(Event, slug=kwargs.get('slug'))
 
-        if not event.cfp_allowed:
+        if not self.event.cfp_allowed:
             raise Http404
 
         return super().dispatch(*args, **kwargs)
@@ -101,14 +90,10 @@ class CFPView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['event'] = event = Event.objects.get(slug=kwargs['slug'])
-        context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
+        update_event_context(self.event, context)
 
         context['speaker_form'] = SpeakerForm(self.request.POST or None, prefix='speaker')
         context['talk_form'] = TalkForm(self.request.POST or None, prefix='talk')
-
-        set_event_ga_to_context(event, context)
 
         return context
 
@@ -144,7 +129,7 @@ def schedule_redirect(request, slug):
 
 class ScheduleView(DetailView):
     model = Event
-    template_name = 'konfera/event_schedule.html'
+    template_name = 'konfera/event/schedule.html'
 
     def get_context_data(self, **kwargs):
         event = kwargs['object']
@@ -161,16 +146,16 @@ class ScheduleView(DetailView):
             for day in range(event_duration.days + 1)
         ]
 
-        set_event_ga_to_context(event, context)
+        update_event_context(event, context)
 
         return context
 
 
 def event_public_tickets(request, slug):
-    context = dict()
-
     event = get_object_or_404(Event.objects.published(), slug=slug)
-    context['event'] = event
+    context = dict()
+    update_event_context(event, context)
+
     available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
         .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
         .exclude(attendee_type=TicketType.PRESS)
@@ -186,17 +171,36 @@ def event_public_tickets(request, slug):
         available_tickets = paginator.page(paginator.num_pages)
 
     context['tickets'] = available_tickets
-    return render(request=request, template_name='konfera/event_public_tickets.html', context=context)
+
+    return render(request=request, template_name='konfera/event/public_tickets.html', context=context)
 
 
 def event_order_detail(request, order_uuid):
-    context = dict()
     order = get_object_or_404(Order, uuid=order_uuid)
+    context = dict()
+
+    if order.event:
+        update_event_context(order.event, context, show_sponsors=False)
     context['order'] = order
+
     if order.status == Order.PAID:
         context['status_label'] = 'label-success'
     elif order.status in [Order.CANCELLED, Order.EXPIRED]:
         context['status_label'] = 'label-danger'
     else:
         context['status_label'] = 'label-warning'
+
     return render(request=request, template_name='konfera/order_details.html', context=context)
+
+
+def event_about_us(request, slug):
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+    context = dict()
+    update_event_context(event, context)
+
+    if not event.organizer:
+        raise Http404(_('Organizer has not been set for event %s' % event.title))
+
+    context['organizer'] = event.organizer
+
+    return render(request=request, template_name='konfera/event/event_organizer.html', context=context)

@@ -25,6 +25,6 @@ urlpatterns = [
         name='ticket_registration_press'),
     url(r'^event/(?P<slug>[\w, -]+)/ticket/financial_aid/$', views.register_ticket_aid,
         name='ticket_registration_aid'),
-    url(r'^event/(?P<slug>[\w, -]+)/ticket/(?P<ticket_uuid>[\w, -]+)/$', views.register_ticket,
+    url(r'^event/(?P<slug>[\w, -]+)/ticket/(?P<ticket_uuid>[\w, -]+)/$', views.register_ticket_uuid,
         name='ticket_registration'),
 ]

@@ -1,8 +1,7 @@
-{% extends 'konfera/event/base.html' %}
+{% extends 'konfera/base.html' %}
 {% load i18n %}
 
-{% block event_details %}
-    {% block top_cfp %}{% endblock %}
+{% block content_details %}
     {% if event.cfp_open %}
       <form method="POST" action="" class="cfp">{% csrf_token %}
         <h2>{% trans "Who are you? Please introduce yourself." %}</h2>
@@ -13,18 +12,12 @@
           <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> {% trans "Submit proposal" %}
         </button>
       </form>
-
     {% else %}
-      <div class="row">
-        <div class="col-md-8">
-          <p>
-            {% trans "Thank you for your interest, but unfortunately call for proposals deadline was at: " %}
-            {{ event.cfp_end }}.
-            {% trans "However, if you feel like you have to submit your talk anyway, feel free to contact us:" %}
-            {{ event.contact_email }}
-          </p>
-        </div>
-      </div>
+      <p>
+        {% trans "Thank you for your interest, but unfortunately call for proposals deadline was at: " %}
+        {{ event.cfp_end }}.
+        {% trans "However, if you feel like you have to submit your talk anyway, feel free to contact us:" %}
+        {{ event.contact_email }}
+      </p>
     {% endif %}
-    {% block bottom_cfp %}{% endblock %}
 {% endblock %}

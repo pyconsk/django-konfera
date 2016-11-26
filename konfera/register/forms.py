@@ -12,6 +12,8 @@ class RegistrationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         description_required = kwargs.pop('description_required', False)
         super(RegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['description'] = forms.CharField(
-            widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
-            required=description_required, label=_('Description'))
+
+        if description_required:
+            self.fields['description'] = forms.CharField(
+                widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
+                required=True, label=_('Description'))

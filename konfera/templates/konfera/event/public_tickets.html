@@ -7,7 +7,7 @@
 {% endblock %}
 
 
-{% block content %}
+{% block content_details %}
     <div class="list-group">
         {% for ticket in tickets %}
             <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="list-group-item">
@@ -40,4 +40,5 @@
             </ul>
         </nav>
     {% endif %}
+    {% block bottom_public_tickets %}{% endblock %}
 {% endblock %}

@@ -248,7 +248,7 @@ class TicketTest(TestCase):
     def setUp(self):
         time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
-                                   state='test_state', capacity=20)
+                                   country='test_country', capacity=20)
         location.save()
         event = models.Event(title='test_event', description='test', event_type='Event.meetup',
                              status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
@@ -409,3 +409,19 @@ class TicketTypeTest(TestCase):
         tt.date_from = now - datetime.timedelta(days=3)
         tt.date_to = now - datetime.timedelta(days=1)
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.EXPIRED])
+
+
+class OrganizerTest(TestCase):
+
+    def setUp(self):
+        self.first_organizer = models.Organizer(title='Mysterious Organizer', street='1 Up street', city='Big City',
+                                                company_id='123',
+                                                about_us="World famous yet unknown conference organizer.")
+
+    def test_save(self):
+        self.assertEquals(self.first_organizer.save(), None)
+        noname_organizer = models.Organizer(street='2 Random', city='Small City')
+        self.assertRaises(ValidationError, noname_organizer.save())
+
+    def test_title(self):
+        self.assertEquals(str(self.first_organizer), 'Mysterious Organizer')
