@@ -144,7 +144,6 @@ class TestMeetup(TestCase):
         # Check that the response is 200 OK.
         self.assertEqual(response.status_code, 200)
         # Check if about us text is present
-        print(response.content)
         self.assertIn('Fabulous meetup', str(response.content))
 
 
