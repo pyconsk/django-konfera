@@ -1,3 +1,6 @@
+import logging
+from smtplib import SMTPException
+
 from django import VERSION
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
@@ -17,6 +20,8 @@ if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
 else:
     from django.urls import reverse
+
+logger = logging.getLogger(__name__)
 
 
 def _register_ticket(request, event, ticket_type):
@@ -40,7 +45,6 @@ def _register_ticket(request, event, ticket_type):
         new_ticket.save()
 
         if notify:
-            messages.success(request, _('Thank you for ordering ticket. You will receive confirmation email soon.'))
 
             event = new_ticket.type.event
             order_url = request.build_absolute_uri(reverse('order_details', args=[new_ticket.order.uuid]))
@@ -58,9 +62,18 @@ def _register_ticket(request, event, ticket_type):
                                                          event_url=event_url)
             msg = EmailMultiAlternatives(subject, text_content, to=[new_ticket.email], bcc=settings.REGISTER_EMAIL_BCC)
             msg.attach_alternative(html_content, "text/html")
-            msg.send()
-            # increase count on email_template
-            template.add_count()
+
+            try:
+                msg.send()
+            except SMTPException as e:
+                messages.success(request, _('Thank you for ordering ticket.'))
+                messages.error(request, _('There was an error while sending email! Copy this url, to access this order\
+                                           again.'))
+                logger.critical('Sending email raised an exception: %s', e)
+            else:
+                # increase count on email_template
+                template.add_count()
+                messages.success(request, _('Thank you for ordering ticket. You\'ll receive confirmation email soon.'))
 
         else:
             messages.success(request, _('Thank you for ordering ticket.'))
