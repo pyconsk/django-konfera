@@ -31,4 +31,3 @@ def update_event_context(event, context, show_sponsors=True):
 
     if event.analytics:
         context['ga'] = event.analytics
-

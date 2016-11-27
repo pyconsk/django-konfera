@@ -111,4 +111,3 @@ def check_payments_status():
         order_payments = _get_payments_for_order(order, new_payments)
         for payment in order_payments:
             _process_payment(order, payment)
-
