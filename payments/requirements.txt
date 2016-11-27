@@ -1,2 +1,3 @@
+requests==2.11.1
 fiobank==1.2.0
 paypalrestsdk==1.11.7

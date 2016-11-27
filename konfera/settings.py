@@ -28,4 +28,13 @@ ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_details')
 Register email notification.
 """
 REGISTER_EMAIL_NOTIFY = getattr(settings, 'REGISTER_EMAIL_NOTIFY', False)
-REGISTER_EMAIL_BCC = getattr(settings, 'REGISTER_EMAIL_BCC', [])
+
+"""
+Notify after submitting proposal
+"""
+PROPOSAL_EMAIL_NOTIFY = getattr(settings, 'PROPOSAL_EMAIL_NOTIFY', False)
+
+"""
+Universal BCC for all notifications
+"""
+EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
