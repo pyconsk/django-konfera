@@ -9,10 +9,14 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm
@@ -25,6 +29,7 @@ from konfera.models.order import Order
 from konfera.utils import update_event_context
 
 logger = logging.getLogger(__name__)
+
 
 def event_venue_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
