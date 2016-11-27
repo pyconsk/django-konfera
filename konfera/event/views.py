@@ -21,7 +21,7 @@ from konfera.models.event import Event
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
-from konfera.utils import update_event_context
+from konfera.utils import update_event_context, update_order_status_context
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -230,14 +230,9 @@ def event_order_detail(request, order_uuid):
 
     if order.event:
         update_event_context(order.event, context, show_sponsors=False)
-    context['order'] = order
 
-    if order.status == Order.PAID:
-        context['status_label'] = 'label-success'
-    elif order.status in [Order.CANCELLED, Order.EXPIRED]:
-        context['status_label'] = 'label-danger'
-    else:
-        context['status_label'] = 'label-warning'
+    context['order'] = order
+    update_order_status_context(order.status, context)
 
     return render(request=request, template_name='konfera/order_details.html', context=context)
 

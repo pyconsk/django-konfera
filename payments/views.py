@@ -9,6 +9,7 @@ from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 
 from konfera.models import Order
+from konfera.utils import update_order_status_context
 
 from payments import settings
 from payments.utils import _process_payment
@@ -26,12 +27,16 @@ paypalrestsdk.configure({
 
 class PaymentOptions(TemplateView):
     template_name = 'payments/order_payment.html'
+    order = None
 
     def get_order(self, uuid):
-        try:
-            return Order.objects.get(uuid=uuid)
-        except (Order.DoesNotExist, ValueError):
-            raise Http404
+        if not self.order:
+            try:
+                self.order = Order.objects.get(uuid=uuid)
+            except (Order.DoesNotExist, ValueError):
+                raise Http404
+
+        return self.order
 
     def dispatch(self, request, *args, **kwargs):
 
@@ -43,7 +48,8 @@ class PaymentOptions(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['order'] = self.get_order(kwargs['order_uuid'])
+        context['order'] = order = self.get_order(kwargs['order_uuid'])
+        update_order_status_context(order.status, context)
         context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
 
         return context
