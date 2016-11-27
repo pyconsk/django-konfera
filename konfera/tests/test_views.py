@@ -152,6 +152,22 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
+    @override_settings(PROPOSAL_NOTIFY=True)
+    def test_cfp_successful_form_submit_notify_invalid_email(self):
+        url, response = self._get_existing_event()
+        speaker_data = self._speaker_form_minimal_data()
+        speaker_data['speaker-email'] = 'notify@'
+        talk_data = self._talk_form_minimal_data()
+        talk_data['talk-title'] = 'Another great talk'
+        post_data = dict(speaker_data, **talk_data)
+
+        # post data with invalid email address
+        self.client.post(url, data=post_data)
+
+        # counter should not change as email has not been sent
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 0)
+
 
 class TestMeetup(TestCase):
     def setUp(self):
