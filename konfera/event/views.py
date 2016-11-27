@@ -87,28 +87,30 @@ class CFPView(TemplateView):
         template = EmailTemplate.objects.get(name='confirm_proposal')
 
         if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
-            speaker_instance = context['speaker_form'].save()
+            speaker = context['speaker_form'].save()
             talk_instance = context['talk_form'].save(commit=False)
-            talk_instance.primary_speaker = speaker_instance
+            talk_instance.primary_speaker = speaker
             talk_instance.event = context['event']
             talk_instance.status = talk_instance.status or Talk.CFP
             talk_instance.save()
 
             if notify:
                 event_url = self.request.build_absolute_uri(reverse('event_details', args=[self.event.slug]))
+                edit_url = self.request.build_absolute_uri(reverse('event_cfp_edit_form',
+                                                                   args=[self.event.slug, self.event.uuid]))
 
                 subject = _('Proposal for {event} has been submitted'.format(event=self.event.title))
-                text_content = template.text_template.format(first_name=speaker_instance.first_name,
-                                                             last_name=speaker_instance.last_name,
-                                                             event=self.event.title,
-                                                             talk=talk_instance.title,
-                                                             event_url=event_url)
-                html_content = template.html_template.format(first_name=speaker_instance.first_name,
-                                                             last_name=speaker_instance.last_name,
-                                                             event=self.event.title,
-                                                             talk=talk_instance.title,
-                                                             event_url=event_url)
-                msg = EmailMultiAlternatives(subject, text_content, to=[speaker_instance.email],
+                template_data = {'first_name': speaker.first_name,
+                                 'last_name': speaker.last_name,
+                                 'event': self.event.title,
+                                 'talk': talk_instance.title,
+                                 'event_url': event_url,
+                                 'edit_url': edit_url,
+                                 'end_call': self.event.cfp_end}
+                text_content = template.text_template.format(**template_data)
+                html_content = template.html_template.format(**template_data)
+
+                msg = EmailMultiAlternatives(subject, text_content, to=[speaker.email],
                                              bcc=settings.REGISTER_EMAIL_BCC)
                 msg.attach_alternative(html_content, "text/html")
 
