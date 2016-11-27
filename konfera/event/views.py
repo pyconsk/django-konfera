@@ -4,7 +4,6 @@ from datetime import timedelta
 from smtplib import SMTPException
 
 from django import VERSION
-from django.conf import settings as django_settings
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -88,7 +87,6 @@ class CFPView(TemplateView):
 
     def post(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        notify = getattr(django_settings, 'PROPOSAL_EMAIL_NOTIFY', getattr(settings, 'PROPOSAL_EMAIL_NOTIFY'))
         template = EmailTemplate.objects.get(name='confirm_proposal')
 
         if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
@@ -99,7 +97,7 @@ class CFPView(TemplateView):
             talk_instance.status = talk_instance.status or Talk.CFP
             talk_instance.save()
 
-            if notify:
+            if settings.PROPOSAL_EMAIL_NOTIFY:
                 event_url = self.request.build_absolute_uri(reverse('event_details', args=[self.event.slug]))
                 edit_url = self.request.build_absolute_uri(reverse('event_cfp_edit_form',
                                                                    args=[self.event.slug, self.event.uuid]))

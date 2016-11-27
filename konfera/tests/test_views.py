@@ -1,10 +1,10 @@
 from django import VERSION
 from django.conf import settings
 from django.test import TestCase
-from django.test.utils import override_settings
 
 from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
+from .utils import custom_override_settings
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -124,7 +124,7 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
-    @override_settings(PROPOSAL_EMAIL_NOTIFY=True)
+    @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
     def test_cfp_successful_form_submit_notify(self):
         self.assertEquals(settings.PROPOSAL_EMAIL_NOTIFY, True)
 
@@ -152,7 +152,7 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
-    @override_settings(PROPOSAL_EMAIL_NOTIFY=True)
+    @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
     def test_cfp_successful_form_submit_notify_invalid_email(self):
         url, response = self._get_existing_event()
         speaker_data = self._speaker_form_minimal_data()
@@ -252,7 +252,7 @@ class TestOrderDetail(TestCase):
         # Check if redirect to the correct order detail page
         self.assertRedirects(response, reverse('order_details', kwargs={'order_uuid': ticket.order.uuid}))
 
-    @override_settings(REGISTER_EMAIL_NOTIFY=True)
+    @custom_override_settings(REGISTER_EMAIL_NOTIFY=True)
     def test_ticket_register_redirect_notify(self):
         self.assertEquals(settings.REGISTER_EMAIL_NOTIFY, True)
 
