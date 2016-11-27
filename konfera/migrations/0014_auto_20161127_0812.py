@@ -11,7 +11,7 @@ def forwards_func(apps, schema_editor):
     text = """Dear {first_name} {last_name},\n\n
               thank you for submitting proposal for {event}.\nYou can edit your submission here: {edit_url}.\n\n
               The call for proposals ends at {end_call}. We will inform you about the acceptance status and further
-              details after this date.\n\n\n
+              details shortly after this date.\n\n\n
               {event} organizers team.\n\n
               {event_url}\n"""
     html = """Dear {first_name} {last_name},<br /><br />
