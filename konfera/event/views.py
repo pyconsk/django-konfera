@@ -1,14 +1,22 @@
+import logging
+from smtplib import SMTPException
+
 from datetime import timedelta
 
+from django.conf import settings as django_settings
 from django.contrib import messages
+from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
+from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm
+from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
 from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
@@ -16,6 +24,7 @@ from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
 from konfera.utils import update_event_context
 
+logger = logging.getLogger(__name__)
 
 def event_venue_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
@@ -74,6 +83,8 @@ class CFPView(TemplateView):
 
     def post(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
+        notify = getattr(django_settings, 'PROPOSAL_NOTIFY', getattr(settings, 'PROPOSAL_NOTIFY'))
+        template = EmailTemplate.objects.get(name='confirm_proposal')
 
         if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
             speaker_instance = context['speaker_form'].save()
@@ -82,7 +93,38 @@ class CFPView(TemplateView):
             talk_instance.event = context['event']
             talk_instance.status = talk_instance.status or Talk.CFP
             talk_instance.save()
-            messages.success(self.request, self.message_text)
+
+            if notify:
+                event_url = self.request.build_absolute_uri(reverse('event_details', args=[self.event.slug]))
+
+                subject = _('Proposal for {event} has been submitted'.format(event=self.event.title))
+                text_content = template.text_template.format(first_name=speaker_instance.first_name,
+                                                             last_name=speaker_instance.last_name,
+                                                             event=self.event.title,
+                                                             talk=talk_instance.title,
+                                                             event_url=event_url)
+                html_content = template.html_template.format(first_name=speaker_instance.first_name,
+                                                             last_name=speaker_instance.last_name,
+                                                             event=self.event.title,
+                                                             talk=talk_instance.title,
+                                                             event_url=event_url)
+                msg = EmailMultiAlternatives(subject, text_content, to=[speaker_instance.email],
+                                             bcc=settings.REGISTER_EMAIL_BCC)
+                msg.attach_alternative(html_content, "text/html")
+
+                try:
+                    msg.send()
+                except SMTPException as e:
+                    messages.success(self.request, _('Thank you for proposal submission.'))
+                    messages.error(self.request, _('There was an error while sending email!\n'
+                                                   'Copy this url to access the proposal details.'))
+                    logger.critical('Sending proposal confirmation email raised an exception: %s', e)
+                else:
+                    template.add_count()
+                    messages.success(self.request,
+                                     _('Thank you for proposal submission, you will receive confirmation email soon.'))
+            else:
+                messages.success(self.request, self.message_text)
 
             return redirect('event_details', slug=context['event'].slug)
 
