@@ -35,4 +35,3 @@ def custom_override_settings(**settings_kwargs):
             return func(func2, *args, **kwargs)
         return wraps(func)(_decorator)
     return _my_decorator
-
