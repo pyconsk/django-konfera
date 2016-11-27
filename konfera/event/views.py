@@ -14,9 +14,6 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from konfera import settings
-from konfera.event.forms import SpeakerForm, TalkForm
-from konfera.models.email_template import EmailTemplate
-from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
 from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
