@@ -14,7 +14,7 @@ from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
 from konfera import settings
-from konfera.event.forms import SpeakerForm, TalkForm
+from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
 from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
 from konfera.models.talk import Talk
@@ -228,6 +228,13 @@ def event_order_detail(request, order_uuid):
 
     if order.event:
         update_event_context(order.event, context, show_sponsors=False)
+
+    if order.status == Order.AWAITING:
+        context['form'] = form = ReceiptForm(request.POST or None, instance=order.receipt_of)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Your order details has been updated.'))
 
     context['order'] = order
     update_order_status_context(order.status, context)

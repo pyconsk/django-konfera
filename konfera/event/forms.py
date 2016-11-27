@@ -1,6 +1,13 @@
 from django import forms
 
-from konfera.models import Speaker, Talk
+from konfera.models import Speaker, Talk, Receipt
+
+
+class ReceiptForm(forms.ModelForm):
+
+    class Meta:
+        model = Receipt
+        exclude = ['order', 'amount']
 
 
 class SpeakerForm(forms.ModelForm):
