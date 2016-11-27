@@ -88,7 +88,7 @@ class CFPView(TemplateView):
 
     def post(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        notify = getattr(django_settings, 'PROPOSAL_NOTIFY', getattr(settings, 'PROPOSAL_NOTIFY'))
+        notify = getattr(django_settings, 'PROPOSAL_EMAIL_NOTIFY', getattr(settings, 'PROPOSAL_EMAIL_NOTIFY'))
         template = EmailTemplate.objects.get(name='confirm_proposal')
 
         if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
@@ -116,7 +116,7 @@ class CFPView(TemplateView):
                 html_content = template.html_template.format(**template_data)
 
                 msg = EmailMultiAlternatives(subject, text_content, to=[speaker.email],
-                                             bcc=settings.REGISTER_EMAIL_BCC)
+                                             bcc=settings.PROPOSAL_EMAIL_BCC)
                 msg.attach_alternative(html_content, "text/html")
 
                 try:

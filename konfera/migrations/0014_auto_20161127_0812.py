@@ -18,7 +18,7 @@ def forwards_func(apps, schema_editor):
               thank you for submitting proposal for <strong><a href=\"{event_url}\">{event}</a></strong>.<br />
               You can edit your submission <a href="{edit_url}">here</a>.<br /><br />
               The call for proposals ends at {end_call}. We will inform you about the acceptance status and further
-              details after this date.<br /><br /><br />
+              details shortly after this date.<br /><br /><br />
               {event} organizers team.<br />"""
     EmailTemplate.objects.using(db_alias).bulk_create([
         EmailTemplate(name="confirm_proposal", counter=0, text_template=text, html_template=html),

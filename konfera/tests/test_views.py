@@ -124,9 +124,9 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
-    @override_settings(PROPOSAL_NOTIFY=True)
+    @override_settings(PROPOSAL_EMAIL_NOTIFY=True)
     def test_cfp_successful_form_submit_notify(self):
-        self.assertEquals(settings.PROPOSAL_NOTIFY, True)
+        self.assertEquals(settings.PROPOSAL_EMAIL_NOTIFY, True)
 
         url, response = self._get_existing_event()
         speaker_data = self._speaker_form_minimal_data()
@@ -152,7 +152,7 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
-    @override_settings(PROPOSAL_NOTIFY=True)
+    @override_settings(PROPOSAL_EMAIL_NOTIFY=True)
     def test_cfp_successful_form_submit_notify_invalid_email(self):
         url, response = self._get_existing_event()
         speaker_data = self._speaker_form_minimal_data()

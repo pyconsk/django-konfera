@@ -31,4 +31,5 @@ REGISTER_EMAIL_NOTIFY = getattr(settings, 'REGISTER_EMAIL_NOTIFY', False)
 REGISTER_EMAIL_BCC = getattr(settings, 'REGISTER_EMAIL_BCC', [])
 
 """Notify after submitting proposal"""
-PROPOSAL_NOTIFY = getattr(settings, 'PROPOSAL_NOTIFY', False)
+PROPOSAL_EMAIL_NOTIFY = getattr(settings, 'PROPOSAL_EMAIL_NOTIFY', False)
+PROPOSAL_EMAIL_BCC = getattr(settings, 'PROPOSAL_EMAIL_BCC', [])
