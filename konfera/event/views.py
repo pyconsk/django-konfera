@@ -1,8 +1,9 @@
 import logging
-from smtplib import SMTPException
 
 from datetime import timedelta
+from smtplib import SMTPException
 
+from django import VERSION
 from django.conf import settings as django_settings
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
@@ -13,20 +14,19 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 
-if VERSION[1] in (8, 9):
-    from django.core.urlresolvers import reverse
-else:
-    from django.urls import reverse
-
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm
 from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
-from konfera.models.sponsor import Sponsor
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
 from konfera.utils import update_event_context
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 logger = logging.getLogger(__name__)
 
