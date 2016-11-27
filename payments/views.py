@@ -4,12 +4,13 @@ import paypalrestsdk
 
 from django.contrib import messages
 from django.http.response import Http404
-from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 
 from konfera.models import Order
-from konfera.utils import update_order_status_context
+from konfera.utils import update_order_status_context, update_event_context
+from konfera.event.forms import ReceiptForm
 
 from payments import settings
 from payments.utils import _process_payment
@@ -25,34 +26,28 @@ paypalrestsdk.configure({
 })
 
 
-class PaymentOptions(TemplateView):
-    template_name = 'payments/order_payment.html'
-    order = None
+def order_payment(request, order_uuid):
+    order = get_object_or_404(Order, uuid=order_uuid)
+    context = dict()
 
-    def get_order(self, uuid):
-        if not self.order:
-            try:
-                self.order = Order.objects.get(uuid=uuid)
-            except (Order.DoesNotExist, ValueError):
-                raise Http404
+    if order.status == Order.PAID:
+        return redirect('order_details', order_uuid=str(order.uuid))
 
-        return self.order
+    if order.status == Order.AWAITING:
+        context['form'] = form = ReceiptForm(request.POST or None, instance=order.receipt_of)
 
-    def dispatch(self, request, *args, **kwargs):
+        if form.is_valid():
+            form.save()
+            messages.success(request, _('Your order details has been updated.'))
 
-        order = self.get_order(kwargs['order_uuid'])
-        if order.status == Order.PAID:
-            return redirect('order_details', order_uuid=str(order.uuid))
+    if order.event:
+        update_event_context(order.event, context, show_sponsors=False)
 
-        return super().dispatch(request, *args, **kwargs)
+    context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
+    context['order'] = order
+    update_order_status_context(order.status, context)
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['order'] = order = self.get_order(kwargs['order_uuid'])
-        update_order_status_context(order.status, context)
-        context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
-
-        return context
+    return render(request=request, template_name='payments/order_payment.html', context=context)
 
 
 class PayOrderByPaypal(TemplateView):

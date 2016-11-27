@@ -1,11 +1,13 @@
 from decimal import Decimal
 
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import KonferaModel
+from konfera.models.receipt import Receipt
 
 
 class Order(KonferaModel):
@@ -38,6 +40,12 @@ class Order(KonferaModel):
             self.payment_date = timezone.now()
 
         super().save(*args, **kwargs)
+
+        try:
+            self.receipt_of.amount = self.amount_paid
+        except ObjectDoesNotExist:
+            receipt = Receipt(order=self, amount=self.amount_paid)
+            receipt.save()
 
     @property
     def left_to_pay(self):
