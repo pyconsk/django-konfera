@@ -116,7 +116,7 @@ class CFPView(TemplateView):
                 html_content = template.html_template.format(**template_data)
 
                 msg = EmailMultiAlternatives(subject, text_content, to=[speaker.email],
-                                             bcc=settings.PROPOSAL_EMAIL_BCC)
+                                             bcc=settings.EMAIL_NOTIFY_BCC)
                 msg.attach_alternative(html_content, "text/html")
 
                 try:

@@ -60,7 +60,7 @@ def _register_ticket(request, event, ticket_type):
                                                          event=event.title,
                                                          order_url=order_url,
                                                          event_url=event_url)
-            msg = EmailMultiAlternatives(subject, text_content, to=[new_ticket.email], bcc=settings.REGISTER_EMAIL_BCC)
+            msg = EmailMultiAlternatives(subject, text_content, to=[new_ticket.email], bcc=settings.EMAIL_NOTIFY_BCC)
             msg.attach_alternative(html_content, "text/html")
 
             try:
