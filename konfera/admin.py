@@ -177,7 +177,7 @@ class ReceiptInline(admin.StackedInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('purchase_date', 'price', 'discount', 'status', 'receipt_of')
+    list_display = ('purchase_date', 'variable_symbol', 'price', 'discount', 'status', 'receipt_of')
     list_filter = ('status',)
     ordering = ('purchase_date',)
     search_fields = ('=uuid',)
