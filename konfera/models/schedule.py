@@ -1,8 +1,11 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from konfera.models.room import Room
 from konfera.models.abstract import KonferaModel
+from konfera.models.talk import APPROVED
 
 
 class Schedule(KonferaModel):
@@ -23,3 +26,36 @@ class Schedule(KonferaModel):
 
     def __str__(self):
         return _('%(start)s (%(duration)s min)') % {'start': self.start, 'duration': self.duration}
+
+    def clean(self, *args, **kwargs):
+        # Only approved talk can be scheduled
+        if self.talk.status != APPROVED:
+            raise ValidationError(_('You cannot schedule unapproved talks'))
+
+        # Event is related to location and location has room,
+        # make sure selected room in schedule belongs to Event's location
+        location_room = Room.objects.filter(location=self.event.location)
+
+        if location_room.first() != self.room:
+            raise ValidationError(_('The room that you have chosen is not part of the scheduled room'))
+
+        # Make sure date and time is within the event's range
+
+        # Make sure system does not allow store two events at the same
+        # time in the same room, eg. schedule datetime + duration in room is unique.
+        schedules = get_model('Schedule').objects.filter(
+            start=self.start, duration=self.duration, room=self.room)
+        if schedules.exists():
+            # this means that there are events with the same schedule
+            raise ValidationError(_('Another event has the same schedule.'))
+
+        return super(Schedule, self).clean(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+
+        if not self.id:
+            # If talk is selected duration is copied from talk
+            self.duration = self.talk.duration
+
+        return super(Schedule, self).save(*args, **kwargs)
