@@ -25,7 +25,7 @@ def _get_last_payments():
     client = FioBank(token=settings.FIO_BANK_TOKEN)
 
     today = timezone.now()
-    date_from = (today - timedelta(days=3)).strftime(DATE_FORMAT)
+    date_from = (today - timedelta(days=settings.FIO_BANK_PROCESS_DAYS)).strftime(DATE_FORMAT)
     date_to = today.strftime(DATE_FORMAT)
 
     try:
@@ -52,7 +52,7 @@ def _get_payments_for_order(order, payments):
     ))
 
 
-def _process_payment(order, payment):
+def _process_payment(order, payment, verbose=0):
     """
     Process the payment
     - change the amount_paid
@@ -74,12 +74,18 @@ def _process_payment(order, payment):
         msg = 'Order(id={order_id}) was paid in payment with transaction_id={transaction_id}'.format(
             order_id=order.pk, transaction_id=payment['transaction_id'])
         logger.info(msg)
+
+        if verbose in (2, 3):
+            print(msg)
     else:
         order.status = Order.PARTLY_PAID
 
         msg = 'Payment with transaction_id={transaction_id} for Order(id={order_id}) was found but it\'s outside ' \
               'of error rate'.format(order_id=order.pk, transaction_id=payment['transaction_id'])
         logger.warning(msg)
+
+        if verbose in (2, 3):
+            print(msg)
 
     order.amount_paid += amount
     order.save()
@@ -100,14 +106,29 @@ def _process_payment(order, payment):
     )
 
 
-def check_payments_status():
+def check_payments_status(verbose=0):
     """ Process every awaiting and partly paid order """
-
     orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
+
+    if verbose in (2, 3):
+        print('%s awaiting or partly paid orders.' % (len(orders)))
+
     new_payments = _get_not_processed_payments(_get_last_payments())
 
+    if verbose:
+        print('%s payments received in last %s days.' % (len(new_payments), settings.FIO_BANK_PROCESS_DAYS))
+
     for order in orders:
+        if verbose in (2, 3):
+            print('Searching order with variable symbol: %s in FIO' % order.variable_symbol, end='')
 
         order_payments = _get_payments_for_order(order, new_payments)
+
+        if verbose in (2, 3):
+            if order_payments:
+                print(' ............ PASS')
+            else:
+                print(' ............ FAIL')
+
         for payment in order_payments:
-            _process_payment(order, payment)
+            _process_payment(order, payment, verbose)

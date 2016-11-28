@@ -2,6 +2,8 @@ from django.conf import settings
 
 
 FIO_BANK_TOKEN = getattr(settings, 'FIO_BANK_TOKEN', 'token')
+FIO_BANK_PROCESS_DAYS = 3
+
 PAYMENT_ERROR_RATE = getattr(settings, 'PAYMENT_ERROR_RATE', 0)
 
 PAYPAL_ADDITIONAL_CHARGE = getattr(settings, 'PAYPAL_ADDITIONAL_CHARGE', 2)
