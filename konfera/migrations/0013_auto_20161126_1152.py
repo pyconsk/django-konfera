@@ -11,13 +11,13 @@ def forwards_func(apps, schema_editor):
     text = """Dear {first_name} {last_name},\n\n
               thank you for purchasing ticket for {event}.\n
               Your order details are available at url: {order_url}\n\n\n
-              Looking forward to see you.\n\n
+              Looking forward to seeing you.\n\n
               {event} organizers team.\n\n
               {event_url}\n"""
     html = """Dear {first_name} {last_name},<br /><br />
               thank you for purchasing ticket for <strong><a href=\"{event_url}\">{event}</a></strong>.<br />
               Your order details are available at url: <a href=\"{order_url}\">{order_url}</a><br /><br /><br />
-              Looking forward to see you.<br /><br />
+              Looking forward to seeing you.<br /><br />
               {event} organizers team.<br />"""
     EmailTemplate.objects.using(db_alias).bulk_create([
         EmailTemplate(name="register_email", counter=0, text_template=text, html_template=html),
