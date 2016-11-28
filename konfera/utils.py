@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_UP
+
 from konfera.models.order import Order
 from konfera.settings import GOOGLE_ANALYTICS
 
@@ -31,3 +33,9 @@ def update_event_context(event, context, show_sponsors=True):
 
     if event.analytics:
         context['ga'] = event.analytics
+
+def currency_round_up(money):
+    if isinstance(money, Decimal):
+        money = money.quantize(Decimal('1.00'), rounding=ROUND_UP)
+
+    return money
