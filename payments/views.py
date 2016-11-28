@@ -56,7 +56,7 @@ class PayOrderByPaypal(TemplateView):
     def get_paypal_price(order):
         """ Calculate the total price for order when paid by paypal """
         additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
-        return (order.left_to_pay + additional_charge).quantize(Decimal('1.00'), rounding=ROUND_HALF_UP)
+        return (order.left_to_pay + additional_charge).quantize(Decimal('1.00'), rounding=ROUND_UP)
 
     @staticmethod
     def get_paypal_url(payment):
