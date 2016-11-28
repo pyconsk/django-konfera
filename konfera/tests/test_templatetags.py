@@ -36,4 +36,3 @@ class TestCurrencyTag(TestCase):
     def test_value_str_int(self):
         self.assertEqual(currency(self.value_str_int), '%s %s' % (self.value_str_int, CURRENCY[0]))
         self.assertEqual(currency_code(self.value_str_int), '%s %s' % (self.value_str_int, CURRENCY[1]))
-
