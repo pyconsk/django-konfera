@@ -9,15 +9,9 @@ register = template.Library()
 
 @register.filter
 def currency(value):
-    if str(value).replace('.', '').replace('-', '').isdigit():
-        return '%s %s' % (currency_round_up(value), CURRENCY[0])
-    else:
-        return value
+    return '%s %s' % (currency_round_up(value), CURRENCY[0])
 
 
 @register.filter
 def currency_code(value):
-    if str(value).replace('.', '').replace('-', '').isdigit():
-        return '%s %s' % (currency_round_up(value), CURRENCY[1])
-    else:
-        return value
+    return '%s %s' % (currency_round_up(value), CURRENCY[1])
