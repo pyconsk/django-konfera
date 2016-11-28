@@ -22,8 +22,10 @@ if sys.argv[-1] == 'publish':
 
 DEPS = [
     'django>=1.10.3',
-    'pytz==2016.7',
+    'pytz>=2016.7',
     'fiobank>=1.2.0',
+    'paypalrestsdk>=1.12.0',
+    'requests>=2.11.1',
 ]
 
 CLASSIFIERS = [
