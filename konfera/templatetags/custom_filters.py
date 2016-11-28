@@ -24,4 +24,5 @@ def currency(value):
         value = float(value)
     except ValueError:
         return value
-    return locale.currency(value, grouping=True)
+    return '%s €' % value
+    # return locale.currency(value, grouping=True)
