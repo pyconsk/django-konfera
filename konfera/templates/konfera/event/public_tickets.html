@@ -1,6 +1,6 @@
 {% extends 'konfera/base.html' %}
 {% load i18n %}
-
+{% load custom_filters %}
 
 {% block title %}
     {% trans "Available tickets" %}
@@ -13,7 +13,7 @@
             <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="list-group-item">
                 <h4 class="list-group-item-heading"> {{ ticket.title }} </h4>
                 <p class="list-group-item-text">{{ ticket.description }}</p>
-                <p class="list-group-item-text">{% trans "Price" %}: {{ ticket.price }}</p>
+                <p class="list-group-item-text">{% trans "Price" %}: {{ ticket.price|currency }}</p>
             </a>
         {%  endfor %}
     </div>
