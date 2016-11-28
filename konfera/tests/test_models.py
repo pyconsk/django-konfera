@@ -9,6 +9,7 @@ from django.utils.text import slugify
 
 from konfera import models
 from konfera.models.discount_code import DiscountCode
+from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
 from konfera.models.order import Order
 from konfera.models.speaker import Speaker
@@ -248,7 +249,7 @@ class TicketTest(TestCase):
     def setUp(self):
         time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
-                                   state='test_state', capacity=20)
+                                   country='test_country', capacity=20)
         location.save()
         event = models.Event(title='test_event', description='test', event_type='Event.meetup',
                              status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
@@ -425,3 +426,29 @@ class OrganizerTest(TestCase):
 
     def test_title(self):
         self.assertEquals(str(self.first_organizer), 'Mysterious Organizer')
+
+
+class EmailTemplateTest(TestCase):
+    def setUp(self):
+        self.new_template = EmailTemplate.objects.create(name='New Template', text_template='Hello',
+                                                         html_template='Hello<br/>')
+
+    def test_template(self):
+        et = EmailTemplate.objects.get(name='register_email')
+        self.assertTrue(hasattr(et, 'text_template'))
+        self.assertIn('Looking forward to seeing you.', et.text_template)
+        self.assertEquals(str(et), 'register_email')
+
+    def test_save(self):
+        self.new_template.text_template = 'Hello world'
+        self.new_template.save()
+        new = EmailTemplate.objects.filter(name='New Template')
+        self.assertTrue(new.exists())
+        et = new[0]
+        self.assertEquals(et.text_template, 'Hello world')
+        self.assertEquals(et.html_template, 'Hello<br/>')
+
+    def test_counter(self):
+        self.assertEquals(self.new_template.counter, 0)
+        self.new_template.add_count()
+        self.assertEquals(self.new_template.counter, 1)

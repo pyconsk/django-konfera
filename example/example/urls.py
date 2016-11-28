@@ -22,4 +22,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('konfera.urls')),
+    url(r'', include('payments.urls', namespace='konfera_payments')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

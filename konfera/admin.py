@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from konfera.forms import OrderedTicketsInlineFormSet
 from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
-                            Room, Schedule, Organizer)
+                            Room, Schedule, Organizer, EmailTemplate)
 
 
 class SponsorshipInline(admin.TabularInline):
@@ -19,13 +19,16 @@ class EventAdmin(admin.ModelAdmin):
     readonly_fields = ('uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'slug', 'description'),
+            'fields': ('title', 'slug', 'organizer', 'description', 'contact_email'),
         }),
         (_('Dates'), {
             'fields': ('date_from', 'date_to', 'cfp_end'),
         }),
         (_('Details'), {
-            'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),
+            'fields': ('uuid', 'event_type', 'status', 'location', 'cfp_allowed', 'footer_text', 'analytics'),
+        }),
+        (_('Code of Conduct'), {
+            'fields': ('coc', 'coc_phone', 'coc_phone2'),
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -146,7 +149,7 @@ class LocationAdmin(admin.ModelAdmin):
             'fields': ('title', 'website', 'capacity',)
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'state', 'city', 'postcode', 'get_here')
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country', 'get_here')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -174,7 +177,7 @@ class ReceiptInline(admin.StackedInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('purchase_date', 'price', 'discount', 'status', 'receipt_of')
+    list_display = ('purchase_date', 'variable_symbol', 'price', 'discount', 'status', 'receipt_of')
     list_filter = ('status',)
     ordering = ('purchase_date',)
     search_fields = ('=uuid',)
@@ -304,7 +307,7 @@ class OrganizerAdmin(admin.ModelAdmin):
             'fields': ('title', 'about_us'),
         }),
         (_('Address'), {
-            'fields': ('street', 'street2', 'city', 'country',),
+            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country',),
         }),
         (_('Legal details'), {
             'fields': ('company_id', 'tax_id', 'vat_id',),
@@ -318,3 +321,25 @@ class OrganizerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Organizer, OrganizerAdmin)
+
+
+class EmailTemplateAdmin(admin.ModelAdmin):
+    list_display = ('name', 'text_template', 'counter')
+    ordering = ('name',)
+    search_fields = ('=name',)
+    readonly_fields = ('date_created', 'date_modified', 'counter')
+    fieldsets = (
+        (_('Basic Info'), {
+            'fields': ('name', 'counter'),
+        }),
+        (_('Templates'), {
+            'fields': ('text_template', 'html_template',),
+        }),
+        (_('Modifications'), {
+            'fields': ('date_created', 'date_modified',),
+            'classes': ('collapse',),
+        }),
+    )
+
+
+admin.site.register(EmailTemplate, EmailTemplateAdmin)

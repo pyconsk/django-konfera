@@ -1,9 +1,11 @@
 from django import VERSION
+from django.conf import settings
 from django.test import TestCase
-from django.utils.translation import ugettext_lazy as _
 
-from konfera.models import Event, Location, Talk, TicketType, Ticket
+from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
+from konfera import settings as konfera_settings
+from .utils import custom_override_settings
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -14,7 +16,7 @@ else:
 class TestEventRedirect(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
         )
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
@@ -41,7 +43,7 @@ class TestEventRedirect(TestCase):
 class TestEventList(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
         )
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
@@ -123,11 +125,100 @@ class TestEventList(TestCase):
         # Test redirect after submission
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
+    @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
+    def test_cfp_successful_form_submit_notify(self):
+        self.assertEquals(settings.PROPOSAL_EMAIL_NOTIFY, True)
+
+        url, response = self._get_existing_event()
+        speaker_data = self._speaker_form_minimal_data()
+        speaker_data['speaker-email'] = 'notify@example.com'
+        talk_data = self._talk_form_minimal_data()
+        talk_data['talk-title'] = 'Great talk'
+        post_data = dict(speaker_data, **talk_data)
+
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 0)
+
+        response = self.client.post(url, data=post_data)
+
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 1)
+
+        # retrieve the talk and speaker from the database
+        talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
+        self.assertEquals(talk_in_db.count(), 1)
+        self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
+        self.assertEquals(talk_in_db[0].status, Talk.CFP)
+
+        # Test redirect after submission
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+
+    @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
+    def test_cfp_successful_form_submit_notify_invalid_email(self):
+        url, response = self._get_existing_event()
+        speaker_data = self._speaker_form_minimal_data()
+        speaker_data['speaker-email'] = 'notify@'
+        talk_data = self._talk_form_minimal_data()
+        talk_data['talk-title'] = 'Another great talk'
+        post_data = dict(speaker_data, **talk_data)
+
+        # post data with invalid email address
+        self.client.post(url, data=post_data)
+
+        # counter should not change as email has not been sent
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 0)
+
+
+class TestMeetup(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
+        )
+        Event.objects.create(
+            title='Meetup', slug='meetup', description='Fabulous meetup', event_type='meetup', status='published',
+            location=self.location, date_from='2016-01-01 17:00:00+01:00', date_to='2016-01-01 19:00:00+01:00',
+        )
+
+    def test_get_meetup(self):
+        response = self.client.get('/meetup/')
+        # Check that the response is 200 OK.
+        self.assertEqual(response.status_code, 200)
+        # Check if about us text is present
+        self.assertIn('Fabulous meetup', str(response.content))
+
+
+class TestEventOrganizer(TestCase):
+    def setUp(self):
+        self.location = Location.objects.create(title='FIIT', street='Ilkovicova', city='Bratislava', capacity=400)
+
+    def test_event_organizer(self):
+        organizer = Organizer.objects.create(title='Famous Organizer', street='3 Mysterious Lane', city='Far Away',
+                                             about_us='We organize things.')
+        Event.objects.create(title='Great event', slug='great_event', description='Great event', status='published',
+                             event_type='conference', location=self.location, organizer=organizer,
+                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
+        response = self.client.get('/great_event/about_us/')
+
+        # Check that the response is 200 OK.
+        self.assertEqual(response.status_code, 200)
+        # Check if about us text is present
+        self.assertIn('We organize things.', str(response.content))
+
+    def test_event_no_organizer(self):
+        Event.objects.create(title='No Organizer Event', slug='no_org_event', description='No organizer event',
+                             status='published', event_type='conference', location=self.location,
+                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
+        response = self.client.get('/no_org_event/about_us/')
+
+        # Check that the response is 404 - organizer not set.
+        self.assertEqual(response.status_code, 404)
+
 
 class TestOrderDetail(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
         )
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
@@ -151,7 +242,8 @@ class TestOrderDetail(TestCase):
 
         # Register for event as volunteer
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com'
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com',
+            'description': 'I want to help.',
         })
 
         # Check that the response is 302 FOUND.
@@ -159,7 +251,50 @@ class TestOrderDetail(TestCase):
         ticket = Ticket.objects.get(type_id=self.volunteer.id, email='test.testovac@example.com')
 
         # Check if redirect to the correct order detail page
-        self.assertRedirects(response, reverse('order_details', kwargs={'order_uuid': ticket.order.uuid}))
+        self.assertRedirects(response, reverse(konfera_settings.ORDER_REDIRECT,
+                             kwargs={'order_uuid': ticket.order.uuid}))
+
+    @custom_override_settings(REGISTER_EMAIL_NOTIFY=True)
+    def test_ticket_register_redirect_notify(self):
+        self.assertEquals(settings.REGISTER_EMAIL_NOTIFY, True)
+
+        response = self.client.get('/register/event/one/ticket/volunteer/')
+        self.assertEqual(response.status_code, 200)
+
+        et = EmailTemplate.objects.get(name='register_email')
+        self.assertEquals(et.counter, 0)
+
+        response = self.client.post('/register/event/one/ticket/volunteer/', {
+            'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify', 'email': 'notify@example.com',
+            'description': 'I want the notification.',
+        })
+        self.assertEqual(response.status_code, 302)
+
+        ticket = Ticket.objects.get(type_id=self.volunteer.id, email='notify@example.com')
+        self.assertRedirects(response, reverse(konfera_settings.ORDER_REDIRECT,
+                             kwargs={'order_uuid': ticket.order.uuid}))
+
+        et = EmailTemplate.objects.get(name='register_email')
+        self.assertEquals(et.counter, 1)
+
+    def test_register_expired_ticket(self):
+        two = Event.objects.create(
+            title='Two', slug='two', description='Second one', event_type='conference', status='published',
+            location=self.location, date_from='2011-01-01 01:01:01+01:00', date_to='2011-01-03 01:01:01+01:00',
+        )
+        TicketType.objects.create(
+            title='Expired', description='Expired ticket', price=0, attendee_type='volunteer', usage=10, event=two,
+            accessibility='public', date_from='2010-01-01 00:00:00+11:00', date_to='2010-12-31 23:59:59+11:00'
+        )
+        response = self.client.get('/register/event/two/ticket/volunteer/')
+        self.assertEqual(response.status_code, 302)
+
+        response = self.client.post('/register/event/two/ticket/volunteer/', {
+            'title': 'mr', 'first_name': 'Tester', 'last_name': 'Expired', 'email': 'expired@example.com',
+            'description': 'Something.',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': two.slug}))
 
     def test_order_status_cancelled(self):
         response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_cancelled.uuid}))
@@ -186,7 +321,7 @@ class TestIndexRedirect(TestCase):
 
     def setUp(self):
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='Slovakia', capacity=400,
         )
 
     def test_no_conference(self):
@@ -194,6 +329,8 @@ class TestIndexRedirect(TestCase):
         # Check if status is OK and correct template is used
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/list_events.html')
+        # test correct alert class
+        self.assertIn('alert alert-info', str(response.content))
 
         self.old_meetup = Event.objects.create(
             title='Old meetup', slug='old-meetup', description='Old meetup', event_type=Event.MEETUP,
@@ -232,10 +369,10 @@ class TestEventVenue(TestCase):
     def setUp(self):
         self.html_code = '<strong>test</strong>'
         self.location = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
         )
         self.location_with_venue = Location.objects.create(
-            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', state='Slovakia', capacity=400,
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,
             get_here=self.html_code,
         )
 
@@ -262,5 +399,50 @@ class TestEventVenue(TestCase):
         url = reverse('event_venue', kwargs={'slug': 'second-one'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'konfera/event_venue.html')
+        self.assertTemplateUsed(response, 'konfera/event/venue.html')
         self.assertTrue(self.html_code in response.content.decode('utf-8'))
+
+
+class TestSponsorsListView(TestCase):
+    def setUp(self):
+        location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,)
+        sponsor1 = Sponsor.objects.create(title='Sponsor 1', type=1, about_us='Platinum Sponsor')
+        sponsor2 = Sponsor.objects.create(title='Sponsor 2', type=2, about_us='Gold Sponsor')
+        evt = Event.objects.create(
+            title='Small Event', slug='small_event', description='Small event', event_type='conference',
+            status='published', date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            location=location,)
+        evt.sponsors.add(sponsor1)
+        evt.sponsors.add(sponsor2)
+
+    def test_sponsors_list(self):
+        response = self.client.get('/small_event/sponsors/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/event/sponsors.html')
+        self.assertIn('Sponsor 1', str(response.content))
+        self.assertIn('Sponsor 2', str(response.content))
+
+
+class TestSpeakersListView(TestCase):
+    def setUp(self):
+        location = Location.objects.create(
+            title='FIIT', street='Ilkovicova', city='Bratislava', postcode='841 04', country='SK', capacity=400,)
+        event = Event.objects.create(
+            title='Tiny Event', slug='tiny_event', description='Tiny event', event_type='conference',
+            status='published', date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
+            location=location,)
+        event.save()
+        speaker1 = Speaker.objects.create(first_name='Nice', last_name='Speaker', email='nice@example.com')
+        speaker2 = Speaker.objects.create(first_name='Talking', last_name='Speaker', email='talk@example.com')
+        Talk.objects.create(
+            title='Talk1', abstract='Talk 1', status=Talk.APPROVED, primary_speaker=speaker1, event=event)
+        Talk.objects.create(
+            title='Talk2', abstract='Talk 2', status=Talk.APPROVED, primary_speaker=speaker2, event=event)
+
+    def test_speakers_list(self):
+        response = self.client.get('/tiny_event/speakers/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'konfera/event/speakers.html')
+        self.assertIn('Nice Speaker', str(response.content))
+        self.assertIn('Talking Speaker', str(response.content))

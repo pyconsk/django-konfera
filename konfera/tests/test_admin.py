@@ -49,13 +49,16 @@ class ModelAdminTests(TestCase):
         event = Event.objects.get(title='PyCon SK 2016')
         ev_default_fieldsets = (
             (_('Description'), {
-                'fields': ('title', 'slug', 'description'),
+                'fields': ('title', 'slug', 'organizer', 'description', 'contact_email'),
             }),
             (_('Dates'), {
                 'fields': ('date_from', 'date_to', 'cfp_end'),
             }),
             (_('Details'), {
-                'fields': ('uuid', 'event_type', 'status', 'location', 'footer_text', 'analytics'),
+                'fields': ('uuid', 'event_type', 'status', 'location', 'cfp_allowed', 'footer_text', 'analytics'),
+            }),
+            (_('Code of Conduct'), {
+                'fields': ('coc', 'coc_phone', 'coc_phone2'),
             }),
             (_('Modifications'), {
                 'fields': ('date_created', 'date_modified'),

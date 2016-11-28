@@ -1,26 +1,13 @@
-import random
-import string
-from django.test import override_settings
 from functools import wraps
-from konfera import settings
+
 try:
     from importlib import reload
 except ImportError:
     from imp import reload
 
+from django.test import override_settings
 
-def random_string(length=1, unicode=False):
-    """
-    Returns random ascii or unicode string.
-    """
-    if unicode:
-        def random_fun():
-            return chr(random.choice((0x300, 0x2000)) + random.randint(0, 0xff))
-    else:
-        def random_fun():
-            return random.choice(string.ascii_lowercase + string.ascii_uppercase + string.digits)
-
-    return ''.join(random_fun() for _ in range(length))
+from payments import settings
 
 
 def custom_override_settings(**settings_kwargs):

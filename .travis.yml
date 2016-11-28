@@ -7,9 +7,9 @@ python:
   - "3.4"
 
 env:
-  - DJANGO_VERSION=1.8.15
-  - DJANGO_VERSION=1.9.10
-  - DJANGO_VERSION=1.10.2
+  - DJANGO_VERSION=1.8.16
+  - DJANGO_VERSION=1.9.11
+  - DJANGO_VERSION=1.10.3
 
 matrix:
   include:
@@ -29,6 +29,7 @@ install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install coverage
   - pip install fiobank==1.2.0
+  - pip install paypalrestsdk==1.11.7
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source konfera runtests.py
