@@ -8,7 +8,7 @@ GOOGLE_ANALYTICS = getattr(settings, 'GOOGLE_ANALYTICS', None)  # just define an
 Currency used in the application. (Currently support just one currency).
 Defined as tuple of Currency Symbol (Unicode block) and  Currency code (ISO 4217)
 """
-CURRENCY =  getattr(settings, 'CURRENCY', ('€', 'EUR'))
+CURRENCY = getattr(settings, 'CURRENCY', ('€', 'EUR'))
 
 TALK_DURATION = getattr(settings, 'TALK_DURATION',
                         (
