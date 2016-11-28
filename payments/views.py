@@ -9,8 +9,9 @@ from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 
 from konfera.models import Order
-from konfera.utils import update_order_status_context, update_event_context
+from konfera.utils import update_order_status_context, update_event_context, currency_round_up
 from konfera.event.forms import ReceiptForm
+from konfera.settings import CURRENCY
 
 from payments import settings
 from payments.utils import _process_payment
@@ -56,7 +57,8 @@ class PayOrderByPaypal(TemplateView):
     def get_paypal_price(order):
         """ Calculate the total price for order when paid by paypal """
         additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
-        return (order.left_to_pay + additional_charge).quantize(Decimal('1.00'), rounding=ROUND_UP)
+
+        return currency_round_up(order.left_to_pay + additional_charge)
 
     @staticmethod
     def get_paypal_url(payment):
@@ -81,7 +83,7 @@ class PayOrderByPaypal(TemplateView):
                 {
                     "amount": {
                         "total": str(PayOrderByPaypal.get_paypal_price(order)),
-                        "currency": settings.PAYPAL_CURRENCY,
+                        "currency": CURRENCY[1],
                     },
                     "description": _("Payment for {event} with variable symbol: {vs}".format(
                         event=order.event, vs=order.variable_symbol))

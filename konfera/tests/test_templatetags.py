@@ -1,44 +1,53 @@
+from decimal import Decimal
+
 from django.test import TestCase
-from ..templatetags.custom_filters import currency, set_default_locale
-from django.utils.translation import override
-import locale
+
+from konfera.templatetags.custom_filters import currency, currency_code
+from konfera.settings import CURRENCY
 
 
 class TestCurrencyTag(TestCase):
     def setUp(self):
         self.value_empty_str = ''
-        self.value_str = 'a'
+        self.value_str = 'some string'
         self.value_float = 12.5
+        self.value_negative_int = -12582
+        self.value_int = 2
+        self.value_str_int = '7'
+
+    def test_value_decimal(self):
+        test_subjects = (
+            (Decimal('1.54'), '1.54'),
+            (Decimal('43.331'), '43.34'),
+            (Decimal('12345.67894'), '12345.68'),
+            (Decimal('0.9999999'), '1.00'),
+            (Decimal('-2.31'), '-2.31'),
+            (Decimal('-71.455'), '-71.46'),
+        )
+        for subj in test_subjects:
+            self.assertEqual(currency(subj[0]), '%s %s' % (subj[1], CURRENCY[0]))
+            self.assertEqual(currency_code(subj[0]), '%s %s' % (subj[1], CURRENCY[1]))
 
     def test_value_empty_string(self):
-        self.assertEqual(currency(self.value_empty_str), self.value_empty_str)
+        self.assertRaises(AttributeError, currency, self.value_empty_str)
+        self.assertRaises(AttributeError, currency_code, self.value_empty_str)
 
-    def test_value_not_float_convertible(self):
-        self.assertEqual(currency(self.value_str), self.value_str)
+    def test_value_string(self):
+        self.assertRaises(AttributeError, currency, self.value_str)
+        self.assertRaises(AttributeError, currency_code, self.value_str)
 
     def test_value_float(self):
-        set_default_locale()
-        self.assertEqual(currency(self.value_float), locale.currency(self.value_float, grouping=True))
+        self.assertRaises(AttributeError, currency, self.value_float)
+        self.assertRaises(AttributeError, currency_code, self.value_float)
 
-    @override('en-gb')
-    def test_overridden_locale_float(self):
-        set_default_locale()
-        self.assertEqual(currency(self.value_float), locale.currency(self.value_float, grouping=True))
+    def test_value_negative_int(self):
+        self.assertRaises(AttributeError, currency, self.value_negative_int)
+        self.assertRaises(AttributeError, currency_code, self.value_negative_int)
 
+    def test_value_int(self):
+        self.assertRaises(AttributeError, currency, self.value_int)
+        self.assertRaises(AttributeError, currency_code, self.value_int)
 
-class TestSetUserLocale(TestCase):
-    @override('en-us')
-    def test_locale_is_en_US(self):
-        self.assertEqual(set_default_locale(), 'en_US.UTF-8')
-
-    @override('pt-br')
-    def test_unsupported_locale1(self):
-        self.assertIn(set_default_locale(), ['pt_BR.UTF-8', 'en_US.UTF-8'])
-
-    @override('zh-cn')
-    def test_unsupported_locale2(self):
-        self.assertIn(set_default_locale(), ['zh_CN.UTF-8', 'en_US.UTF-8'])
-
-    @override('ro-mo')
-    def test_unsupported_locale3(self):
-        self.assertIn(set_default_locale(), ['ro_MO.UTF-8', 'en_US.UTF-8'])
+    def test_value_str_int(self):
+        self.assertRaises(AttributeError, currency, self.value_str_int)
+        self.assertRaises(AttributeError, currency_code, self.value_str_int)

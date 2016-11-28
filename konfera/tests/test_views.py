@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
+from konfera import settings as konfera_settings
 from .utils import custom_override_settings
 
 if VERSION[1] in (8, 9):
@@ -250,7 +251,8 @@ class TestOrderDetail(TestCase):
         ticket = Ticket.objects.get(type_id=self.volunteer.id, email='test.testovac@example.com')
 
         # Check if redirect to the correct order detail page
-        self.assertRedirects(response, reverse(settings.ORDER_REDIRECT, kwargs={'order_uuid': ticket.order.uuid}))
+        self.assertRedirects(response, reverse(konfera_settings.ORDER_REDIRECT,
+                             kwargs={'order_uuid': ticket.order.uuid}))
 
     @custom_override_settings(REGISTER_EMAIL_NOTIFY=True)
     def test_ticket_register_redirect_notify(self):
@@ -269,7 +271,8 @@ class TestOrderDetail(TestCase):
         self.assertEqual(response.status_code, 302)
 
         ticket = Ticket.objects.get(type_id=self.volunteer.id, email='notify@example.com')
-        self.assertRedirects(response, reverse(settings.ORDER_REDIRECT, kwargs={'order_uuid': ticket.order.uuid}))
+        self.assertRedirects(response, reverse(konfera_settings.ORDER_REDIRECT,
+                             kwargs={'order_uuid': ticket.order.uuid}))
 
         et = EmailTemplate.objects.get(name='register_email')
         self.assertEquals(et.counter, 1)
