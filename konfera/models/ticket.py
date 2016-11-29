@@ -29,6 +29,7 @@ class Ticket(KonferaModel):
     last_name = models.CharField(max_length=128)
     email = models.EmailField()
     phone = models.CharField(max_length=64, blank=True)
+    # TODO isn't the description useless? The general description of the ticket provides type.description...
     description = models.TextField(blank=True)
     order = models.ForeignKey('Order', blank=True)
 

@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content_details %}
+    <p class="list-group-item-text">{{ description }}</p>
+    <p class="list-group-item-text">{% trans "Price" %}: {{ price|currency }}</p>
     <form method="post" action="">
         {% csrf_token %}
         {{ form.as_p }}
