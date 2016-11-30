@@ -102,8 +102,7 @@ class CFPView(TemplateView):
                 edit_url = self.request.build_absolute_uri(reverse('event_cfp_edit_form',
                                                                    args=[self.event.slug, talk_instance.uuid]))
 
-                end = getattr(self.event, 'cfp_end') or self.event.date_from
-                end_call = datetime.strftime(end, '%d %B %Y')
+                end_call = datetime.strftime(self.event.cfp_end, '%d %B %Y')
 
                 subject = _('Proposal for {event} has been submitted'.format(event=self.event.title))
                 template_data = {'first_name': speaker.first_name,
