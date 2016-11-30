@@ -27,12 +27,16 @@ class TestPayOrderByPaypal(TestCase):
     @custom_override_settings(PAYPAL_ADDITIONAL_CHARGE=0)
     def test_get_paypal_price(self):
         order = Order(price=200, discount=100, amount_paid=50)
-        self.assertEqual(PayOrderByPaypal.get_paypal_price(order), Decimal('50'))
+        order.processing_fee = PayOrderByPaypal.calculate_processing_fee(order)
+        self.assertEqual(order.processing_fee, Decimal('0'))
+        self.assertEqual(order.left_to_pay, Decimal('50'))
 
-    @custom_override_settings(PAYPAL_ADDITIONAL_CHARGE=7)
+    @custom_override_settings(PAYPAL_ADDITIONAL_CHARGE=5)
     def test_get_paypal_price2(self):
         order = Order(price=200, discount=100, amount_paid=50)
-        self.assertEqual(PayOrderByPaypal.get_paypal_price(order), Decimal('53.5'))
+        order.processing_fee = PayOrderByPaypal.calculate_processing_fee(order)
+        self.assertEqual(order.processing_fee, Decimal('2.5'))
+        self.assertEqual(order.left_to_pay, Decimal('52.5'))
 
     # Tests for .get()
 
