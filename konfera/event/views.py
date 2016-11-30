@@ -1,6 +1,6 @@
 import logging
 
-from datetime import timedelta
+from datetime import datetime, timedelta
 from smtplib import SMTPException
 
 from django import VERSION
@@ -100,7 +100,10 @@ class CFPView(TemplateView):
             if settings.PROPOSAL_EMAIL_NOTIFY:
                 event_url = self.request.build_absolute_uri(reverse('event_details', args=[self.event.slug]))
                 edit_url = self.request.build_absolute_uri(reverse('event_cfp_edit_form',
-                                                                   args=[self.event.slug, self.event.uuid]))
+                                                                   args=[self.event.slug, talk_instance.uuid]))
+
+                end = getattr(self.event, 'cfp_end') or self.event.date_from
+                end_call = datetime.strftime(end, '%d %B %Y')
 
                 subject = _('Proposal for {event} has been submitted'.format(event=self.event.title))
                 template_data = {'first_name': speaker.first_name,
@@ -109,7 +112,7 @@ class CFPView(TemplateView):
                                  'talk': talk_instance.title,
                                  'event_url': event_url,
                                  'edit_url': edit_url,
-                                 'end_call': self.event.cfp_end}
+                                 'end_call': end_call}
                 text_content = template.text_template.format(**template_data)
                 html_content = template.html_template.format(**template_data)
 
