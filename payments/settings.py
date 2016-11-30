@@ -1,5 +1,9 @@
 from django.conf import settings
 
+"""
+Payment process update order email notification.
+"""
+PAYMENT_PROCESS_EMAIL_NOTIFY = getattr(settings, 'PAYMENT_PROCESS_EMAIL_NOTIFY', False)
 
 FIO_BANK_TOKEN = getattr(settings, 'FIO_BANK_TOKEN', 'token')
 FIO_BANK_PROCESS_DAYS = 3
