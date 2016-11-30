@@ -48,6 +48,7 @@ class TestEventList(TestCase):
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            cfp_end='2020-12-31 23:59:59+01:00'
         )
         self.event_not_allowed_cfp = Event.objects.create(
             title='CFP not allowed at this event', slug='cfp-not-allowed', description='CFP not allowed',
