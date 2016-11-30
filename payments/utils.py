@@ -113,31 +113,20 @@ def _process_payment(order, payment, verbose=0):
     if settings.PAYMENT_PROCESS_EMAIL_NOTIFY:
         event = order.event
         template = EmailTemplate.objects.get(name='order_update_email')
-        subject = _('Your ticket for {event}.'.format(variable_symbol=order.variable_symbol,
-                                                      event=event.title))
+        subject = _('Your ticket for {event}.'.format(event=event.title))
 
         for ticket in order.ticket_set.all():
-            text_content = template.text_template.format(first_name=ticket.first_name,
-                                                         last_name=ticket.last_name,
-                                                         event=event.title,
-                                                         price=order.price,
-                                                         currency=CURRENCY[1],
-                                                         amount_paid=order.amount_paid,
-                                                         discount=order.discount,
-                                                         processing_fee=order.processing_fee,
-                                                         status=order.status,
+            text_content = template.text_template.format(first_name=ticket.first_name, last_name=ticket.last_name,
+                                                         event=event.title, price=order.price, currency=CURRENCY[1],
+                                                         amount_paid=order.amount_paid, discount=order.discount,
+                                                         processing_fee=order.processing_fee, status=order.status,
                                                          purchase_date=order.purchase_date,
                                                          payment_date=order.payment_date)
-            html_content = template.html_template.format(first_name=ticket.first_name,
-                                                         last_name=ticket.last_name,
-                                                         event=event.title,
-                                                         price=order.price,
-                                                         currency=CURRENCY[1],
-                                                         amount_paid=order.amount_paid,
-                                                         discount=order.discount,
-                                                         processing_fee=order.processing_fee,
-                                                         status=order.status,
-                                                         purchase_date=order.purchase_date,
+            html_content = template.html_template.format(first_name=ticket.first_name, last_name=ticket.last_name,
+                                                         event=event.title, price=order.price,
+                                                         currency=CURRENCY[1], amount_paid=order.amount_paid,
+                                                         discount=order.discount, processing_fee=order.processing_fee,
+                                                         status=order.status, purchase_date=order.purchase_date,
                                                          payment_date=order.payment_date)
             msg = EmailMultiAlternatives(subject, text_content, to=[ticket.email], bcc=EMAIL_NOTIFY_BCC)
             msg.attach_alternative(html_content, "text/html")
