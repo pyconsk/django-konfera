@@ -265,7 +265,7 @@ class TestOrderDetail(TestCase):
         self.assertEquals(settings.REGISTER_EMAIL_NOTIFY, True)
 
         response = self.client.get('/register/event/one/ticket/volunteer/')
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
 
         et = EmailTemplate.objects.get(name='register_email')
         self.assertEquals(et.counter, 0)
