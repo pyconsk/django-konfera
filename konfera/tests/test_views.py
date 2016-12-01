@@ -22,6 +22,7 @@ hour = timedelta(hours=1)
 past = now - 365 * day
 future = now + 365 * day
 
+
 class TestEventRedirect(TestCase):
     def setUp(self):
         self.location = Location.objects.create(
