@@ -83,16 +83,16 @@ class EventTest(TestCase):
 
         title = random_string(title_length)
         slug = slugify(title)
-        date_to = timezone.now()
-        date_from = date_to + datetime.timedelta(seconds=1)
+        date_from = timezone.now()
+        date_to = date_from + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
         event1 = Event(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from, date_to=date_to,
-                       location=location)
+                       location=location, cfp_allowed=False)
         event1.save()
         self.assertEqual(Event.objects.get(slug=slug).title, title)
 
         event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=Event.MEETUP, date_from=date_from,
-                       date_to=date_to, location=location)
+                       date_to=date_to, location=location, cfp_allowed=False)
         self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
     def test_cfp(self):
@@ -155,7 +155,7 @@ class OrderTest(TestCase):
         date_to = date_from + datetime.timedelta(days=1)
         location = models.Location.objects.create(title="Test Location title")
         event = Event.objects.create(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from,
-                                     date_to=date_to, location=location, status=Event.PUBLISHED)
+                                     date_to=date_to, location=location, status=Event.PUBLISHED, cfp_allowed=False)
         # Create TicketType for Event
         ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from,
                                                 date_to=date_to)
@@ -248,11 +248,12 @@ class TicketTest(TestCase):
 
     def setUp(self):
         time = timezone.now()
+        later = time + datetime.timedelta(seconds=1)
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
                                    country='test_country', capacity=20)
         location.save()
-        event = models.Event(title='test_event', description='test', event_type='Event.meetup',
-                             status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
+        event = models.Event(title='test_event', description='test', event_type='Event.meetup', cfp_allowed=False,
+                             status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=later)
         event.save()
         self.ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
                                              date_from=time, date_to=time)
@@ -323,11 +324,11 @@ class TicketTest(TestCase):
     def test_save_tickets_for_different_event(self):
         title1 = 'First title'
         title2 = 'Second title'
-        date_to = timezone.now()
-        date_from = date_to + datetime.timedelta(seconds=1)
+        date_from = timezone.now()
+        date_to = date_from + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
         date_kwargs = {'date_from': date_from, 'date_to': date_to}
-        event_kwargs = {'event_type': Event.MEETUP, 'location': location}
+        event_kwargs = {'event_type': Event.MEETUP, 'location': location, 'cfp_allowed': False}
         event_kwargs.update(date_kwargs)
         event1 = Event.objects.create(title=title1, slug=slugify(title1), **event_kwargs)
         event2 = Event.objects.create(title=title2, slug=slugify(title2), **event_kwargs)
@@ -380,6 +381,7 @@ class TicketTypeTest(TestCase):
         # PyCon SK 2054 is in the future
         future_event = Event.objects.create(title='PyCon SK 2054', description='test', event_type=Event.MEETUP,
                                             status=Event.PUBLISHED, location=event.location,
+                                            cfp_end=parse_datetime('2053-12-31T23:59:59Z'),
                                             date_from=parse_datetime('2054-03-11T09:00:00Z'),
                                             date_to=parse_datetime('2054-03-13T18:00:00Z'))
         ftt = TicketType(title='Test Future Ticket', price=120, event=future_event)

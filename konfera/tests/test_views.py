@@ -21,6 +21,7 @@ class TestEventRedirect(TestCase):
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            cfp_allowed=False
         )
 
     def test_redirects(self):
@@ -31,6 +32,7 @@ class TestEventRedirect(TestCase):
         two = Event.objects.create(
             title='Two', slug='two', description='Second one', event_type=Event.CONFERENCE, status=Event.PUBLISHED,
             location=self.location, date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
+            cfp_allowed=False
         )
 
         response = self.client.get('/events/')
@@ -48,7 +50,7 @@ class TestEventList(TestCase):
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
-            cfp_end='2020-12-31 23:59:59+01:00'
+            cfp_end='2014-12-31 23:59:59+01:00'
         )
         self.event_not_allowed_cfp = Event.objects.create(
             title='CFP not allowed at this event', slug='cfp-not-allowed', description='CFP not allowed',
@@ -179,6 +181,7 @@ class TestMeetup(TestCase):
         Event.objects.create(
             title='Meetup', slug='meetup', description='Fabulous meetup', event_type='meetup', status='published',
             location=self.location, date_from='2016-01-01 17:00:00+01:00', date_to='2016-01-01 19:00:00+01:00',
+            cfp_allowed=False
         )
 
     def test_get_meetup(self):
@@ -197,7 +200,7 @@ class TestEventOrganizer(TestCase):
         organizer = Organizer.objects.create(title='Famous Organizer', street='3 Mysterious Lane', city='Far Away',
                                              about_us='We organize things.')
         Event.objects.create(title='Great event', slug='great_event', description='Great event', status='published',
-                             event_type='conference', location=self.location, organizer=organizer,
+                             event_type='conference', location=self.location, organizer=organizer, cfp_allowed=False,
                              date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
         response = self.client.get('/great_event/about_us/')
 
@@ -209,7 +212,8 @@ class TestEventOrganizer(TestCase):
     def test_event_no_organizer(self):
         Event.objects.create(title='No Organizer Event', slug='no_org_event', description='No organizer event',
                              status='published', event_type='conference', location=self.location,
-                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00')
+                             date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+                             cfp_allowed=False)
         response = self.client.get('/no_org_event/about_us/')
 
         # Check that the response is 404 - organizer not set.
@@ -224,6 +228,7 @@ class TestOrderDetail(TestCase):
         self.one = Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
+            cfp_allowed=False
         )
         self.volunteer = TicketType.objects.create(
             title='Volunteer', description='Volunteer ticket', price=0, attendee_type='volunteer', usage=10,
@@ -260,7 +265,7 @@ class TestOrderDetail(TestCase):
         self.assertEquals(settings.REGISTER_EMAIL_NOTIFY, True)
 
         response = self.client.get('/register/event/one/ticket/volunteer/')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)
 
         et = EmailTemplate.objects.get(name='register_email')
         self.assertEquals(et.counter, 0)
@@ -282,6 +287,7 @@ class TestOrderDetail(TestCase):
         two = Event.objects.create(
             title='Two', slug='two', description='Second one', event_type='conference', status='published',
             location=self.location, date_from='2011-01-01 01:01:01+01:00', date_to='2011-01-03 01:01:01+01:00',
+            cfp_allowed=False
         )
         TicketType.objects.create(
             title='Expired', description='Expired ticket', price=0, attendee_type='volunteer', usage=10, event=two,
@@ -335,8 +341,8 @@ class TestIndexRedirect(TestCase):
 
         self.old_meetup = Event.objects.create(
             title='Old meetup', slug='old-meetup', description='Old meetup', event_type=Event.MEETUP,
-            status='published', location=self.location,
-            date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-01 01:01:01+01:00',
+            status='published', location=self.location, cfp_allowed=False,
+            date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-01 01:10:01+01:00',
         )
         response = self.client.get('')
         # Check if status is OK and correct template is used
@@ -346,7 +352,7 @@ class TestIndexRedirect(TestCase):
     def test_one_conference(self):
         self.old_conference = Event.objects.create(
             title='Old conference', slug='old-conference', description='Old conference', event_type=Event.CONFERENCE,
-            status='published', location=self.location,
+            status='published', location=self.location, cfp_allowed=False,
             date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
         )
         response = self.client.get('')
@@ -357,7 +363,7 @@ class TestIndexRedirect(TestCase):
     def test_latest_conference(self):
         self.new_conference = Event.objects.create(
             title='New conference', slug='new-conference', description='New conference', event_type=Event.CONFERENCE,
-            status='published', location=self.location,
+            status='published', location=self.location, cfp_allowed=False,
             date_from='2017-01-01 01:01:01+01:00', date_to='2017-01-03 01:01:01+01:00',
         )
         response = self.client.get('')
@@ -386,6 +392,7 @@ class TestEventVenue(TestCase):
         Event.objects.create(
             title='One', slug='one', description='First one', event_type='conference', status='published',
             location=self.location, date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            cfp_allowed=False
         )
         url = reverse('event_venue', kwargs={'slug': 'one'})
         response = self.client.get(url)
@@ -394,7 +401,7 @@ class TestEventVenue(TestCase):
     def test_venue_get_here_filled_not_escaped(self):
         Event.objects.create(
             title='Second', slug='second-one', description='Second one', event_type='conference', status='published',
-            date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
+            date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00', cfp_allowed=False,
             location=self.location_with_venue,
         )
         url = reverse('event_venue', kwargs={'slug': 'second-one'})
@@ -413,7 +420,7 @@ class TestSponsorsListView(TestCase):
         evt = Event.objects.create(
             title='Small Event', slug='small_event', description='Small event', event_type='conference',
             status='published', date_from='2015-01-01 01:01:01+01:00', date_to='2015-01-03 01:01:01+01:00',
-            location=location,)
+            location=location, cfp_allowed=False)
         evt.sponsors.add(sponsor1)
         evt.sponsors.add(sponsor2)
 
@@ -432,7 +439,7 @@ class TestSpeakersListView(TestCase):
         event = Event.objects.create(
             title='Tiny Event', slug='tiny_event', description='Tiny event', event_type='conference',
             status='published', date_from='2016-01-01 01:01:01+01:00', date_to='2016-01-03 01:01:01+01:00',
-            location=location,)
+            location=location, cfp_allowed=False)
         event.save()
         speaker1 = Speaker.objects.create(first_name='Nice', last_name='Speaker', email='nice@example.com')
         speaker2 = Speaker.objects.create(first_name='Talking', last_name='Speaker', email='talk@example.com')
