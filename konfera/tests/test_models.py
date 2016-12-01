@@ -20,9 +20,8 @@ from .utils import random_string
 
 now = timezone.now()
 day = datetime.timedelta(days=1)
-hour = datetime.timedelta(hours=1)
-later = now + hour
-distant_future = now + 3650*day
+later = now + datetime.timedelta(hours=1)
+distant_future = now + 3650 * day
 
 
 class DiscountCodeTest(TestCase):
@@ -79,7 +78,7 @@ class EventTest(TestCase):
     def test_dates(self):
         event = models.Event(title="Test Event dates")
         event.date_to = now
-        event.date_from = now + hour
+        event.date_from = later
         self.assertRaises(ValidationError, event.clean)
 
     def test_slug(self):
@@ -102,11 +101,11 @@ class EventTest(TestCase):
         self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
     def test_cfp(self):
-        event = Event(title='Test event', date_from=now, date_to=now + 2*day, cfp_allowed=True)
+        event = Event(title='Test event', date_from=now, date_to=now + 2 * day, cfp_allowed=True)
         self.assertRaises(ValidationError, event.clean)
-        event1 = Event(title='Test event', date_from=now, date_to=now + 2*day, cfp_allowed=True, cfp_end=now)
+        event1 = Event(title='Test event', date_from=now, date_to=now + 2 * day, cfp_allowed=True, cfp_end=now)
         self.assertRaises(ValidationError, event1.clean)
-        event2 = Event(title='Test normal event', date_from=now + 2*day, date_to=now + 3*day, cfp_end=now + day)
+        event2 = Event(title='Test normal event', date_from=now + 2 * day, date_to=now + 3 * day, cfp_end=now + day)
         self.assertIsNone(event2.clean())
 
 
@@ -323,7 +322,7 @@ class TicketTest(TestCase):
         title1 = 'First title'
         title2 = 'Second title'
         date_from = now
-        date_to = date_from + hour
+        date_to = later
         location = models.Location.objects.order_by('?').first()
         date_kwargs = {'date_from': date_from, 'date_to': date_to}
         event_kwargs = {'event_type': Event.MEETUP, 'location': location, 'cfp_allowed': False}
@@ -361,25 +360,25 @@ class TicketTypeTest(TestCase):
 
         # Past event and dates after it raises error
         tt.date_from = now
-        tt.date_to = now + 3*day
+        tt.date_to = now + 3 * day
         self.assertRaises(ValidationError, tt.clean)
         tt.date_from = parse_datetime('2016-01-11T09:00:00Z')
         self.assertRaises(ValidationError, tt.clean)
 
         # End date can not be before start date
-        tt.date_to = tt.date_from - 3*day
+        tt.date_to = tt.date_from - 3 * day
         self.assertRaises(ValidationError, tt.clean)
 
         # Correct data in the past before event, SAVE.
-        tt.date_to = tt.date_from + 9*day
+        tt.date_to = tt.date_from + 9 * day
         tt.clean()
         tt.save()
 
         # PyCon SK 2054 is in the future
         future_event = Event.objects.create(
             title='PyCon SK 2054', description='test', event_type=Event.MEETUP, status=Event.PUBLISHED,
-            location=event.location, cfp_end=distant_future - 7*day,
-            date_from=distant_future, date_to=distant_future + 7*day)
+            location=event.location, cfp_end=distant_future - 7 * day,
+            date_from=distant_future, date_to=distant_future + 7 * day)
         ftt = TicketType(title='Test Future Ticket', price=120, event=future_event)
 
         # Future event pre-populate the dates
@@ -397,7 +396,7 @@ class TicketTypeTest(TestCase):
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
         tt.date_from = now + day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
-        tt.date_to = now + 3*day
+        tt.date_to = now + 3 * day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
 
         # ticket type is within the date range so it is TicketType.active
@@ -405,7 +404,7 @@ class TicketTypeTest(TestCase):
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.ACTIVE])
 
         # passed ticket types we consider as TicketType.expired
-        tt.date_from = now - 3*day
+        tt.date_from = now - 3 * day
         tt.date_to = now - day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.EXPIRED])
 
