@@ -54,11 +54,9 @@ def order_payment(request, order_uuid):
 class PayOrderByPaypal(TemplateView):
 
     @staticmethod
-    def get_paypal_price(order):
+    def calculate_processing_fee(order):
         """ Calculate the total price for order when paid by paypal """
-        additional_charge = order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
-
-        return currency_round_up(order.left_to_pay + additional_charge)
+        return order.left_to_pay * Decimal(settings.PAYPAL_ADDITIONAL_CHARGE) / Decimal('100')
 
     @staticmethod
     def get_paypal_url(payment):
@@ -72,6 +70,10 @@ class PayOrderByPaypal(TemplateView):
     @staticmethod
     def pay(request, order):
         """ Create the payment and redirect to PayPal or back to the order with an error message """
+        paypal_fee = PayOrderByPaypal.calculate_processing_fee(order)
+        order.processing_fee += paypal_fee
+        order.save()
+
         payment = paypalrestsdk.Payment({
             "intent": "sale",
             "payer": {"payment_method": "paypal"},
@@ -82,7 +84,7 @@ class PayOrderByPaypal(TemplateView):
             "transactions": [
                 {
                     "amount": {
-                        "total": str(PayOrderByPaypal.get_paypal_price(order)),
+                        "total": str(currency_round_up(order.left_to_pay)),
                         "currency": CURRENCY[1],
                     },
                     "description": _("Payment for {event} with variable symbol: {vs}".format(
@@ -102,6 +104,9 @@ class PayOrderByPaypal(TemplateView):
         logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(
             order=order.pk, err=payment.error))
         messages.error(request, _('Something went wrong, try again later.'))
+
+        order.processing_fee -= paypal_fee
+        order.save()
 
         return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
 
@@ -153,6 +158,9 @@ class PayOrderByPaypal(TemplateView):
         if status == 'success' and PayOrderByPaypal.success(request, order):
             messages.success(request, _('Order successfully paid!'))
         else:
+            order.processing_fee = 0
+            order.save()
+
             messages.error(request, _('Something went wrong, try again later.'))
 
         return redirect('order_details', order_uuid=str(order.uuid))
