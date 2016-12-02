@@ -18,6 +18,11 @@ from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from .utils import random_string
 
+now = timezone.now()
+day = datetime.timedelta(days=1)
+later = now + datetime.timedelta(hours=1)
+distant_future = now + 3650 * day
+
 
 class DiscountCodeTest(TestCase):
     fixtures = ['test_data.json']
@@ -72,8 +77,8 @@ class EventTest(TestCase):
 
     def test_dates(self):
         event = models.Event(title="Test Event dates")
-        event.date_to = timezone.now()
-        event.date_from = event.date_to + datetime.timedelta(+3)
+        event.date_to = now
+        event.date_from = later
         self.assertRaises(ValidationError, event.clean)
 
     def test_slug(self):
@@ -83,28 +88,24 @@ class EventTest(TestCase):
 
         title = random_string(title_length)
         slug = slugify(title)
-        date_to = timezone.now()
-        date_from = date_to + datetime.timedelta(seconds=1)
+        date_from = now
+        date_to = date_from + datetime.timedelta(seconds=1)
         location = models.Location.objects.order_by('?').first()
         event1 = Event(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from, date_to=date_to,
-                       location=location)
+                       location=location, cfp_allowed=False)
         event1.save()
         self.assertEqual(Event.objects.get(slug=slug).title, title)
 
         event2 = Event(title=random_string(128, unicode=True), slug=slug, event_type=Event.MEETUP, date_from=date_from,
-                       date_to=date_to, location=location)
+                       date_to=date_to, location=location, cfp_allowed=False)
         self.assertRaises(IntegrityError, event2.save)  # slug must be unique
 
     def test_cfp(self):
-        now = datetime.datetime.now()
-        tomorrow = now + datetime.timedelta(days=1)
-        in_two_days = now + datetime.timedelta(days=2)
-        later = in_two_days + datetime.timedelta(hours=1)
-        event = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True)
+        event = Event(title='Test event', date_from=now, date_to=now + 2 * day, cfp_allowed=True)
         self.assertRaises(ValidationError, event.clean)
-        event1 = Event(title='Test event', date_from=now, date_to=in_two_days, cfp_allowed=True, cfp_end=now)
+        event1 = Event(title='Test event', date_from=now, date_to=now + 2 * day, cfp_allowed=True, cfp_end=now)
         self.assertRaises(ValidationError, event1.clean)
-        event2 = Event(title='Test normal event', date_from=in_two_days, date_to=later, cfp_end=tomorrow)
+        event2 = Event(title='Test normal event', date_from=now + 2 * day, date_to=now + 3 * day, cfp_end=now + day)
         self.assertIsNone(event2.clean())
 
 
@@ -155,7 +156,7 @@ class OrderTest(TestCase):
         date_to = date_from + datetime.timedelta(days=1)
         location = models.Location.objects.create(title="Test Location title")
         event = Event.objects.create(title=title, slug=slug, event_type=Event.MEETUP, date_from=date_from,
-                                     date_to=date_to, location=location, status=Event.PUBLISHED)
+                                     date_to=date_to, location=location, status=Event.PUBLISHED, cfp_allowed=False)
         # Create TicketType for Event
         ticket_type = TicketType.objects.create(title='Test Ticket Type', price=150, event=event, date_from=date_from,
                                                 date_to=date_to)
@@ -247,26 +248,23 @@ class TalkTest(TestCase):
 class TicketTest(TestCase):
 
     def setUp(self):
-        time = timezone.now()
         location = models.Location(title='test_title', street='test_street', city='test_city', postcode='000000',
                                    country='test_country', capacity=20)
         location.save()
-        event = models.Event(title='test_event', description='test', event_type='Event.meetup',
-                             status=models.event.Event.PUBLISHED, location=location, date_from=time, date_to=time)
+        event = models.Event(title='test_event', description='test', event_type='Event.meetup', cfp_allowed=False,
+                             status=models.event.Event.PUBLISHED, location=location, date_from=now, date_to=later)
         event.save()
         self.ticket_type = models.TicketType(title='test', description='test', price=100, event=event,
-                                             date_from=time, date_to=time)
+                                             date_from=now, date_to=later)
         self.ticket_type.save()
         self.ticket_type_2 = models.TicketType(title='secondType', description='otherType', price=7, event=event,
-                                               date_from=time, date_to=time)
+                                               date_from=now, date_to=later)
         self.ticket_type_2.save()
         self.discount_code = models.DiscountCode(title='test discount', hash='test', discount=60,
-                                                 date_from=time, date_to=time, usage=1,
-                                                 ticket_type=self.ticket_type)
+                                                 date_from=now, date_to=later, usage=1, ticket_type=self.ticket_type)
         self.discount_code.save()
-        self.discount_code_2 = models.DiscountCode(title='discount_2', hash='otherCode', discount=4,
-                                                   date_from=time, date_to=time, usage=100,
-                                                   ticket_type=self.ticket_type_2)
+        self.discount_code_2 = models.DiscountCode(title='discount_2', hash='otherCode', discount=4, usage=100,
+                                                   date_from=now, date_to=later, ticket_type=self.ticket_type_2)
 
     def test_string_representation(self):
         """
@@ -323,11 +321,11 @@ class TicketTest(TestCase):
     def test_save_tickets_for_different_event(self):
         title1 = 'First title'
         title2 = 'Second title'
-        date_to = timezone.now()
-        date_from = date_to + datetime.timedelta(seconds=1)
+        date_from = now
+        date_to = later
         location = models.Location.objects.order_by('?').first()
         date_kwargs = {'date_from': date_from, 'date_to': date_to}
-        event_kwargs = {'event_type': Event.MEETUP, 'location': location}
+        event_kwargs = {'event_type': Event.MEETUP, 'location': location, 'cfp_allowed': False}
         event_kwargs.update(date_kwargs)
         event1 = Event.objects.create(title=title1, slug=slugify(title1), **event_kwargs)
         event2 = Event.objects.create(title=title2, slug=slugify(title2), **event_kwargs)
@@ -354,7 +352,6 @@ class TicketTypeTest(TestCase):
         """
         Cleaning models dates follow different type of rules, also depending on event
         """
-        now = timezone.now()
         event = Event.objects.get(title='PyCon SK 2016')  # PyCon SK 2016 is in the past
         tt = TicketType(title='Test Ticket', price=12, event=event)
 
@@ -363,31 +360,31 @@ class TicketTypeTest(TestCase):
 
         # Past event and dates after it raises error
         tt.date_from = now
-        tt.date_to = now + datetime.timedelta(days=3)
+        tt.date_to = now + 3 * day
         self.assertRaises(ValidationError, tt.clean)
         tt.date_from = parse_datetime('2016-01-11T09:00:00Z')
         self.assertRaises(ValidationError, tt.clean)
 
         # End date can not be before start date
-        tt.date_to = tt.date_from - datetime.timedelta(days=3)
+        tt.date_to = tt.date_from - 3 * day
         self.assertRaises(ValidationError, tt.clean)
 
         # Correct data in the past before event, SAVE.
-        tt.date_to = tt.date_from + datetime.timedelta(days=13)
+        tt.date_to = tt.date_from + 9 * day
         tt.clean()
         tt.save()
 
         # PyCon SK 2054 is in the future
-        future_event = Event.objects.create(title='PyCon SK 2054', description='test', event_type=Event.MEETUP,
-                                            status=Event.PUBLISHED, location=event.location,
-                                            date_from=parse_datetime('2054-03-11T09:00:00Z'),
-                                            date_to=parse_datetime('2054-03-13T18:00:00Z'))
+        future_event = Event.objects.create(
+            title='PyCon SK 2054', description='test', event_type=Event.MEETUP, status=Event.PUBLISHED,
+            location=event.location, cfp_end=distant_future - 7 * day,
+            date_from=distant_future, date_to=distant_future + 7 * day)
         ftt = TicketType(title='Test Future Ticket', price=120, event=future_event)
 
         # Future event pre-populate the dates
         ftt.clean()
-        self.assertAlmostEquals((ftt.date_from - now).seconds, 0)
-        self.assertEquals(ftt.date_to, ftt.event.date_to)
+        self.assertEquals(abs(ftt.date_from - timezone.now()).seconds, 0)
+        self.assertEquals(abs(ftt.date_to - ftt.event.date_to).seconds, 0)
         ftt.save()
 
     def test_status(self):
@@ -397,27 +394,28 @@ class TicketTypeTest(TestCase):
 
         # Dates are not set or are in future ticket type is not available
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
-        tt.date_from = now + datetime.timedelta(days=1)
+        tt.date_from = now + day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
-        tt.date_to = now + datetime.timedelta(days=3)
+        tt.date_to = now + 3 * day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.NOT_AVAILABLE])
 
         # ticket type is within the date range so it is TicketType.active
-        tt.date_from = now - datetime.timedelta(days=1)
+        tt.date_from = now - day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.ACTIVE])
 
         # passed ticket types we consider as TicketType.expired
-        tt.date_from = now - datetime.timedelta(days=3)
-        tt.date_to = now - datetime.timedelta(days=1)
+        tt.date_from = now - 3 * day
+        tt.date_to = now - day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.EXPIRED])
 
 
 class OrganizerTest(TestCase):
 
     def setUp(self):
-        self.first_organizer = models.Organizer(title='Mysterious Organizer', street='1 Up street', city='Big City',
-                                                company_id='123',
-                                                about_us="World famous yet unknown conference organizer.")
+        self.first_organizer = models.Organizer(
+            title='Mysterious Organizer', street='1 Up street', city='Big City', company_id='123',
+            about_us="World famous yet unknown conference organizer."
+        )
 
     def test_save(self):
         self.assertEquals(self.first_organizer.save(), None)
@@ -430,8 +428,9 @@ class OrganizerTest(TestCase):
 
 class EmailTemplateTest(TestCase):
     def setUp(self):
-        self.new_template = EmailTemplate.objects.create(name='New Template', text_template='Hello',
-                                                         html_template='Hello<br/>')
+        self.new_template = EmailTemplate.objects.create(
+            name='New Template', text_template='Hello', html_template='Hello<br/>'
+        )
 
     def test_template(self):
         et = EmailTemplate.objects.get(name='register_email')

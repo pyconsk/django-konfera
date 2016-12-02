@@ -65,19 +65,61 @@
               <div class="panel-heading">{% trans "Order Details" %}</div>
               <div class="panel-body">
                   <strong>{% trans "Event: " %}</strong>{{ order.event }}<br>
-                  <strong>{% trans "Price: " %}</strong>{{ order.price|currency }}<br>
-                  <strong>{% trans "Amount paid: " %}</strong>{{ order.amount_paid|currency }}<br>
-                  {% if order.discount %}
-                  <strong>{% trans "Discount: " %}</strong>{{ order.discount|currency }}<br>
-                  {% endif %}
-		  <strong>{% trans "Status: " %}</strong>
+                  <strong>{% trans "Status: " %}</strong>
                   <span class="label {{ status_label }}">
                     {{ order.get_status_display }}
                   </span><br>
+                  <strong>{% trans "Variable symbol: " %}</strong>{{ order.variable_symbol }}<br>
                   <strong>{% trans "Purchase date: " %}</strong>{{ order.purchase_date }}<br>
                   {% if order.payment_date %}
                   <strong>{% trans "Payment date: " %}</strong>{{ order.payment_date }}<br>
                   {% endif %}
+                    <br />
+                  <div class="row">
+                    <div class="col-xs-6">
+                        <strong>{% trans "Price: " %}</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        {{ order.price|currency }}
+                    </div>
+                  </div>
+                  {% if order.discount %}
+                  <div class="row">
+                    <div class="col-xs-6">
+                        <strong>{% trans "Discount: " %}</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        {{ order.discount|currency }}
+                    </div>
+                  </div>
+                  {% endif %}
+                  {% if order.processing_fee %}
+                   <div class="row">
+                    <div class="col-xs-6">
+                        <strong>{% trans "Processing fee: " %}</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        {{ order.processing_fee|currency }}
+                    </div>
+                  </div>
+                  {% endif %}
+                  <hr />
+                  <div class="row">
+                    <div class="col-xs-6">
+                        <strong>{% trans "Total price: " %}</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        {{ order.to_pay|currency }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                        <strong>{% trans "Amount paid: " %}</strong>
+                    </div>
+                    <div class="col-xs-6">
+                        {{ order.amount_paid|currency }}
+                    </div>
+                  </div>
 	      </div>
             </div>
           </div>
