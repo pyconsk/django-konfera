@@ -77,9 +77,13 @@ class Event(FromToModel):
         if self.cfp_allowed and not self.cfp_end:
             raise ValidationError(_('CFP deadline has to be defined if CFP is allowed.'))
         # at this point cfp_end is defined
-        if self.cfp_end >= self.date_from:
+        if self.cfp_allowed and self.cfp_end >= self.date_from:
             raise ValidationError(_('CFP deadline should be before the event starts.'))
         super(Event, self).clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(Event, self).save(*args, **kwargs)
 
 
 Event._meta.get_field('date_from').blank = False

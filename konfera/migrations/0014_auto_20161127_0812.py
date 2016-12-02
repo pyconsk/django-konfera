@@ -10,15 +10,16 @@ def forwards_func(apps, schema_editor):
     db_alias = schema_editor.connection.alias
     text = """Dear {first_name} {last_name},\n\n
               thank you for submitting proposal for {event}.\nYou can edit your submission here: {edit_url}.\n\n
-              The call for proposals ends at {end_call}. We will inform you about the acceptance status and further
-              details shortly after this date.\n\n\n
+              The call for proposals ends at {end_call}.
+              We will inform you about the acceptance status and further details shortly after this date.\n\n\n
               {event} organizers team.\n\n
               {event_url}\n"""
     html = """Dear {first_name} {last_name},<br /><br />
               thank you for submitting proposal for <strong><a href=\"{event_url}\">{event}</a></strong>.<br />
               You can edit your submission <a href="{edit_url}">here</a>.<br /><br />
-              The call for proposals ends at {end_call}. We will inform you about the acceptance status and further
-              details shortly after this date.<br /><br /><br />
+              The call for proposals ends at {end_call}.
+              We will inform you about the acceptance status and further details shortly after this date.
+              <br /><br /><br />
               {event} organizers team.<br />"""
     EmailTemplate.objects.using(db_alias).bulk_create([
         EmailTemplate(name="confirm_proposal", counter=0, text_template=text, html_template=html),
