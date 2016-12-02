@@ -81,6 +81,10 @@ class Event(FromToModel):
             raise ValidationError(_('CFP deadline should be before the event starts.'))
         super(Event, self).clean()
 
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(Event, self).save(*args, **kwargs)
+
 
 Event._meta.get_field('date_from').blank = False
 Event._meta.get_field('date_from').verbose_name = _('Event beginning')
