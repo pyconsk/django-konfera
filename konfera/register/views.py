@@ -80,7 +80,10 @@ def _register_ticket(request, event, ticket_type):
     context['event'] = event
     context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
     context['form'] = form
+    context['title'] = ticket_type.title
     context['type'] = ticket_type.attendee_type
+    context['price'] = ticket_type.price
+    context['description'] = ticket_type.description
 
     return render(request, 'konfera/registration_form.html', context=context)
 
