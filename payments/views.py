@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_UP
+from decimal import Decimal
 import logging
 import paypalrestsdk
 
@@ -93,7 +93,13 @@ class PayOrderByPaypal(TemplateView):
             ]
         })
 
-        if payment.create():
+        try:
+            paypal_payment = payment.create()
+        except paypalrestsdk.exceptions.UnauthorizedAccess:
+            payment.error = 'Client Authentication failed'
+            paypal_payment = False
+
+        if paypal_payment:
             request.session['paypal_payment_id'] = payment['id']
 
             try:
@@ -103,7 +109,7 @@ class PayOrderByPaypal(TemplateView):
 
         logger.error("Payment for order(pk={order}) couldn't be created! Error: {err}".format(
             order=order.pk, err=payment.error))
-        messages.error(request, _('Something went wrong, try again later.'))
+        messages.error(request, _('Something went wrong, try again later, or try different payment method.'))
 
         order.processing_fee -= paypal_fee
         order.save()
