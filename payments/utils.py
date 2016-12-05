@@ -96,8 +96,10 @@ def _process_payment(order, payment, verbose=0):
     order.save()
 
     for key in payment.keys():
-        if key in ('currency', 'executor', 'comment') and payment[key] is None:
+        if key in ('currency', 'comment') and payment[key] is None:
             payment[key] = ''
+        if not payment['executor']:
+            payment['executor'] = payment['account_name']
 
     ProcessedTransaction.objects.create(
         transaction_id=payment['transaction_id'],

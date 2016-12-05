@@ -8,6 +8,7 @@ from django.test.utils import override_settings
 from konfera import models
 from payments import utils, settings
 from payments.models import ProcessedTransaction
+from payments.tests.utils import custom_override_settings
 
 
 def make_payment(new_data):
@@ -19,6 +20,7 @@ def make_payment(new_data):
         'currency': 'EUR',
         'comment': '',
         'executor': '',
+        'account_name': 'Tester Testovac',
     }
     data.update(new_data)
     return data
@@ -127,16 +129,19 @@ class TestProcessPayment(TestCase):
         self.assertEqual(order.amount_paid, 80)
         self.assertEqual(order.status, models.order.Order.PARTLY_PAID)
 
+    @custom_override_settings(PAYMENT_PROCESS_EMAIL_NOTIFY=False)
     def test_attendee_paid_enough(self):
         order = models.Order.objects.create(price=100, discount=10, amount_paid=5,
                                             status=models.order.Order.PARTLY_PAID)
-        payment = make_payment({'amount': 85, 'transaction_id': '7'})
+        payment = make_payment({'amount': 85, 'transaction_id': '7', 'executor': 'Executor Executorovac'})
 
         utils._process_payment(order, payment)
 
         self.assertEqual(order.amount_paid, 90)
         self.assertEqual(order.status, models.order.Order.PAID)
+        self.assertEqual(ProcessedTransaction.objects.all()[0].executor, 'Executor Executorovac')
 
+    @custom_override_settings(PAYMENT_PROCESS_EMAIL_NOTIFY=False)
     def test_payment_marked_as_processed(self):
         order = models.Order.objects.create(price=100, discount=10)
         payment = make_payment({'amount': 80, 'transaction_id': '7'})
@@ -147,6 +152,7 @@ class TestProcessPayment(TestCase):
 
         self.assertEqual(ProcessedTransaction.objects.count(), 1)
         self.assertEqual(ProcessedTransaction.objects.all()[0].transaction_id, '7')
+        self.assertEqual(ProcessedTransaction.objects.all()[0].executor, 'Tester Testovac')
 
 
 class TestCheckPaymentsStatus(TestCase):
@@ -154,6 +160,7 @@ class TestCheckPaymentsStatus(TestCase):
         self.order1 = models.Order.objects.create(price=200, discount=0)
         self.order2 = models.Order.objects.create(price=200, discount=7)
 
+    @custom_override_settings(PAYMENT_PROCESS_EMAIL_NOTIFY=False)
     @patch('payments.utils._get_last_payments', return_value=[])
     def test_no_payments_available(self, mock_api_call):
         """ FioBank doesn't have any payments - no order status should be changed """
@@ -166,6 +173,7 @@ class TestCheckPaymentsStatus(TestCase):
         self.assertEqual(order1.status, models.order.Order.AWAITING)
         self.assertEqual(order2.status, models.order.Order.AWAITING)
 
+    @custom_override_settings(PAYMENT_PROCESS_EMAIL_NOTIFY=False)
     @patch('payments.utils._get_last_payments')
     def test_one_order_is_paid(self, mock_api_call):
         """ FioBank doesn't have a payment for order1 - order's status was changed """
@@ -181,6 +189,7 @@ class TestCheckPaymentsStatus(TestCase):
         self.assertEqual(order1.status, models.order.Order.PAID)
         self.assertEqual(order2.status, models.order.Order.AWAITING)
 
+    @custom_override_settings(PAYMENT_PROCESS_EMAIL_NOTIFY=False)
     @patch('payments.utils._get_last_payments')
     def test_all_orders_are_paid(self, mock_api_call):
         mock_api_call.return_value = [
