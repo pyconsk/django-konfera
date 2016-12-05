@@ -455,3 +455,9 @@ class TestSpeakersListView(TestCase):
         self.assertTemplateUsed(response, 'konfera/event/speakers.html')
         self.assertIn('Nice Speaker', str(response.content))
         self.assertIn('Talking Speaker', str(response.content))
+
+
+class TestApps(TestCase):
+    def test_apps(self):
+        from konfera.apps import KonferaConfig
+        self.assertEquals(KonferaConfig.name, 'konfera')
