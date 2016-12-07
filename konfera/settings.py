@@ -13,6 +13,7 @@ CURRENCY = getattr(settings, 'CURRENCY', ('€', 'EUR'))
 TALK_LANGUAGE = getattr(settings, 'TALK_LANGUAGE',
                         (
                             ('SK', _('Slovak')),
+                            ('CZ', _('Czech')),
                             ('EN', _('English')),
                         ))
 TALK_LANGUAGE_DEFAULT = 'EN'
