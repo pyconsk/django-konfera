@@ -13,7 +13,7 @@ from fiobank import FioBank
 
 from konfera.models.email_template import EmailTemplate
 from konfera.models import Order
-from konfera.settings import CURRENCY, EMAIL_NOTIFY_BCC
+from konfera.settings import CURRENCY, EMAIL_NOTIFY_BCC, UNPAID_ORDER_NOTIFICATION_DAYS
 
 from payments import settings
 from payments.models import ProcessedTransaction
@@ -173,3 +173,45 @@ def check_payments_status(verbose=0):
 
         for payment in order_payments:
             _process_payment(order, payment, verbose)
+
+
+def send_unpaid_order_email_notifications(verbose=0):
+    """
+    Send email to all users who has unpaid orders.
+    """
+    deadline = timezone.now() - timedelta(days=UNPAID_ORDER_NOTIFICATION_DAYS)
+
+    orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
+    orders = orders.filter(date_created__lt=deadline, unpaid_notification_sent_at__isnull=True)
+
+    for order in orders:
+        template = EmailTemplate.objects.get(name='unpaid_order_notification')
+        subject = 'Your order for {event} haven\'t been paid yet.'.format(event=order.event.title)
+
+        for ticket in order.ticket_set.all():
+
+            text_content = template.text_template.format(
+                first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
+            )
+            html_content = template.html_template.format(
+                first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
+            )
+
+            msg = EmailMultiAlternatives(subject, text_content, to=[ticket.email], bcc=EMAIL_NOTIFY_BCC)
+            msg.attach_alternative(html_content, "text/html")
+
+            try:
+                msg.send()
+            except (SMTPException, ConnectionRefusedError) as e:
+                logger.critical('Sending email raised an exception: %s', e)
+            else:
+                # increase count on email_template
+                template.add_count()
+                msg = 'Email template unpaid_ticket_notifier has been send to: %s' % ticket.email
+                logger.debug(msg)
+
+                order.unpaid_notification_sent_at = timezone.now()
+                order.save()
+
+                if verbose in (2, 3):
+                    print(msg)
