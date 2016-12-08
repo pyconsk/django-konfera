@@ -95,6 +95,7 @@ class TestEventList(TestCase):
             'talk-abstract': 'More text about interesting talk',
             'talk-type': Talk.TALK,
             'talk-duration': 30,
+            'talk-language': 'EN',
             # 'primary_speaker': 'TBD',
             # 'event': 'TBD',
         }

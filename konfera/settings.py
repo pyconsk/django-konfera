@@ -10,6 +10,14 @@ Defined as tuple of Currency Symbol (Unicode block) and  Currency code (ISO 4217
 """
 CURRENCY = getattr(settings, 'CURRENCY', ('€', 'EUR'))
 
+TALK_LANGUAGE = getattr(settings, 'TALK_LANGUAGE',
+                        (
+                            ('SK', _('Slovak')),
+                            ('CZ', _('Czech')),
+                            ('EN', _('English')),
+                        ))
+TALK_LANGUAGE_DEFAULT = 'EN'
+
 TALK_DURATION = getattr(settings, 'TALK_DURATION',
                         (
                             (5, _('5 min')),

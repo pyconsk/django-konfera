@@ -80,7 +80,7 @@ class TalkAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'abstract', 'event',)
+            'fields': ('title', 'abstract', 'language', 'event',)
         }),
         (_('Details'), {
             'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)

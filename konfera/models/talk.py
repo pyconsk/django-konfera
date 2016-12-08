@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import KonferaModel
-from konfera.settings import TALK_DURATION as TALK_DURATION_SETTING
+from konfera.settings import TALK_LANGUAGE, TALK_LANGUAGE_DEFAULT, TALK_DURATION as TALK_DURATION_SETTING
 
 
 class Talk(KonferaModel):
@@ -35,6 +35,7 @@ class Talk(KonferaModel):
     abstract = models.TextField(help_text=_('Abstract will be published in the schedule.'))
     type = models.CharField(choices=TALK_TYPE, max_length=32, default=TALK)
     status = models.CharField(choices=TALK_STATUS, max_length=32)
+    language = models.CharField(choices=TALK_LANGUAGE, max_length=2, default=TALK_LANGUAGE_DEFAULT)
     duration = models.IntegerField(choices=TALK_DURATION, help_text=_('Talk duration in minutes.'), default=30)
     primary_speaker = models.ForeignKey(
         'Speaker',
