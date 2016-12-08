@@ -32,6 +32,7 @@ class Order(KonferaModel):
     status = models.CharField(choices=ORDER_CHOICES, default=AWAITING, max_length=20)
     purchase_date = models.DateTimeField(auto_now_add=True)
     payment_date = models.DateTimeField(blank=True, null=True)
+    unpaid_notification_sent_at = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return str(self.price - self.discount)
