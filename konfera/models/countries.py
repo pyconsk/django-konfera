@@ -62,7 +62,7 @@ COUNTRIES = (
     ('CU', _('Cuba')),
     ('CW', _('Curaçao')),
     ('CY', _('Cyprus')),
-    ('CZ', _('Czechia')),
+    ('CZ', _('Czech Republic')),
     ('DK', _('Denmark')),
     ('DJ', _('Djibouti')),
     ('DM', _('Dominica')),
