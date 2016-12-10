@@ -31,7 +31,7 @@ def reverse_func(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('konfera', '0018_auto_20161203_2305'),
+        ('konfera', '0019_talk_language'),
     ]
 
     operations = [

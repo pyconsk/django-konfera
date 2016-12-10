@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('konfera', '0019_unpaid_templates'),
+        ('konfera', '0020_unpaid_templates'),
     ]
 
     operations = [
