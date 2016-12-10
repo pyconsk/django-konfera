@@ -52,3 +52,9 @@ PROPOSAL_EMAIL_NOTIFY = getattr(settings, 'PROPOSAL_EMAIL_NOTIFY', False)
 Universal BCC for all notifications
 """
 EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
+
+
+"""
+Number of days after the user is notified about unpaid order
+"""
+UNPAID_ORDER_NOTIFICATION_DAYS = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_DAYS', 3)
