@@ -188,7 +188,7 @@
 
           {% if allow_receipt_edit %}
           <div class="text-center">
-            <a href="{% url "order_details_edit" order.uuid %}" class="btn btn-default" role="button">
+            <a href="{% url "order_detail_edit" order.uuid %}" class="btn btn-default" role="button">
               <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit Receipt
             </a>
           </div>
@@ -237,7 +237,7 @@
 
             {% if allow_pdf_storage %}
             <div class="text-center">
-              <a href="{% url "order_details_pdf" order.uuid %}" class="btn btn-default" role="button">
+              <a href="{% url "order_detail_pdf" order.uuid %}" class="btn btn-default" role="button">
                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Save as PDF
               </a>
             </div>

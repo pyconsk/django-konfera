@@ -242,7 +242,7 @@ def event_about_us(request, slug):
 
 class EventOrderDetailView(DetailView):
     model = Order
-    template_name = 'konfera/order_details.html'
+    template_name = 'konfera/order_detail.html'
     slug_field = 'uuid'
     slug_url_kwarg = 'order_uuid'
 
@@ -271,12 +271,12 @@ class EventOrderDetailFormView(ModelFormMixin, EventOrderDetailView):
 
         if self.object.status != Order.AWAITING:
             messages.error(self.request, _('You can not edit order. Please contact support.'))
-            return redirect('order_details', order_uuid=self.object.uuid)
+            return redirect('order_detail', order_uuid=self.object.uuid)
 
         return super().dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        return reverse('order_details', kwargs={'order_uuid': self.object.order.uuid})
+        return reverse('order_detail', kwargs={'order_uuid': self.object.order.uuid})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -336,6 +336,6 @@ class EventOrderDetailPDFView(EventOrderDetailView):
             logger.critical('Generating PDF Order detail raised an exception: %s', e)
             messages.error(self.request, _('Generating PDF Order detail failed. Please try again later.'))
 
-            return redirect('order_details', order_uuid=self.object.uuid)
+            return redirect('order_detail', order_uuid=self.object.uuid)
 
         return response

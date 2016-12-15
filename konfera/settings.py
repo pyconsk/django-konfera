@@ -36,7 +36,7 @@ LANDING_PAGE = getattr(settings, 'LANDING_PAGE', 'latest_conference')
 """
 Specify url, where user will be redirected after registering the ticket.
 """
-ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_details')
+ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_detail')
 
 """
 Register email notification.
