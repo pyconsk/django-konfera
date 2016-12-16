@@ -249,11 +249,8 @@ class EventOrderDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context['order'] = self.object
-        context['allow_receipt_edit'] = True
+        context['allow_receipt_edit'] = self.object.status == Order.AWAITING
         context['allow_pdf_storage'] = True
-
-        if self.object.status != Order.AWAITING:
-            context['allow_receipt_edit'] = False
 
         if self.object.event:
             update_event_context(self.object.event, context, show_sponsors=False)
@@ -270,7 +267,7 @@ class EventOrderDetailFormView(ModelFormMixin, EventOrderDetailView):
         self.object = self.get_object()
 
         if self.object.status != Order.AWAITING:
-            messages.error(self.request, _('You can not edit order. Please contact support.'))
+            messages.error(self.request, _('You can not edit your order. Please contact the support.'))
             return redirect('order_detail', order_uuid=self.object.uuid)
 
         return super().dispatch(*args, **kwargs)
@@ -296,8 +293,8 @@ class EventOrderDetailFormView(ModelFormMixin, EventOrderDetailView):
 
         if form.is_valid():
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+
+        return self.form_invalid(form)
 
     def form_valid(self, form):
         messages.success(self.request, _('Your order details has been updated.'))
@@ -320,18 +317,12 @@ class EventOrderDetailPDFView(EventOrderDetailView):
 
     def render_to_response(self, context):
         try:
-            response = PDFTemplateResponse(request=self.request,
-                                           template=self.template_name,
+            response = PDFTemplateResponse(request=self.request, template=self.template_name,
                                            filename="order-%s.pdf" % self.object.variable_symbol,
-                                           context=self.get_context_data(),
-                                           show_content_in_browser=False,
-                                           cmd_options={'margin-top': 10,
-                                                        "zoom": 1,
-                                                        "viewport-size": "1366 x 513",
-                                                        'javascript-delay': 1000,
-                                                        'footer-center': '[page]/[topage]',
-                                                        "no-stop-slow-scripts": True},
-                                           )
+                                           context=self.get_context_data(), show_content_in_browser=False,
+                                           cmd_options={'margin-top': 10, 'zoom': 1, 'viewport-size': '1366 x 513',
+                                                        'javascript-delay': 1000, 'footer-center': '[page]/[topage]',
+                                                        'no-stop-slow-scripts': True})
         except CalledProcessError as e:
             logger.critical('Generating PDF Order detail raised an exception: %s', e)
             messages.error(self.request, _('Generating PDF Order detail failed. Please try again later.'))
