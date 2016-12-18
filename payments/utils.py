@@ -190,6 +190,14 @@ def send_unpaid_order_email_notifications(verbose=0):
     """
     Send email to all users who has unpaid orders.
     """
+    # cancel overdue orders with enough notifications
+    overdue_orders = get_unpaid_orders(overdue=True)
+
+    for order in overdue_orders:
+        order.status = Order.CANCELLED
+        order.save()
+
+    # notify the rest
     orders = get_unpaid_orders()
 
     for order in orders:
