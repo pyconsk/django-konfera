@@ -179,7 +179,8 @@ def check_payments_status(verbose=0):
 def get_unpaid_orders(overdue=False):
     deadline = timezone.now() - timedelta(days=UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
     orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
-    orders = orders.filter(Q(date_created__lt=deadline) | Q(unpaid_notification_sent_at__lt=deadline))
+    orders = orders.filter(Q(unpaid_notification_sent_amount=0) & Q(date_created__lt=deadline) |
+                           Q(unpaid_notification_sent_at__lt=deadline))
     if overdue:
         return orders.filter(unpaid_notification_sent_amount=UNPAID_ORDER_NOTIFICATION_REPEAT)
     return orders.filter(unpaid_notification_sent_amount__lt=UNPAID_ORDER_NOTIFICATION_REPEAT)

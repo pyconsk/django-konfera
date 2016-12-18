@@ -56,9 +56,9 @@ EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
 """
 How many times we should repeat the email notification
 """
-UNPAID_ORDER_NOTIFICATION_REPEAT = 3
+UNPAID_ORDER_NOTIFICATION_REPEAT = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT', 3)
 
 """
-How long shoudl we wait to notify about missing payment
+How long should we wait to notify about missing payment
 """
-UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = 5
+UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY', 5)
