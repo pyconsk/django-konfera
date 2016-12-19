@@ -63,4 +63,4 @@ UNPAID_ORDER_NOTIFICATION_DAYS = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_DA
 Enable ability to store order as PDF.
 In order to make this functionality work, make sure django-wkhtmltopdf, with wkhtmltopdf binary.
 """
-ENABLE_ORDER_PDF = getattr(settings, 'ENABLE_ORDER_PDF', False)
+ENABLE_ORDER_PDF_GENERATION = getattr(settings, 'ENABLE_ORDER_PDF_GENERATION', False)
