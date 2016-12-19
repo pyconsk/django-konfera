@@ -6,5 +6,5 @@ sitetrees = (
         item('Tickets', 'event_tickets event.slug'),
         item('Call for Proposals', 'event_cfp_form event.slug'),
         item('Code of Conduct', 'event_coc event.slug'),
-  ]),
+    ]),
 )
