@@ -8,9 +8,12 @@
 
 {% block content_details %}
     <div class="list-group">
+      <div class="list-group-item">
         <h4 class="list-group-item-heading"> {{ title }} </h4>
         <p class="list-group-item-text">{{ description }}</p>
         <p class="list-group-item-text">{% trans "Price" %}: {{ price|currency }}</p>
+      </div>
+      <p>
         <form method="post" action="">
             {% csrf_token %}
             {{ form.as_p }}
@@ -18,5 +21,6 @@
               <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> {% blocktrans %} Register as a {{ type }} {% endblocktrans %}
             </button>
         </form>
+      </p>
     </div>
 {% endblock %}
