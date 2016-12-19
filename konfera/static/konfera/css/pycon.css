@@ -588,7 +588,7 @@ body {
 hr {
   border-color:#ececec;
 }
-input, select {
+input:not([type=button]):not([type=reset]):not([type=submit]), select {
   width: 98%;
 }
 button {

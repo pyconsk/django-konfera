@@ -51,7 +51,7 @@ class TestPayOrderByPaypal(TestCase):
 
         response = self.client.get(url)
 
-        expected_redirect_url = reverse('order_details', kwargs={'order_uuid': order.uuid})
+        expected_redirect_url = reverse('order_detail', kwargs={'order_uuid': order.uuid})
         self.assertRedirects(response, expected_redirect_url)
 
     @patch('payments.views.PayOrderByPaypal.pay', return_value=HttpResponse())
@@ -69,7 +69,7 @@ class TestPayOrderByPaypal(TestCase):
 
         response = self.client.get(url)
 
-        expected_redirect_url = reverse('order_details', kwargs={'order_uuid': order.uuid})
+        expected_redirect_url = reverse('order_detail', kwargs={'order_uuid': order.uuid})
         self.assertRedirects(response, expected_redirect_url)
 
     @patch('payments.views.PayOrderByPaypal.success', return_value=True)
@@ -81,7 +81,7 @@ class TestPayOrderByPaypal(TestCase):
 
         self.assertTrue(success_method_mock.called)
 
-        expected_redirect_url = reverse('order_details', kwargs={'order_uuid': order.uuid})
+        expected_redirect_url = reverse('order_detail', kwargs={'order_uuid': order.uuid})
         self.assertRedirects(response, expected_redirect_url)
 
     # todo: test: get_paypal_url, pay, success

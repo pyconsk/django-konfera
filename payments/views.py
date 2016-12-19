@@ -32,7 +32,7 @@ def order_payment(request, order_uuid):
     context = dict()
 
     if order.status == Order.PAID:
-        return redirect('order_details', order_uuid=str(order.uuid))
+        return redirect('order_detail', order_uuid=str(order.uuid))
 
     if order.status == Order.AWAITING:
         context['form'] = form = ReceiptForm(request.POST or None, instance=order.receipt_of)
@@ -154,7 +154,7 @@ class PayOrderByPaypal(TemplateView):
             raise Http404
 
         if order.status == Order.PAID:
-            return redirect('order_details', order_uuid=str(order.uuid))
+            return redirect('order_detail', order_uuid=str(order.uuid))
 
         status = request.GET.get('status')
 
@@ -169,4 +169,4 @@ class PayOrderByPaypal(TemplateView):
 
             messages.error(request, _('Something went wrong, try again later.'))
 
-        return redirect('order_details', order_uuid=str(order.uuid))
+        return redirect('order_detail', order_uuid=str(order.uuid))

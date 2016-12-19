@@ -2,6 +2,8 @@ import logging
 
 from datetime import datetime, timedelta
 from smtplib import SMTPException
+from wkhtmltopdf.views import PDFTemplateResponse
+from subprocess import CalledProcessError
 
 from django import VERSION
 from django.contrib import messages
@@ -12,6 +14,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
@@ -224,26 +227,6 @@ def event_public_tickets(request, slug):
     return render(request=request, template_name='konfera/event/public_tickets.html', context=context)
 
 
-def event_order_detail(request, order_uuid):
-    order = get_object_or_404(Order, uuid=order_uuid)
-    context = dict()
-
-    if order.event:
-        update_event_context(order.event, context, show_sponsors=False)
-
-    if order.status == Order.AWAITING:
-        context['form'] = form = ReceiptForm(request.POST or None, instance=order.receipt_of)
-
-        if form.is_valid():
-            form.save()
-            messages.success(request, _('Your order details has been updated.'))
-
-    context['order'] = order
-    update_order_status_context(order.status, context)
-
-    return render(request=request, template_name='konfera/order_details.html', context=context)
-
-
 def event_about_us(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
@@ -255,3 +238,101 @@ def event_about_us(request, slug):
     context['organizer'] = event.organizer
 
     return render(request=request, template_name='konfera/event/event_organizer.html', context=context)
+
+
+class EventOrderDetailView(DetailView):
+    model = Order
+    template_name = 'konfera/order_detail.html'
+    slug_field = 'uuid'
+    slug_url_kwarg = 'order_uuid'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['order'] = self.object
+        context['allow_receipt_edit'] = self.object.status == Order.AWAITING
+        context['allow_pdf_storage'] = settings.ENABLE_ORDER_PDF_GENERATION
+
+        if self.object.event:
+            update_event_context(self.object.event, context, show_sponsors=False)
+
+        update_order_status_context(self.object.status, context)
+
+        return context
+
+
+class EventOrderDetailFormView(ModelFormMixin, EventOrderDetailView):
+    form_class = ReceiptForm
+
+    def dispatch(self, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.status != Order.AWAITING:
+            messages.error(self.request, _('You can not edit your order. Please contact the support.'))
+            return redirect('order_detail', order_uuid=self.object.uuid)
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('order_detail', kwargs={'order_uuid': self.object.order.uuid})
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['form'] = self.get_form()
+        return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'instance': self.object.receipt_of,
+        })
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+
+        if form.is_valid():
+            return self.form_valid(form)
+
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        messages.success(self.request, _('Your order details has been updated.'))
+
+        return super().form_valid(form)
+
+
+class EventOrderDetailPDFView(EventOrderDetailView):
+
+    def dispatch(self, *args, **kwargs):
+        if not settings.ENABLE_ORDER_PDF_GENERATION:
+            raise Http404
+
+        return super().dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['allow_receipt_edit'] = False
+        context['allow_pdf_storage'] = False
+        context['display_receipt'] = False
+
+        if self.object.receipt_of.title:
+            context['display_receipt'] = True
+
+        return context
+
+    def render_to_response(self, context):
+        try:
+            response = PDFTemplateResponse(request=self.request, template=self.template_name,
+                                           filename="order-%s.pdf" % self.object.variable_symbol,
+                                           context=self.get_context_data(), show_content_in_browser=False,
+                                           cmd_options={'margin-top': 10, 'zoom': 1, 'viewport-size': '1366 x 513',
+                                                        'javascript-delay': 1000, 'footer-center': '[page]/[topage]',
+                                                        'no-stop-slow-scripts': True})
+        except CalledProcessError as e:
+            logger.critical('Generating PDF Order detail raised an exception: %s', e)
+            messages.error(self.request, _('Generating PDF Order detail failed. Please try again later.'))
+
+            return redirect('order_detail', order_uuid=self.object.uuid)
+
+        return response

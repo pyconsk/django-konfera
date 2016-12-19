@@ -307,22 +307,22 @@ class TestOrderDetail(TestCase):
         self.assertRedirects(response, reverse('event_details', kwargs={'slug': two.slug}))
 
     def test_order_status_cancelled(self):
-        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_cancelled.uuid}))
+        response = self.client.get(reverse('order_detail', kwargs={'order_uuid': self.order_cancelled.uuid}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-danger')
 
     def test_order_status_expired(self):
-        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_expired.uuid}))
+        response = self.client.get(reverse('order_detail', kwargs={'order_uuid': self.order_expired.uuid}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-danger')
 
     def test_order_status_paid(self):
-        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_paid.uuid}))
+        response = self.client.get(reverse('order_detail', kwargs={'order_uuid': self.order_paid.uuid}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-success')
 
     def test_order_status_await(self):
-        response = self.client.get(reverse('order_details', kwargs={'order_uuid': self.order_await.uuid}))
+        response = self.client.get(reverse('order_detail', kwargs={'order_uuid': self.order_await.uuid}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-warning')
 
