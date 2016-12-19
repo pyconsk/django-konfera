@@ -250,7 +250,7 @@ class EventOrderDetailView(DetailView):
         context = super().get_context_data()
         context['order'] = self.object
         context['allow_receipt_edit'] = self.object.status == Order.AWAITING
-        context['allow_pdf_storage'] = True
+        context['allow_pdf_storage'] = settings.ENABLE_ORDER_PDF
 
         if self.object.event:
             update_event_context(self.object.event, context, show_sponsors=False)
@@ -303,6 +303,12 @@ class EventOrderDetailFormView(ModelFormMixin, EventOrderDetailView):
 
 
 class EventOrderDetailPDFView(EventOrderDetailView):
+
+    def dispatch(self, *args, **kwargs):
+        if not settings.ENABLE_ORDER_PDF:
+            raise Http404
+
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

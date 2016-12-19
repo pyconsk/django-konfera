@@ -58,3 +58,9 @@ EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
 Number of days after the user is notified about unpaid order
 """
 UNPAID_ORDER_NOTIFICATION_DAYS = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_DAYS', 3)
+
+"""
+Enable ability to store order as PDF.
+In order to make this functionality work, make sure django-wkhtmltopdf, with wkhtmltopdf binary.
+"""
+ENABLE_ORDER_PDF = getattr(settings, 'ENABLE_ORDER_PDF', False)
