@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'wkhtmltopdf',
     'konfera',
     'payments',
 ]
@@ -119,8 +120,8 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = (
-    ('en', _('English')),
-    ('sk', _('Slovak')),
+    ('en', 'English'),
+    ('sk', 'Slovensky'),
 )
 
 LOCALE_PATHS = [
@@ -133,8 +134,24 @@ LOCALE_PATHS = [
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+WKHTMLTOPDF_CMD_OPTIONS = {
+    'quiet': True,
+}
+
+if os.name != 'nt':
+    WKHTMLTOPDF_CMD = '/usr/local/bin/wkhtmltopdf'
+else:
+    WKHTMLTOPDF_DEBUG = True
+
 
 FIO_BANK_TOKEN = 'token'
 PAYMENT_ERROR_RATE = 0  # percentage
