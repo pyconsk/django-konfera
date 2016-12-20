@@ -5,6 +5,14 @@ from django.conf import settings
 GOOGLE_ANALYTICS = getattr(settings, 'GOOGLE_ANALYTICS', None)  # just define analytics code: 'UA-XXXXXXXX-X'
 
 """
+Application supports django-sitetree navigation support, weather it shouold be passed to template
+"""
+NAVIGATION_ENABLED = getattr(settings, 'NAVIGATION_ENABLED', False)
+NAVIGATION_BRAND = getattr(settings, 'NAVIGATION_BRAND', 'Konfera')
+NAVIGATION_URL = getattr(settings, 'NAVIGATION_URL', '/')
+NAVIGATION_LOGO = getattr(settings, 'NAVIGATION_LOGO', None)
+
+"""
 Currency used in the application. (Currently support just one currency).
 Defined as tuple of Currency Symbol (Unicode block) and  Currency code (ISO 4217)
 """
@@ -36,7 +44,7 @@ LANDING_PAGE = getattr(settings, 'LANDING_PAGE', 'latest_conference')
 """
 Specify url, where user will be redirected after registering the ticket.
 """
-ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_details')
+ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_detail')
 
 """
 Register email notification.
@@ -67,3 +75,9 @@ UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = getattr(settings, 'UNPAID_ORDER_NOTIFIC
 Absolute url base with protocol
 """
 ABSOLUTE_URL = getattr(settings, 'ABSOLUTE_URL', 'https://www.pycon.sk/')
+
+"""
+Enable ability to store order as PDF.
+In order to make this functionality work, make sure django-wkhtmltopdf, with wkhtmltopdf binary.
+"""
+ENABLE_ORDER_PDF_GENERATION = getattr(settings, 'ENABLE_ORDER_PDF_GENERATION', False)

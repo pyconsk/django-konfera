@@ -7,14 +7,14 @@ python:
   - "3.4"
 
 env:
-  - DJANGO_VERSION=1.8.16
-  - DJANGO_VERSION=1.9.11
-  - DJANGO_VERSION=1.10.3
+  - DJANGO_VERSION=1.8.17
+  - DJANGO_VERSION=1.9.12
+  - DJANGO_VERSION=1.10.4
 
 matrix:
   include:
     - python: "3.3"
-      env: DJANGO_VERSION=1.8.15
+      env: DJANGO_VERSION=1.8.17
 
     - python: "3.5"
       env: TEST_PEP8=True
@@ -27,9 +27,10 @@ before_install:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
   - pip install -q Django==$DJANGO_VERSION
-  - pip install coverage
+  - pip install coverage==4.2
   - pip install fiobank==1.2.0
-  - pip install paypalrestsdk==1.11.7
+  - pip install paypalrestsdk==1.12.0
+  - pip install django-wkhtmltopdf==3.1.0
 
 # command to run tests using coverage, e.g. python setup.py test
 script: coverage run --source konfera runtests.py

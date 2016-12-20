@@ -44,7 +44,7 @@ def _register_ticket(request, event, ticket_type):
         if settings.REGISTER_EMAIL_NOTIFY:
 
             event = new_ticket.type.event
-            order_url = request.build_absolute_uri(reverse('order_details', args=[new_ticket.order.uuid]))
+            order_url = request.build_absolute_uri(reverse('order_detail', args=[new_ticket.order.uuid]))
             event_url = request.build_absolute_uri(reverse('event_details', args=[event.slug]))
             subject = _('Your ticket for {event}.'.format(event=event.title))
             text_content = template.text_template.format(first_name=new_ticket.first_name,

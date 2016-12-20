@@ -1,4 +1,4 @@
-{% extends 'konfera/order_details.html' %}
+{% extends 'konfera/order_detail.html' %}
 {% load i18n %}
 {% load custom_filters %}
 
@@ -41,9 +41,11 @@
               {% endblocktrans %}
             </div>
 	    <p>{% trans "You will be redirected to the PayPal site to finish the payment." %}</p>
-            <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-success">
-                {% trans "Pay by PayPal" %}
-            </a>
+            <div class="text-center">
+              <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-lg btn-default" role="button">
+                <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> {% trans "Pay by PayPal" %}
+              </a>
+            </div>
           </div>
         </div>
       </div>
