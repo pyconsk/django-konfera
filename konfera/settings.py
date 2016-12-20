@@ -62,3 +62,8 @@ UNPAID_ORDER_NOTIFICATION_REPEAT = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_
 How long should we wait to notify about missing payment
 """
 UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY', 5)
+
+"""
+Absolute url base with protocol
+"""
+ABSOLUTE_URL = getattr(settings, 'ABSOLUTE_URL', 'https://www.pycon.sk/')

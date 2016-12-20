@@ -9,12 +9,12 @@ def forwards_func(apps, schema_editor):
     EmailTemplate = apps.get_model("konfera", "EmailTemplate")
     db_alias = schema_editor.connection.alias
     new_text = """Dear {first_name} {last_name},\n\n
-order with your ticket for {event} hasn't been paid yet.\n\n
+order ({order_url}) with your ticket for {event} hasn't been paid yet.\n\n
 Please pay for it as soon as possible otherwise your ticket will expire.\n\n\n
 
 {event} organizers team."""
     new_html = """Dear {first_name} {last_name},<br /><br />
-order with your ticket for {event} hasn't been paid yet.<br /><br />
+<a href="{order_url}">order</a> with your ticket for {event} hasn't been paid yet.<br /><br />
 Please pay for it as soon as possible otherwise your ticket will expire.<br /><br /><br />
 
 {event} organizers team."""

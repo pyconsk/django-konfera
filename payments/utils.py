@@ -176,6 +176,12 @@ def check_payments_status(verbose=0):
             _process_payment(order, payment, verbose)
 
 
+def get_full_order_url(order):
+    ABSOLUTE_URL = settings.get('ABSOLUTE_URL')
+    full_url = '{}order/{}'.format(ABSOLUTE_URL, order.uuid)
+    return full_url
+
+
 def get_unpaid_orders(overdue=False):
     deadline = timezone.now() - timedelta(days=UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
     orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
@@ -203,16 +209,17 @@ def send_unpaid_order_email_notifications(verbose=0):
     for order in orders:
         template = EmailTemplate.objects.get(name='unpaid_order_notification')
         subject = 'Your order for {event} haven\'t been paid yet.'.format(event=order.event.title)
+        order_url = get_full_order_url(order)
 
         for ticket in order.ticket_set.all():
 
             text_content = template.text_template.format(
                 first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
-                order=order
+                order_url=order_url
             )
             html_content = template.html_template.format(
                 first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
-                order=order
+                order_url=order_url
             )
 
             msg = EmailMultiAlternatives(subject, text_content, to=[ticket.email], bcc=EMAIL_NOTIFY_BCC)
