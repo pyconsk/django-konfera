@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext_lazy as _
+from django import VERSION
 
 from fiobank import FioBank
 
@@ -18,6 +19,11 @@ from konfera.settings import UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTI
 
 from payments import settings
 from payments.models import ProcessedTransaction
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 DATE_FORMAT = '%Y-%m-%d'
@@ -177,9 +183,8 @@ def check_payments_status(verbose=0):
 
 
 def get_full_order_url(order):
-    ABSOLUTE_URL = settings.get('ABSOLUTE_URL')
-    full_url = '{}order/{}'.format(ABSOLUTE_URL, order.uuid)
-    return full_url
+    site_url = settings.get('SITE_URL')
+    return site_url + reverse('order_detail', kwargs={'order_uuid': order.uuid})
 
 
 def get_unpaid_orders(overdue=False):

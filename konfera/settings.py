@@ -72,9 +72,9 @@ How long should we wait to notify about missing payment
 UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY', 5)
 
 """
-Absolute url base with protocol
+Absolute url base with protocol, MUST NOT contain trailing slash (/) at the end
 """
-ABSOLUTE_URL = getattr(settings, 'ABSOLUTE_URL', 'https://www.pycon.sk/')
+SITE_URL = getattr(settings, 'ABSOLUTE_URL', 'https://www.pycon.sk')
 
 """
 Enable ability to store order as PDF.
