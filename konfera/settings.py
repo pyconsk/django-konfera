@@ -61,11 +61,20 @@ Universal BCC for all notifications
 """
 EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
 
+"""
+How many times we should repeat the email notification
+"""
+UNPAID_ORDER_NOTIFICATION_REPEAT = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT', 3)
 
 """
-Number of days after the user is notified about unpaid order
+How long should we wait to notify about missing payment
 """
-UNPAID_ORDER_NOTIFICATION_DAYS = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_DAYS', 3)
+UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY = getattr(settings, 'UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY', 5)
+
+"""
+Absolute url base with protocol, should not contain trailing slash (/) at the end
+"""
+SITE_URL = getattr(settings, 'ABSOLUTE_URL', 'https://www.pycon.sk').rstrip('/')
 
 """
 Enable ability to store order as PDF.
