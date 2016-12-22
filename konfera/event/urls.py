@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/venue/$', views.event_venue_view, name='event_venue'),
     url(r'^(?P<slug>[\w, -]+)/speakers/$', views.event_speakers_list_view, name='event_speakers'),
     url(r'^(?P<slug>[\w, -]+)/sponsors/$', views.event_sponsors_list_view, name='event_sponsors'),
+    url(r'^(?P<slug>[\w, -]+)/code-of-conduct/$', views.event_coc, name='event_coc'),
     url(r'^(?P<slug>[\w, -]+)/cfp/$', views.CFPView.as_view(), name='event_cfp_form'),
     url(r'^(?P<slug>[\w, -]+)/cfp/(?P<uuid>[\w, -]+)$', views.CFPEditView.as_view(), name='event_cfp_edit_form'),
     url(r'^(?P<slug>[\w, -]+)/schedule/$', views.schedule_redirect, name='schedule'),
