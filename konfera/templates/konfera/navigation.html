@@ -1,0 +1,25 @@
+{% load sitetree %}
+{% load i18n %}
+{% load static %}
+
+
+<div class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <a href="{{ navigation_url }}">
+        {% if navigation_logo %}
+          <img class="navbar-brand navbar-logo" src="{{ navigation_logo }}" alt="Home" >
+        {% endif %}
+        <span class="navbar-brand">{{ navigation_brand }}</span>
+      </a>
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse hidden-print" id="navbar-main">
+      {% sitetree_menu from "events" include "trunk,topmenu" template 'sitetree/menu_bootstrap3.html' %}
+    </div>
+  </div>
+</div>

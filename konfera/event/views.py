@@ -75,6 +75,22 @@ def event_details_view(request, slug):
     return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
+def event_coc(request, slug):
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+
+    if not event.coc:
+        raise Http404
+
+    context = dict()
+    context['coc'] = event.coc
+    context['phone'] = event.coc_phone
+    context['phone2'] = event.coc_phone2
+
+    update_event_context(event, context, show_sponsors=False)
+
+    return render(request=request, template_name='konfera/event/coc.html', context=context)
+
+
 class CFPView(TemplateView):
     event = None
     template_name = 'konfera/event/cfp_form.html'
@@ -230,7 +246,7 @@ def event_public_tickets(request, slug):
 def event_about_us(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
-    update_event_context(event, context)
+    update_event_context(event, context, show_sponsors=False)
 
     if not event.organizer:
         raise Http404(_('Organizer has not been set for event %s' % event.title))
@@ -312,6 +328,8 @@ class EventOrderDetailPDFView(EventOrderDetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        context['navigation_enabled'] = False
+        context['footer_enabled'] = False
         context['allow_receipt_edit'] = False
         context['allow_pdf_storage'] = False
         context['display_receipt'] = False

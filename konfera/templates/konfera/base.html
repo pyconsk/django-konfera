@@ -19,7 +19,7 @@
 </head>
 <body>
   {% block navbar %}
-    {% if navigation_enabled %}{% include "navigation.html" %}{% endif %}
+    {% if navigation_enabled %}{% include "konfera/navigation.html" %}{% endif %}
   {% endblock %}
 
   <div class="container" id="content" role="main">
@@ -61,7 +61,7 @@
             {% endifchanged %}
             <li>
               <a href="{{ sponsor.url }}" target="_blank">
-                <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" style="width:230px" />
+                <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="{{ sponsor.get_type_display|lower }}" />
               </a>
             </li>
             {% if forloop.last %}
@@ -77,6 +77,7 @@
   {% endblock %}
 
   <!-- content end -->
+  {% if footer_enabled %}
     <footer class="hidden-print">
       <div class="row">
         {% block footer %}{% endblock %}
@@ -90,6 +91,7 @@
       </div>
       {% endif %}
     </footer>
+  {% endif %}
   </div> <!-- container end -->
 
 
