@@ -75,6 +75,22 @@ def event_details_view(request, slug):
     return render(request=request, template_name='konfera/event/details_conference.html', context=context)
 
 
+def event_coc(request, slug):
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+
+    if not event.coc:
+        raise Http404
+
+    context = dict()
+    context['coc'] = event.coc
+    context['phone'] = event.coc_phone
+    context['phone2'] = event.coc_phone2
+
+    update_event_context(event, context, show_sponsors=False)
+
+    return render(request=request, template_name='konfera/event/coc.html', context=context)
+
+
 class CFPView(TemplateView):
     event = None
     template_name = 'konfera/event/cfp_form.html'
