@@ -311,7 +311,7 @@ class OrganizerAdmin(admin.ModelAdmin):
             'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country',),
         }),
         (_('Legal details'), {
-            'fields': ('company_id', 'tax_id', 'vat_id',),
+            'fields': ('company_id', 'tax_id', 'vat_id', 'other'),
             'classes': ('collapse',),
         }),
         (_('Modifications'), {
