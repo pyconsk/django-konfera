@@ -11,12 +11,14 @@ class Sponsor(KonferaModel):
     BRONZE = 4
     OTHER = 5
     DJANGO_GIRLS = 6
+    MEDIA = 7
 
     SPONSOR_TYPE = (
         (PLATINUM, _('Platinum')),
         (GOLD, _('Gold')),
         (SILVER, _('Silver')),
         (BRONZE, _('Bronze')),
+        (MEDIA, _('Media')),
         (OTHER, _('Other')),
         (DJANGO_GIRLS, _('Django girls')),
     )
