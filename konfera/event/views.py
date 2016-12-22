@@ -230,7 +230,7 @@ def event_public_tickets(request, slug):
 def event_about_us(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
-    update_event_context(event, context)
+    update_event_context(event, context, show_sponsors=False)
 
     if not event.organizer:
         raise Http404(_('Organizer has not been set for event %s' % event.title))
