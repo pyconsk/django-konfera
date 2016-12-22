@@ -61,7 +61,7 @@
             {% endifchanged %}
             <li>
               <a href="{{ sponsor.url }}" target="_blank">
-                <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" style="width:230px" />
+                <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="{{ sponsor.get_type_display|lower }}" />
               </a>
             </li>
             {% if forloop.last %}

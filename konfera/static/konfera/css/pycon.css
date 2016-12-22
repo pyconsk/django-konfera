@@ -55,6 +55,22 @@ body {
   font-size: 12px;
 }
 
+img.media {
+  width: 130px;
+}
+
+img.silver {
+  width: 140px;
+}
+
+img.gold {
+  width: 200px;
+}
+
+img.platinum {
+  width: 230px;
+}
+
 mark.partners {
   background-color: #ADD8E6;
 }

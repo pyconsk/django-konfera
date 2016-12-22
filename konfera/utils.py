@@ -1,5 +1,6 @@
 from decimal import Decimal, ROUND_UP
 
+from konfera.models.sponsor import Sponsor
 from konfera.models.order import Order
 from konfera.settings import GOOGLE_ANALYTICS, NAVIGATION_ENABLED, NAVIGATION_URL, NAVIGATION_LOGO, NAVIGATION_BRAND
 
@@ -13,6 +14,7 @@ def collect_view_data(request):
     view_data['navigation_url'] = NAVIGATION_URL
     view_data['navigation_brand'] = NAVIGATION_BRAND
     view_data['navigation_logo'] = NAVIGATION_LOGO
+    view_data['footer_enabled'] = True
 
     if GOOGLE_ANALYTICS:
         view_data['ga'] = GOOGLE_ANALYTICS
@@ -33,7 +35,8 @@ def update_event_context(event, context, show_sponsors=True):
     context['event'] = event
 
     if show_sponsors:
-        context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER, Sponsor.MEDIA)
+        context['sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
 
     if event.analytics:
         context['ga'] = event.analytics
