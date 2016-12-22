@@ -328,6 +328,8 @@ class EventOrderDetailPDFView(EventOrderDetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
+        context['navigation_enabled'] = False
+        context['footer_enabled'] = False
         context['allow_receipt_edit'] = False
         context['allow_pdf_storage'] = False
         context['display_receipt'] = False
