@@ -5,8 +5,8 @@ from smtplib import SMTPException
 
 from django.core.mail import EmailMultiAlternatives
 from konfera.models.order import Order
-from konfera.settings import GOOGLE_ANALYTICS, NAVIGATION_ENABLED, NAVIGATION_URL, NAVIGATION_LOGO, NAVIGATION_BRAND,\
-                             EMAIL_NOTIFY_BCC
+from konfera.settings import GOOGLE_ANALYTICS, NAVIGATION_ENABLED, NAVIGATION_URL, NAVIGATION_LOGO, NAVIGATION_BRAND
+from konfera.settings import EMAIL_NOTIFY_BCC
 
 
 logger = logging.getLogger(__name__)
