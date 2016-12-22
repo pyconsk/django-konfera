@@ -51,10 +51,10 @@ def currency_round_up(money):
     return money.quantize(Decimal('1.00'), rounding=ROUND_UP)
 
 
-def validate_email_template(raw_template, input):
+def validate_email_template(raw_template, formatting_dict):
     required_keys = set(re.findall('{(.+?)}', raw_template))
-    if required_keys.issubset(set(input.keys())):
-        return raw_template.format(**input)
+    if required_keys.issubset(set(formatting_dict.keys())):
+        return raw_template.format(**formatting_dict)
     return
 
 
@@ -62,12 +62,12 @@ class EmailTemplateError(Exception):
     pass
 
 
-def send_email(addresses, subject, template, input=None, verbose=0):
-    input = input or {}
+def send_email(addresses, subject, template, formatting_dict=None, verbose=0):
+    formatting_dict = formatting_dict or {}
     text_template = getattr(template, 'text_template', '')
     html_template = getattr(template, 'html_template', '')
-    text_content = validate_email_template(text_template, input)
-    html_content = validate_email_template(html_template, input)
+    text_content = validate_email_template(text_template, formatting_dict)
+    html_content = validate_email_template(html_template, formatting_dict)
 
     if not text_content:
         logger.critical('Invalid text template (required) for the input {}.'.format(text_content))
