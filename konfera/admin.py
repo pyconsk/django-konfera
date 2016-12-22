@@ -304,6 +304,7 @@ class TicketAdmin(admin.ModelAdmin):
 
     link_to_order.short_description = "Order"
 
+
 admin.site.register(Ticket, TicketAdmin)
 
 
