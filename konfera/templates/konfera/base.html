@@ -77,6 +77,7 @@
   {% endblock %}
 
   <!-- content end -->
+  {% if footer_enabled %}
     <footer class="hidden-print">
       <div class="row">
         {% block footer %}{% endblock %}
@@ -90,6 +91,7 @@
       </div>
       {% endif %}
     </footer>
+  {% endif %}
   </div> <!-- container end -->
 
 
