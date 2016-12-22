@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal, ROUND_UP
 
 from konfera.models.order import Order
@@ -41,3 +42,11 @@ def update_event_context(event, context, show_sponsors=True):
 
 def currency_round_up(money):
     return money.quantize(Decimal('1.00'), rounding=ROUND_UP)
+
+
+def check_email_template(template, input):
+    required_keys = set(re.findall('{(.+?)}', template))
+    if required_keys.issubset(set(input.keys())):
+        return template.format(**input)
+    # raise KeyError?
+    return
