@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from konfera.utils import validate_email_template
 
+
 class EmailUtilTest(TestCase):
 
     def test_validate_email_template(self):
