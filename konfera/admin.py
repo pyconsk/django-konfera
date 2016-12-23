@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.forms import OrderedTicketsInlineFormSet
@@ -164,7 +166,7 @@ class LocationAdmin(admin.ModelAdmin):
 admin.site.register(Location, LocationAdmin)
 
 
-class OrderedTicketsInline(admin.StackedInline):
+class OrderedTicketsInline(admin.TabularInline):
     model = Ticket
     verbose_name = _('Ordered ticket')
     verbose_name_plural = _('Ordered tickets')
@@ -177,14 +179,14 @@ class ReceiptInline(admin.StackedInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('purchase_date', 'variable_symbol', 'price', 'discount', 'status', 'receipt_of')
-    list_filter = ('status',)
+    list_display = ('variable_symbol', 'purchase_date', 'price', 'discount', 'status', 'receipt_of')
+    list_filter = ('status', 'purchase_date')
     ordering = ('purchase_date',)
     search_fields = ('=uuid',)
-    readonly_fields = (
-        'purchase_date', 'payment_date', 'amount_paid', 'uuid', 'date_created', 'date_modified', 'variable_symbol',
-        'price', 'discount', 'to_pay', 'unpaid_notification_sent_at',
-    )
+    readonly_fields = [
+        'purchase_date', 'uuid', 'date_created', 'date_modified', 'variable_symbol', 'price', 'discount', 'to_pay',
+        'unpaid_notification_sent_at',
+    ]
     fieldsets = (
         (_('Details'), {
             'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
@@ -199,13 +201,20 @@ class OrderAdmin(admin.ModelAdmin):
         ReceiptInline, OrderedTicketsInline
     ]
 
+    def get_readonly_fields(self, request, obj=None):
+        if obj and obj.status not in (Order.AWAITING, Order.PARTLY_PAID):
+            return self.readonly_fields + ['amount_paid', 'payment_date', 'processing_fee']
+
+        return self.readonly_fields
+
 
 admin.site.register(Order, OrderAdmin)
 
 
 class TicketTypeAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'attendee_type', 'event', 'status', 'accessibility')
-    list_filter = ('attendee_type', 'accessibility')
+    list_filter = ('attendee_type', 'accessibility', 'event__event_type')
+    search_fields = ('=title',)
     ordering = ('event', 'title', 'date_from')
     readonly_fields = ('status', 'uuid', 'date_created', 'date_modified')
     fieldsets = (
@@ -213,7 +222,7 @@ class TicketTypeAdmin(admin.ModelAdmin):
             'fields': ('title', 'description', 'uuid', 'price', 'attendee_type', 'event',)
         }),
         (_('Availability'), {
-            'fields': ('date_from', 'date_to', 'status', 'accessibility'),
+            'fields': ('date_from', 'date_to', 'status', 'usage', 'accessibility'),
             'classes': ('collapse',),
         }),
         (_('Modifications'), {
@@ -221,6 +230,17 @@ class TicketTypeAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+    actions = ['make_public']
+
+    def make_public(self, request, queryset):
+        rows_updated = queryset.update(accessibility=TicketType.PUBLIC)
+        if rows_updated == 1:
+            message_bit = "1 Ticket type was"
+        else:
+            message_bit = "%s Ticket types were" % rows_updated
+        self.message_user(request, "%s successfully marked as public." % message_bit)
+
+    make_public.short_description = "Mark selected Ticket types as public"
 
 
 admin.site.register(TicketType, TicketTypeAdmin)
@@ -252,23 +272,37 @@ admin.site.register(DiscountCode, DiscountCodeAdmin)
 
 
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('email', 'type', 'status')
+    list_display = ('email', 'first_name', 'last_name', 'type', 'status')
     list_filter = ('status', 'type__event',)
     ordering = ('order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
-    readonly_fields = ('order', 'date_created', 'date_modified')
+    readonly_fields = ('link_to_order', 'date_created', 'date_modified')
     fieldsets = (
         (_('Personal details'), {
             'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
         }),
         (_('Ticket info'), {
-            'fields': ('order', 'type', 'discount_code', 'status', 'description')
+            'fields': ('link_to_order', 'type', 'discount_code', 'status', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
             'classes': ('collapse',),
         }),
     )
+    actions = ['make_checked_in']
+
+    def make_checked_in(self, request, queryset):
+        rows_updated = queryset.update(status=Ticket.CHECKEDIN)
+        self.message_user(request, "%s visitor(s) checked in." % rows_updated)
+
+    make_checked_in.short_description = "Mark selected Tickets as checked in"
+
+    def link_to_order(self, obj):
+        info = (Order._meta.app_label, Order._meta.model_name)
+        link = reverse("admin:%s_%s_change" % info, args=(obj.id,))
+        return mark_safe('<a href="%s">%s</a>' % (link, obj.order.uuid))
+
+    link_to_order.short_description = "Order"
 
 
 admin.site.register(Ticket, TicketAdmin)
