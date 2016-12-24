@@ -5,6 +5,7 @@ from smtplib import SMTPException
 
 from django.core.mail import EmailMultiAlternatives
 
+from konfera.models.email_template import EmailTemplate
 from konfera.models.sponsor import Sponsor
 from konfera.models.order import Order
 from konfera.settings import GOOGLE_ANALYTICS, NAVIGATION_ENABLED, NAVIGATION_URL, NAVIGATION_LOGO, NAVIGATION_BRAND
@@ -55,36 +56,51 @@ def currency_round_up(money):
     return money.quantize(Decimal('1.00'), rounding=ROUND_UP)
 
 
-def validate_email_template(raw_template, formatting_dict):
-    required_keys = set(re.findall('{(.+?)}', raw_template))
-    if required_keys.issubset(set(formatting_dict.keys())):
-        return raw_template.format(**formatting_dict)
-    return
-
-
 class EmailTemplateError(Exception):
     pass
 
 
-def send_email(addresses, subject, template, formatting_dict=None, verbose=0):
+def validate_email_template(raw_template, formatting_dict, required=True):
+    required_keys = set(re.findall('{(.+?)}', raw_template))
+    if not required_keys.issubset(set(formatting_dict.keys())):
+        if required:
+            logger.critical('Not all required fields of the template were found in formatting dictionary.\n'
+                            'required:{} !~ formatting:{}'.format(required_keys, set(formatting_dict)))
+            raise EmailTemplateError('Not all required fields of the template were found in formatting dictionary.\n'
+                                     'required:{} !~ formatting:{}'.format(required_keys, set(formatting_dict)))
+        else:
+            logger.warning('Not all required fields of the template were found in formatting dictionary.')
+
+    return raw_template.format(**formatting_dict)
+
+
+def get_email_template(template_name):
+    template = EmailTemplate.objects.get(name=template_name)
+    if not template:
+        raise EmailTemplateError('No such template: {}'.format(template_name))
+    return template
+
+
+def send_email(addresses, subject, template_name, formatting_dict=None, **kwargs):
     formatting_dict = formatting_dict or {}
+    template = get_email_template(template_name)
     text_template = getattr(template, 'text_template', '')
     html_template = getattr(template, 'html_template', '')
-    text_content = validate_email_template(text_template, formatting_dict)
-    html_content = validate_email_template(html_template, formatting_dict)
 
-    if not text_content:
-        logger.critical('Invalid text template (required) for the input {}.'.format(text_content))
-        # raise EmailTemplateError("Email template is not valid for the input.")
-    if not html_content:
-        logger.warning('Invalid html template (not required) for the input {}.'.format(html_content))
+    if not text_template:
+        logger.critical('Missing text template (required) for the input {}.'.format(text_template))
+        raise EmailTemplateError("Email template is not valid for the input.")
+    if not html_template:
+        logger.warning('Invalid html template (not required) for the input {}.'.format(html_template))
+
+    text_content = validate_email_template(text_template, formatting_dict)
+    html_content = validate_email_template(html_template, formatting_dict, False)
 
     to = addresses.get('to', [])
     cc = addresses.get('cc', [])
     bcc = addresses.get('bcc', EMAIL_NOTIFY_BCC)
 
-    # if text template does not match - do we want to raid the exception or to send unformatted template?
-    msg = EmailMultiAlternatives(subject, text_content or text_template, to=to, cc=cc, bcc=bcc)
+    msg = EmailMultiAlternatives(subject, text_content, to=to, cc=cc, bcc=bcc)
     if html_content:
         msg.attach_alternative(html_content, "text/html")
 
@@ -95,6 +111,6 @@ def send_email(addresses, subject, template, formatting_dict=None, verbose=0):
     else:
         # increase count on email_template
         template.add_count()
-        if verbose > 1:
+        if kwargs.get('verbose', 0) > 1:
             print(msg)
         return True

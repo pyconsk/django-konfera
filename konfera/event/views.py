@@ -7,7 +7,6 @@ from subprocess import CalledProcessError
 
 from django import VERSION
 from django.contrib import messages
-from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -18,12 +17,11 @@ from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
-from konfera.models.email_template import EmailTemplate
 from konfera.models.event import Event
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
-from konfera.utils import update_event_context, update_order_status_context
+from konfera.utils import send_email, update_event_context, update_order_status_context
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -106,7 +104,7 @@ class CFPView(TemplateView):
 
     def post(self, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        template = EmailTemplate.objects.get(name='confirm_proposal')
+        template_name = 'confirm_proposal'
 
         if context['speaker_form'].is_valid() and context['talk_form'].is_valid():
             speaker = context['speaker_form'].save()
@@ -124,29 +122,24 @@ class CFPView(TemplateView):
                 end_call = datetime.strftime(self.event.cfp_end, '%d %B %Y')
 
                 subject = _('Proposal for {event} has been submitted'.format(event=self.event.title))
-                template_data = {'first_name': speaker.first_name,
-                                 'last_name': speaker.last_name,
-                                 'event': self.event.title,
-                                 'talk': talk_instance.title,
-                                 'event_url': event_url,
-                                 'edit_url': edit_url,
-                                 'end_call': end_call}
-                text_content = template.text_template.format(**template_data)
-                html_content = template.html_template.format(**template_data)
-
-                msg = EmailMultiAlternatives(subject, text_content, to=[speaker.email],
-                                             bcc=settings.EMAIL_NOTIFY_BCC)
-                msg.attach_alternative(html_content, "text/html")
-
+                template_data = {
+                    'first_name': speaker.first_name,
+                    'last_name': speaker.last_name,
+                    'event': self.event.title,
+                    'talk': talk_instance.title,
+                    'event_url': event_url,
+                    'edit_url': edit_url,
+                    'end_call': end_call
+                }
+                addresses = {'to': [speaker.email], 'bcc': settings.EMAIL_NOTIFY_BCC}
                 try:
-                    msg.send()
+                    send_email(addresses, subject, template_name, formatting_dict=template_data)
                 except SMTPException as e:
                     messages.success(self.request, _('Thank you for proposal submission.'))
                     messages.error(self.request, _('There was an error while sending email!\n'
                                                    'Copy this url to access the proposal details.'))
                     logger.critical('Sending proposal confirmation email raised an exception: %s', e)
                 else:
-                    template.add_count()
                     messages.success(self.request,
                                      _('Thank you for proposal submission, you will receive confirmation email soon.'))
             else:
