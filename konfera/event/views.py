@@ -339,7 +339,7 @@ class EventOrderDetailPDFView(EventOrderDetailView):
                                            context=self.get_context_data(), show_content_in_browser=False,
                                            cmd_options={'margin-top': 10, 'zoom': 1, 'viewport-size': '1366 x 513',
                                                         'javascript-delay': 1000, 'footer-center': '[page]/[topage]',
-                                                        'no-stop-slow-scripts': True})
+                                                        'no-stop-slow-scripts': True, 'dpi': 130, 'zoom': 1.33})
         except CalledProcessError as e:
             logger.critical('Generating PDF Order detail raised an exception: %s', e)
             messages.error(self.request, _('Generating PDF Order detail failed. Please try again later.'))
