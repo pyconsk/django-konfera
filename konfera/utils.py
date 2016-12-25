@@ -70,6 +70,7 @@ def validate_email_template(raw_template, formatting_dict, required=True):
                                      'required:{} !~ formatting:{}'.format(required_keys, set(formatting_dict)))
         else:
             logger.warning('Not all required fields of the template were found in formatting dictionary.')
+            return raw_template
 
     return raw_template.format(**formatting_dict)
 
