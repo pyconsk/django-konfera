@@ -337,7 +337,7 @@ class EventOrderDetailPDFView(EventOrderDetailView):
             response = PDFTemplateResponse(request=self.request, template=self.template_name,
                                            filename="order-%s.pdf" % self.object.variable_symbol,
                                            context=self.get_context_data(), show_content_in_browser=False,
-                                           cmd_options={'margin-top': 10, 'zoom': 1, 'viewport-size': '1366 x 513',
+                                           cmd_options={'margin-top': 10, 'zoom': 1.33, 'viewport-size': '1366 x 513',
                                                         'javascript-delay': 1000, 'footer-center': '[page]/[topage]',
                                                         'no-stop-slow-scripts': True, 'dpi': 130})
         except CalledProcessError as e:
