@@ -63,7 +63,6 @@ class TestPayOrderByPaypal(TestCase):
         self.assertTrue(pay_method_mock.called)
 
     def test_get_redirect_after_paypal_callback_failed(self):
-        order = Order.objects.create(price=100, status=Order.AWAITING)
         url = reverse('konfera_payments:paypal_button_url',
                       kwargs={'order_uuid': self.order_await.uuid}) + '?status=failed'
 
@@ -90,6 +89,5 @@ class TestPayOrderByPaypal(TestCase):
         content = response.content.decode("utf-8")
         self.assertEqual('<meta name="robots" content="noindex,nofollow" />' in content, True)
         self.assertEqual('<meta name="googlebot" content="nosnippet,noarchive" />' in content, True)
-
 
     # todo: test: get_paypal_url, pay, success
