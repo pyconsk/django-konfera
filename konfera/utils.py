@@ -76,10 +76,11 @@ def validate_email_template(raw_template, formatting_dict, required=True):
 
 
 def get_email_template(template_name):
-    template = EmailTemplate.objects.get(name=template_name)
-    if not template:
+    try:
+        template = EmailTemplate.objects.get(name=template_name)
+        return template
+    except EmailTemplate.DoesNotExist:
         raise EmailTemplateError('No such template: {}'.format(template_name))
-    return template
 
 
 def send_email(addresses, subject, template_name, formatting_dict=None, **kwargs):

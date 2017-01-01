@@ -1,6 +1,7 @@
 from django.test import TestCase
 
-from konfera.utils import validate_email_template, EmailTemplateError
+from konfera.models.email_template import EmailTemplate
+from konfera.utils import validate_email_template, get_email_template, EmailTemplateError
 
 
 class EmailUtilTest(TestCase):
@@ -11,3 +12,9 @@ class EmailUtilTest(TestCase):
         invalid_input = {'Joe': 'name'}
         self.assertEqual(validate_email_template(template, valid_input), 'Hello Joe')
         self.assertRaises(EmailTemplateError, validate_email_template, *(template, invalid_input))
+
+    def test_get_email_template(self):
+        template = 'Non existing test template'
+        self.assertRaises(EmailTemplateError, get_email_template, template)
+        et = EmailTemplate.objects.create(name=template)
+        self.assertEqual(get_email_template(template), et)
