@@ -12,6 +12,7 @@ class EmailUtilTest(TestCase):
         invalid_input = {'Joe': 'name'}
         self.assertEqual(validate_email_template(template, valid_input), 'Hello Joe')
         self.assertRaises(EmailTemplateError, validate_email_template, *(template, invalid_input))
+        self.assertEqual(validate_email_template(template, {}, False), 'Hello {name}')
 
     def test_get_email_template(self):
         template = 'Non existing test template'
