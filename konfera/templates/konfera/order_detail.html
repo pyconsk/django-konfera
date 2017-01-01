@@ -2,6 +2,11 @@
 {% load i18n %}
 {% load custom_filters %}
 
+{% block header %}
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="googlebot" content="nosnippet,noarchive" />
+{% endblock %}
+
 {% block title %}
   {% trans "Order Detail" %}
 {% endblock %}
