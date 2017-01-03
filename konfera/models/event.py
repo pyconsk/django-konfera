@@ -46,7 +46,7 @@ class Event(FromToModel):
     analytics = models.TextField(blank=True)
 
     cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
-    cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True)
+    cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True, blank=True)
     contact_email = models.EmailField(verbose_name=_('E-mail'), blank=True,
                                       help_text=_('Publicly displayed email to contact organizers.'))
     coc = models.TextField(verbose_name=_('Code of Conduct'), blank=True)
