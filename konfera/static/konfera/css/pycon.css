@@ -57,18 +57,22 @@ body {
 
 img.media {
   width: 130px;
+  margin: 3px 0;
 }
 
 img.silver {
   width: 140px;
+  margin: 3px 0;
 }
 
 img.gold {
-  width: 200px;
+  width: 160px;
+  margin: 5px 0;
 }
 
 img.platinum {
   width: 230px;
+  margin: 5px 0;
 }
 
 mark.partners {
