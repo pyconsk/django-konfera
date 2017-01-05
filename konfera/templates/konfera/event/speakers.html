@@ -1,27 +1,46 @@
 {% extends 'konfera/base.html' %}
+{% load static %}
 {% load i18n %}
 
 
 {% block title %}
-    {{ event }} | {% trans "Speakers" %}
+  {{ event }} | {% trans "Speakers" %}
 {% endblock %}
 
 
 {% block content_details %}
-    <h2>{{ event }}</h2>
-    <div>
-    {% for talk in talks %}
-        <h4>{% trans "Talk:" %} {{ talk }}</h4>
-        <p>
-            {% trans "Speaker #1:" %}
-            <a href="{{ talk.primary_speaker.social_url }}">{{ talk.primary_speaker }}</a>
-        </p>
-        {% if talk.secondary_speaker %}
-            <p>
-                {% trans "Speaker #2:" %}
-                <a href="{{ talk.secondary_speaker.social_url }}">{{ talk.secondary_speaker }}</a>
-            </p>
-        {% endif %}
-    {%  endfor %}
+  <h2>{{ event }}</h2>
+
+  {% for speaker in speakers %}
+  <div class="row" id="{{ speaker.last_name.split|join:"-" }}">
+
+    {% if forloop.counter|divisibleby:2 %}  {# even loop: picture on left #}
+    <div class="col-xs-3 text-center">
+      <img src="{% if speaker.image %}{% get_media_prefix %}{{ speaker.image }}{% else %}{% static "konfera/images/no_avatar.png" %}{% endif %}" alt="{{ speaker }}" class="img-thumbnail" />
     </div>
+    {% endif %}
+
+    <div class="col-xs-9 text-justify"><h3>{{ speaker }} <small>({{ speaker.country }})</small></h3>
+      {% if speaker.url or speaker.social_url %}<p>
+        {% if speaker.url %}
+        <a href="{{ speaker.url }}" target="_blank" title="{{ speaker.first_name }} Blog">{{ speaker.url }}</a>{% if speaker.social_url %}<br />{% endif %}
+        {% endif %}
+        {% if speaker.social_url %}
+        <a href="{{ speaker.social_url }}" target="_blank" title="{{ speaker.first_name }} Social media">{{ speaker.social_url }}</a>
+        {% endif %}
+      </p>{% endif %}
+      <p>
+        {{ speaker.bio }}
+      </p>
+    </div>
+
+    {% if not forloop.counter|divisibleby:2 %}  {# odd loop: picture on right #}
+    <div class="col-xs-3 text-center">
+      <img src="{% if speaker.image %}{% get_media_prefix %}{{ speaker.image }}{% else %}{% static "konfera/images/no_avatar.png" %}{% endif %}" alt="{{ speaker }}" class="img-thumbnail" />
+    </div>
+    {% endif %}
+
+  </div>
+  <hr />
+  {%  endfor %}
 {% endblock %}
