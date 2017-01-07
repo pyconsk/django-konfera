@@ -131,7 +131,7 @@ class CFPView(TemplateView):
                     'edit_url': edit_url,
                     'end_call': end_call
                 }
-                addresses = {'to': [speaker.email], 'bcc': settings.EMAIL_NOTIFY_BCC}
+                addresses = {'to': [speaker.email]}
                 try:
                     send_email(addresses, subject, template_name, formatting_dict=template_data)
                 except SMTPException as e:

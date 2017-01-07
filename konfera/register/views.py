@@ -53,7 +53,7 @@ def _register_ticket(request, event, ticket_type):
                 'order_url': order_url,
                 'event_url': event_url,
             }
-            addresses = {'to': [new_ticket.email], 'bcc': settings.EMAIL_NOTIFY_BCC}
+            addresses = {'to': [new_ticket.email]}
             send_email(addresses, subject, template_name, formatting_dict=formatting_dict)
             messages.success(request, _('Thank you for ordering ticket. You\'ll receive confirmation email soon.'))
         else:
