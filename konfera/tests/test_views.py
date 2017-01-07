@@ -326,6 +326,13 @@ class TestOrderDetail(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['status_label'], 'label-warning')
 
+    def test_metatags_noindex_nofollow(self):
+        response = self.client.get(reverse('order_detail', kwargs={'order_uuid': self.order_paid.uuid}))
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode("utf-8")
+        self.assertEqual('<meta name="robots" content="noindex,nofollow" />' in content, True)
+        self.assertEqual('<meta name="googlebot" content="nosnippet,noarchive" />' in content, True)
+
 
 class TestIndexRedirect(TestCase):
 
