@@ -11,8 +11,8 @@ from django import VERSION
 from fiobank import FioBank
 
 from konfera.models import Order
-from konfera.settings import CURRENCY, EMAIL_NOTIFY_BCC
-from konfera.settings import UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY
+from konfera.settings import (CURRENCY, EMAIL_NOTIFY_BCC, SITE_URL,
+                              UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
 from konfera.utils import send_email
 
 from payments import settings
@@ -169,8 +169,7 @@ def check_payments_status(verbose=0):
 
 
 def get_full_order_url(order):
-    site_url = settings.get('SITE_URL')
-    return site_url + reverse('order_detail', kwargs={'order_uuid': order.uuid})
+    return SITE_URL + reverse('order_detail', kwargs={'order_uuid': order.uuid})
 
 
 def get_unpaid_orders(overdue=False):
