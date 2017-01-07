@@ -57,7 +57,7 @@ Notify after submitting proposal
 PROPOSAL_EMAIL_NOTIFY = getattr(settings, 'PROPOSAL_EMAIL_NOTIFY', False)
 
 """
-Universal BCC for all notifications
+Universal BCC for all notifications, MUST be empty list OR list of valid email adresses
 """
 EMAIL_NOTIFY_BCC = getattr(settings, 'EMAIL_NOTIFY_BCC', [])
 
