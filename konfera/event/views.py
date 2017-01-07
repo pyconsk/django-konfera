@@ -7,6 +7,7 @@ from subprocess import CalledProcessError
 
 from django import VERSION
 from django.contrib import messages
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -17,6 +18,7 @@ from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
+from konfera.models import Speaker
 from konfera.models.event import Event
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
@@ -55,7 +57,11 @@ def event_sponsors_list_view(request, slug):
 def event_speakers_list_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
-    context['talks'] = event.talk_set.filter(status=Talk.APPROVED).order_by('primary_speaker__last_name')
+
+    context['speakers'] = Speaker.objects.filter(
+        (Q(primary_speaker_talks__event__slug=slug) | Q(secondary_speaker_talks__event__slug=slug)) &
+        (Q(primary_speaker_talks__status=Talk.APPROVED) | Q(secondary_speaker_talks__status=Talk.APPROVED))
+    ).order_by('last_name')
 
     update_event_context(event, context)
 
