@@ -7,12 +7,16 @@ from konfera.models.abstract import KonferaModel
 
 class Speaker(KonferaModel):
     TITLE_UNSET = 'none'
+    TITLE_MR = 'mr'
+    TITLE_MS = 'ms'
+    TITLE_MX = 'mx'
     COUNTRY_DEFAULT = 'SK'
 
     TITLE_CHOICES = (
         (TITLE_UNSET, ''),
-        ('mr', _('Mr.')),
-        ('ms', _('Ms.')),
+        (TITLE_MR, _('Mr.')),
+        (TITLE_MS, _('Ms.')),
+        (TITLE_MX, _('Mx.')),
     )
 
     first_name = models.CharField(max_length=128)

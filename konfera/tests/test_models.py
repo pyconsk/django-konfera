@@ -211,6 +211,15 @@ class SpeakerTest(TestCase):
             '%s %s %s' % (dict(Speaker.TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
         )
 
+    def test_string_representation_title_mx(self):
+        entry = models.Speaker(first_name="Test", last_name="Tester")
+        self.assertEqual(str(entry), '%s %s' % (entry.first_name, entry.last_name))
+        entry.title = 'mx'
+        self.assertEqual(
+            str(entry),
+            '%s %s %s' % (dict(Speaker.TITLE_CHOICES)[entry.title], entry.first_name, entry.last_name)
+        )
+
 
 class SponsorTest(TestCase):
     fixtures = ['test_data.json']
