@@ -1,21 +1,19 @@
 from datetime import timedelta
 from decimal import Decimal
-from smtplib import SMTPException
 import requests
 import logging
 
 from django.db.models import Q
 from django.utils import timezone
-from django.core.mail import EmailMultiAlternatives
 from django.utils.translation import ugettext_lazy as _
 from django import VERSION
 
 from fiobank import FioBank
 
-from konfera.models.email_template import EmailTemplate
 from konfera.models import Order
-from konfera.settings import CURRENCY, EMAIL_NOTIFY_BCC
-from konfera.settings import UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY
+from konfera.settings import (CURRENCY, EMAIL_NOTIFY_BCC, SITE_URL,
+                              UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
+from konfera.utils import send_email
 
 from payments import settings
 from payments.models import ProcessedTransaction
@@ -121,37 +119,25 @@ def _process_payment(order, payment, verbose=0):
 
     if settings.PAYMENT_PROCESS_EMAIL_NOTIFY:
         event = order.event
-        template = EmailTemplate.objects.get(name='order_update_email')
         subject = _('Your ticket for {event}.'.format(event=event.title))
+        template_name = 'order_update_email'
 
         for ticket in order.ticket_set.all():
-            text_content = template.text_template.format(first_name=ticket.first_name, last_name=ticket.last_name,
-                                                         event=event.title, price=order.price, currency=CURRENCY[1],
-                                                         amount_paid=order.amount_paid, discount=order.discount,
-                                                         processing_fee=order.processing_fee, status=order.status,
-                                                         purchase_date=order.purchase_date,
-                                                         payment_date=order.payment_date)
-            html_content = template.html_template.format(first_name=ticket.first_name, last_name=ticket.last_name,
-                                                         event=event.title, price=order.price,
-                                                         currency=CURRENCY[1], amount_paid=order.amount_paid,
-                                                         discount=order.discount, processing_fee=order.processing_fee,
-                                                         status=order.status, purchase_date=order.purchase_date,
-                                                         payment_date=order.payment_date)
-            msg = EmailMultiAlternatives(subject, text_content, to=[ticket.email], bcc=EMAIL_NOTIFY_BCC)
-            msg.attach_alternative(html_content, "text/html")
-
-            try:
-                msg.send()
-            except SMTPException as e:
-                logger.critical('Sending email raised an exception: %s', e)
-            else:
-                # increase count on email_template
-                template.add_count()
-                msg = 'Email template order_update_email has been send to: %s' % ticket.email
-                logger.debug(msg)
-
-                if verbose in (2, 3):
-                    print(msg)
+            formatting_dict = {
+                'first_name': ticket.first_name,
+                'last_name': ticket.last_name,
+                'event': event.title,
+                'price': order.price,
+                'currency': CURRENCY[1],
+                'amount_paid': order.amount_paid,
+                'discount': order.discount,
+                'processing_fee': order.processing_fee,
+                'status': order.status,
+                'purchase_date': order.purchase_date,
+                'payment_date': order.payment_date
+            }
+            addresses = {'to': [ticket.email], 'bcc': EMAIL_NOTIFY_BCC}
+            send_email(addresses, subject, template_name, formatting_dict=formatting_dict)
 
 
 def check_payments_status(verbose=0):
@@ -183,8 +169,7 @@ def check_payments_status(verbose=0):
 
 
 def get_full_order_url(order):
-    site_url = settings.get('SITE_URL')
-    return site_url + reverse('order_detail', kwargs={'order_uuid': order.uuid})
+    return SITE_URL + reverse('order_detail', kwargs={'order_uuid': order.uuid})
 
 
 def get_unpaid_orders(overdue=False):
@@ -210,39 +195,24 @@ def send_unpaid_order_email_notifications(verbose=0):
 
     # notify the rest
     orders = get_unpaid_orders()
+    template_name = 'unpaid_order_notification'
 
     for order in orders:
-        template = EmailTemplate.objects.get(name='unpaid_order_notification')
         subject = 'Your order for {event} haven\'t been paid yet.'.format(event=order.event.title)
         order_url = get_full_order_url(order)
 
         for ticket in order.ticket_set.all():
+            content_data = {
+                'first_name': ticket.first_name,
+                'last_name': ticket.last_name,
+                'event': order.event.title,
+                'order_url': order_url,
+            }
+            addresses = {'to': [ticket.email], 'bcc': EMAIL_NOTIFY_BCC}
+            send_email(addresses, subject, template_name, content_data)
+            msg = 'Email template unpaid_ticket_notifier has been send to: %s' % ticket.email
+            logger.debug(msg)
 
-            text_content = template.text_template.format(
-                first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
-                order_url=order_url
-            )
-            html_content = template.html_template.format(
-                first_name=ticket.first_name, last_name=ticket.last_name, event=order.event.title,
-                order_url=order_url
-            )
-
-            msg = EmailMultiAlternatives(subject, text_content, to=[ticket.email], bcc=EMAIL_NOTIFY_BCC)
-            msg.attach_alternative(html_content, "text/html")
-
-            try:
-                msg.send()
-            except (SMTPException, ConnectionRefusedError) as e:
-                logger.critical('Sending email raised an exception: %s', e)
-            else:
-                # increase count on email_template
-                template.add_count()
-                msg = 'Email template unpaid_ticket_notifier has been send to: %s' % ticket.email
-                logger.debug(msg)
-
-                order.unpaid_notification_sent_at = timezone.now()
-                order.unpaid_notification_sent_amount += 1
-                order.save()
-
-                if verbose in (2, 3):
-                    print(msg)
+            order.unpaid_notification_sent_at = timezone.now()
+            order.unpaid_notification_sent_amount += 1
+            order.save()
