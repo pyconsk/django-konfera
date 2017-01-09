@@ -32,6 +32,10 @@ class EventAdmin(admin.ModelAdmin):
         (_('Code of Conduct'), {
             'fields': ('coc', 'coc_phone', 'coc_phone2'),
         }),
+        (_('Social media'), {
+            'fields': ('enc_social_media_meta', 'enc_social_media_list'),
+            'classes': ('collapse',),
+        }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
             'classes': ('collapse',),
