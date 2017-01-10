@@ -24,7 +24,8 @@ class Speaker(KonferaModel):
     title = models.CharField(
         choices=TITLE_CHOICES,
         max_length=4,
-        default=TITLE_UNSET
+        default=TITLE_UNSET,
+        blank=True
     )
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=64, blank=True)

@@ -5,6 +5,8 @@ from konfera.models import Ticket
 
 
 class RegistrationForm(forms.ModelForm):
+    required_css_class = 'required'
+
     class Meta:
         model = Ticket
         fields = ('title', 'first_name', 'last_name', 'email', 'phone')
