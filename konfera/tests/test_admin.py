@@ -29,9 +29,10 @@ class ModelAdminTests(TestCase):
         ev = EventAdmin(Event, self.site)
         event = Event.objects.get(title='PyCon SK 2016')
         ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status',
-                             'location', 'organizer', 'sponsors', 'footer_text', 'analytics', 'enc_social_media_meta',
-                             'enc_social_media_list', 'cfp_allowed', 'cfp_end', 'contact_email', 'coc', 'coc_phone',
-                             'coc_phone2', 'uuid', 'date_created', 'date_modified']
+                             'location', 'organizer', 'sponsors', 'footer_text', 'analytics',
+                             'enc_social_media_meta_tags', 'enc_social_media_data', 'cfp_allowed', 'cfp_end',
+                             'contact_email', 'coc', 'coc_phone', 'coc_phone2', 'uuid', 'date_created',
+                             'date_modified']
 
         self.assertEqual(list(ev.get_fields(request)), ev_default_fields)
         self.assertEqual(list(ev.get_fields(request, event)), ev_default_fields)
@@ -63,7 +64,7 @@ class ModelAdminTests(TestCase):
                 'fields': ('coc', 'coc_phone', 'coc_phone2'),
             }),
             (_('Social media'), {
-                'fields': ('enc_social_media_meta', 'enc_social_media_list'),
+                'fields': ('enc_social_media_meta_tags', 'enc_social_media_meta_data'),
                 'classes': ('collapse',),
             }),
             (_('Modifications'), {

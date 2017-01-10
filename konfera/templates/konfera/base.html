@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% block header %}{% endblock %}
   <title>{% block title %}{% endblock %}</title>
-  {% for metatag in event.social_media_meta %}
+  {% for metatag in event.social_media_meta_tags %}
     <meta {% for key, value in metatag.items %}{{ key }}="{{ value }}" {% endfor %}/>
   {% endfor %}
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -85,6 +85,13 @@
     <footer class="hidden-print">
       <div class="row">
         {% block footer %}{% endblock %}
+        {% if event.social_media_data %}
+        <ul class="list-unstyled">
+        {% for social_media in event.social_media_data %}{% for key, value in social_media.items %}
+          <li><a href="{{ value }}">{{ key }}</a></li>
+        {% endfor %}{% endfor %}
+        </ul>
+        {% endif %}
       </div>
 
       {% if event %}
