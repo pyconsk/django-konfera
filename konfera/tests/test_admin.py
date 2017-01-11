@@ -64,7 +64,7 @@ class ModelAdminTests(TestCase):
                 'fields': ('coc', 'coc_phone', 'coc_phone2'),
             }),
             (_('Social media'), {
-                'fields': ('enc_social_media_meta_tags', 'enc_social_media_meta_data'),
+                'fields': ('enc_social_media_meta_tags', 'enc_social_media_data'),
                 'classes': ('collapse',),
             }),
             (_('Modifications'), {
