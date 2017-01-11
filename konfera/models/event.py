@@ -1,7 +1,10 @@
+import json
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 
 from konfera.models.abstract import FromToModel
 
@@ -44,6 +47,8 @@ class Event(FromToModel):
     sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
     footer_text = models.TextField(blank=True)
     analytics = models.TextField(blank=True)
+    enc_social_media_meta_tags = models.TextField(blank=True)
+    enc_social_media_data = models.TextField(blank=True)
 
     cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
     cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True, blank=True)
@@ -84,6 +89,29 @@ class Event(FromToModel):
     def save(self, *args, **kwargs):
         self.clean()
         super(Event, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('event_details', kwargs={'slug': self.slug})
+
+    @property
+    def social_media_meta_tags(self):
+        if self.enc_social_media_meta_tags:
+            return json.loads(self.enc_social_media_meta_tags)
+        return dict()
+
+    @social_media_meta_tags.setter
+    def social_media_meta_tags(self, data):
+        self.enc_social_media_meta_tags = json.dumps(data)
+
+    @property
+    def social_media_data(self):
+        if self.enc_social_media_data:
+            return json.loads(self.enc_social_media_data)
+        return dict()
+
+    @social_media_data.setter
+    def social_media_data(self, data):
+        self.enc_social_media_data = json.dumps(data)
 
 
 Event._meta.get_field('date_from').blank = False
