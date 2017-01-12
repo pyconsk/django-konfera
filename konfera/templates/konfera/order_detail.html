@@ -26,6 +26,51 @@
 
   <div class="row">
     <div class="col-xs-6">
+
+      {% if event.organizer.title %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <div class="row">
+            <div class="col-xs-4">
+                <strong>{% trans "Organizer: " %}</strong>
+            </div>
+            <div class="col-xs-8">{{ event.organizer.title }}</div>
+          </div>
+          {% if event.organizer.company_id %}
+          <div class="row">
+            <div class="col-xs-4">
+                <strong>{% trans "Company ID: " %}</strong>
+            </div>
+            <div class="col-xs-8">{{ event.organizer.company_id }}</div>
+          </div>
+          {% endif %}
+          {% if event.organizer.tax_id %}
+          <div class="row">
+            <div class="col-xs-4">
+                <strong>{% trans "Tax ID: " %}</strong>
+            </div>
+            <div class="col-xs-8">{{ event.organizer.tax_id }}</div>
+          </div>
+          {% endif %}
+          {% if event.organizer.vat_id %}
+          <div class="row">
+            <div class="col-xs-4">
+                <strong>{% trans "VAT ID: " %}</strong>
+            </div>
+            <div class="col-xs-8">{{ event.organizer.vat_id }}</div>
+          </div>
+          {% endif %}
+          {% if event.organizer.other %}
+          <div class="row">
+            <div class="col-xs-4">&nbsp;</div>
+            <div class="col-xs-8">{{ event.organizer.other }}</div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
       <div class="panel panel-default">
         <div class="panel-heading">{% trans "Order Details" %}</div>
         <div class="panel-body">
