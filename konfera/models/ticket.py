@@ -24,7 +24,7 @@ class Ticket(KonferaModel):
     type = models.ForeignKey('TicketType')
     discount_code = models.ForeignKey('DiscountCode', blank=True, null=True)
     status = models.CharField(choices=TICKET_STATUS, max_length=32)
-    title = models.CharField(choices=Speaker.TITLE_CHOICES, max_length=4, default=Speaker.TITLE_UNSET)
+    title = models.CharField(choices=Speaker.TITLE_CHOICES, max_length=4, default=Speaker.TITLE_UNSET, blank=True)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     email = models.EmailField()
