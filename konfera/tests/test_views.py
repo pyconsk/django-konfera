@@ -1,11 +1,11 @@
-import  os
-from datetime import datetime, timedelta
+import os
+from datetime import timedelta
 
 from django import VERSION
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
-from django.core.files.uploadedfile import SimpleUploadedFile
+# from django.core.files.uploadedfile import SimpleUploadedFile
 
 from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
@@ -94,7 +94,7 @@ class TestEventList(TestCase):
         avatar = os.path.join(APP_DIR, 'static', 'konfera', 'images', 'no_avatar.png')
 
         with open(avatar, 'rb') as infile:
-            data['speaker-image'] = infile.read() #SimpleUploadedFile('no_avatar.png', infile.read())
+            data['speaker-image'] = infile.read()  # SimpleUploadedFile('no_avatar.png', infile.read())
 
         return data
 
