@@ -63,8 +63,7 @@
           {% endif %}
           {% if event.organizer.other %}
           <div class="row">
-            <div class="col-xs-4">&nbsp;</div>
-            <div class="col-xs-8">{{ event.organizer.other }}</div>
+            <div class="col-xs-12">{{ event.organizer.other|safe }}</div>
           </div>
           {% endif %}
         </div>
