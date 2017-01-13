@@ -5,7 +5,7 @@ from django import VERSION
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
-# from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 from konfera.models import EmailTemplate, Event, Location, Organizer, Speaker, Sponsor, Talk, TicketType, Ticket
 from konfera.models.order import Order
@@ -94,7 +94,7 @@ class TestEventList(TestCase):
         avatar = os.path.join(APP_DIR, 'static', 'konfera', 'images', 'no_avatar.png')
 
         with open(avatar, 'rb') as infile:
-            data['speaker-image'] = infile.read()  # SimpleUploadedFile('no_avatar.png', infile.read())
+            data['speaker-image'] = SimpleUploadedFile('no_avatar.png', infile.read())
 
         return data
 
@@ -129,50 +129,48 @@ class TestEventList(TestCase):
         url, response = self._get_existing_event()
         self.assertTemplateUsed(response, 'konfera/event/cfp_form.html')
 
-    # TODO: Test with required image fails
+    def test_cfp_successful_form_submit(self):
+        url, response = self._get_existing_event()
+        speaker_data = self._speaker_form_minimal_data()
+        talk_data = self._talk_form_minimal_data()
+        post_data = dict(speaker_data, **talk_data)
 
-    # def test_cfp_successful_form_submit(self):
-    #     url, response = self._get_existing_event()
-    #     speaker_data = self._speaker_form_minimal_data()
-    #     talk_data = self._talk_form_minimal_data()
-    #     post_data = dict(speaker_data, **talk_data)
-    #
-    #     response = self.client.post(url, data=post_data)
-    #
-    #     # retrieve the talk and speaker from the database
-    #     talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
-    #     self.assertEquals(talk_in_db.count(), 1)
-    #     self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
-    #     self.assertEquals(talk_in_db[0].status, Talk.CFP)
-    #
-    #     # Test redirect after submission
-    #     self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+        response = self.client.post(url, data=post_data)
 
-    # @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
-    # def test_cfp_successful_form_submit_notify(self):
-    #     self.assertEquals(settings.PROPOSAL_EMAIL_NOTIFY, True)
-    #
-    #     url, response = self._get_existing_event()
-    #     speaker_data = self._speaker_form_minimal_data()
-    #     speaker_data['speaker-email'] = 'notify@example.com'
-    #     talk_data = self._talk_form_minimal_data()
-    #     talk_data['talk-title'] = 'Great talk'
-    #     post_data = dict(speaker_data, **talk_data)
-    #     et = EmailTemplate.objects.get(name='confirm_proposal')
-    #     self.assertEquals(et.counter, 0)
-    #
-    #     response = self.client.post(url, post_data)
-    #     et = EmailTemplate.objects.get(name='confirm_proposal')
-    #     self.assertEquals(et.counter, 1)
-    #
-    #     # retrieve the talk and speaker from the database
-    #     talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
-    #     self.assertEquals(talk_in_db.count(), 1)
-    #     self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
-    #     self.assertEquals(talk_in_db[0].status, Talk.CFP)
-    #
-    #     # Test redirect after submission
-    #     self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+        # retrieve the talk and speaker from the database
+        talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
+        self.assertEquals(talk_in_db.count(), 1)
+        self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
+        self.assertEquals(talk_in_db[0].status, Talk.CFP)
+
+        # Test redirect after submission
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
+
+    @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
+    def test_cfp_successful_form_submit_notify(self):
+        self.assertEquals(settings.PROPOSAL_EMAIL_NOTIFY, True)
+
+        url, response = self._get_existing_event()
+        speaker_data = self._speaker_form_minimal_data()
+        speaker_data['speaker-email'] = 'notify@example.com'
+        talk_data = self._talk_form_minimal_data()
+        talk_data['talk-title'] = 'Great talk'
+        post_data = dict(speaker_data, **talk_data)
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 0)
+
+        response = self.client.post(url, post_data)
+        et = EmailTemplate.objects.get(name='confirm_proposal')
+        self.assertEquals(et.counter, 1)
+
+        # retrieve the talk and speaker from the database
+        talk_in_db = Talk.objects.filter(event__slug='one', primary_speaker__email=speaker_data['speaker-email'])
+        self.assertEquals(talk_in_db.count(), 1)
+        self.assertEquals(talk_in_db[0].title, talk_data['talk-title'])
+        self.assertEquals(talk_in_db[0].status, Talk.CFP)
+
+        # Test redirect after submission
+        self.assertRedirects(response, reverse('event_details', kwargs={'slug': 'one'}))
 
     @custom_override_settings(PROPOSAL_EMAIL_NOTIFY=True)
     def test_cfp_successful_form_submit_notify_invalid_email(self):

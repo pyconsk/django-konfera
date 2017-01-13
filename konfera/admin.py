@@ -52,9 +52,25 @@ class EventAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 
+class SpeakerTalksInline(admin.StackedInline):
+    model = Talk
+    verbose_name = _("Speaker's talk")
+    verbose_name_plural = _("Speaker's talks")
+    fk_name = "primary_speaker"
+    extra = 0
+
+
+class SecondarySpeakerTalksInline(admin.StackedInline):
+    model = Talk
+    verbose_name = _("Secondary speaker's talk")
+    verbose_name_plural = _("Secondary speaker's talks")
+    fk_name = "secondary_speaker"
+    extra = 0
+
+
 class SpeakerAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'country', 'social_url',)
-    list_filter = ('country', 'title', 'sponsor',)
+    list_filter = ('country', 'title', 'sponsor')
     ordering = ('last_name', 'first_name',)
     search_fields = ('=last_name', '=first_name',)  # case insensitive searching
     readonly_fields = ('date_created', 'date_modified')
@@ -66,13 +82,17 @@ class SpeakerAdmin(admin.ModelAdmin):
             'fields': ('email', 'phone',)
         }),
         (_('About'), {
-            'fields': ('bio', 'country', ('url', 'social_url',), 'sponsor',)
+            'fields': ('bio', 'country', ('url', 'social_url',), 'image', 'sponsor',)
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
             'classes': ('collapse',),
         }),
     )
+    inlines = [
+        SpeakerTalksInline,
+        SecondarySpeakerTalksInline,
+    ]
 
 
 admin.site.register(Speaker, SpeakerAdmin)

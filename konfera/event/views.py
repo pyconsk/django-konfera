@@ -159,7 +159,7 @@ class CFPView(TemplateView):
         context = super().get_context_data(**kwargs)
         update_event_context(self.event, context)
 
-        context['speaker_form'] = SpeakerForm(self.request.POST or None, prefix='speaker')
+        context['speaker_form'] = SpeakerForm(self.request.POST or None, self.request.FILES or None, prefix='speaker')
         context['talk_form'] = TalkForm(self.request.POST or None, prefix='talk')
 
         return context

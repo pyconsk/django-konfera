@@ -3,7 +3,7 @@
 
 {% block content_details %}
     {% if event.cfp_open %}
-      <form method="POST" action="" class="cfp">{% csrf_token %}
+      <form method="POST" action="" class="cfp" enctype="multipart/form-data">{% csrf_token %}
         <h2>{% trans "Who are you? Please introduce yourself." %}</h2>
           {{ speaker_form.as_p }}
         <h2>{% trans "What would you like to talk about?" %}</h2>
