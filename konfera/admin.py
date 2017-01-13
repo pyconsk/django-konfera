@@ -203,7 +203,8 @@ class ReceiptInline(admin.StackedInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('variable_symbol', 'purchase_date', 'price', 'discount', 'status', 'receipt_of')
+    list_display = ('variable_symbol', 'purchase_date', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
+                    'receipt_of')
     list_filter = ('status', 'purchase_date')
     ordering = ('purchase_date',)
     search_fields = ('=uuid',)
@@ -296,7 +297,7 @@ admin.site.register(DiscountCode, DiscountCodeAdmin)
 
 
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('email', 'first_name', 'last_name', 'type', 'status')
+    list_display = ('email', 'first_name', 'last_name', 'type', 'status', 'link_to_order')
     list_filter = ('status', 'type__event',)
     ordering = ('order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
