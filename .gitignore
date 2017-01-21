@@ -29,6 +29,9 @@ envs3
 *.db
 *.sqlite3
 
+# Generated documentation
+docs/_build
+
 # Installer logs
 doc/current-commit.txt
 pip-log.txt
