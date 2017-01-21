@@ -169,4 +169,4 @@ class PayOrderByPaypal(TemplateView):
         order.save()
 
         messages.error(request, _('Something went wrong, try again later.'))
-        return redirect('payment_options', order_uuid=str(order.uuid))
+        return redirect('konfera_payments:payment_options', order_uuid=str(order.uuid))
