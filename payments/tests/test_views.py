@@ -67,7 +67,8 @@ class TestPayOrderByPaypal(TestCase):
                       kwargs={'order_uuid': self.order_await.uuid}) + '?status=failed'
 
         response = self.client.get(url)
-        expected_redirect_url = reverse('order_detail', kwargs={'order_uuid': self.order_await.uuid})
+        expected_redirect_url = reverse('konfera_payments:payment_options',
+                                        kwargs={'order_uuid': str(self.order_await.uuid)})
         self.assertRedirects(response, expected_redirect_url)
 
     @patch('payments.views.PayOrderByPaypal.success', return_value=True)
