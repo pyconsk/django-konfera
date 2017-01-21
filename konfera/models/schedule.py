@@ -29,12 +29,14 @@ class Schedule(KonferaModel):
         return _('%(start)s (%(duration)s min)') % {'start': self.start, 'duration': self.duration}
 
     def clean(self, *args, **kwargs):
+        duration_delta = datetime.timedelta(minutes=self.duration)
+
         # Only approved talk can be scheduled
         if self.talk and self.talk.status != self.talk.APPROVED:
             raise ValidationError({'talk': _('You cannot schedule unapproved talks.')})
 
         # Make sure date and time is within the event's range
-        if self.event.date_from > self.start or self.start > self.event.date_to:
+        if self.event.date_from > self.start or self.start + duration_delta > self.event.date_to:
             raise ValidationError({'start': _('Schedule start have to be within the event\'s range.')})
 
         # Event is related to location and location has room, make sure selected room belongs to Event's location
@@ -44,7 +46,7 @@ class Schedule(KonferaModel):
         # Make sure system does not allow store two events at the same
         # time in the same room, eg. schedule datetime + duration in room is unique.
         schedules = Schedule.objects.filter(start__gte=self.start,
-                                            start__lte=self.start + datetime.timedelta(minutes=self.duration),
+                                            start__lte=self.start + duration_delta,
                                             room=self.room)
 
         if schedules.exists():
