@@ -41,7 +41,7 @@ There is example directory, that provides a convenience feature to allow potenti
 Contributing Guide
 ------------------
 
-Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given. For more details see file: `CONTRIBUTING.rst <https://github.com/pyconsk/django-konfera/blob/master/CONTRIBUTING.rst>`_
+Contributions are welcome, and they are greatly appreciated! Every little bit helps, and credit will always be given. For more details see file: `docs/contributing.rst <https://github.com/pyconsk/django-konfera/blob/master/docs/contributing.rst>`_
 
 Disclaimer
 ----------
