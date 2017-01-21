@@ -10,6 +10,10 @@ django-konfera
 .. image:: https://codecov.io/gh/pyconsk/django-konfera/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/pyconsk/django-konfera
 
+.. image:: https://readthedocs.org/projects/django-konfera/badge/
+    :target: https://django-konfera.readthedocs.io/en/latest/
+
+
 Yet another event organization app for Django.
 ----------------------------------------------
 
