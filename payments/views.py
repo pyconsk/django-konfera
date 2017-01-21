@@ -163,10 +163,10 @@ class PayOrderByPaypal(TemplateView):
 
         if status == 'success' and PayOrderByPaypal.success(request, order):
             messages.success(request, _('Order successfully paid!'))
-        else:
-            order.processing_fee = 0
-            order.save()
+            return redirect('order_detail', order_uuid=str(order.uuid))
 
-            messages.error(request, _('Something went wrong, try again later.'))
+        order.processing_fee = 0
+        order.save()
 
-        return redirect('order_detail', order_uuid=str(order.uuid))
+        messages.error(request, _('Something went wrong, try again later.'))
+        return redirect('payment_options', order_uuid=str(order.uuid))
