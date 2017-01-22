@@ -12,17 +12,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
-from konfera.models import Speaker
-from konfera.models.event import Event
-from konfera.models.talk import Talk
-from konfera.models.ticket_type import TicketType
-from konfera.models.order import Order
+from konfera.models import Event, Order, Talk, TicketType, Speaker, Ticket
 from konfera.utils import send_email, update_event_context, update_order_status_context
 
 if VERSION[1] in (8, 9):
@@ -353,3 +349,20 @@ class EventOrderDetailPDFView(EventOrderDetailView):
             return redirect('order_detail', order_uuid=self.object.uuid)
 
         return response
+
+
+class CheckInView(ListView):
+    template_name = 'konfera/checkin_list.html'
+    paginate_by = 50
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.groups.filter(name='Checkin').exists():
+            raise Http404
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        event = Event.objects.get(slug=self.kwargs.get('slug'))
+        queryset = Ticket.objects.filter(type__event=event)
+
+        return queryset
