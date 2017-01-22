@@ -1,6 +1,6 @@
 from django import forms
 
-from konfera.models import Speaker, Talk, Receipt
+from konfera.models import Speaker, Talk, Ticket, Receipt
 
 
 class ReceiptForm(forms.ModelForm):
@@ -31,3 +31,9 @@ class TalkForm(forms.ModelForm):
     class Meta:
         model = Talk
         exclude = ['status', 'primary_speaker', 'secondary_speaker', 'event']
+
+
+class CheckInTicket(forms.ModelForm):
+    class Meta:
+        model = Ticket
+        fields = ['status']

@@ -8,23 +8,7 @@
 
 
 {% block content %}
-<form method="get" action=".">
-
-    <div class="input-group">
-        <input type="text" class="form-control" name="search" placeholder="First name/Last name/Email">
-        <span class="input-group-btn">
-            <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
-        </span>
-    </div>
-    <div class="checkbox">
-      <label>
-          <input type="checkbox" {% if requested_only %}checked{% endif %} name="requested_only">
-          Requested only
-      </label>
-    </div>
-</form>
-
-<hr>
+    {% include 'konfera/checkin_search.html' with event=event %}
 
 <div class="list-group">
 
@@ -47,7 +31,11 @@
                 <td>{{ ticket.first_name }}</td>
                 <td>{{ ticket.last_name }}</td>
                 <td>{{ ticket.email }}</td>
-                <td>{{ ticket.status }}</td>
+                <td>
+                    <a href="{% url 'check_in' ticket.type.event.slug ticket.uuid %}">
+                        {{ ticket.status }}
+                    </a>
+                </td>
                 <td>{{ ticket.date_created }}</td>
             </tr>
         {% endfor %}

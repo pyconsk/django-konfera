@@ -17,7 +17,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
-from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
+from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm, CheckInTicket
 from konfera.models import Event, Order, Talk, TicketType, Speaker, Ticket
 from konfera.utils import send_email, update_event_context, update_order_status_context
 
@@ -351,20 +351,24 @@ class EventOrderDetailPDFView(EventOrderDetailView):
         return response
 
 
-class CheckInView(ListView):
-    template_name = 'konfera/checkin_list.html'
-    paginate_by = 50
-
+class CheckInAccessMixin:
     def dispatch(self, request, *args, **kwargs):
         if not request.user.groups.filter(name='Checkin').exists():
             raise Http404
 
         return super().dispatch(request, *args, **kwargs)
 
+
+class CheckInView(CheckInAccessMixin, ListView):
+    template_name = 'konfera/checkin_list.html'
+    paginate_by = 50
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.GET.get('requested_only'):
             context['requested_only'] = True
+
+        context['event'] = Event.objects.get(slug=self.kwargs.get('slug'))
         return context
 
     def get_queryset(self):
@@ -374,9 +378,9 @@ class CheckInView(ListView):
         search = self.request.GET.get('search')
         if search:
             queryset = queryset.filter(
-                Q(first_name__contains=search) |
-                Q(last_name__contains=search) |
-                Q(email__contains=search)
+                Q(first_name__icontains=search)
+                | Q(last_name__icontains=search)
+                | Q(email__icontains=search)
             )
 
         requested_only = self.request.GET.get('requested_only')
@@ -384,3 +388,34 @@ class CheckInView(ListView):
             queryset = queryset.filter(status=Ticket.REQUESTED)
 
         return queryset
+
+
+class CheckInDetailView(CheckInAccessMixin, DetailView):
+    model = Ticket
+    slug_field = 'uuid'
+    slug_url_kwarg = 'order_uuid'
+    template_name = 'konfera/checkin_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = CheckInTicket(instance=context['object'])
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        obj = self.get_object()
+
+        form = CheckInTicket(request.POST, instance=obj)
+        if form.is_valid():
+            messages.success(
+                request,
+                _('{name}\'s status has been changed to {status}!').format(name=obj, status=obj.status)
+            )
+
+            form.save()
+
+            url = reverse('check_in', kwargs={'slug': obj.type.event.slug})
+            return redirect(url)
+
+        messages.error(request, _('Status couldn\'t be changed, try again.'))
+        return self.get(request, *args, **kwargs)

@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<form method="get" action="{% url 'check_in' event.slug %}">
+
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="{% trans "First name/Last name/Email" %}">
+        <span class="input-group-btn">
+            <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
+        </span>
+    </div>
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" {% if requested_only %}checked{% endif %} name="requested_only">
+          {% trans "Requested only" %}
+      </label>
+    </div>
+</form>

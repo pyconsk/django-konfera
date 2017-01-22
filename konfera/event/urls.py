@@ -5,6 +5,7 @@ from konfera.event import views
 
 urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/checkin/$', views.CheckInView.as_view(), name='check_in'),
+    url(r'^(?P<slug>[\w, -]+)/checkin/(?P<order_uuid>[\w, -]+)/$', views.CheckInDetailView.as_view(), name='check_in'),
     url(r'^(?P<slug>[\w, -]+)/venue/$', views.event_venue_view, name='event_venue'),
     url(r'^(?P<slug>[\w, -]+)/speakers/$', views.event_speakers_list_view, name='event_speakers'),
     url(r'^(?P<slug>[\w, -]+)/sponsors/$', views.event_sponsors_list_view, name='event_sponsors'),
