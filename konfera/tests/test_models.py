@@ -190,13 +190,45 @@ class ScheduleTest(TestCase):
         self.assertEqual(str(entry), '%s (%s min)' % (entry.start, entry.duration))
 
     def test_duration_range(self):
-        entry = models.Schedule(start="2015-01-01 01:01:01", duration=0)
+        date_from = timezone.now()
+        date_to = date_from + datetime.timedelta(days=3)
+        location = models.Location(title='test schedule location', street='test_street', city='test_city',
+                                   postcode='000000', state='test_state', capacity=20)
+        event = models.Event(title='test_event', description='test', event_type=Event.CONFERENCE,
+                             status=Event.PUBLISHED, location=location, date_from=date_from, date_to=date_to)
+
+        entry = models.Schedule(start=timezone.now(), duration=10, event=event)
         self.assertTrue(entry.full_clean)
         entry.duration = -1
         self.assertRaises(ValidationError, entry.full_clean)
         entry.duration = 301
         self.assertRaises(ValidationError, entry.full_clean)
         entry.duration = 300
+        self.assertTrue(entry.full_clean)
+
+    def test_event_daterange(self):
+        date_from = timezone.now()
+        date_to = date_from + datetime.timedelta(days=3)
+        location = models.Location(title='test schedule location', street='test_street', city='test_city',
+                                   postcode='000000', state='test_state', capacity=20)
+        event = models.Event(title='test_event', description='test', event_type=Event.CONFERENCE,
+                             status=Event.PUBLISHED, location=location, date_from=date_from, date_to=date_to)
+
+        entry = models.Schedule(start=timezone.now(), duration=10, event=event)
+        self.assertTrue(entry.full_clean)
+
+        entry = models.Schedule(start=date_from - datetime.timedelta(days=1), duration=10, event=event)
+        self.assertRaises(ValidationError, entry.full_clean)
+
+        entry = models.Schedule(start=date_from + datetime.timedelta(days=10), duration=10, event=event)
+        self.assertRaises(ValidationError, entry.full_clean)
+
+    def test_talk_status(self):
+        speaker = models.Speaker(first_name="Test", last_name="Scheduler")
+        talk = models.Talk(title="Test Talk schedule", primary_speaker=speaker, status=Talk.DRAFT)
+        entry = models.Schedule(start=timezone.now(), duration=0, talk=talk)
+        self.assertRaises(ValidationError, entry.full_clean)
+        talk.status = Talk.APPROVED
         self.assertTrue(entry.full_clean)
 
 
