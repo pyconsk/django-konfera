@@ -363,6 +363,15 @@ class CheckInView(ListView):
 
     def get_queryset(self):
         event = Event.objects.get(slug=self.kwargs.get('slug'))
-        queryset = Ticket.objects.filter(type__event=event)
+        queryset = Ticket.objects.filter(type__event=event).order_by('-last_name')
+
+        search = self.request.GET.get('search')
+
+        if search:
+            queryset = queryset.filter(
+                Q(first_name__contains=search) |
+                Q(last_name__contains=search) |
+                Q(email__contains=search)
+            )
 
         return queryset

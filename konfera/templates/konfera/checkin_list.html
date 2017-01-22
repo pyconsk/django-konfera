@@ -3,18 +3,51 @@
 
 
 {% block title %}
-{% trans "Checkin List" %}
+    {% trans "Checkin List" %}
 {% endblock %}
 
 
 {% block content %}
+<form method="get" action=".">
+
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="First name/Last name/Email">
+        <span class="input-group-btn">
+            <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
+        </span>
+    </div>
+</form>
+
+<hr>
+
 <div class="list-group">
 
     {% block description %}{% endblock %}
 
-    {% for ticket in object_list %}
-        {{ ticket }} <br>
-    {% endfor %}
+    <div class="table-responsive">
+    <table class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Created</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ticket in object_list %}
+            <tr>
+                <td>{{ ticket.first_name }}</td>
+                <td>{{ ticket.last_name }}</td>
+                <td>{{ ticket.email }}</td>
+                <td>{{ ticket.status }}</td>
+                <td>{{ ticket.date_created }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
 </div>
 
 {% if is_paginated %}
