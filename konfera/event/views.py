@@ -361,17 +361,26 @@ class CheckInView(ListView):
 
         return super().dispatch(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.GET.get('requested_only'):
+            context['requested_only'] = True
+        return context
+
     def get_queryset(self):
         event = Event.objects.get(slug=self.kwargs.get('slug'))
         queryset = Ticket.objects.filter(type__event=event).order_by('-last_name')
 
         search = self.request.GET.get('search')
-
         if search:
             queryset = queryset.filter(
                 Q(first_name__contains=search) |
                 Q(last_name__contains=search) |
                 Q(email__contains=search)
             )
+
+        requested_only = self.request.GET.get('requested_only')
+        if requested_only:
+            queryset = queryset.filter(status=Ticket.REQUESTED)
 
         return queryset

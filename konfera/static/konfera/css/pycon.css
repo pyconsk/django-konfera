@@ -613,7 +613,7 @@ label.required:after {
   content: ' *';
 }
 
-input:not([type=button]):not([type=reset]):not([type=submit]), select {
+input:not([type=button]):not([type=reset]):not([type=submit]):not([type=checkbox]), select {
   width: 98%;
 }
 button {

@@ -16,6 +16,12 @@
             <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
         </span>
     </div>
+    <div class="checkbox">
+      <label>
+          <input type="checkbox" {% if requested_only %}checked{% endif %} name="requested_only">
+          Requested only
+      </label>
+    </div>
 </form>
 
 <hr>
@@ -32,7 +38,7 @@
                 <th>Last name</th>
                 <th>Email</th>
                 <th>Status</th>
-                <th>Created</th>
+                <th>Ticket bought</th>
             </tr>
         </thead>
         <tbody>
