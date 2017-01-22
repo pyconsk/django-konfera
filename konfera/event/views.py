@@ -360,7 +360,7 @@ class CheckInAccessMixin:
 
 
 class CheckInView(CheckInAccessMixin, ListView):
-    template_name = 'konfera/checkin_list.html'
+    template_name = 'konfera/checkin/list.html'
     paginate_by = 50
 
     def get_context_data(self, **kwargs):
@@ -378,9 +378,9 @@ class CheckInView(CheckInAccessMixin, ListView):
         search = self.request.GET.get('search')
         if search:
             queryset = queryset.filter(
-                Q(first_name__icontains=search)
-                | Q(last_name__icontains=search)
-                | Q(email__icontains=search)
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search) |
+                Q(email__icontains=search)
             )
 
         requested_only = self.request.GET.get('requested_only')
@@ -394,28 +394,26 @@ class CheckInDetailView(CheckInAccessMixin, DetailView):
     model = Ticket
     slug_field = 'uuid'
     slug_url_kwarg = 'order_uuid'
-    template_name = 'konfera/checkin_detail.html'
+    template_name = 'konfera/checkin/detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = CheckInTicket(instance=context['object'])
+        context['event'] = context['object'].type.event
 
         return context
 
     def post(self, request, *args, **kwargs):
-        obj = self.get_object()
+        self.object = self.get_object()
 
-        form = CheckInTicket(request.POST, instance=obj)
+        form = CheckInTicket(request.POST, instance=self.object)
         if form.is_valid():
-            messages.success(
-                request,
-                _('{name}\'s status has been changed to {status}!').format(name=obj, status=obj.status)
-            )
+            msg = _("{name}'s status has been changed to {status}!").format(name=self.object, status=self.object.status)
+            messages.success(request, msg)
 
             form.save()
+            return redirect(reverse('check_in', kwargs={'slug': self.object.type.event.slug}))
 
-            url = reverse('check_in', kwargs={'slug': obj.type.event.slug})
-            return redirect(url)
-
-        messages.error(request, _('Status couldn\'t be changed, try again.'))
-        return self.get(request, *args, **kwargs)
+        context = self.get_context_data(object=self.object)
+        context['form'] = form
+        return self.render_to_response(context)

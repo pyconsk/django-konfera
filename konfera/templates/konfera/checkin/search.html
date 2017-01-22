@@ -1,7 +1,6 @@
 {% load i18n %}
 
 <form method="get" action="{% url 'check_in' event.slug %}">
-
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="{% trans "First name/Last name/Email" %}">
         <span class="input-group-btn">
