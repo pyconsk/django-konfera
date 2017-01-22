@@ -8,6 +8,7 @@ from subprocess import CalledProcessError
 from django import VERSION
 from django.contrib import messages
 from django.db.models import Q
+from django.db.models.functions import Lower
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
@@ -365,15 +366,13 @@ class CheckInView(CheckInAccessMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.GET.get('requested_only'):
-            context['requested_only'] = True
-
         context['event'] = Event.objects.get(slug=self.kwargs.get('slug'))
+        context['requested_only'] = 'requested_only' in self.request.GET
         return context
 
     def get_queryset(self):
         event = Event.objects.get(slug=self.kwargs.get('slug'))
-        queryset = Ticket.objects.filter(type__event=event).order_by('-last_name')
+        queryset = Ticket.objects.filter(type__event=event).order_by(Lower('last_name'), Lower('first_name'))
 
         search = self.request.GET.get('search')
         if search:
