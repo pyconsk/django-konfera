@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'dynamic_forms.apps.DynamicFormsConfig',
     'wkhtmltopdf',
     'konfera',
     'payments',
+    'questionnaires',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'dynamic_forms.middlewares.FormModelMiddleware',
 ]
 
 ROOT_URLCONF = 'example.urls'
