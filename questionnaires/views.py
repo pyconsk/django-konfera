@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
+from dynamic_forms.actions import dynamic_form_store_database
 from dynamic_forms.models import FormModel
 from dynamic_forms.views import DynamicFormView
 
@@ -11,22 +12,25 @@ from .models import FormForTicket
 
 class ShowFormForTicket(DynamicFormView):
 
+    def get_template_names(self):
+        return ['questionnaires/form.html']
+
+    def get_data(self):
+        if 'model' not in self.kwargs:
+            self.kwargs['model'] = get_object_or_404(FormModel, pk=self.kwargs['pk'])
+        if 'ticket' not in self.kwargs:
+            self.kwargs['ticket'] = get_object_or_404(Ticket, uuid=self.kwargs['ticket_uuid'])
+
     def dispatch(self, request, *args, **kwargs):
-        form_model = get_object_or_404(FormModel, pk=kwargs['pk'])
+        self.get_data()
 
-        self.kwargs['model'] = form_model
-        self.kwargs['ticket'] = get_object_or_404(Ticket, uuid=kwargs['ticket_uuid'])
-
-        if FormForTicket.objects.filter(form_data__form=form_model, ticket=self.kwargs['ticket']).exists():
+        if FormForTicket.objects.filter(form_data__form=self.kwargs['model'], ticket=self.kwargs['ticket']).exists():
             raise Http404  # todo: show a better error
 
         return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form, *args, **kwargs):
-        # todo: this is not invoked?!
-        response = super().form_valid(form)
-        print('I am invoked!\n' * 10)
-
-        FormForTicket.objects.create(form=form.instance, ticket=self.kwargs['ticket'])
-
-        return response
+    def form_valid(self, form):
+        self.get_data()
+        data = dynamic_form_store_database(self.kwargs['model'], form, self.request)
+        FormForTicket.objects.create(form_data=data, ticket=self.kwargs['ticket'])
+        return super().form_valid(form)
