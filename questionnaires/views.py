@@ -21,7 +21,7 @@ class ShowFormForTicket(DynamicFormView):
             print(QuestionnaireForEvent.objects.active(self.kwargs['ticket'].type.event))
             questionnaire = get_object_or_404(
                 QuestionnaireForEvent.objects.active(self.kwargs['ticket'].type.event),
-                pk=self.kwargs['pk']
+                slug=self.kwargs['slug']
             )
             self.kwargs['model'] = questionnaire.questionnaire
 

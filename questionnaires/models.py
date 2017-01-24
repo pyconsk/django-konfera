@@ -36,8 +36,12 @@ class QuestionnaireForEvent(KonferaModel, models.Model):
     questionnaire = models.OneToOneField('dynamic_forms.FormModel', on_delete=models.CASCADE)
     event = models.ForeignKey('konfera.Event', on_delete=models.CASCADE)
     deadline = models.DateTimeField()
+    slug = models.SlugField()
 
     def __str__(self):
         return _('Questionnaire {name} for {event}').format(name=self.questionnaire.name, event=self.event.title)
+
+    class Meta:
+        unique_together = [('event', 'slug')]
 
     objects = QuestionnaireManager()
