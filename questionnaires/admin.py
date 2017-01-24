@@ -17,7 +17,9 @@ class FormForTicketAdmin(admin.ModelAdmin):
 
 @admin.register(QuestionnaireForEvent)
 class QuestionnaireForEventAdmin(admin.ModelAdmin):
-    list_display = ['questionnaire', 'event', 'deadline']
+    list_display = ['slug', 'questionnaire', 'event', 'deadline']
+    search_fields = ['slug', 'questionnaire__name']
+    list_filter = ['event']
 
 
 admin.site.unregister(FormModel)
