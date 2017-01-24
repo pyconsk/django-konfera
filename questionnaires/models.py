@@ -18,6 +18,9 @@ class FormForTicket(KonferaModel, models.Model):
             raise ValidationError(_('Form already submitted.'))
         super().clean()
 
+    def __str__(self):
+        return '{} - {}'.format(self.form_data.form.name, self.ticket)
+
     class Meta:
         verbose_name = 'Answer for a ticket'
         verbose_name_plural = 'Answers for tickets'

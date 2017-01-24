@@ -1,5 +1,4 @@
-from django.shortcuts import get_object_or_404
-from django.http import Http404
+from django.shortcuts import get_object_or_404, render
 
 from dynamic_forms.actions import dynamic_form_store_database
 from dynamic_forms.models import FormModel
@@ -21,11 +20,14 @@ class ShowFormForTicket(DynamicFormView):
         if 'ticket' not in self.kwargs:
             self.kwargs['ticket'] = get_object_or_404(Ticket, uuid=self.kwargs['ticket_uuid'])
 
+    def get_success_url(self):
+        return self.request.path
+
     def dispatch(self, request, *args, **kwargs):
         self.get_data()
 
         if FormForTicket.objects.filter(form_data__form=self.kwargs['model'], ticket=self.kwargs['ticket']).exists():
-            raise Http404  # todo: show a better error
+            return render(request, 'questionnaires/form_already_submited.html')
 
         return super().dispatch(request, *args, **kwargs)
 

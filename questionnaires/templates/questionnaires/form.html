@@ -1,7 +1,11 @@
+{% extends 'konfera/base.html' %}
 {% load i18n %}
+
+{% block content %}
 <h2>{{ name }}</h2>
 <form method="post" action=".">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">{% trans "Submit" %}</button>
+    <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
 </form>
+{% endblock %}
