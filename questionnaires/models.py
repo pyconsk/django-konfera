@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import ValidationError
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from konfera.models.abstract import KonferaModel
@@ -22,5 +23,21 @@ class FormForTicket(KonferaModel, models.Model):
         return '{} - {}'.format(self.form_data.form.name, self.ticket)
 
     class Meta:
-        verbose_name = 'Answer for a ticket'
-        verbose_name_plural = 'Answers for tickets'
+        verbose_name = _('Answer for a ticket')
+        verbose_name_plural = _('Answers for tickets')
+
+
+class QuestionnaireManager(models.Manager):
+    def active(self, event):
+        return self.get_queryset().filter(event=event, deadline__gte=timezone.now())
+
+
+class QuestionnaireForEvent(KonferaModel, models.Model):
+    questionnaire = models.OneToOneField('dynamic_forms.FormModel', on_delete=models.CASCADE)
+    event = models.ForeignKey('konfera.Event', on_delete=models.CASCADE)
+    deadline = models.DateTimeField()
+
+    def __str__(self):
+        return _('Questionnaire {name} for {event}').format(name=self.questionnaire.name, event=self.event.title)
+
+    objects = QuestionnaireManager()

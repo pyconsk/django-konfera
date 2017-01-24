@@ -1,9 +1,10 @@
 from django.contrib import admin
+from django.utils.translation import ugettext as _
 
 from dynamic_forms.admin import FormModelAdmin, FormModelDataAdmin
 from dynamic_forms.models import FormModel, FormModelData
 
-from .models import FormForTicket
+from .models import FormForTicket, QuestionnaireForEvent
 
 
 @admin.register(FormForTicket)
@@ -14,6 +15,11 @@ class FormForTicketAdmin(admin.ModelAdmin):
     list_filter = ['ticket__type__event']
 
 
+@admin.register(QuestionnaireForEvent)
+class QuestionnaireForEventAdmin(admin.ModelAdmin):
+    list_display = ['questionnaire', 'event', 'deadline']
+
+
 admin.site.unregister(FormModel)
 admin.site.unregister(FormModelData)
 
@@ -21,15 +27,15 @@ admin.site.unregister(FormModelData)
 class ProxyFormModel(FormModel):
     class Meta:
         proxy = True
-        verbose_name = 'Questionnaire'
-        verbose_name_plural = 'Questionnaires'
+        verbose_name = _('Questionnaire')
+        verbose_name_plural = _('Questionnaires')
 
 
 class ProxyFormModelDate(FormModelData):
     class Meta:
         proxy = True
-        verbose_name = 'Answer'
-        verbose_name_plural = 'Answers'
+        verbose_name = _('Answer')
+        verbose_name_plural = _('Answers')
 
 
 admin.site.register(ProxyFormModel, FormModelAdmin)

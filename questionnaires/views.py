@@ -1,12 +1,12 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 from dynamic_forms.actions import dynamic_form_store_database
-from dynamic_forms.models import FormModel
 from dynamic_forms.views import DynamicFormView
 
 from konfera.models import Ticket
 
-from .models import FormForTicket
+from .models import FormForTicket, QuestionnaireForEvent
 
 
 class ShowFormForTicket(DynamicFormView):
@@ -15,19 +15,21 @@ class ShowFormForTicket(DynamicFormView):
         return ['questionnaires/form.html']
 
     def get_data(self):
-        if 'model' not in self.kwargs:
-            self.kwargs['model'] = get_object_or_404(FormModel, pk=self.kwargs['pk'])
         if 'ticket' not in self.kwargs:
             self.kwargs['ticket'] = get_object_or_404(Ticket, uuid=self.kwargs['ticket_uuid'])
-
-    def get_success_url(self):
-        return self.request.path
+        if 'model' not in self.kwargs:
+            print(QuestionnaireForEvent.objects.active(self.kwargs['ticket'].type.event))
+            questionnaire = get_object_or_404(
+                QuestionnaireForEvent.objects.active(self.kwargs['ticket'].type.event),
+                pk=self.kwargs['pk']
+            )
+            self.kwargs['model'] = questionnaire.questionnaire
 
     def dispatch(self, request, *args, **kwargs):
         self.get_data()
 
         if FormForTicket.objects.filter(form_data__form=self.kwargs['model'], ticket=self.kwargs['ticket']).exists():
-            return render(request, 'questionnaires/form_already_submited.html')
+            raise Http404  # todo: show a better error
 
         return super().dispatch(request, *args, **kwargs)
 
