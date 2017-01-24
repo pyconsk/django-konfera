@@ -17,3 +17,7 @@ class FormForTicket(KonferaModel, models.Model):
         if FormForTicket.objects.filter(form_data__form=self.form_data.form, ticket=self.ticket).exists():
             raise ValidationError(_('Form already submitted.'))
         super().clean()
+
+    class Meta:
+        verbose_name = 'Answer for a ticket'
+        verbose_name_plural = 'Answers for tickets'
