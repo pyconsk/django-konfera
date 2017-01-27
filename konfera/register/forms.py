@@ -14,13 +14,17 @@ class RegistrationForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         description_required = kwargs.pop('description_required', False)
-        super(RegistrationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         self.fields['discount_code'] = forms.CharField(label='Promo Code', max_length=15, required=False)
 
         if description_required:
             self.fields['description'] = forms.CharField(
                 widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
                 required=True, label=_('Description'))
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'col-sm-10 form-control'
 
     def clean_discount_code(self):
         data = self.cleaned_data['discount_code']
