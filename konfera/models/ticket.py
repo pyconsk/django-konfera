@@ -37,7 +37,7 @@ class Ticket(KonferaModel):
                 title=dict(Speaker.TITLE_CHOICES).get(self.title, ''),
                 first_name=self.first_name,
                 last_name=self.last_name
-            )
+            ).strip()
 
     def discount_calculator(self):
         if self.discount_code:
