@@ -34,10 +34,10 @@ class Ticket(KonferaModel):
 
     def __str__(self):
         return '{title} {first_name} {last_name}'.format(
-                title=dict(Speaker.TITLE_CHOICES).get(self.title, ''),
-                first_name=self.first_name,
-                last_name=self.last_name
-            ).strip()
+            title=dict(Speaker.TITLE_CHOICES).get(self.title, ''),
+            first_name=self.first_name,
+            last_name=self.last_name
+        ).strip()
 
     def discount_calculator(self):
         if self.discount_code:
