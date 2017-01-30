@@ -1,10 +1,14 @@
 from django import template
 
-
 from konfera.utils import currency_round_up
 from konfera.settings import CURRENCY
 
 register = template.Library()
+
+
+@register.filter(name='addcss')
+def addcss(field, css):
+    return field.as_widget(attrs={"class": css})
 
 
 @register.filter

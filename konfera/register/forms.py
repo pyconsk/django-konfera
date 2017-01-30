@@ -23,8 +23,6 @@ class RegistrationForm(forms.ModelForm):
                 widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
                 required=True, label=_('Description'))
 
-        for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'col-sm-10 form-control'
 
     def clean_discount_code(self):
         data = self.cleaned_data['discount_code']
