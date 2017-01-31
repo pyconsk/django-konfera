@@ -42,7 +42,7 @@
 
   {% block content %}
     <div class="row">
-      <div class="col-md-{% if sponsors %}8{% else %}12{% endif %}">
+      <div class="col-md-{% if show_sponsors %}8{% else %}12{% endif %}">
 
         {% block content_top %}{% endblock %}
         {% block content_details %}{% endblock %}
@@ -50,7 +50,7 @@
 
       </div>
 
-      {% if sponsors %}
+      {% if show_sponsors %}
       <div class="col-md-4">
       <!-- right_nav -->
         <div class="text-center right-nav hidden-print">
