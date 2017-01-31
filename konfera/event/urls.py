@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/tickets/$', views.event_public_tickets, name='event_tickets'),
     url(r'^(?P<slug>[\w, -]+)/$', views.event_details_view, name='event_details'),
     url(r'^order/(?P<order_uuid>[\w, -]+)/$', views.EventOrderDetailView.as_view(), name='order_detail'),
+    url(r'^order/(?P<order_uuid>[\w, -]+)/thanks/$', views.EventOrderDetailThanksView.as_view(),
+        name='order_detail_thanks'),
     url(r'^order/(?P<order_uuid>[\w, -]+)/edit/$', views.EventOrderDetailFormView.as_view(), name='order_detail_edit'),
     url(r'^order/(?P<order_uuid>[\w, -]+)/pdf/$', views.EventOrderDetailPDFView.as_view(), name='order_detail_pdf'),
     url(r'^(?P<slug>[\w, -]+)/about_us/$', views.event_about_us, name='event_about_us'),

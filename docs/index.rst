@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 2
 
    contributing
-
+   options
 
 Indices and tables
 ==================

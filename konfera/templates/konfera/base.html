@@ -124,6 +124,30 @@
 
   ga('create', '{{ ga }}', 'auto');
   ga('send', 'pageview');
+  {% if ga_ecommerce %}
+  ga('require', 'ecommerce');
+
+  ga('ecommerce:addTransaction', {
+    'id': '{{ ga_ecommerce.ga_transaction.id }}',
+    'affiliation': '{{ ga_ecommerce.ga_transaction.affiliation }}',
+    'revenue': '{{ ga_ecommerce.ga_transaction.revenue }}',
+    'shipping': '{{ ga_ecommerce.ga_transaction.shipping }}',
+    'tax': '{{ ga_ecommerce.ga_transaction.tax }}',
+    'currency': '{{ ga_ecommerce.ga_transaction.currency }}',
+  });
+  {% for item in  ga_ecommerce.ga_items %}
+  ga('ecommerce:addItem', {
+    'id': '{{ item.id }}',
+    'name': '{{ item.name }}',
+    'category': '{{ item.category }}',
+    'price': '{{ item.price }}',
+    'quantity': '{{ item.quantity }}',
+    'currency': '{{ item.currency }}',
+  });
+  {% endfor %}
+
+  ga('ecommerce:send');
+  {% endif %}
   </script>
   <!-- end GA -->
   {% endif %}

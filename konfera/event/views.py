@@ -23,7 +23,7 @@ from konfera.models.event import Event
 from konfera.models.talk import Talk
 from konfera.models.ticket_type import TicketType
 from konfera.models.order import Order
-from konfera.utils import send_email, update_event_context, update_order_status_context
+from konfera.utils import send_email, update_event_context, update_order_status_context, generate_ga_ecommerce_context
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -271,6 +271,15 @@ class EventOrderDetailView(DetailView):
             update_event_context(self.object.event, context, show_sponsors=False)
 
         update_order_status_context(self.object.status, context)
+
+        return context
+
+
+class EventOrderDetailThanksView(EventOrderDetailView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        generate_ga_ecommerce_context(self.object, context)
 
         return context
 
