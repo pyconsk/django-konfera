@@ -260,8 +260,8 @@ class TestOrderDetail(TestCase):
 
         # Register for event as volunteer
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com',
-            'description': 'I want to help.',
+            'type': self.volunteer.pk, 'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac',
+            'email': 'test.testovac@example.com', 'description': 'I want to help.',
         })
 
         # Check that the response is 302 FOUND.
@@ -283,8 +283,8 @@ class TestOrderDetail(TestCase):
         self.assertEquals(et.counter, 0)
 
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify', 'email': 'notify@example.com',
-            'description': 'I want the notification.',
+            'type': self.volunteer.pk, 'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify',
+            'email': 'notify@example.com', 'description': 'I want the notification.',
         })
         self.assertEqual(response.status_code, 302)
 
