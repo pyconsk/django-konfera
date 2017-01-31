@@ -25,9 +25,6 @@ class RegistrationForm(forms.ModelForm):
                 widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
                 required=True, label=_('Description'))
 
-    #def clean_type(self):
-    #    return self.instance.type
-
     def clean_discount_code(self):
         data = self.cleaned_data['discount_code']
 
@@ -38,5 +35,4 @@ class RegistrationForm(forms.ModelForm):
                 raise forms.ValidationError(_('Invalid Promo Code.'))
 
             return discount
-
         return None
