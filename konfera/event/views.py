@@ -266,6 +266,7 @@ class EventOrderDetailView(DetailView):
         context['order'] = self.object
         context['allow_receipt_edit'] = self.object.status == Order.AWAITING
         context['allow_pdf_storage'] = settings.ENABLE_ORDER_PDF_GENERATION
+        context['rendering_pdf'] = False
 
         if self.object.event:
             update_event_context(self.object.event, context, show_sponsors=False)
@@ -332,6 +333,7 @@ class EventOrderDetailPDFView(EventOrderDetailView):
         context['allow_receipt_edit'] = False
         context['allow_pdf_storage'] = False
         context['display_receipt'] = False
+        context['rendering_pdf'] = True
 
         if self.object.receipt_of.title:
             context['display_receipt'] = True
