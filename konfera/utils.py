@@ -58,7 +58,7 @@ def generate_ga_ecommerce_context(order, context):
         ga_transaction = {
             'id': order.variable_symbol,
             'affiliation': order.event,
-            'revenue': order.price,
+            'revenue': order.to_pay,
             'shipping': '0',
             'tax': '0',
             'currency': CURRENCY[1],
@@ -70,7 +70,7 @@ def generate_ga_ecommerce_context(order, context):
                 'id': order.variable_symbol,
                 'name': ticket.type.title,
                 'category': ticket.type.attendee_type,
-                'price': ticket.type.price,
+                'price': ticket.type.price - ticket.discount_calculator(),
                 'quantity': '1',
                 'currency': CURRENCY[1],
             })
