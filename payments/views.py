@@ -9,11 +9,6 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 
-if VERSION[1] in (8, 9):
-    from django.core.urlresolvers import reverse
-else:
-    from django.urls import reverse
-
 from konfera.models import Order
 from konfera.utils import currency_round_up, generate_ga_ecommerce_context
 from konfera.settings import CURRENCY
@@ -21,6 +16,11 @@ from konfera.event.views import EventOrderDetailFormView
 
 from payments import settings
 from payments.utils import _process_payment
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 logger = logging.getLogger(__name__)
