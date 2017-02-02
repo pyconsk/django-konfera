@@ -69,7 +69,7 @@ class Ticket(KonferaModel):
             order.save()
             self.order = order
 
-        if order.status == Order.PAID:
+        if self.order.status == Order.PAID and self.status == self.REQUESTED:
             self.status = self.REGISTERED
 
         super(Ticket, self).save(*args, **kwargs)
