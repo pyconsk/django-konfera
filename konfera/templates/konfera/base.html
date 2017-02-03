@@ -64,7 +64,10 @@
           <ul class="list-unstyled">
             {% endifchanged %}
             <li>
-              <a href="{{ sponsor.url }}" target="_blank" {% if ga %}onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-panel-{{ sponsor|slugify }}');"{% endif %}>
+              <a href="{{ sponsor.url }}" target="_blank" {% if ga %}
+                 onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-panel-{{ sponsor|slugify }}');
+                 trackOutboundLink('{{ sponsor.url }}');
+                 return false;"{% endif %}>
                 <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="{{ sponsor.get_type_display|lower }}" />
               </a>
             </li>
@@ -148,6 +151,13 @@
 
   ga('ecommerce:send');
   {% endif %}
+
+  var trackOutboundLink = function(url) {
+     ga('send', 'event', 'outbound', 'click', url, {
+       'transport': 'beacon',
+       'hitCallback': function(){document.location = url;}
+     });
+  }
   </script>
   <!-- end GA -->
   {% endif %}

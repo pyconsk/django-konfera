@@ -34,7 +34,8 @@
         {% if type.list|length|divisibleby:7 and not type.list|length|divisibleby:3 and type.list|length|sub:forloop.counter == 0 %}col-md-offset-4{% endif %}
       {% endif %}
       {% endspaceless %} col-md-4">
-      <a href="{{ sponsor.url }}" target="_blank" class="sbox" {% if ga %}onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-page-{{ sponsor|slugify }}');"{% endif %}>
+      <a href="{{ sponsor.url }}" target="_blank" class="sbox" {% if ga %}
+         onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-page-{{ sponsor|slugify }}');trackOutboundLink('{{ sponsor.url }}');return false;"{% endif %}>
         <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="slogo img-responsive center-block" style="width: 80%" />
         <div class="sbox-inner">
           <div class="sdesc">
