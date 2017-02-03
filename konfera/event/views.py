@@ -61,7 +61,7 @@ def event_speakers_list_view(request, slug):
 
     context['speakers'] = Speaker.objects.filter(
         (Q(primary_speaker_talks__event__slug=slug) | Q(secondary_speaker_talks__event__slug=slug)) &
-        (Q(primary_speaker_talks__status=Talk.APPROVED) | Q(secondary_speaker_talks__status=Talk.APPROVED))
+        (Q(primary_speaker_talks__status=Talk.PUBLISHED) | Q(secondary_speaker_talks__status=Talk.PUBLISHED))
     ).order_by('last_name').distinct()
 
     update_event_context(event, context)

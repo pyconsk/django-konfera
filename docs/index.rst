@@ -13,6 +13,7 @@ Contents:
 
    contributing
    options
+   talks
 
 Indices and tables
 ==================
