@@ -49,7 +49,8 @@ def event_venue_view(request, slug):
 def event_sponsors_list_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
-    update_event_context(event, context)
+    context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+    update_event_context(event, context, show_sponsors=False)
 
     return render(request=request, template_name='konfera/event/sponsors.html', context=context)
 

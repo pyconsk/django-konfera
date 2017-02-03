@@ -15,3 +15,8 @@ def currency(value):
 @register.filter
 def currency_code(value):
     return '%s %s' % (currency_round_up(value), CURRENCY[1])
+
+
+@register.filter
+def sub(value, arg):
+    return value - arg
