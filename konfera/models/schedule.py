@@ -1,7 +1,7 @@
 import datetime
 
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -32,7 +32,7 @@ class Schedule(KonferaModel):
         duration_delta = datetime.timedelta(minutes=self.duration)
 
         # Only approved talk can be scheduled
-        if self.talk and self.talk.status != self.talk.APPROVED:
+        if self.talk and self.talk.status not in (self.talk.APPROVED, self.talk.PUBLISHED):
             raise ValidationError({'talk': _('You cannot schedule unapproved talks.')})
 
         # Make sure date and time is within the event's range
