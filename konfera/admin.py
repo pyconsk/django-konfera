@@ -280,7 +280,7 @@ class DiscountCodeAdmin(admin.ModelAdmin):
             'fields': ('title', 'hash', 'ticket_type')
         }),
         (_('Discount'), {
-            'fields': ('discount', 'usage', 'issued_tickets')
+            'fields': ('discount', 'usage')
         }),
         (_('Availability'), {
             'fields': ('date_from', 'date_to'),
