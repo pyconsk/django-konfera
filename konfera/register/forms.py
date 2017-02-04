@@ -28,11 +28,12 @@ class RegistrationForm(forms.ModelForm):
     def clean_discount_code(self):
         data = self.cleaned_data['discount_code']
 
-        if data:
-            try:
-                discount = DiscountCode.objects.get(hash=data)
-            except (DiscountCode.DoesNotExist, ValueError):
-                raise forms.ValidationError(_('Invalid Promo Code.'))
+        if not data:
+            return None
 
-            return discount
-        return None
+        try:
+            discount = DiscountCode.objects.get(hash=data)
+        except (DiscountCode.DoesNotExist, ValueError):
+            raise forms.ValidationError(_('Invalid Promo Code.'))
+
+        return discount
