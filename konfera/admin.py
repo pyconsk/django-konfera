@@ -116,7 +116,7 @@ class TalkAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
-    actions = ['make_draft', 'make_approved', 'make_rejected', 'make_withdrawn']
+    actions = ['make_draft', 'make_approved', 'make_published', 'make_rejected', 'make_withdrawn']
 
     def make_draft(self, request, queryset):
         rows_updated = queryset.update(status=Talk.DRAFT)
@@ -124,6 +124,10 @@ class TalkAdmin(admin.ModelAdmin):
 
     def make_approved(self, request, queryset):
         rows_updated = queryset.update(status=Talk.APPROVED)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    def make_published(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.PUBLISHED)
         self.message_user(request, "%s talk(s) status updated." % rows_updated)
 
     def make_rejected(self, request, queryset):
@@ -136,6 +140,7 @@ class TalkAdmin(admin.ModelAdmin):
 
     make_draft.short_description = "Set selected talks to draft"
     make_approved.short_description = "Set selected talks to approved"
+    make_approved.short_description = "Set selected talks to published"
     make_rejected.short_description = "Set selected talks to rejected"
     make_withdrawn.short_description = "Set selected talks to withdrawn"
 
