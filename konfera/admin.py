@@ -140,7 +140,7 @@ class TalkAdmin(admin.ModelAdmin):
 
     make_draft.short_description = "Set selected talks to draft"
     make_approved.short_description = "Set selected talks to approved"
-    make_approved.short_description = "Set selected talks to published"
+    make_published.short_description = "Set selected talks to published"
     make_rejected.short_description = "Set selected talks to rejected"
     make_withdrawn.short_description = "Set selected talks to withdrawn"
 
