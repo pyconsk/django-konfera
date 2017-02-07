@@ -174,7 +174,8 @@ a.sbox:hover > .sbox-inner {
   display: block;
   position: absolute;
   z-index: 0;
-  width: 80%; /* set this individually for every image */
+  max-width: 75%;
+  max-height: 75%;
   top: 0;
   left: 0;
   right: 0;
