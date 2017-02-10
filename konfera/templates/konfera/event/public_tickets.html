@@ -12,13 +12,13 @@
       {% for ticket in tickets %}
         <li class="list-group-item">
           <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-8">
               <h4>{{ ticket.title }}</h4>
               <p class="text-justify">{{ ticket.description }}<br>
                 {% trans "Price" %}: <span class="badge">{{ ticket.price|currency }}</span>
               </p>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
               <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="btn btn-warning btn-lg btn-block pull-right">
                 <span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Register ticket
               </a>
