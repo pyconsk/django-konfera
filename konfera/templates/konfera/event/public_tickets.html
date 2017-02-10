@@ -8,15 +8,27 @@
 
 
 {% block content_details %}
-    <div class="list-group">
-        {% for ticket in tickets %}
-            <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="list-group-item">
-                <h4 class="list-group-item-heading"> {{ ticket.title }} </h4>
-                <p class="list-group-item-text">{{ ticket.description }}</p>
-                <p class="list-group-item-text">{% trans "Price" %}: {{ ticket.price|currency }}</p>
-            </a>
-        {%  endfor %}
+    <ul class="list-group">
+      {% for ticket in tickets %}
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-10">
+              <h4>{{ ticket.title }}</h4>
+              <p class="text-justify">{{ ticket.description }}<br>
+                {% trans "Price" %}: <span class="badge">{{ ticket.price|currency }}</span>
+              </p>
+            </div>
+            <div class="col-md-2">
+              <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="btn btn-warning btn-lg btn-block pull-right">
+                <span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Register ticket
+              </a>
+            </div>
+          </div>
+
+        </li>
+      {% endfor %}
     </div>
+
     {% if tickets.num_pages > 1 %}
         <nav aria-label="Page navigation">
             <ul class="pagination">

@@ -604,7 +604,7 @@ body {
 .btn-info,.label-info,.progress-bar-info{background-color:#a0c3ff;border-color:#a0c3ff;}
 .btn-danger,.label-danger,.progress-bar-danger{background-color:#dd4b39;}
 .btn-warning,.label-warning,.progress-bar-warning{background-color:#f4b400;color:#444444;}
-
+.btn-warning:hover,.label-warning:hover,.progress-bar-warning:hover{color:#444444;}
 hr {
   border-color:#ececec;
 }
@@ -623,9 +623,9 @@ textarea {
   resize: none;
   outline: 0;
 }
-.panel .btn i,.btn span{
-  color:#666666;
-}
+/*.panel .btn i,.btn span{*/
+  /*color:#666666;*/
+/*}*/
 .panel .panel-heading {
   background-color:#ffffff;
   font-weight:700;
