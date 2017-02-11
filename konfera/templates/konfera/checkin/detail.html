@@ -16,6 +16,10 @@
             <td>{{ object.type }}</td>
         </tr>
         <tr>
+            <th>{% trans "Status" %}</th>
+            <td>{{ ticket.get_status_display }}</td>
+        </tr>
+        <tr>
             <th>{% trans "Order status" %}</th>
             <td>{{ ticket.order.get_status_display }}</td>
         </tr>
@@ -29,11 +33,15 @@
 
     <hr>
 
-    <form action="." method="post">
-        {% csrf_token %}
-        {{ form }}
-        <input type="submit" class="btn btn-primary">
-    </form>
+    {% if show_form %}
+        <form action="." method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-primary">
+        </form>
+    {% else %}
+        <p>{% trans "Tiket's status cannot be changed." %}</p>
+    {% endif %}
 
     {% if request.user.is_staff %}
         <hr>

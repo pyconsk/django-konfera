@@ -22,7 +22,7 @@
                 <td>{{ ticket.last_name }}</td>
                 <td>
                     <a href="{% url 'check_in' ticket.type.event.slug ticket.uuid %}">
-                        {{ ticket.status }}
+                        {{ ticket.get_status_display }}
                     </a>
                 </td>
                 <td>{{ ticket.order.get_status_display }}</td>
