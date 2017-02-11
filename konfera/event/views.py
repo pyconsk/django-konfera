@@ -367,7 +367,7 @@ class CheckInView(CheckInAccessMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['event'] = Event.objects.get(slug=self.kwargs.get('slug'))
-        context['requested_only'] = 'requested_only' in self.request.GET
+        context['registered_only'] = 'registered_only' in self.request.GET
         return context
 
     def get_queryset(self):
@@ -382,9 +382,9 @@ class CheckInView(CheckInAccessMixin, ListView):
                 Q(email__icontains=search)
             )
 
-        requested_only = self.request.GET.get('requested_only')
-        if requested_only:
-            queryset = queryset.filter(status=Ticket.REQUESTED)
+        registered_only = self.request.GET.get('registered_only')
+        if registered_only:
+            queryset = queryset.filter(status=Ticket.REGISTERED)
 
         return queryset
 
