@@ -407,7 +407,9 @@ class CheckInDetailView(CheckInAccessMixin, DetailView):
 
         form = CheckInTicket(request.POST, instance=self.object)
         if form.is_valid():
-            msg = _("{name}'s status has been changed to {status}!").format(name=self.object, status=self.object.status)
+            msg = _("{name}'s status has been changed to {status}!").format(
+                name=self.object, status=self.object.status
+            )
             messages.success(request, msg)
 
             form.save()
