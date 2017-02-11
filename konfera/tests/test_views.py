@@ -260,8 +260,8 @@ class TestOrderDetail(TestCase):
 
         # Register for event as volunteer
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac', 'email': 'test.testovac@example.com',
-            'description': 'I want to help.',
+            'type': self.volunteer.pk, 'title': 'mr', 'first_name': 'Test', 'last_name': 'Testovac',
+            'email': 'test.testovac@example.com', 'description': 'I want to help.',
         })
 
         # Check that the response is 302 FOUND.
@@ -283,8 +283,8 @@ class TestOrderDetail(TestCase):
         self.assertEquals(et.counter, 0)
 
         response = self.client.post('/register/event/one/ticket/volunteer/', {
-            'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify', 'email': 'notify@example.com',
-            'description': 'I want the notification.',
+            'type': self.volunteer.pk, 'title': 'mr', 'first_name': 'Test', 'last_name': 'Notify',
+            'email': 'notify@example.com', 'description': 'I want the notification.',
         })
         self.assertEqual(response.status_code, 302)
 
@@ -460,17 +460,33 @@ class TestSpeakersListView(TestCase):
         event.save()
         speaker1 = Speaker.objects.create(first_name='Nice', last_name='Speaker', email='nice@example.com')
         speaker2 = Speaker.objects.create(first_name='Talking', last_name='Speaker', email='talk@example.com')
+        speaker3 = Speaker.objects.create(first_name='Spammer', last_name='Speaker', email='talk@example.com')
+        speaker4 = Speaker.objects.create(first_name='Assistent', last_name='Speaker', email='nice@example.com')
+
         Talk.objects.create(
             title='Talk1', abstract='Talk 1', status=Talk.APPROVED, primary_speaker=speaker1, event=event)
         Talk.objects.create(
-            title='Talk2', abstract='Talk 2', status=Talk.APPROVED, primary_speaker=speaker2, event=event)
+            title='Talk2', abstract='Talk 2', status=Talk.PUBLISHED, primary_speaker=speaker2, event=event)
+        Talk.objects.create(
+            title='Talk3', abstract='Talk 3', status=Talk.CFP, primary_speaker=speaker1, event=event)
+        Talk.objects.create(
+            title='Talk4', abstract='Talk 4', status=Talk.DRAFT, primary_speaker=speaker2, event=event)
+        Talk.objects.create(
+            title='Talk5', abstract='Talk 5', status=Talk.REJECTED, primary_speaker=speaker3, event=event)
+        Talk.objects.create(
+            title='Talk6', abstract='Talk 6', status=Talk.WITHDRAWN, primary_speaker=speaker3, event=event)
+        Talk.objects.create(
+            title='Talk7', abstract='Talk 7', status=Talk.PUBLISHED, primary_speaker=speaker2,
+            secondary_speaker=speaker4, event=event)
 
     def test_speakers_list(self):
         response = self.client.get('/tiny_event/speakers/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'konfera/event/speakers.html')
-        self.assertIn('Nice Speaker', str(response.content))
+        self.assertNotIn('Nice Speaker', str(response.content))
         self.assertIn('Talking Speaker', str(response.content))
+        self.assertNotIn('Spammer Speaker', str(response.content))
+        self.assertIn('Assistent Speaker', str(response.content))
 
 
 class TestApps(TestCase):
