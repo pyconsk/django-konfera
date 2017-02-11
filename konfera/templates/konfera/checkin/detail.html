@@ -4,31 +4,24 @@
 
 {% block checkin_content %}
 <div class="list-group">
-    <h2>Ticket details</h2>
+    <h2>{% trans "Ticket details" %}</h2>
 
     <table class="table">
         <tr>
-            <th>Full name</th>
+            <th>{% trans "Full name" %}</th>
             <td>{{ object }}</td>
         </tr>
         <tr>
-            <th>Email</th>
-            <td>{{ object.email }}</td>
-        </tr>
-        <tr>
-            <th>Type</th>
+            <th>{% trans "Type" %}</th>
             <td>{{ object.type }}</td>
         </tr>
-        {% if object.phone %}
-            <tr>
-                <th>Email</th>
-                <td>{{ object.phone }}</td>
-            </tr>
-        {% endif %}
-
+        <tr>
+            <th>{% trans "Order status" %}</th>
+            <td>{{ ticket.order.get_status_display }}</td>
+        </tr>
         {% if object.description %}
             <tr>
-                <th>Description</th>
+                <th>{% trans "Description" %}</th>
                 <td>{{ object.description }}</td>
             </tr>
         {% endif %}

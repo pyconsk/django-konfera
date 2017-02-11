@@ -10,8 +10,8 @@
             <tr>
                 <th>{% trans "First name" %}</th>
                 <th>{% trans "Last name" %}</th>
-                <th>{% trans "Email" %}</th>
                 <th>{% trans "Status" %}</th>
+                <th>{% trans "Order status" %}</th>
                 <th>{% trans "Ticket bought at" %}</th>
             </tr>
         </thead>
@@ -20,12 +20,12 @@
             <tr>
                 <td>{{ ticket.first_name }}</td>
                 <td>{{ ticket.last_name }}</td>
-                <td>{{ ticket.email }}</td>
                 <td>
                     <a href="{% url 'check_in' ticket.type.event.slug ticket.uuid %}">
                         {{ ticket.status }}
                     </a>
                 </td>
+                <td>{{ ticket.order.get_status_display }}</td>
                 <td>{{ ticket.date_created }}</td>
             </tr>
         {% endfor %}
