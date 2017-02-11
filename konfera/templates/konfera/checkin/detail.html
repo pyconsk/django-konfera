@@ -34,5 +34,18 @@
         {{ form }}
         <input type="submit" class="btn btn-primary">
     </form>
+
+    {% if request.user.is_staff %}
+        <hr>
+        <p>
+            <a href="{% url 'admin:konfera_ticket_change' object.id %}" class="btn btn-warning">
+                {% trans "Show ticket in admin" %}
+            </a>
+
+            <a href="{% url 'admin:konfera_order_change' object.order.id %}" class="btn btn-warning">
+                {% trans "Show order in admin" %}
+            </a>
+        </p>
+    {% endif %}
 </div>
 {% endblock %}
