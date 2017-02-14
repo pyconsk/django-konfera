@@ -68,7 +68,7 @@ class Ticket(KonferaModel):
             order.save()
             self.order = order
 
-        super(Ticket, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if recalculate_tickets:
             self.order.recalculate_ticket_price()
