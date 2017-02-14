@@ -1,0 +1,59 @@
+{% extends 'konfera/checkin/base.html' %}
+{% load i18n %}
+
+
+{% block checkin_content %}
+<div class="list-group">
+    <h2>{% trans "Ticket details" %}</h2>
+
+    <table class="table">
+        <tr>
+            <th>{% trans "Full name" %}</th>
+            <td>{{ object }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Type" %}</th>
+            <td>{{ object.type }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Status" %}</th>
+            <td>{{ ticket.get_status_display }}</td>
+        </tr>
+        <tr>
+            <th>{% trans "Order status" %}</th>
+            <td>{{ ticket.order.get_status_display }}</td>
+        </tr>
+        {% if object.description %}
+            <tr>
+                <th>{% trans "Description" %}</th>
+                <td>{{ object.description }}</td>
+            </tr>
+        {% endif %}
+    </table>
+
+    <hr>
+
+    {% if show_form %}
+        <form action="." method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" class="btn btn-primary">
+        </form>
+    {% else %}
+        <p>{% trans "Tiket's status cannot be changed." %}</p>
+    {% endif %}
+
+    {% if request.user.is_staff %}
+        <hr>
+        <p>
+            <a href="{% url 'admin:konfera_ticket_change' object.id %}" class="btn btn-warning">
+                {% trans "Show ticket in admin" %}
+            </a>
+
+            <a href="{% url 'admin:konfera_order_change' object.order.id %}" class="btn btn-warning">
+                {% trans "Show order in admin" %}
+            </a>
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
