@@ -175,7 +175,7 @@ a.sbox:hover > .sbox-inner {
   position: absolute;
   z-index: 0;
   max-width: 75%;
-  max-height: 75%;
+  max-height: 40%;
   top: 0;
   left: 0;
   right: 0;
