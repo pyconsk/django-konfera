@@ -45,8 +45,8 @@ def update_event_context(event, context, show_sponsors=True):
     context['event'] = event
 
     if show_sponsors:
-        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER, Sponsor.MEDIA)
-        context['sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
+        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER)
+        context['show_sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
 
     if event.analytics:
         context['ga'] = event.analytics
