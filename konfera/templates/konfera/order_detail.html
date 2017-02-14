@@ -292,10 +292,10 @@
               </tbody>
             </table>
 
-            {% if allow_pdf_storage %}
+            {% if allow_pdf_storage and not allow_receipt_edit %}
             <div class="text-center">
               <a href="{% url "order_detail_pdf" order.uuid %}" class="btn btn-default" role="button">
-                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Save as PDF
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download Invoice" %}
               </a>
             </div>
             {% endif %}
