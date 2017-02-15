@@ -174,7 +174,8 @@ a.sbox:hover > .sbox-inner {
   display: block;
   position: absolute;
   z-index: 0;
-  width: 80%; /* set this individually for every image */
+  max-width: 75%;
+  max-height: 40%;
   top: 0;
   left: 0;
   right: 0;
@@ -613,7 +614,7 @@ label.required:after {
   content: ' *';
 }
 
-input:not([type=button]):not([type=reset]):not([type=submit]), select {
+input:not([type=button]):not([type=reset]):not([type=submit]):not([type=checkbox]), select {
   width: 98%;
 }
 button {

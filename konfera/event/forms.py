@@ -1,6 +1,6 @@
 from django import forms
 
-from konfera.models import Speaker, Talk, Receipt
+from konfera.models import Speaker, Talk, Ticket, Receipt
 
 
 class ReceiptForm(forms.ModelForm):
@@ -31,3 +31,18 @@ class TalkForm(forms.ModelForm):
     class Meta:
         model = Talk
         exclude = ['status', 'primary_speaker', 'secondary_speaker', 'event']
+
+
+class CheckInTicket(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.status is not None:
+            new_choices = [(Ticket.CHECKEDIN, 'Checked-in'), (Ticket.REGISTERED, 'Registered')]
+            self.fields['status'].choices = new_choices
+            self.fields['status'].widget.choices = new_choices
+
+    class Meta:
+        model = Ticket
+        fields = ['status']
