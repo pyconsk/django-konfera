@@ -81,3 +81,8 @@ Enable ability to store order as PDF.
 In order to make this functionality work, make sure django-wkhtmltopdf, with wkhtmltopdf binary.
 """
 ENABLE_ORDER_PDF_GENERATION = getattr(settings, 'ENABLE_ORDER_PDF_GENERATION', False)
+
+"""
+Show amount of available tickets
+"""
+DISPLAY_TICKET_AVAILABILITY = getattr(settings, 'DISPLAY_TICKET_AVAILABILITY', True)
