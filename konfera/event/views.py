@@ -18,9 +18,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
+from konfera.utils import send_email, update_event_context, update_order_status_context, generate_ga_ecommerce_context
 from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm, CheckInTicket
 from konfera.models import Event, Order, Talk, TicketType, Speaker, Ticket
-from konfera.utils import send_email, update_event_context, update_order_status_context
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -270,6 +270,15 @@ class EventOrderDetailView(DetailView):
             update_event_context(self.object.event, context, show_sponsors=False)
 
         update_order_status_context(self.object.status, context)
+
+        return context
+
+
+class EventOrderDetailThanksView(EventOrderDetailView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        generate_ga_ecommerce_context(self.object, context)
 
         return context
 

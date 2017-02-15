@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    contributing
+   options
    talks
 
 Indices and tables
