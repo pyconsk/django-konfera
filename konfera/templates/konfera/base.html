@@ -42,7 +42,7 @@
 
   {% block content %}
     <div class="row">
-      <div class="col-md-{% if sponsors %}8{% else %}12{% endif %}">
+      <div class="col-md-{% if show_sponsors %}8{% else %}12{% endif %}">
 
         {% block content_top %}{% endblock %}
         {% block content_details %}{% endblock %}
@@ -50,11 +50,11 @@
 
       </div>
 
-      {% if sponsors %}
+      {% if show_sponsors %}
       <div class="col-md-4">
       <!-- right_nav -->
         <div class="text-center right-nav hidden-print">
-          {% for sponsor in sponsors %}
+          {% for sponsor in show_sponsors %}
             {% ifchanged sponsor.type %}
               {% if not forloop.first %}
           </ul>
@@ -64,7 +64,7 @@
           <ul class="list-unstyled">
             {% endifchanged %}
             <li>
-              <a href="{{ sponsor.url }}" target="_blank">
+              <a href="{{ sponsor.url }}" target="_blank" {% if ga %}onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-panel-{{ sponsor|slugify }}'); trackOutboundLink('{{ sponsor.url }}');"{% endif %}>
                 <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="{{ sponsor.get_type_display|lower }}" />
               </a>
             </li>
@@ -124,6 +124,37 @@
 
   ga('create', '{{ ga }}', 'auto');
   ga('send', 'pageview');
+  {% if ga_ecommerce %}
+  ga('require', 'ecommerce');
+
+  ga('ecommerce:addTransaction', {
+    'id': '{{ ga_ecommerce.ga_transaction.id }}',
+    'affiliation': '{{ ga_ecommerce.ga_transaction.affiliation }}',
+    'revenue': '{{ ga_ecommerce.ga_transaction.revenue }}',
+    'shipping': '{{ ga_ecommerce.ga_transaction.shipping }}',
+    'tax': '{{ ga_ecommerce.ga_transaction.tax }}',
+    'currency': '{{ ga_ecommerce.ga_transaction.currency }}',
+  });
+  {% for item in  ga_ecommerce.ga_items %}
+  ga('ecommerce:addItem', {
+    'id': '{{ item.id }}',
+    'name': '{{ item.name }}',
+    'category': '{{ item.category }}',
+    'price': '{{ item.price }}',
+    'quantity': '{{ item.quantity }}',
+    'currency': '{{ item.currency }}',
+  });
+  {% endfor %}
+
+  ga('ecommerce:send');
+  {% endif %}
+
+  var trackOutboundLink = function(url) {
+     ga('send', 'event', 'outbound', 'click', url, {
+       'transport': 'beacon',
+       'hitCallback': function(){document.location = url;}
+     });
+  }
   </script>
   <!-- end GA -->
   {% endif %}

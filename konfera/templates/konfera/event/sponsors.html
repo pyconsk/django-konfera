@@ -1,6 +1,7 @@
 {% extends 'konfera/base.html' %}
 {% load i18n %}
-
+{% load static %}
+{% load custom_filters %}
 
 {% block title %}
     {{ event }} | {% trans "Sponsors" %}
@@ -8,10 +9,49 @@
 
 
 {% block content_details %}
-    <h2>{{ event }}</h2>
-    <div>
-        {% for sponsor in sponsors %}
-           <p><a href="{{ sponsor.url }}">{{ sponsor.title }}</a></p>
-        {% endfor %}
+
+  {% regroup sponsors by get_type_display as sponsor_levels  %}
+
+<div class="sponsors">
+  {% for type in sponsor_levels %}
+  <div class="row" id="{{ type.grouper|lower }}">
+    <div class="col-md-12 text-center">
+      <h2><mark class="{{ type.grouper|lower }}">{{ type.grouper }}</mark></h2>
     </div>
+  </div>
+    {% for sponsor in type.list %}
+  {% if forloop.first or forloop.counter|divisibleby:3 %}
+  <div class="row">
+  {% endif %}
+
+    <div class="{% spaceless %}
+      {% if forloop.first %}
+        {% if type.list|length == 1 %}col-md-offset-4{% endif %}
+        {% if type.list|length == 2 or type.list|length == 4 %}col-md-offset-2{% endif %}
+      {% else %}
+        {% if type.list|length|divisibleby:2 and not type.list|length|divisibleby:3 and type.list|length|sub:forloop.counter == 1 %}col-md-offset-2{% endif %}
+        {% if type.list|length|divisibleby:5 and not type.list|length|divisibleby:3 and type.list|length|sub:forloop.counter == 1 %}col-md-offset-2{% endif %}
+        {% if type.list|length|divisibleby:7 and not type.list|length|divisibleby:3 and type.list|length|sub:forloop.counter == 0 %}col-md-offset-4{% endif %}
+      {% endif %}
+      {% endspaceless %} col-md-4">
+      <a href="{{ sponsor.url }}" target="_blank" class="sbox" {% if ga %}onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-page-{{ sponsor|slugify }}');trackOutboundLink('{{ sponsor.url }}');"{% endif %}>
+        <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="slogo img-responsive center-block" />
+        <div class="sbox-inner">
+          <div class="sdesc">
+            <h3>{{ sponsor }}</h3>
+            <p>{{ sponsor.url }}</p>
+            <p class="text-justify">{{ sponsor.about_us }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  {% if forloop.last or forloop.counter|divisibleby:3 %}
+  </div>
+  {% endif %}
+
+    {% endfor %}
+  <hr>
+  {% endfor %}
+</div> <!-- div sponsors -->
 {% endblock %}

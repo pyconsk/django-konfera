@@ -2,19 +2,25 @@ from decimal import Decimal
 import logging
 import paypalrestsdk
 
+from django import VERSION
 from django.contrib import messages
 from django.http.response import Http404
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.utils.translation import ugettext as _
 
 from konfera.models import Order
-from konfera.utils import update_order_status_context, update_event_context, currency_round_up
-from konfera.event.forms import ReceiptForm
+from konfera.utils import currency_round_up, generate_ga_ecommerce_context
 from konfera.settings import CURRENCY
+from konfera.event.views import EventOrderDetailFormView
 
 from payments import settings
 from payments.utils import _process_payment
+
+if VERSION[1] in (8, 9):
+    from django.core.urlresolvers import reverse
+else:
+    from django.urls import reverse
 
 
 logger = logging.getLogger(__name__)
@@ -27,28 +33,26 @@ paypalrestsdk.configure({
 })
 
 
-def order_payment(request, order_uuid):
-    order = get_object_or_404(Order, uuid=order_uuid)
-    context = dict()
+class OrderPaymentView(EventOrderDetailFormView):
+    template_name = 'payments/order_payment.html'
 
-    if order.status == Order.PAID:
-        return redirect('order_detail', order_uuid=str(order.uuid))
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
 
-    if order.status == Order.AWAITING:
-        context['form'] = form = ReceiptForm(request.POST or None, instance=order.receipt_of)
+        return context
 
-        if form.is_valid():
-            form.save()
-            messages.success(request, _('Your order details has been updated.'))
+    def get_success_url(self):
+        return reverse('konfera_payments:payment_options', kwargs={'order_uuid': self.object.order.uuid})
 
-    if order.event:
-        update_event_context(order.event, context, show_sponsors=False)
 
-    context['PAYPAL_ADDITIONAL_CHARGE'] = settings.PAYPAL_ADDITIONAL_CHARGE
-    context['order'] = order
-    update_order_status_context(order.status, context)
+class OrderPaymentThanksView(OrderPaymentView):
 
-    return render(request=request, template_name='payments/order_payment.html', context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        generate_ga_ecommerce_context(self.object, context)
+
+        return context
 
 
 class PayOrderByPaypal(TemplateView):

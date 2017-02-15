@@ -8,8 +8,8 @@ from django.core.mail import EmailMultiAlternatives
 from konfera.models.email_template import EmailTemplate
 from konfera.models.sponsor import Sponsor
 from konfera.models.order import Order
-from konfera.settings import (GOOGLE_ANALYTICS, NAVIGATION_ENABLED, NAVIGATION_URL, NAVIGATION_LOGO,
-                              NAVIGATION_BRAND, EMAIL_NOTIFY_BCC)
+from konfera.settings import (GOOGLE_ANALYTICS, GOOGLE_ANALYTICS_ECOMMERCE, NAVIGATION_ENABLED, NAVIGATION_URL,
+                              NAVIGATION_LOGO, NAVIGATION_BRAND, EMAIL_NOTIFY_BCC, CURRENCY)
 
 
 logger = logging.getLogger(__name__)
@@ -45,11 +45,40 @@ def update_event_context(event, context, show_sponsors=True):
     context['event'] = event
 
     if show_sponsors:
-        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER, Sponsor.MEDIA)
-        context['sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
+        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER)
+        context['show_sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
 
     if event.analytics:
         context['ga'] = event.analytics
+
+
+def generate_ga_ecommerce_context(order, context):
+
+    if GOOGLE_ANALYTICS and GOOGLE_ANALYTICS_ECOMMERCE:
+        ga_transaction = {
+            'id': order.variable_symbol,
+            'affiliation': order.event,
+            'revenue': order.to_pay,
+            'shipping': '0',
+            'tax': '0',
+            'currency': CURRENCY[1],
+        }
+        ga_items = []
+
+        for ticket in order.ticket_set.all():
+            ga_items.append({
+                'id': order.variable_symbol,
+                'name': ticket.type.title,
+                'category': ticket.type.attendee_type,
+                'price': ticket.type.price - ticket.discount_calculator(),
+                'quantity': '1',
+                'currency': CURRENCY[1],
+            })
+
+        context['ga_ecommerce'] = {
+            'ga_transaction': ga_transaction,
+            'ga_items': ga_items
+        }
 
 
 def currency_round_up(money):
