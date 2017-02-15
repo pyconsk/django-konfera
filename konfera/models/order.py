@@ -45,7 +45,7 @@ class Order(KonferaModel):
         super().save(*args, **kwargs)
 
         try:
-            has_receipt = self.receipt_of is not None
+            self.receipt_of
         except ObjectDoesNotExist:
             receipt = Receipt(order=self, amount=self.amount_paid)
             receipt.save()
