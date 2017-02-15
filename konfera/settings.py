@@ -3,6 +3,7 @@ from django.conf import settings
 
 
 GOOGLE_ANALYTICS = getattr(settings, 'GOOGLE_ANALYTICS', None)  # just define analytics code: 'UA-XXXXXXXX-X'
+GOOGLE_ANALYTICS_ECOMMERCE = getattr(settings, 'GOOGLE_ANALYTICS_ECOMMERCE', False)
 
 """
 Application supports django-sitetree navigation support, weather it shouold be passed to template
@@ -44,7 +45,7 @@ LANDING_PAGE = getattr(settings, 'LANDING_PAGE', 'latest_conference')
 """
 Specify url, where user will be redirected after registering the ticket.
 """
-ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_detail')
+ORDER_REDIRECT = getattr(settings, 'ORDER_REDIRECT', 'order_detail_thanks')
 
 """
 Register email notification.
