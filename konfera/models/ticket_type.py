@@ -73,7 +73,7 @@ class TicketType(FromToModel):
             status = TicketType.NOT_AVAILABLE
         elif self.date_to < now:
             status = TicketType.EXPIRED
-        elif self.usage - self.issued_tickets <= 0:
+        elif self.usage - self.issued_tickets == 0:
             status = TicketType.SOLDOUT
 
         return status
