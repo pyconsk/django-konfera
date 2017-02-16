@@ -39,8 +39,11 @@ class Order(KonferaModel):
         return str(self.price - self.discount)
 
     def save(self, *args, **kwargs):
-        if self.status == Order.PAID and self.payment_date is None:
-            self.payment_date = timezone.now()
+        if self.status == Order.PAID:
+            if self.payment_date is None:
+                self.payment_date = timezone.now()
+            if self.amount_paid == 0:
+                self.amount_paid = self.to_pay
 
         super().save(*args, **kwargs)
 
@@ -49,6 +52,7 @@ class Order(KonferaModel):
         except ObjectDoesNotExist:
             receipt = Receipt(order=self, amount=self.amount_paid)
             receipt.save()
+
 
     @property
     def left_to_pay(self):

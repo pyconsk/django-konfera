@@ -99,8 +99,8 @@ admin.site.register(Speaker, SpeakerAdmin)
 
 
 class TalkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'primary_speaker', 'type', 'duration', 'event', 'status',)
-    list_filter = ('type', 'duration', 'event', 'status',)
+    list_display = ('title', 'speaker', 'type', 'duration', 'event', 'status',)
+    list_filter = ('type', 'duration', 'status', 'event',)
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
     ordering = ('title', 'event')
     readonly_fields = ('date_created', 'date_modified', 'uuid')
@@ -116,6 +116,38 @@ class TalkAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+    actions = ['make_draft', 'make_approved', 'make_published', 'make_rejected', 'make_withdrawn']
+
+    def make_draft(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.DRAFT)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    def make_approved(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.APPROVED)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    def make_published(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.PUBLISHED)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    def make_rejected(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.REJECTED)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    def make_withdrawn(self, request, queryset):
+        rows_updated = queryset.update(status=Talk.WITHDRAWN)
+        self.message_user(request, "%s talk(s) status updated." % rows_updated)
+
+    make_draft.short_description = "Set selected talks to draft"
+    make_approved.short_description = "Set selected talks to approved"
+    make_published.short_description = "Set selected talks to published"
+    make_rejected.short_description = "Set selected talks to rejected"
+    make_withdrawn.short_description = "Set selected talks to withdrawn"
+
+    def speaker(self, obj):
+        info = (Speaker._meta.app_label, Speaker._meta.model_name)
+        link = reverse("admin:%s_%s_change" % info, args=(obj.primary_speaker.id,))
+        return mark_safe('<a href="%s">%s</a>' % (link, obj.primary_speaker))
 
 
 admin.site.register(Talk, TalkAdmin)
@@ -203,11 +235,10 @@ class ReceiptInline(admin.StackedInline):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('variable_symbol', 'purchase_date', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
-                    'receipt_of')
+    list_display = ('uuid', 'variable_symbol', 'purchase_date', 'price', 'discount', 'processing_fee', 'to_pay',
+                    'status', 'receipt_of')
     list_filter = ('status', 'purchase_date')
-    ordering = ('purchase_date',)
-    search_fields = ('=uuid',)
+    ordering = ('-purchase_date',)
     readonly_fields = [
         'purchase_date', 'uuid', 'date_created', 'date_modified', 'variable_symbol', 'price', 'discount', 'to_pay',
         'unpaid_notification_sent_at',
@@ -225,6 +256,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [
         ReceiptInline, OrderedTicketsInline
     ]
+    actions = ['make_paid']
 
     def get_readonly_fields(self, request, obj=None):
         if obj and obj.status not in (Order.AWAITING, Order.PARTLY_PAID):
@@ -232,6 +264,11 @@ class OrderAdmin(admin.ModelAdmin):
 
         return self.readonly_fields
 
+    def make_paid(self, request, queryset):
+        rows_updated = queryset.update(status=Order.PAID)
+        self.message_user(request, "%s order(s) status updated." % rows_updated)
+
+    make_paid.short_description = "Mark selected order as paid"
 
 admin.site.register(Order, OrderAdmin)
 
@@ -299,7 +336,7 @@ admin.site.register(DiscountCode, DiscountCodeAdmin)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'last_name', 'type', 'status', 'link_to_order')
     list_filter = ('status', 'type__event',)
-    ordering = ('order__purchase_date', 'email')
+    ordering = ('-order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
     readonly_fields = ('link_to_order', 'date_created', 'date_modified')
     fieldsets = (
@@ -324,7 +361,7 @@ class TicketAdmin(admin.ModelAdmin):
 
     def link_to_order(self, obj):
         info = (Order._meta.app_label, Order._meta.model_name)
-        link = reverse("admin:%s_%s_change" % info, args=(obj.id,))
+        link = reverse("admin:%s_%s_change" % info, args=(obj.order.id,))
         return mark_safe('<a href="%s">%s</a>' % (link, obj.order.uuid))
 
     link_to_order.short_description = "Order"
