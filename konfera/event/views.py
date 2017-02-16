@@ -8,22 +8,19 @@ from subprocess import CalledProcessError
 from django import VERSION
 from django.contrib import messages
 from django.db.models import Q
+from django.db.models.functions import Lower
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import ModelFormMixin
 
 from konfera import settings
-from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm
-from konfera.models import Speaker
-from konfera.models.event import Event
-from konfera.models.talk import Talk
-from konfera.models.ticket_type import TicketType
-from konfera.models.order import Order
-from konfera.utils import send_email, update_event_context, update_order_status_context
+from konfera.utils import send_email, update_event_context, update_order_status_context, generate_ga_ecommerce_context
+from konfera.event.forms import SpeakerForm, TalkForm, ReceiptForm, CheckInTicket
+from konfera.models import Event, Order, Talk, TicketType, Speaker, Ticket
 
 if VERSION[1] in (8, 9):
     from django.core.urlresolvers import reverse
@@ -49,7 +46,8 @@ def event_venue_view(request, slug):
 def event_sponsors_list_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
-    update_event_context(event, context)
+    context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+    update_event_context(event, context, show_sponsors=False)
 
     return render(request=request, template_name='konfera/event/sponsors.html', context=context)
 
@@ -225,7 +223,7 @@ def event_public_tickets(request, slug):
 
     available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
         .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
-        .exclude(attendee_type=TicketType.PRESS)
+        .exclude(attendee_type=TicketType.PRESS).order_by('price', 'title')
     available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
@@ -266,11 +264,21 @@ class EventOrderDetailView(DetailView):
         context['order'] = self.object
         context['allow_receipt_edit'] = self.object.status == Order.AWAITING
         context['allow_pdf_storage'] = settings.ENABLE_ORDER_PDF_GENERATION
+        context['rendering_pdf'] = False
 
         if self.object.event:
             update_event_context(self.object.event, context, show_sponsors=False)
 
         update_order_status_context(self.object.status, context)
+
+        return context
+
+
+class EventOrderDetailThanksView(EventOrderDetailView):
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        generate_ga_ecommerce_context(self.object, context)
 
         return context
 
@@ -332,6 +340,7 @@ class EventOrderDetailPDFView(EventOrderDetailView):
         context['allow_receipt_edit'] = False
         context['allow_pdf_storage'] = False
         context['display_receipt'] = False
+        context['rendering_pdf'] = True
 
         if self.object.receipt_of.title:
             context['display_receipt'] = True
@@ -353,3 +362,72 @@ class EventOrderDetailPDFView(EventOrderDetailView):
             return redirect('order_detail', order_uuid=self.object.uuid)
 
         return response
+
+
+class CheckInAccessMixin:
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.groups.filter(name='Checkin').exists():
+            raise Http404
+
+        return super().dispatch(request, *args, **kwargs)
+
+
+class CheckInView(CheckInAccessMixin, ListView):
+    template_name = 'konfera/checkin/list.html'
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['event'] = Event.objects.get(slug=self.kwargs.get('slug'))
+        context['registered_only'] = 'registered_only' in self.request.GET
+        return context
+
+    def get_queryset(self):
+        event = Event.objects.get(slug=self.kwargs.get('slug'))
+        queryset = Ticket.objects.filter(type__event=event).order_by(Lower('last_name'), Lower('first_name'))
+
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search) |
+                Q(last_name__icontains=search) |
+                Q(email__icontains=search)
+            )
+
+        registered_only = self.request.GET.get('registered_only')
+        if registered_only:
+            queryset = queryset.filter(status=Ticket.REGISTERED)
+
+        return queryset
+
+
+class CheckInDetailView(CheckInAccessMixin, DetailView):
+    model = Ticket
+    slug_field = 'uuid'
+    slug_url_kwarg = 'order_uuid'
+    template_name = 'konfera/checkin/detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['show_form'] = context['object'].status in [Ticket.REGISTERED, Ticket.CHECKEDIN]
+        context['form'] = CheckInTicket(instance=context['object'])
+        context['event'] = context['object'].type.event
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        form = CheckInTicket(request.POST, instance=self.object)
+        if form.is_valid():
+            msg = _("{name}'s status has been changed to {status}!").format(
+                name=self.object, status=self.object.status
+            )
+            messages.success(request, msg)
+
+            form.save()
+            return redirect(reverse('check_in', kwargs={'slug': self.object.type.event.slug}))
+
+        context = self.get_context_data(object=self.object)
+        context['form'] = form
+        return self.render_to_response(context)

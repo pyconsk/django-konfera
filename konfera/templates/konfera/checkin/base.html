@@ -1,0 +1,14 @@
+{% extends 'konfera/base.html' %}
+{% load i18n %}
+
+
+{% block title %}
+    {% trans "Check-In List" %}
+{% endblock %}
+
+
+{% block content %}
+    {% include 'konfera/checkin/search.html' %}
+    <hr />
+    {% block checkin_content %}{% endblock %}
+{% endblock %}

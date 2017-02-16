@@ -23,10 +23,10 @@
     <div class="col-xs-9 text-justify"><h3>{{ speaker }} <small>({{ speaker.country }})</small></h3>
       {% if speaker.url or speaker.social_url %}<p>
         {% if speaker.url %}
-        <a href="{{ speaker.url }}" target="_blank" title="{{ speaker.first_name }} Blog">{{ speaker.url }}</a>{% if speaker.social_url %}<br />{% endif %}
+        <a href="{{ speaker.url }}" target="_blank" title="{{ speaker.first_name }} Blog" {% if ga %}onclick="trackOutboundLink('{{ speaker.url }}');"{% endif %}>{{ speaker.url }}</a>{% if speaker.social_url %}<br />{% endif %}
         {% endif %}
         {% if speaker.social_url %}
-        <a href="{{ speaker.social_url }}" target="_blank" title="{{ speaker.first_name }} Social media">{{ speaker.social_url }}</a>
+        <a href="{{ speaker.social_url }}" target="_blank" title="{{ speaker.first_name }} Social media" {% if ga %}onclick="trackOutboundLink('{{ speaker.social_url }}');"{% endif %}>{{ speaker.social_url }}</a>
         {% endif %}
       </p>{% endif %}
       <p>

@@ -48,8 +48,7 @@ class Order(KonferaModel):
         super().save(*args, **kwargs)
 
         try:
-            self.receipt_of.amount = self.amount_paid
-            self.receipt_of.save()
+            self.receipt_of
         except ObjectDoesNotExist:
             receipt = Receipt(order=self, amount=self.amount_paid)
             receipt.save()
@@ -81,4 +80,5 @@ class Order(KonferaModel):
         for ticket in self.ticket_set.all():
             self.price += ticket.type.price
             self.discount += ticket.discount_calculator()
+
         self.save()

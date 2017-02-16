@@ -72,7 +72,7 @@ class Ticket(KonferaModel):
         if self.order.status == Order.PAID and self.status == self.REQUESTED:
             self.status = self.REGISTERED
 
-        super(Ticket, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if recalculate_tickets:
             self.order.recalculate_ticket_price()

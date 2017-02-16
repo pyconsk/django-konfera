@@ -12,48 +12,47 @@
 {% endblock %}
 
 {% block content_top %}
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="text-center">
-          <h2>{% trans "Pay the order" %} #{{ order.variable_symbol }}</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="text-center">
+        <h2>{% trans "Pay the order" %} #{{ order.variable_symbol }}</h2>
+      </div>
+      <hr>
+      <div class="row">
+        {# todo: render is separately in future and display it only when it responses to signal #}
+        <div class="col-md-6">
+          <h3>{% trans "Pay by bank transfer" %}</h3>
+          <div class="alert alert-success" role="alert">
+            {% blocktrans with amount=order.left_to_pay|currency variable_symbol=order.variable_symbol %}
+              Transfer {{ amount }} to the account bellow and fill the variable symbol to {{ variable_symbol }}.
+            {% endblocktrans %}
+          </div>
+          <p>
+            <strong>{% trans "Account name:" %}</strong> SPy<br>
+            <strong>{% trans "Bank name:" %}</strong> Fio banka, a. s., pobočka zahraničnej banky<br>
+            <strong>{% trans "Bank account EUR (SK):" %}</strong> 2300870269/8330<br>
+            <strong>{% trans "Bank account EUR (CZ):" %}</strong> 2300870269/2010<br>
+            <strong>{% trans "Bank account EUR (IBAN / international):" %}</strong> SK48 8330 0000 0023 0087 0269<br>
+            <strong>{% trans "SWIFT/BIC:" %}</strong> FIOZSKBAXXX
+          </p>
         </div>
-        <hr>
-        <div class="row">
-          {# todo: render is separately in future and display it only when it responses to signal #}
-          <div class="col-md-6">
-            <h3>{% trans "Pay by bank transfer" %}</h3>
-            <div class="alert alert-success" role="alert">
-              {% blocktrans with amount=order.left_to_pay|currency variable_symbol=order.variable_symbol %}
-                Transfer {{ amount }} to the account bellow and fill the variable symbol to {{ variable_symbol }}.
-              {% endblocktrans %}
-            </div>
-
-            <p>
-              <strong>{% trans "Account name:" %}</strong> SPy<br>
-              <strong>{% trans "Bank name:" %}</strong> Fio banka, a. s., pobočka zahraničnej banky<br>
-              <strong>{% trans "Bank account EUR (SK):" %}</strong> 2300870269/8330<br>
-              <strong>{% trans "Bank account EUR (CZ):" %}</strong> 2300870269/2010<br>
-              <strong>{% trans "Bank account EUR (IBAN / international):" %}</strong> SK48 8330 0000 0023 0087 0269<br>
-              <strong>{% trans "SWIFT/BIC:" %}</strong> FIOZSKBAXXX
-            </p>
-        </div>
-	<div class="col-md-6">
-            <h3>{% trans "Pay by PayPal" %}</h3>
-            <div class="alert alert-warning" role="alert">
-              {% blocktrans %}
-                <strong>Warning!</strong> We charge additional {{ PAYPAL_ADDITIONAL_CHARGE }}% for PayPal payments.
-              {% endblocktrans %}
-            </div>
-	    <p>{% trans "You will be redirected to the PayPal site to finish the payment." %}</p>
-            <div class="text-center">
-              <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-lg btn-default" role="button">
-                <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> {% trans "Pay by PayPal" %}
-              </a>
-            </div>
+        <div class="col-md-6">
+          <h3>{% trans "Pay by PayPal" %}</h3>
+          <div class="alert alert-warning" role="alert">
+            {% blocktrans %}
+              <strong>Warning!</strong> We charge additional {{ PAYPAL_ADDITIONAL_CHARGE }}% for PayPal payments.
+            {% endblocktrans %}
+          </div>
+          <p>{% trans "You will be redirected to the PayPal site to finish the payment." %}</p>
+          <div class="text-center">
+            <a href="{% url 'konfera_payments:paypal_button_url' order.uuid %}" class="btn btn-lg btn-default" role="button">
+              <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> {% trans "Pay by PayPal" %}
+            </a>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}

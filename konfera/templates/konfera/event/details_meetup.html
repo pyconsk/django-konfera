@@ -11,7 +11,7 @@
     {% endif %}
   </h2>
   <h2><span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-    {% if event.location.website %}<a href="{{ event.location.website }}" title="{{ event.location }}">{% endif %}
+    {% if event.location.website %}<a href="{{ event.location.website }}" title="{{ event.location }}" {% if ga %}onclick="trackOutboundLink('{{ event.location.website }}');"{% endif %}>{% endif %}
       {{ event.location }},
       <br>{{ event.location.street }}, {{ event.location.city }}
     {% if event.location.website %}</a>{% endif %}
