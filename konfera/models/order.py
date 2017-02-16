@@ -53,7 +53,6 @@ class Order(KonferaModel):
             receipt = Receipt(order=self, amount=self.amount_paid)
             receipt.save()
 
-
     @property
     def left_to_pay(self):
         """ Amount attendee still have to pay """

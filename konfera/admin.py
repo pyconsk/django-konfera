@@ -270,6 +270,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     make_paid.short_description = "Mark selected order as paid"
 
+
 admin.site.register(Order, OrderAdmin)
 
 
