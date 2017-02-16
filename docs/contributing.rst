@@ -41,7 +41,7 @@ Developer's HowTo
 =================
 
 Development standards
---------------------
+---------------------
 
 * We do use standard PEP8, with extended line to 119 characters.
 * Each pull request is tested against our automated test suite (yes, PEP8 is one of the tests).
@@ -69,7 +69,7 @@ This is reusable django app, which means you have to create project first. Creat
 13. ``python manage.py runserver`` start development server, and check the app in browser
 
 Development methodology
-----------------------
+-----------------------
 
 1. You create a `fork <https://github.com/pyconsk/django-konfera/fork>`_ of the project (you do this only once. Afterwards you already have it in your GitHub, it is your repo in which you are doing all the development).
 2. Clone your fork locally ``git clone git@github.com:YOUR-GITHUB-ACCOUNT/django-konfera.git`` add upstream remote to be able to download updated into your fork ``git remote add upstream https://github.com/pyconsk/django-konfera.git``. You don't have the right to push to upstream, but do regularly pull and push to your fork to keep it up-to-date and prevent conflicts.
@@ -87,6 +87,6 @@ Development methodology
 8. Your feature is approved and merged to master of upstream, so you can check out master at your local copy: ``git checkout master`` and pull the newly approved changes from upstream ``git pull upstream master``. Pull from upstream will download your work (as one commit into master) that has been done in branch. Now you can delete your local branch ``git branch --delete XX-new-feature``, and also remote one ``git push origin :XX-new-feature``
 
 Continuous Integration
----------------------
+----------------------
 
 Once developer changes create `pull request <https://help.github.com/articles/using-pull-requests>`_ we do automated test for supported Python and Django versions and execute all unit tests in our `Travis CI <https://travis-ci.org/pyconsk/django-konfera>`_. Once the pull request is merged to the master `staging server <https://staging.pycon.sk>`_ is updated automatically, so you can see your changes in project on server immediately.
