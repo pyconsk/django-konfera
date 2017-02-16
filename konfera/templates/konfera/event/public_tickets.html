@@ -8,49 +8,61 @@
 
 
 {% block content_details %}
-    <ul class="list-group">
-      {% for ticket in tickets %}
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-8">
-              <h4>{{ ticket.title }}</h4>
-              <p class="text-justify">{{ ticket.description }}<br>
-                {% trans "Price" %}: <span class="badge">{{ ticket.price|currency }}</span>
-              </p>
-            </div>
-            <div class="col-md-4">
-              <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="btn btn-warning btn-lg btn-block pull-right">
-                <span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Register ticket
-              </a>
-            </div>
-          </div>
 
+<ul class="list-group">
+  {% for ticket in tickets %}
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-md-8">
+        <h4>{{ ticket.title }}</h4>
+        <div class="row">
+          <div class="col-md-12 text-justify">{{ ticket.description }}</div>
+        </div>
+        <div class="row">
+          <div class="col-xs-6">{% trans "Price" %}: <span class="badge">{{ ticket.price|currency }}</span></div>
+          {% if dispaly_ticket_availability and ticket.available_tickets > 0 %}
+            <div class="col-xs-6">{% trans "Available tickets" %}:
+              <span class="badge">{{ ticket.available_tickets }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-md-4">
+        <a href="{% url 'ticket_registration' event.slug ticket.uuid %}" class="btn btn-lg btn-block pull-right{% if ticket.available_tickets <= 0 %} btn-danger disabled{% else %} btn-warning{% endif %}">
+          {% if ticket.available_tickets <= 0 %}
+          <span class="glyphicon glyphicon glyphicon-ban-circle" aria-hidden="true"></span> {{ ticket.status }}
+          {% else %}
+          <span class="glyphicon glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> {% trans "Register ticket" %}
+          {% endif %}
+        </a>
+      </div>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+
+{% if tickets.num_pages > 1 %}
+  <nav aria-label="{% trans "Page navigation" %}">
+    <ul class="pagination">
+      {% if tickets.has_previous %}
+        <li>
+          <a href="?page={{ tickets.previous_page_number }}" aria-label="{% trans "Previous" %}" >
+          <span aria-hidden="true">&laquo;</span></a>
         </li>
+      {% endif %}
+
+      {% for page in tickets.paginator.page_range %}
+        <li><a href="?page={{ page }}"> {{ page }} </a></li>
       {% endfor %}
+
+      {% if tickets.has_next %}
+        <li>
+          <a href="?page={{ tickets.next_page_number }}" aria-label="{% trans "Next" %}" >
+          <span aria-hidden="true">&raquo;</span></a>
+        </li>
+      {% endif %}
     </ul>
-
-    {% if tickets.num_pages > 1 %}
-        <nav aria-label="Page navigation">
-            <ul class="pagination">
-                {% if tickets.has_previous %}
-                    <li>
-                        <a href="?page={{ tickets.previous_page_number }}" aria-label="Previous" >
-                        <span aria-hidden="true">&laquo;</span></a>
-                    </li>
-                {% endif %}
-
-                {% for page in tickets.paginator.page_range %}
-                    <li><a href="?page={{ page }}"> {{ page }} </a></li>
-                {% endfor %}
-
-                {% if tickets.has_next %}
-                    <li>
-                        <a href="?page={{ tickets.next_page_number }}" aria-label="Next" >
-                        <span aria-hidden="true">&raquo;</span></a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-    {% endif %}
-    {% block bottom_public_tickets %}{% endblock %}
+  </nav>
+{% endif %}
+{% block bottom_public_tickets %}{% endblock %}
 {% endblock %}

@@ -5,17 +5,20 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.abstract import FromToModel
+from konfera.models.ticket import Ticket
 
 
 class TicketType(FromToModel):
     NOT_AVAILABLE = 'na'
     ACTIVE = 'active'
     EXPIRED = 'expired'
+    SOLDOUT = 'soldout'
 
     STATUSES = {
         NOT_AVAILABLE: _('Not available yet'),
         ACTIVE: _('Active'),
         EXPIRED: _('Expired'),
+        SOLDOUT: _('Sold out'),
     }
 
     VOLUNTEER = 'volunteer'
@@ -55,7 +58,8 @@ class TicketType(FromToModel):
     price = models.DecimalField(decimal_places=2, max_digits=12, validators=[MinValueValidator(0)])
     attendee_type = models.CharField(choices=TICKET_TYPE_CHOICES, max_length=32, default=ATTENDEE)
     accessibility = models.CharField(choices=ACCESSIBILITY, max_length=32, default=PRIVATE)
-    usage = models.IntegerField(default=10, help_text=_('Amount of tickets that can be issued.'))
+    usage = models.IntegerField(default=-1, help_text=_('Number of tickets which can be issued. '
+                                                        'For unlimited amount use -1.'))
     event = models.ForeignKey('Event')
 
     def __str__(self):
@@ -69,12 +73,22 @@ class TicketType(FromToModel):
             status = TicketType.NOT_AVAILABLE
         elif self.date_to < now:
             status = TicketType.EXPIRED
+        elif self.usage - self.issued_tickets == 0:
+            status = TicketType.SOLDOUT
 
         return status
 
     @property
     def status(self):
         return TicketType.STATUSES[self._get_current_status()]
+
+    @property
+    def issued_tickets(self):
+        return len(self.ticket_set.exclude(status=Ticket.CANCELLED))
+
+    @property
+    def available_tickets(self):
+        return self.usage - self.issued_tickets
 
     def clean(self):
         now = timezone.now()
