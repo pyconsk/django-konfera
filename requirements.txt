@@ -4,3 +4,4 @@ django-sitetree==1.6.0
 mock==2.0.0
 pytz==2016.7
 Pillow==3.4.2
+Unidecode==0.04.20
