@@ -7,7 +7,7 @@ from konfera.models.abstract import AddressModel
 
 class Receipt(AddressModel):
     order = models.OneToOneField('Order', on_delete=models.CASCADE, related_name='receipt_of')
-    title = models.CharField(max_length=128, verbose_name=_('Name'))
+    title = models.CharField(max_length=128, verbose_name=_('Name'), blank=True)
     companyid = models.CharField(max_length=32, blank=True, verbose_name=_('Company ID'))
     taxid = models.CharField(max_length=32, blank=True, verbose_name=_('Tax ID'))
     vatid = models.CharField(max_length=32, blank=True, verbose_name=_('VAT ID'))
