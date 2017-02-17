@@ -11,8 +11,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   installation
    contributing
-   settings
    options
    talks
 
