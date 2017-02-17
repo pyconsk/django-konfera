@@ -340,10 +340,10 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ('status', 'type__event',)
     ordering = ('-order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email',)  # case insensitive searching
-    readonly_fields = ('link_to_order', 'date_created', 'date_modified')
+    readonly_fields = ('link_to_order', 'date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Personal details'), {
-            'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
+            'fields': ('title', 'first_name', 'last_name', 'email', 'phone', 'uuid')
         }),
         (_('Ticket info'), {
             'fields': ('link_to_order', 'type', 'discount_code', 'status', 'description')
