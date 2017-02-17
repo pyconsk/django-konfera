@@ -18,7 +18,7 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="text-center">
-        <h2>{{ rendering_pdf|yesno:"Invoice for order,Details for order" }} #{{ order.variable_symbol }}</h2>
+        <h2>{{ rendering_pdf|yesno:_("Invoice,Order") }} #{{ order.variable_symbol }}</h2>
       </div>
       <hr>
     </div>
@@ -33,14 +33,14 @@
 
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Organizer: " %}</strong>
+                <strong>{% trans "Organizer" %}:</strong>
             </div>
             <div class="col-xs-8">{{ event.organizer.title }}</div>
           </div>
           {% if event.organizer.company_id %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Company ID: " %}</strong>
+                <strong>{% trans "Company ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ event.organizer.company_id }}</div>
           </div>
@@ -48,7 +48,7 @@
           {% if event.organizer.tax_id %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Tax ID: " %}</strong>
+                <strong>{% trans "TAX ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ event.organizer.tax_id }}</div>
           </div>
@@ -56,7 +56,7 @@
           {% if event.organizer.vat_id %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "VAT ID: " %}</strong>
+                <strong>{% trans "VAT ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ event.organizer.vat_id }}</div>
           </div>
@@ -71,13 +71,13 @@
       {% endif %}
 
       <div class="panel panel-default">
-        <div class="panel-heading">{{ rendering_pdf|yesno:"Invoice Details,Order Details" }}</div>
+        <div class="panel-heading">{{ rendering_pdf|yesno:_("Invoice Details,Order Details") }}</div>
         <div class="panel-body">
 
           {% if rendering_pdf %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Invoice ID:" %}</strong>
+                <strong>{% trans "Invoice ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.pk }}</div>
           </div>
@@ -90,26 +90,26 @@
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Status: " %}</strong>
+                <strong>{% trans "Status" %}:</strong>
             </div>
             <div class="col-xs-8"><span class="label {{ status_label }}">{{ order.get_status_display }}</span></div>
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Variable symbol:" %}</strong>
+                <strong>{% trans "Variable symbol" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.variable_symbol }}</div>
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Purchase date:" %}</strong>
+                <strong>{% trans "Purchase date" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.purchase_date }}</div>
           </div>
           {% if order.payment_date %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Payment date:" %}</strong>
+                <strong>{% trans "Payment date" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.payment_date }}</div>
           </div>
@@ -117,14 +117,14 @@
 
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Price: " %}</strong>
+                <strong>{% trans "Price" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.price|currency }}</div>
           </div>
           {% if order.discount %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Discount: " %}</strong>
+                <strong>{% trans "Discount" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.discount|currency }}</div>
           </div>
@@ -132,7 +132,7 @@
           {% if order.processing_fee %}
            <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Processing fee: " %}</strong>
+                <strong>{% trans "Processing fee" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.processing_fee|currency }}</div>
           </div>
@@ -140,13 +140,13 @@
           <hr />
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Total price: " %}</strong>
+                <strong>{% trans "Total price" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.to_pay|currency }}</div>
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Amount paid: " %}</strong>
+                <strong>{% trans "Amount paid" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.amount_paid|currency }}</div>
           </div>
@@ -182,46 +182,48 @@
 
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Name: " %}</strong>
+                <strong>{% trans "Name" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.title }}</div>
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Street: " %}</strong>
+                <strong>{% trans "Street" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.street }}</div>
           </div>
           {% if order.receipt_of.street2 %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Street 2: " %}</strong>
+                <strong>{% trans "Street 2" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.street2 }}</div>
           </div>
           {% endif %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "City: " %}</strong>
+                <strong>{% trans "City" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.city }}</div>
           </div>
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Post code: " %}</strong>
+                <strong>{% trans "Post code" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.postcode }}</div>
           </div>
+          {% if order.receipt_of.state %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "State: " %}</strong>
+                <strong>{% trans "State" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.state  }}</div>
           </div>
+          {% endif %}
           {% if order.receipt_of.companyid %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "Company ID: " %}</strong>
+                <strong>{% trans "Company ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.companyid }}</div>
           </div>
@@ -229,7 +231,7 @@
           {% if order.receipt_of.taxid %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "TAX ID: " %}</strong>
+                <strong>{% trans "TAX ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.taxid }}</div>
           </div>
@@ -237,7 +239,7 @@
           {% if order.receipt_of.vatid %}
           <div class="row">
             <div class="col-xs-4">
-                <strong>{% trans "VAT ID: " %}</strong>
+                <strong>{% trans "VAT ID" %}:</strong>
             </div>
             <div class="col-xs-8">{{ order.receipt_of.vatid }}</div>
           </div>
@@ -246,7 +248,7 @@
           {% if allow_receipt_edit %}
           <div class="text-center">
             <a href="{% url "order_detail_edit" order.uuid %}" class="btn btn-default" role="button">
-              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit Receipt
+              <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> {% trans "Edit Receipt" %}
             </a>
           </div>
           {% endif %}
@@ -294,9 +296,14 @@
 
             {% if allow_pdf_storage and not allow_receipt_edit %}
             <div class="text-center">
+            {% get_available_languages as languages %}
+            {% for lang_code, lang_name in languages %}
+              {% language lang_code %}
               <a href="{% url "order_detail_pdf" order.uuid %}" class="btn btn-default" role="button">
-                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download Invoice" %}
+                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> {% trans "Download Invoice" %} ({{ lang_name }})
               </a>
+              {% endlanguage %}
+            {% endfor %}
             </div>
             {% endif %}
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-10-08 08:31+0000\n"
+"POT-Creation-Date: 2017-02-17 14:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,265 +18,1423 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: admin.py:20 admin.py:76 tests/test_admin.py:50
+#: admin.py:23 admin.py:108 register/forms.py:26
+#: templates/konfera/checkin/detail.html:28 tests/test_admin.py:54
 msgid "Description"
 msgstr ""
 
-#: admin.py:23 tests/test_admin.py:53
+#: admin.py:26 tests/test_admin.py:57
 msgid "Dates"
 msgstr ""
 
-#: admin.py:26 admin.py:79 admin.py:113 admin.py:140 admin.py:169 admin.py:190
-#: admin.py:211 admin.py:262 templates/konfera/event_details.html:6
-#: tests/test_admin.py:56 tests/test_admin.py:70
+#: admin.py:29 admin.py:111 admin.py:178 admin.py:206 admin.py:247 admin.py:284
+#: admin.py:318 admin.py:385 tests/test_admin.py:60 tests/test_admin.py:81
 msgid "Details"
 msgstr "Detaily"
 
-#: admin.py:29 admin.py:60 admin.py:82 admin.py:116 admin.py:146 admin.py:172
-#: admin.py:197 admin.py:221 admin.py:243 admin.py:265 tests/test_admin.py:59
-#: tests/test_admin.py:73
+#: admin.py:32 models/event.py:57 templates/konfera/event/coc.html:6
+#: tests/test_admin.py:63
+msgid "Code of Conduct"
+msgstr ""
+
+#: admin.py:35 tests/test_admin.py:66
+msgid "Social media"
+msgstr ""
+
+#: admin.py:39 admin.py:87 admin.py:114 admin.py:181 admin.py:212 admin.py:251
+#: admin.py:292 admin.py:328 admin.py:351 admin.py:388 admin.py:415
+#: admin.py:437 tests/test_admin.py:70 tests/test_admin.py:85
 msgid "Modifications"
 msgstr ""
 
-#: admin.py:51
-msgid "Name"
+#: admin.py:57
+msgid "Speaker's talk"
 msgstr ""
 
-#: admin.py:54
+#: admin.py:58
+msgid "Speaker's talks"
+msgstr ""
+
+#: admin.py:65
+msgid "Secondary speaker's talk"
+msgstr ""
+
+#: admin.py:66
+msgid "Secondary speaker's talks"
+msgstr ""
+
+#: admin.py:78 models/receipt.py:10 templates/konfera/order_detail.html:185
+#: templates/konfera/order_detail.html:273
+msgid "Name"
+msgstr "Meno"
+
+#: admin.py:81
 msgid "Contact"
 msgstr ""
 
-#: admin.py:57
+#: admin.py:84
 msgid "About"
-msgstr ""
+msgstr "O nás"
 
-#: admin.py:94
+#: admin.py:159
 msgid "Sponsored event"
 msgstr ""
 
-#: admin.py:95
+#: admin.py:160
 msgid "Sponsored events"
 msgstr ""
 
-#: admin.py:101
+#: admin.py:166
 msgid "Sponsored speaker"
 msgstr ""
 
-#: admin.py:102
+#: admin.py:167
 msgid "Sponsored speakers"
 msgstr ""
 
-#: admin.py:143
+#: admin.py:209 admin.py:408 templates/konfera/event/event_organizer.html:18
 msgid "Address"
+msgstr "Adresa"
+
+#: admin.py:227
+msgid "Ordered ticket"
 msgstr ""
 
-#: admin.py:193 admin.py:217
+#: admin.py:228 templates/konfera/order_detail.html:266
+msgid "Ordered tickets"
+msgstr "Objednané lístky"
+
+#: admin.py:287 admin.py:324
 msgid "Availability"
-msgstr ""
+msgstr "Dostupnosť"
 
-#: admin.py:214
+#: admin.py:321 templates/konfera/order_detail.html:127
 msgid "Discount"
-msgstr ""
+msgstr "Zľava"
 
-#: admin.py:237
+#: admin.py:345
 msgid "Personal details"
 msgstr ""
 
-#: admin.py:240
+#: admin.py:348
 msgid "Ticket info"
 msgstr ""
 
-#: admin.py:259
+#: admin.py:382
 msgid "Time"
 msgstr ""
 
-#: event/views.py:80
-msgid "Your talk proposal successfully created."
+#: admin.py:405 admin.py:431
+msgid "Basic Info"
 msgstr ""
 
-#: models/abstract.py:14
-msgid "Created"
+#: admin.py:411 templates/konfera/event/event_organizer.html:26
+msgid "Legal details"
+msgstr ""
+
+#: admin.py:434
+msgid "Templates"
+msgstr ""
+
+#: event/views.py:99
+msgid "Your talk proposal was successfully created."
+msgstr ""
+
+#: event/views.py:128
+#, python-brace-format
+msgid "Proposal for {event} has been submitted"
+msgstr ""
+
+#: event/views.py:142
+msgid "Thank you for proposal submission."
+msgstr ""
+
+#: event/views.py:143
+msgid ""
+"There was an error while sending email!\n"
+"Copy this url to access the proposal details."
+msgstr ""
+
+#: event/views.py:148
+msgid ""
+"Thank you for proposal submission, you will receive confirmation email soon."
+msgstr ""
+
+#: event/views.py:167
+msgid "Your talk proposal was successfully updated."
+msgstr ""
+
+#: event/views.py:251
+#, python-format
+msgid "Organizer has not been set for event %s"
+msgstr ""
+
+#: event/views.py:295
+msgid "You can not edit your order. Please contact the support."
+msgstr ""
+
+#: event/views.py:325
+msgid "Your order details has been updated."
+msgstr ""
+
+#: event/views.py:362
+msgid "Generating PDF Order detail failed. Please try again later."
+msgstr ""
+
+#: event/views.py:425
+#, python-brace-format
+msgid "{name}'s status has been changed to {status}!"
+msgstr ""
+
+#: forms.py:12 models/ticket.py:54
+msgid "All tickets must be for the same event."
 msgstr ""
 
 #: models/abstract.py:15
+msgid "Created"
+msgstr ""
+
+#: models/abstract.py:16
 msgid "Last modified"
 msgstr ""
 
-#: models/abstract.py:23
+#: models/abstract.py:24
 msgid "Available from"
 msgstr ""
 
-#: models/abstract.py:24
+#: models/abstract.py:25
 msgid "Available to"
 msgstr ""
 
-#: models/abstract.py:28
+#: models/abstract.py:29
 #, python-format
 msgid "%(date_from)s have to be before %(date_to)s."
 msgstr ""
 
-#: models/discount_code.py:18
+#: models/countries.py:6
+msgid "Afghanistan"
+msgstr ""
+
+#: models/countries.py:7
+msgid "Åland Islands"
+msgstr ""
+
+#: models/countries.py:8
+msgid "Albania"
+msgstr ""
+
+#: models/countries.py:9
+msgid "Algeria"
+msgstr ""
+
+#: models/countries.py:10
+msgid "American Samoa"
+msgstr ""
+
+#: models/countries.py:11
+msgid "Andorra"
+msgstr ""
+
+#: models/countries.py:12
+msgid "Angola"
+msgstr ""
+
+#: models/countries.py:13
+msgid "Anguilla"
+msgstr ""
+
+#: models/countries.py:14
+msgid "Antarctica"
+msgstr ""
+
+#: models/countries.py:15
+msgid "Antigua and Barbuda"
+msgstr ""
+
+#: models/countries.py:16
+msgid "Argentina"
+msgstr ""
+
+#: models/countries.py:17
+msgid "Armenia"
+msgstr ""
+
+#: models/countries.py:18
+msgid "Aruba"
+msgstr ""
+
+#: models/countries.py:19
+msgid "Australia"
+msgstr ""
+
+#: models/countries.py:20
+msgid "Austria"
+msgstr ""
+
+#: models/countries.py:21
+msgid "Azerbaijan"
+msgstr ""
+
+#: models/countries.py:22
+msgid "Bahamas"
+msgstr ""
+
+#: models/countries.py:23
+msgid "Bahrain"
+msgstr ""
+
+#: models/countries.py:24
+msgid "Bangladesh"
+msgstr ""
+
+#: models/countries.py:25
+msgid "Barbados"
+msgstr ""
+
+#: models/countries.py:26
+msgid "Belarus"
+msgstr ""
+
+#: models/countries.py:27
+msgid "Belgium"
+msgstr ""
+
+#: models/countries.py:28
+msgid "Belize"
+msgstr ""
+
+#: models/countries.py:29
+msgid "Benin"
+msgstr ""
+
+#: models/countries.py:30
+msgid "Bermuda"
+msgstr ""
+
+#: models/countries.py:31
+msgid "Bhutan"
+msgstr ""
+
+#: models/countries.py:32
+msgid "Bolivia"
+msgstr ""
+
+#: models/countries.py:33
+msgid "Bonaire, Sint Eustatius and Saba"
+msgstr ""
+
+#: models/countries.py:34
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: models/countries.py:35
+msgid "Botswana"
+msgstr ""
+
+#: models/countries.py:36
+msgid "Bouvet Island"
+msgstr ""
+
+#: models/countries.py:37
+msgid "Brazil"
+msgstr ""
+
+#: models/countries.py:38
+msgid "British Indian Ocean Territory"
+msgstr ""
+
+#: models/countries.py:39
+msgid "Brunei Darussalam"
+msgstr ""
+
+#: models/countries.py:40
+msgid "Bulgaria"
+msgstr ""
+
+#: models/countries.py:41
+msgid "Burkina Faso"
+msgstr ""
+
+#: models/countries.py:42
+msgid "Burundi"
+msgstr ""
+
+#: models/countries.py:43
+msgid "Cabo Verde"
+msgstr ""
+
+#: models/countries.py:44
+msgid "Cambodia"
+msgstr ""
+
+#: models/countries.py:45
+msgid "Cameroon"
+msgstr ""
+
+#: models/countries.py:46
+msgid "Canada"
+msgstr ""
+
+#: models/countries.py:47
+msgid "Cayman Islands"
+msgstr ""
+
+#: models/countries.py:48
+msgid "Central African Republic"
+msgstr ""
+
+#: models/countries.py:49
+msgid "Chad"
+msgstr ""
+
+#: models/countries.py:50
+msgid "Chile"
+msgstr ""
+
+#: models/countries.py:51
+msgid "China"
+msgstr ""
+
+#: models/countries.py:52
+msgid "Christmas Island"
+msgstr ""
+
+#: models/countries.py:53
+msgid "Cocos (Keeling) Islands"
+msgstr ""
+
+#: models/countries.py:54
+msgid "Colombia"
+msgstr ""
+
+#: models/countries.py:55
+msgid "Comoros"
+msgstr ""
+
+#: models/countries.py:56
+msgid "Congo, Democratic Republic of"
+msgstr ""
+
+#: models/countries.py:57
+msgid "Congo"
+msgstr ""
+
+#: models/countries.py:58
+msgid "Cook Islands"
+msgstr ""
+
+#: models/countries.py:59
+msgid "Costa Rica"
+msgstr ""
+
+#: models/countries.py:60
+msgid "Côte d'Ivoire"
+msgstr ""
+
+#: models/countries.py:61
+msgid "Croatia"
+msgstr ""
+
+#: models/countries.py:62
+msgid "Cuba"
+msgstr ""
+
+#: models/countries.py:63
+msgid "Curaçao"
+msgstr ""
+
+#: models/countries.py:64
+msgid "Cyprus"
+msgstr ""
+
+#: models/countries.py:65
+msgid "Czechia"
+msgstr ""
+
+#: models/countries.py:66
+msgid "Denmark"
+msgstr ""
+
+#: models/countries.py:67
+msgid "Djibouti"
+msgstr ""
+
+#: models/countries.py:68
+msgid "Dominica"
+msgstr ""
+
+#: models/countries.py:69
+msgid "Dominican Republic"
+msgstr ""
+
+#: models/countries.py:70
+msgid "Ecuador"
+msgstr ""
+
+#: models/countries.py:71
+msgid "Egypt"
+msgstr ""
+
+#: models/countries.py:72
+msgid "El Salvador"
+msgstr ""
+
+#: models/countries.py:73
+msgid "Equatorial Guinea"
+msgstr ""
+
+#: models/countries.py:74
+msgid "Eritrea"
+msgstr ""
+
+#: models/countries.py:75
+msgid "Estonia"
+msgstr ""
+
+#: models/countries.py:76
+msgid "Ethiopia"
+msgstr ""
+
+#: models/countries.py:77
+msgid "Falkland Islands"
+msgstr ""
+
+#: models/countries.py:78
+msgid "Faroe Islands"
+msgstr ""
+
+#: models/countries.py:79
+msgid "Fiji"
+msgstr ""
+
+#: models/countries.py:80
+msgid "Finland"
+msgstr ""
+
+#: models/countries.py:81
+msgid "France"
+msgstr ""
+
+#: models/countries.py:82
+msgid "French Guiana"
+msgstr ""
+
+#: models/countries.py:83
+msgid "French Polynesia"
+msgstr ""
+
+#: models/countries.py:84
+msgid "French Southern Territories"
+msgstr ""
+
+#: models/countries.py:85
+msgid "Gabon"
+msgstr ""
+
+#: models/countries.py:86
+msgid "Gambia"
+msgstr ""
+
+#: models/countries.py:87
+msgid "Georgia"
+msgstr ""
+
+#: models/countries.py:88
+msgid "Germany"
+msgstr ""
+
+#: models/countries.py:89
+msgid "Ghana"
+msgstr ""
+
+#: models/countries.py:90
+msgid "Gibraltar"
+msgstr ""
+
+#: models/countries.py:91
+msgid "Greece"
+msgstr ""
+
+#: models/countries.py:92
+msgid "Greenland"
+msgstr ""
+
+#: models/countries.py:93
+msgid "Grenada"
+msgstr ""
+
+#: models/countries.py:94
+msgid "Guadeloupe"
+msgstr ""
+
+#: models/countries.py:95
+msgid "Guam"
+msgstr ""
+
+#: models/countries.py:96
+msgid "Guatemala"
+msgstr ""
+
+#: models/countries.py:97
+msgid "Guernsey"
+msgstr ""
+
+#: models/countries.py:98
+msgid "Guinea"
+msgstr ""
+
+#: models/countries.py:99
+msgid "Guinea-Bissau"
+msgstr ""
+
+#: models/countries.py:100
+msgid "Guyana"
+msgstr ""
+
+#: models/countries.py:101
+msgid "Haiti"
+msgstr ""
+
+#: models/countries.py:102
+msgid "Heard Island and McDonald Islands"
+msgstr ""
+
+#: models/countries.py:103
+msgid "Holy See"
+msgstr ""
+
+#: models/countries.py:104
+msgid "Honduras"
+msgstr ""
+
+#: models/countries.py:105
+msgid "Hong Kong"
+msgstr ""
+
+#: models/countries.py:106
+msgid "Hungary"
+msgstr ""
+
+#: models/countries.py:107
+msgid "Iceland"
+msgstr ""
+
+#: models/countries.py:108
+msgid "India"
+msgstr ""
+
+#: models/countries.py:109
+msgid "Indonesia"
+msgstr ""
+
+#: models/countries.py:110
+msgid "Iran"
+msgstr ""
+
+#: models/countries.py:111
+msgid "Iraq"
+msgstr ""
+
+#: models/countries.py:112
+msgid "Ireland"
+msgstr ""
+
+#: models/countries.py:113
+msgid "Isle of Man"
+msgstr ""
+
+#: models/countries.py:114
+msgid "Israel"
+msgstr ""
+
+#: models/countries.py:115
+msgid "Italy"
+msgstr ""
+
+#: models/countries.py:116
+msgid "Jamaica"
+msgstr ""
+
+#: models/countries.py:117
+msgid "Japan"
+msgstr ""
+
+#: models/countries.py:118
+msgid "Jersey"
+msgstr ""
+
+#: models/countries.py:119
+msgid "Jordan"
+msgstr ""
+
+#: models/countries.py:120
+msgid "Kazakhstan"
+msgstr ""
+
+#: models/countries.py:121
+msgid "Kenya"
+msgstr ""
+
+#: models/countries.py:122
+msgid "Kiribati"
+msgstr ""
+
+#: models/countries.py:123
+msgid "Korea, Democratic People's Republic of)"
+msgstr ""
+
+#: models/countries.py:124
+msgid "Korea, Republic of)"
+msgstr ""
+
+#: models/countries.py:125
+msgid "Kuwait"
+msgstr ""
+
+#: models/countries.py:126
+msgid "Kyrgyzstan"
+msgstr ""
+
+#: models/countries.py:127
+msgid "Lao People's Democratic Republic"
+msgstr ""
+
+#: models/countries.py:128
+msgid "Latvia"
+msgstr ""
+
+#: models/countries.py:129
+msgid "Lebanon"
+msgstr ""
+
+#: models/countries.py:130
+msgid "Lesotho"
+msgstr ""
+
+#: models/countries.py:131
+msgid "Liberia"
+msgstr ""
+
+#: models/countries.py:132
+msgid "Libya"
+msgstr ""
+
+#: models/countries.py:133
+msgid "Liechtenstein"
+msgstr ""
+
+#: models/countries.py:134
+msgid "Lithuania"
+msgstr ""
+
+#: models/countries.py:135
+msgid "Luxembourg"
+msgstr ""
+
+#: models/countries.py:136
+msgid "Macao"
+msgstr ""
+
+#: models/countries.py:137
+msgid "Macedonia"
+msgstr ""
+
+#: models/countries.py:138
+msgid "Madagascar"
+msgstr ""
+
+#: models/countries.py:139
+msgid "Malawi"
+msgstr ""
+
+#: models/countries.py:140
+msgid "Malaysia"
+msgstr ""
+
+#: models/countries.py:141
+msgid "Maldives"
+msgstr ""
+
+#: models/countries.py:142
+msgid "Mali"
+msgstr ""
+
+#: models/countries.py:143
+msgid "Malta"
+msgstr ""
+
+#: models/countries.py:144
+msgid "Marshall Islands"
+msgstr ""
+
+#: models/countries.py:145
+msgid "Martinique"
+msgstr ""
+
+#: models/countries.py:146
+msgid "Mauritania"
+msgstr ""
+
+#: models/countries.py:147
+msgid "Mauritius"
+msgstr ""
+
+#: models/countries.py:148
+msgid "Mayotte"
+msgstr ""
+
+#: models/countries.py:149
+msgid "Mexico"
+msgstr ""
+
+#: models/countries.py:150
+msgid "Micronesia"
+msgstr ""
+
+#: models/countries.py:151
+msgid "Moldova"
+msgstr ""
+
+#: models/countries.py:152
+msgid "Monaco"
+msgstr ""
+
+#: models/countries.py:153
+msgid "Mongolia"
+msgstr ""
+
+#: models/countries.py:154
+msgid "Montenegro"
+msgstr ""
+
+#: models/countries.py:155
+msgid "Montserrat"
+msgstr ""
+
+#: models/countries.py:156
+msgid "Morocco"
+msgstr ""
+
+#: models/countries.py:157
+msgid "Mozambique"
+msgstr ""
+
+#: models/countries.py:158
+msgid "Myanmar"
+msgstr ""
+
+#: models/countries.py:159
+msgid "Namibia"
+msgstr ""
+
+#: models/countries.py:160
+msgid "Nauru"
+msgstr ""
+
+#: models/countries.py:161
+msgid "Nepal"
+msgstr ""
+
+#: models/countries.py:162
+msgid "Netherlands"
+msgstr ""
+
+#: models/countries.py:163
+msgid "New Caledonia"
+msgstr ""
+
+#: models/countries.py:164
+msgid "New Zealand"
+msgstr ""
+
+#: models/countries.py:165
+msgid "Nicaragua"
+msgstr ""
+
+#: models/countries.py:166
+msgid "Niger"
+msgstr ""
+
+#: models/countries.py:167
+msgid "Nigeria"
+msgstr ""
+
+#: models/countries.py:168
+msgid "Niue"
+msgstr ""
+
+#: models/countries.py:169
+msgid "Norfolk Island"
+msgstr ""
+
+#: models/countries.py:170
+msgid "Northern Mariana Islands"
+msgstr ""
+
+#: models/countries.py:171
+msgid "Norway"
+msgstr ""
+
+#: models/countries.py:172
+msgid "Oman"
+msgstr ""
+
+#: models/countries.py:173
+msgid "Pakistan"
+msgstr ""
+
+#: models/countries.py:174
+msgid "Palau"
+msgstr ""
+
+#: models/countries.py:175
+msgid "Palestine"
+msgstr ""
+
+#: models/countries.py:176
+msgid "Panama"
+msgstr ""
+
+#: models/countries.py:177
+msgid "Papua New Guinea"
+msgstr ""
+
+#: models/countries.py:178
+msgid "Paraguay"
+msgstr ""
+
+#: models/countries.py:179
+msgid "Peru"
+msgstr ""
+
+#: models/countries.py:180
+msgid "Philippines"
+msgstr ""
+
+#: models/countries.py:181
+msgid "Pitcairn"
+msgstr ""
+
+#: models/countries.py:182
+msgid "Poland"
+msgstr ""
+
+#: models/countries.py:183
+msgid "Portugal"
+msgstr ""
+
+#: models/countries.py:184
+msgid "Puerto Rico"
+msgstr ""
+
+#: models/countries.py:185
+msgid "Qatar"
+msgstr ""
+
+#: models/countries.py:186
+msgid "Réunion"
+msgstr ""
+
+#: models/countries.py:187
+msgid "Romania"
+msgstr ""
+
+#: models/countries.py:188
+msgid "Russian Federation"
+msgstr ""
+
+#: models/countries.py:189
+msgid "Rwanda"
+msgstr ""
+
+#: models/countries.py:190
+msgid "Saint Barthélemy"
+msgstr ""
+
+#: models/countries.py:191
+msgid "Saint Helena, Ascension and Tristan da Cunha"
+msgstr ""
+
+#: models/countries.py:192
+msgid "Saint Kitts and Nevis"
+msgstr ""
+
+#: models/countries.py:193
+msgid "Saint Lucia"
+msgstr ""
+
+#: models/countries.py:194
+msgid "Saint Martin"
+msgstr ""
+
+#: models/countries.py:195
+msgid "Saint Pierre and Miquelon"
+msgstr ""
+
+#: models/countries.py:196
+msgid "Saint Vincent and the Grenadines"
+msgstr ""
+
+#: models/countries.py:197
+msgid "Samoa"
+msgstr ""
+
+#: models/countries.py:198
+msgid "San Marino"
+msgstr ""
+
+#: models/countries.py:199
+msgid "Sao Tome and Principe"
+msgstr ""
+
+#: models/countries.py:200
+msgid "Saudi Arabia"
+msgstr ""
+
+#: models/countries.py:201
+msgid "Senegal"
+msgstr ""
+
+#: models/countries.py:202
+msgid "Serbia"
+msgstr ""
+
+#: models/countries.py:203
+msgid "Seychelles"
+msgstr ""
+
+#: models/countries.py:204
+msgid "Sierra Leone"
+msgstr ""
+
+#: models/countries.py:205
+msgid "Singapore"
+msgstr ""
+
+#: models/countries.py:206
+msgid "Sint Maarten"
+msgstr ""
+
+#: models/countries.py:207
+msgid "Slovakia"
+msgstr ""
+
+#: models/countries.py:208
+msgid "Slovenia"
+msgstr ""
+
+#: models/countries.py:209
+msgid "Solomon Islands"
+msgstr ""
+
+#: models/countries.py:210
+msgid "Somalia"
+msgstr ""
+
+#: models/countries.py:211
+msgid "South Africa"
+msgstr ""
+
+#: models/countries.py:212
+msgid "South Georgia and the South Sandwich Islands"
+msgstr ""
+
+#: models/countries.py:213
+msgid "South Sudan"
+msgstr ""
+
+#: models/countries.py:214
+msgid "Spain"
+msgstr ""
+
+#: models/countries.py:215
+msgid "Sri Lanka"
+msgstr ""
+
+#: models/countries.py:216
+msgid "Sudan"
+msgstr ""
+
+#: models/countries.py:217
+msgid "Suriname"
+msgstr ""
+
+#: models/countries.py:218
+msgid "Svalbard and Jan Mayen"
+msgstr ""
+
+#: models/countries.py:219
+msgid "Swaziland"
+msgstr ""
+
+#: models/countries.py:220
+msgid "Sweden"
+msgstr ""
+
+#: models/countries.py:221
+msgid "Switzerland"
+msgstr ""
+
+#: models/countries.py:222
+msgid "Syrian Arab Republic"
+msgstr ""
+
+#: models/countries.py:223
+msgid "Taiwan"
+msgstr ""
+
+#: models/countries.py:224
+msgid "Tajikistan"
+msgstr ""
+
+#: models/countries.py:225
+msgid "Tanzania"
+msgstr ""
+
+#: models/countries.py:226
+msgid "Thailand"
+msgstr ""
+
+#: models/countries.py:227
+msgid "Timor-Leste"
+msgstr ""
+
+#: models/countries.py:228
+msgid "Togo"
+msgstr ""
+
+#: models/countries.py:229
+msgid "Tokelau"
+msgstr ""
+
+#: models/countries.py:230
+msgid "Tonga"
+msgstr ""
+
+#: models/countries.py:231
+msgid "Trinidad and Tobago"
+msgstr ""
+
+#: models/countries.py:232
+msgid "Tunisia"
+msgstr ""
+
+#: models/countries.py:233
+msgid "Turkey"
+msgstr ""
+
+#: models/countries.py:234
+msgid "Turkmenistan"
+msgstr ""
+
+#: models/countries.py:235
+msgid "Turks and Caicos Islands"
+msgstr ""
+
+#: models/countries.py:236
+msgid "Tuvalu"
+msgstr ""
+
+#: models/countries.py:237
+msgid "Uganda"
+msgstr ""
+
+#: models/countries.py:238
+msgid "Ukraine"
+msgstr ""
+
+#: models/countries.py:239
+msgid "United Arab Emirates"
+msgstr ""
+
+#: models/countries.py:240
+msgid "United Kingdom"
+msgstr ""
+
+#: models/countries.py:241
+msgid "United States Minor Outlying Islands"
+msgstr ""
+
+#: models/countries.py:242
+msgid "United States of America"
+msgstr ""
+
+#: models/countries.py:243
+msgid "Uruguay"
+msgstr ""
+
+#: models/countries.py:244
+msgid "Uzbekistan"
+msgstr ""
+
+#: models/countries.py:245
+msgid "Vanuatu"
+msgstr ""
+
+#: models/countries.py:246
+msgid "Venezuela"
+msgstr ""
+
+#: models/countries.py:247
+msgid "Viet Nam"
+msgstr ""
+
+#: models/countries.py:248
+msgid "British Virgin Islands"
+msgstr ""
+
+#: models/countries.py:249
+msgid "U.S. Virgin Islands"
+msgstr ""
+
+#: models/countries.py:250
+msgid "Wallis and Futuna"
+msgstr ""
+
+#: models/countries.py:251
+msgid "Western Sahara*"
+msgstr ""
+
+#: models/countries.py:252
+msgid "Yemen"
+msgstr ""
+
+#: models/countries.py:253
+msgid "Zambia"
+msgstr ""
+
+#: models/countries.py:254
+msgid "Zimbabwe"
+msgstr ""
+
+#: models/discount_code.py:19
 msgid "Value is percentage discount from ticket type price."
 msgstr ""
 
-#: models/discount_code.py:20 models/ticket_type.py:57
+#: models/discount_code.py:21
 msgid "Amount of tickets that can be issued."
 msgstr ""
 
-#: models/discount_code.py:32
+#: models/discount_code.py:43
 msgid ""
 "Discount code can not be available before ticket type is available for sale."
 msgstr ""
 
-#: models/discount_code.py:38
+#: models/discount_code.py:49
 msgid ""
 "Discount code can not be available after ticket type is available for sale."
 msgstr ""
 
-#: models/event.py:11
+#: models/event.py:22
 msgid "Conference"
 msgstr ""
 
-#: models/event.py:12
+#: models/event.py:23
 msgid "Meetup"
 msgstr ""
 
-#: models/event.py:21 models/talk.py:15
+#: models/event.py:32 models/talk.py:19
 msgid "Draft"
 msgstr ""
 
-#: models/event.py:22
+#: models/event.py:33 models/talk.py:21
 msgid "Published"
 msgstr ""
 
-#: models/event.py:23 models/ticket_type.py:46
+#: models/event.py:34 models/ticket_type.py:51
 msgid "Private"
 msgstr ""
 
-#: models/event.py:24 models/order.py:21 models/ticket_type.py:17
+#: models/event.py:35 models/order.py:24 models/ticket_type.py:20
 msgid "Expired"
 msgstr ""
 
-#: models/event.py:34
+#: models/event.py:38
 msgid "Event name"
 msgstr ""
 
-#: models/event.py:35
+#: models/event.py:39
 msgid "Event url"
 msgstr ""
 
-#: models/event.py:35
+#: models/event.py:40
 msgid "Slug field, relative URL to the event."
 msgstr ""
 
-#: models/event.py:51
+#: models/event.py:53
+msgid "Is it allowed to submit talk proposals?"
+msgstr ""
+
+#: models/event.py:54
+msgid "Call for proposals deadline"
+msgstr ""
+
+#: models/event.py:55
+msgid "E-mail"
+msgstr ""
+
+#: models/event.py:56
+msgid "Publicly displayed email to contact organizers."
+msgstr ""
+
+#: models/event.py:58
+msgid "Code of Conduct contact"
+msgstr ""
+
+#: models/event.py:59 models/event.py:62
+msgid "Publicly displayed phone to contact organizers."
+msgstr ""
+
+#: models/event.py:61
+msgid "Code of Conduct contact 2"
+msgstr ""
+
+#: models/event.py:83
+msgid "CFP deadline has to be defined if CFP is allowed."
+msgstr ""
+
+#: models/event.py:86
+msgid "CFP deadline should be before the event starts."
+msgstr ""
+
+#: models/event.py:118
 msgid "Event beginning"
 msgstr ""
 
-#: models/event.py:53
+#: models/event.py:120
 msgid "Event end"
 msgstr ""
 
-#: models/order.py:18
+#: models/order.py:21
 msgid "Awaiting payment"
-msgstr ""
+msgstr "Čakanie na úhradu"
 
-#: models/order.py:19
+#: models/order.py:22
 msgid "Partly paid"
-msgstr ""
+msgstr "Čiastočne uhradené"
 
-#: models/order.py:20
+#: models/order.py:23
 msgid "Paid"
-msgstr ""
+msgstr "Uhradené"
 
-#: models/order.py:22 models/ticket.py:18
+#: models/order.py:25 models/ticket.py:21
 msgid "Cancelled"
-msgstr ""
+msgstr "Zrušené"
 
-#: models/schedule.py:13
+#: models/receipt.py:11 templates/konfera/event/event_organizer.html:28
+#: templates/konfera/order_detail.html:43
+#: templates/konfera/order_detail.html:226
+msgid "Company ID"
+msgstr "IČO"
+
+#: models/receipt.py:12 templates/konfera/event/event_organizer.html:29
+#: templates/konfera/order_detail.html:51
+#: templates/konfera/order_detail.html:234
+msgid "TAX ID"
+msgstr "DIČ"
+
+#: models/receipt.py:13 templates/konfera/event/event_organizer.html:30
+#: templates/konfera/order_detail.html:59
+#: templates/konfera/order_detail.html:242
+msgid "VAT ID"
+msgstr "IČ DPH"
+
+#: models/schedule.py:17
 msgid ""
 "Description will be displayed, only if there is no related talk, eg. coffee "
 "break, lunch etc..."
 msgstr ""
 
-#: models/schedule.py:21
-msgid "Duration in minutes."
+#: models/schedule.py:25
+msgid "Duration in minutes. If talk is selected, value will be generated."
 msgstr ""
 
-#: models/schedule.py:25
+#: models/schedule.py:29
 #, python-format
 msgid "%(start)s (%(duration)s min)"
 msgstr ""
 
-#: models/speaker.py:11
+#: models/schedule.py:36
+msgid "You cannot schedule unapproved talks."
+msgstr ""
+
+#: models/schedule.py:40
+msgid "Schedule start have to be within the event's range."
+msgstr ""
+
+#: models/schedule.py:44
+msgid "The room does not belong to event location rooms."
+msgstr ""
+
+#: models/schedule.py:54
+msgid "The events in schedule cannot overlap if they are in the same room."
+msgstr ""
+
+#: models/speaker.py:17
 msgid "Mr."
-msgstr ""
+msgstr "Pán"
 
-#: models/speaker.py:12
+#: models/speaker.py:18
 msgid "Ms."
+msgstr "Pani"
+
+#: models/speaker.py:19
+msgid "Mx."
 msgstr ""
 
-#: models/sponsor.py:8
+#: models/sponsor.py:17
 msgid "Platinum"
-msgstr ""
+msgstr "Platinový"
 
-#: models/sponsor.py:9
+#: models/sponsor.py:18
 msgid "Gold"
-msgstr ""
+msgstr "Zlatý"
 
-#: models/sponsor.py:10
+#: models/sponsor.py:19
 msgid "Silver"
-msgstr ""
+msgstr "Strieborný"
 
-#: models/sponsor.py:11
+#: models/sponsor.py:20
 msgid "Bronze"
+msgstr "Bronzový"
+
+#: models/sponsor.py:21
+msgid "Media"
 msgstr ""
 
-#: models/sponsor.py:12
+#: models/sponsor.py:22
 msgid "Other"
-msgstr ""
+msgstr "Ostatný"
 
-#: models/sponsor.py:13
+#: models/sponsor.py:23
 msgid "Django girls"
 msgstr ""
 
-#: models/talk.py:14
+#: models/talk.py:18
 msgid "Call For Proposals"
 msgstr ""
 
-#: models/talk.py:16
+#: models/talk.py:20
 msgid "Approved"
 msgstr ""
 
-#: models/talk.py:17
+#: models/talk.py:22
 msgid "Rejected"
 msgstr ""
 
-#: models/talk.py:18
+#: models/talk.py:23
 msgid "Withdrawn"
 msgstr ""
 
-#: models/talk.py:25
+#: models/talk.py:30
 msgid "Talk"
 msgstr ""
 
-#: models/talk.py:26
+#: models/talk.py:31
 msgid "Workshop"
 msgstr ""
 
-#: models/talk.py:30
-msgid "5 min"
-msgstr ""
-
-#: models/talk.py:31
-msgid "30 min"
-msgstr ""
-
-#: models/talk.py:32
-msgid "45 min"
-msgstr ""
-
-#: models/talk.py:38
+#: models/talk.py:37
 msgid "Abstract will be published in the schedule."
 msgstr ""
 
@@ -297,156 +1455,407 @@ msgstr ""
 msgid "%(primary)s have to be different than %(secondary)s."
 msgstr ""
 
-#: models/ticket.py:15
+#: models/ticket.py:18
 msgid "Requested"
 msgstr ""
 
-#: models/ticket.py:16
+#: models/ticket.py:19
 msgid "Registered"
 msgstr ""
 
-#: models/ticket.py:17
+#: models/ticket.py:20
 msgid "Checked-in"
 msgstr ""
 
-#: models/ticket_type.py:15
+#: models/ticket.py:50
+msgid "Discount code is not applicable for the selected ticket type."
+msgstr ""
+
+#: models/ticket.py:57
+msgid "Usage of the discount code has already exceeded allowed number."
+msgstr ""
+
+#: models/ticket_type.py:18
 msgid "Not available yet"
 msgstr ""
 
-#: models/ticket_type.py:16
+#: models/ticket_type.py:19
 msgid "Active"
 msgstr ""
 
-#: models/ticket_type.py:30
-msgid "Volunteer"
-msgstr ""
-
-#: models/ticket_type.py:31
-msgid "Press"
-msgstr ""
-
-#: models/ticket_type.py:32
-msgid "Student"
-msgstr ""
-
-#: models/ticket_type.py:33
-msgid "Attendee"
+#: models/ticket_type.py:21
+msgid "Sold out"
 msgstr ""
 
 #: models/ticket_type.py:34
-msgid "Supporter"
+msgid "Volunteer"
 msgstr ""
 
 #: models/ticket_type.py:35
-msgid "Speaker"
+msgid "Press"
 msgstr ""
 
 #: models/ticket_type.py:36
-msgid "Sponsor"
+msgid "Student"
 msgstr ""
 
 #: models/ticket_type.py:37
+msgid "Attendee"
+msgstr ""
+
+#: models/ticket_type.py:38
+msgid "Supporter"
+msgstr ""
+
+#: models/ticket_type.py:39
+msgid "Speaker"
+msgstr ""
+
+#: models/ticket_type.py:40
+msgid "Sponsor"
+msgstr ""
+
+#: models/ticket_type.py:41
 msgid "Aid"
 msgstr ""
 
-#: models/ticket_type.py:45
+#: models/ticket_type.py:50
 msgid "Public"
 msgstr ""
 
-#: models/ticket_type.py:47
+#: models/ticket_type.py:52
 msgid "Disabled"
 msgstr ""
 
-#: models/ticket_type.py:83
+#: models/ticket_type.py:53
+msgid "Not listed"
+msgstr ""
+
+#: models/ticket_type.py:61
+msgid "Number of tickets which can be issued. For unlimited amount use -1."
+msgstr ""
+
+#: models/ticket_type.py:98
 msgid ""
 "You are creating ticket type for event that has already ended. Please add "
 "the dates manually."
 msgstr ""
 
-#: models/ticket_type.py:92
+#: models/ticket_type.py:107
 msgid "You can't sell tickets after your event has ended."
 msgstr ""
 
-#: templates/konfera/cfp_form.html:9
+#: register/forms.py:25
+msgid "Please tell us something about yourself..."
+msgstr ""
+
+#: register/forms.py:37
+msgid "Invalid Promo Code."
+msgstr ""
+
+#: register/views.py:30
+msgid "This ticket type is not available"
+msgstr ""
+
+#: register/views.py:48
+#, python-brace-format
+msgid "Your ticket for {event}."
+msgstr ""
+
+#: register/views.py:58
+msgid "Thank you for ordering ticket. You'll receive confirmation email soon."
+msgstr ""
+
+#: register/views.py:60
+msgid "Thank you for ordering ticket."
+msgstr ""
+
+#: settings.py:24
+msgid "Slovak"
+msgstr ""
+
+#: settings.py:25
+msgid "Czech"
+msgstr ""
+
+#: settings.py:26
+msgid "English"
+msgstr ""
+
+#: settings.py:32
+msgid "5 min"
+msgstr ""
+
+#: settings.py:33
+msgid "30 min"
+msgstr ""
+
+#: settings.py:34
+msgid "45 min"
+msgstr ""
+
+#: templates/konfera/base_list_events.html:6
+msgid "Events List"
+msgstr ""
+
+#: templates/konfera/checkin/base.html:6
+msgid "Check-In List"
+msgstr ""
+
+#: templates/konfera/checkin/detail.html:7
+msgid "Ticket details"
+msgstr ""
+
+#: templates/konfera/checkin/detail.html:11
+msgid "Full name"
+msgstr "Celé meno"
+
+#: templates/konfera/checkin/detail.html:15
+#: templates/konfera/order_detail.html:278
+msgid "Type"
+msgstr "Typ"
+
+#: templates/konfera/checkin/detail.html:19
+#: templates/konfera/checkin/list.html:13
+#: templates/konfera/order_detail.html:93
+#: templates/konfera/order_detail.html:279
+msgid "Status"
+msgstr "Stav"
+
+#: templates/konfera/checkin/detail.html:23
+#: templates/konfera/checkin/list.html:14
+msgid "Order status"
+msgstr ""
+
+#: templates/konfera/checkin/detail.html:43
+msgid "Tiket's status cannot be changed."
+msgstr ""
+
+#: templates/konfera/checkin/detail.html:50
+msgid "Show ticket in admin"
+msgstr ""
+
+#: templates/konfera/checkin/detail.html:54
+msgid "Show order in admin"
+msgstr ""
+
+#: templates/konfera/checkin/list.html:11
+msgid "First name"
+msgstr "Krstné meno"
+
+#: templates/konfera/checkin/list.html:12
+msgid "Last name"
+msgstr "Priezvisko"
+
+#: templates/konfera/checkin/list.html:15
+msgid "Ticket bought at"
+msgstr ""
+
+#: templates/konfera/checkin/search.html:5
+msgid "First name/Last name/Email"
+msgstr ""
+
+#: templates/konfera/checkin/search.html:7
+msgid "Search"
+msgstr ""
+
+#: templates/konfera/checkin/search.html:13
+msgid "Registered only"
+msgstr ""
+
+#: templates/konfera/event/cfp_form.html:7
 msgid "Who are you? Please introduce yourself."
 msgstr ""
 
-#: templates/konfera/cfp_form.html:11
+#: templates/konfera/event/cfp_form.html:9
 msgid "What would you like to talk about?"
 msgstr ""
 
-#: templates/konfera/cfp_form.html:14
+#: templates/konfera/event/cfp_form.html:12
 msgid "Submit proposal"
 msgstr ""
 
-#: templates/konfera/event_details.html:14
-msgid "Type of event:"
+#: templates/konfera/event/cfp_form.html:17
+msgid ""
+"Thank you for your interest, but unfortunately call for proposals deadline "
+"was at: "
 msgstr ""
 
-#: templates/konfera/event_details.html:17
-msgid "Description:"
+#: templates/konfera/event/cfp_form.html:19
+msgid ""
+"However, if you feel like you have to submit your talk anyway, feel free to "
+"contact us:"
 msgstr ""
 
-#: templates/konfera/event_details.html:20
-msgid "Taking place at:"
+#: templates/konfera/event/event_organizer.html:6
+#: templates/konfera/order_detail.html:36
+msgid "Organizer"
+msgstr "Organizátor"
+
+#: templates/konfera/event/public_tickets.html:6
+#: templates/konfera/event/public_tickets.html:24
+msgid "Available tickets"
 msgstr ""
 
-#: templates/konfera/event_details.html:23
-msgid "Starting at:"
+#: templates/konfera/event/public_tickets.html:22
+#: templates/konfera/order_detail.html:120
+#: templates/konfera/registration_form.html:14
+msgid "Price"
+msgstr "Cena"
+
+#: templates/konfera/event/public_tickets.html:35
+msgid "Register ticket"
 msgstr ""
 
-#: templates/konfera/event_details.html:26
-msgid "Expected to end:"
+#: templates/konfera/event/public_tickets.html:45
+msgid "Page navigation"
 msgstr ""
 
-#: templates/konfera/event_details.html:29
-msgid "Status:"
+#: templates/konfera/event/public_tickets.html:49
+msgid "Previous"
 msgstr ""
 
-#: templates/konfera/event_details.html:35
-msgid "Event is sponsored by:"
+#: templates/konfera/event/public_tickets.html:60
+msgid "Next"
 msgstr ""
 
-#: templates/konfera/event_schedule.html:6
-#: templates/konfera/event_schedule.html:11
+#: templates/konfera/event/schedule.html:6
+#: templates/konfera/event/schedule.html:11
 msgid "Schedule"
-msgstr ""
+msgstr "Program"
 
-#: templates/konfera/event_speakers.html:6
+#: templates/konfera/event/speakers.html:7
 msgid "Speakers"
-msgstr ""
+msgstr "Rečníci"
 
-#: templates/konfera/event_speakers.html:14
-msgid "Talk:"
-msgstr ""
-
-#: templates/konfera/event_speakers.html:16
-msgid "Speaker #1:"
-msgstr ""
-
-#: templates/konfera/event_speakers.html:21
-msgid "Speaker #2:"
-msgstr ""
-
-#: templates/konfera/event_sponsors.html:6
+#: templates/konfera/event/sponsors.html:7
 msgid "Sponsors"
+msgstr "Sponzory"
+
+#: templates/konfera/event/venue.html:6
+msgid "How to get here"
 msgstr ""
 
-#: templates/konfera/events.html:6
-msgid "List of upcoming events"
+#: templates/konfera/list_conferences.html:6
+msgid "Conferences List"
 msgstr ""
 
-#: templates/konfera/registration_form.html:4
+#: templates/konfera/list_events.html:6
+msgid "All events list"
+msgstr ""
+
+#: templates/konfera/list_meetups.html:6
+msgid "Meetups list"
+msgstr ""
+
+#: templates/konfera/list_meetups.html:11
+msgid "Python Meetup"
+msgstr ""
+
+#: templates/konfera/list_meetups.html:15
+msgid "Admission is free of charge"
+msgstr ""
+
+#: templates/konfera/list_meetups.html:17
+msgid ""
+"Approximate duration: two hours (one hour presentation, one hour or more: "
+"discussion)."
+msgstr ""
+
+#: templates/konfera/order_detail.html:11
+msgid "Order Detail"
+msgstr "Detail Objednávky"
+
+#: templates/konfera/order_detail.html:21
+msgid "Invoice,Order"
+msgstr "Faktúra,Objednávka"
+
+#: templates/konfera/order_detail.html:74
+msgid "Invoice Details,Order Details"
+msgstr "Detaily faktúry,Detaily objednávky"
+
+#: templates/konfera/order_detail.html:80
+msgid "Invoice ID"
+msgstr "Číslo faktúry"
+
+#: templates/konfera/order_detail.html:99
+msgid "Variable symbol"
+msgstr "Variabilný symbol"
+
+#: templates/konfera/order_detail.html:105
+msgid "Purchase date"
+msgstr "Dátum zakúpenia"
+
+#: templates/konfera/order_detail.html:112
+msgid "Payment date"
+msgstr "Dátum platby"
+
+#: templates/konfera/order_detail.html:135
+msgid "Processing fee"
+msgstr "Poplatok za spracovanie"
+
+#: templates/konfera/order_detail.html:143
+msgid "Total price"
+msgstr "Celková suma"
+
+#: templates/konfera/order_detail.html:149
+msgid "Amount paid"
+msgstr "Zaplatená suma"
+
+#: templates/konfera/order_detail.html:159
+msgid "Subscriber"
+msgstr "Odberateľ"
+
+#: templates/konfera/order_detail.html:178
+msgid "Submit"
+msgstr ""
+
+#: templates/konfera/order_detail.html:191
+msgid "Street"
+msgstr "Ulica"
+
+#: templates/konfera/order_detail.html:198
+msgid "Street 2"
+msgstr "Ulica 2"
+
+#: templates/konfera/order_detail.html:205
+msgid "City"
+msgstr "Mesto"
+
+#: templates/konfera/order_detail.html:211
+msgid "Post code"
+msgstr "PSČ"
+
+#: templates/konfera/order_detail.html:218
+msgid "State"
+msgstr "Stav"
+
+#: templates/konfera/order_detail.html:251
+msgid "Edit Receipt"
+msgstr ""
+
+#: templates/konfera/order_detail.html:274
+msgid "Email"
+msgstr ""
+
+#: templates/konfera/order_detail.html:276
+msgid "Discount Code"
+msgstr "Zľavový kupón"
+
+#: templates/konfera/order_detail.html:303
+msgid "Download Invoice"
+msgstr "Stiahnuť Faktúru"
+
+#: templates/konfera/registration_form.html:6
 #, python-format
 msgid " Registration of a %(type)s "
 msgstr ""
 
-#: templates/konfera/registration_form.html:8
-#, python-format
-msgid " Register as a %(type)s "
+#: templates/konfera/registration_form.html:43
+msgid "Order ticket"
 msgstr ""
 
-#: templates/konfera/venue_view.html:6
+#: views.py:22
 #, python-format
-msgid "How to get here"
+msgid "No %s event has been found. Redirected to default list."
 msgstr ""
