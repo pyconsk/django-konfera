@@ -27,7 +27,7 @@ def _register_ticket(request, event, ticket_type):
     template_name = 'register_email'
 
     if ticket_type._get_current_status() != TicketType.ACTIVE:
-        messages.error(request, _('This ticket type is not available'))
+        messages.error(request, _('This ticket type is not available'), extra_tags='danger')
 
         return redirect('event_details', event.slug)
 
