@@ -224,7 +224,8 @@ def event_public_tickets(request, slug):
     available_tickets = event.tickettype_set.filter(accessibility=TicketType.PUBLIC)\
         .exclude(attendee_type=TicketType.AID).exclude(attendee_type=TicketType.VOLUNTEER)\
         .exclude(attendee_type=TicketType.PRESS).order_by('price', 'title')
-    available_tickets = [t for t in available_tickets if t._get_current_status() == TicketType.ACTIVE]
+    available_tickets = [t for t in available_tickets
+                         if t._get_current_status() in (TicketType.ACTIVE, TicketType.SOLDOUT)]
     paginator = Paginator(available_tickets, 10)
     page = request.GET.get('page')
 
@@ -236,6 +237,7 @@ def event_public_tickets(request, slug):
         available_tickets = paginator.page(paginator.num_pages)
 
     context['tickets'] = available_tickets
+    context['dispaly_ticket_availability'] = settings.DISPLAY_TICKET_AVAILABILITY
 
     return render(request=request, template_name='konfera/event/public_tickets.html', context=context)
 

@@ -11,19 +11,20 @@ class RegistrationForm(forms.ModelForm):
     type = forms.ModelChoiceField(queryset=TicketType.objects.all(),
                                   widget=forms.HiddenInput(attrs={'readonly': 'readonly'}))
     discount_code = forms.CharField(label='Promo Code', max_length=15, required=False)
+    description = forms.CharField(required=True, label=_('Description'),
+                                  widget=forms.Textarea({'placeholder': _('Please tell us your reason why are you '
+                                                                          'applying for grant...')}),)
 
     class Meta:
         model = Ticket
-        fields = ('type', 'title', 'first_name', 'last_name', 'email', 'phone', 'discount_code')
+        fields = ('type', 'title', 'first_name', 'last_name', 'email', 'phone', 'discount_code', 'description')
 
     def __init__(self, *args, **kwargs):
         description_required = kwargs.pop('description_required', False)
         super().__init__(*args, **kwargs)
 
-        if description_required:
-            self.fields['description'] = forms.CharField(
-                widget=forms.Textarea({'placeholder': _('Please tell us something about yourself...')}),
-                required=True, label=_('Description'))
+        if not description_required:
+            del(self.fields['description'])
 
     def clean_discount_code(self):
         data = self.cleaned_data['discount_code']

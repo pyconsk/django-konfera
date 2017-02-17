@@ -275,17 +275,18 @@ admin.site.register(Order, OrderAdmin)
 
 
 class TicketTypeAdmin(admin.ModelAdmin):
-    list_display = ('title', 'price', 'attendee_type', 'event', 'status', 'accessibility')
-    list_filter = ('attendee_type', 'accessibility', 'event__event_type')
+    list_display = ('title', 'price', 'attendee_type', 'event', 'available_tickets', 'status', 'accessibility')
+    list_filter = ('attendee_type', 'accessibility', 'event__event_type', 'event')
     search_fields = ('=title',)
     ordering = ('event', 'title', 'date_from')
-    readonly_fields = ('status', 'uuid', 'date_created', 'date_modified')
+    readonly_fields = ('status', 'uuid', 'date_created', 'date_modified', 'issued_tickets', 'available_tickets')
     fieldsets = (
         (_('Details'), {
             'fields': ('title', 'description', 'uuid', 'price', 'attendee_type', 'event',)
         }),
         (_('Availability'), {
-            'fields': ('date_from', 'date_to', 'status', 'usage', 'accessibility'),
+            'fields': ('date_from', 'date_to', 'status', 'accessibility', 'usage', 'issued_tickets',
+                       'available_tickets'),
             'classes': ('collapse',),
         }),
         (_('Modifications'), {

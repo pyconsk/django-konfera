@@ -25,9 +25,9 @@
     </ul>
     <h4>{% trans "Legal details" %}</h4>
     <ul class="list-unstyled">
-      {% if organizer.company_id %}<li><b>{% trans "Company ID:" %}</b> {{ organizer.company_id }}</li>{% endif %}
-      {% if organizer.tax_id %}<li><b>{% trans "TAX ID:" %}</b> {{ organizer.tax_id }}</li>{% endif %}
-      {% if organizer.vat_id %}<li><b>{% trans "VAT ID:" %}</b> {{ organizer.vat_id }}</li>{% endif %}
+      {% if organizer.company_id %}<li><b>{% trans "Company ID" %}:</b> {{ organizer.company_id }}</li>{% endif %}
+      {% if organizer.tax_id %}<li><b>{% trans "TAX ID" %}:</b> {{ organizer.tax_id }}</li>{% endif %}
+      {% if organizer.vat_id %}<li><b>{% trans "VAT ID" %}:</b> {{ organizer.vat_id }}</li>{% endif %}
     </ul>
     {{ organizer.other|safe }}
   </div>

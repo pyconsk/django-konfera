@@ -438,6 +438,9 @@ class TicketTypeTest(TestCase):
         tt.date_from = now - day
         self.assertEquals(tt.status, TicketType.STATUSES[TicketType.ACTIVE])
 
+        tt.usage = 0
+        self.assertEquals(tt.status, TicketType.STATUSES[TicketType.SOLDOUT])
+
         # passed ticket types we consider as TicketType.expired
         tt.date_from = now - 3 * day
         tt.date_to = now - day
