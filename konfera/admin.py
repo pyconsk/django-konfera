@@ -337,7 +337,7 @@ admin.site.register(DiscountCode, DiscountCodeAdmin)
 
 class TicketAdmin(admin.ModelAdmin):
     list_display = ('email', 'first_name', 'last_name', 'type', 'status', 'link_to_order')
-    list_filter = ('status',  'order__status', 'type__attendee_type', 'type__event')
+    list_filter = ('status', 'order__status', 'type__attendee_type', 'type__event')
     ordering = ('-order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email')  # case insensitive searching
     readonly_fields = ('link_to_order', 'date_created', 'date_modified')
