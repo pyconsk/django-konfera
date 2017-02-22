@@ -45,6 +45,14 @@ class Order(KonferaModel):
             if self.amount_paid == 0:
                 self.amount_paid = self.to_pay
 
+        if self.status == Order.CANCELLED:
+            self.price = 0
+            self.discount = 0
+
+            for ticket in self.ticket_set.all():
+                ticket.status = ticket.CANCELLED
+                ticket.save()
+
         super().save(*args, **kwargs)
 
         try:
@@ -77,7 +85,8 @@ class Order(KonferaModel):
         self.discount = 0
 
         for ticket in self.ticket_set.all():
-            self.price += ticket.type.price
-            self.discount += ticket.discount_calculator()
+            if ticket.status != ticket.CANCELLED:
+                self.price += ticket.type.price
+                self.discount += ticket.discount_calculator()
 
         self.save()
