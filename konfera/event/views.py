@@ -47,6 +47,8 @@ def event_sponsors_list_view(request, slug):
     event = get_object_or_404(Event.objects.published(), slug=slug)
     context = dict()
     context['sponsors'] = event.sponsors.all().order_by('type', 'title')
+    context['one_last_sponsor'] = (1, 4, 7, 10, 13, 16, 19)
+    context['two_last_sponsor'] = (2, 5, 8, 11, 14, 17, 20)
     update_event_context(event, context, show_sponsors=False)
 
     return render(request=request, template_name='konfera/event/sponsors.html', context=context)
