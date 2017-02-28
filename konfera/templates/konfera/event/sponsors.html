@@ -28,7 +28,6 @@
       {% elif type.list|length in two_last_sponsor and type.list|length|sub:forloop.counter == 1 %}col-md-offset-2
       {% endif %}
       {% endspaceless %} col-md-4">
-      {{ forloop.counter }} {{ type.list|length|sub:forloop.counter }}
       <a href="{{ sponsor.url }}" target="_blank" class="sbox" {% if ga %}onclick="ga('send', 'event', 'sponsor', 'click', 'sponsors-page-{{ sponsor|slugify }}');trackOutboundLink('{{ sponsor.url }}');"{% endif %}>
         <img src="{% get_media_prefix %}{{ sponsor.logo }}" alt="{{ sponsor }}" class="slogo img-responsive center-block" />
         <div class="sbox-inner">
