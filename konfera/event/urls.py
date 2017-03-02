@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^(?P<slug>[\w, -]+)/cfp/$', views.CFPView.as_view(), name='event_cfp_form'),
     url(r'^(?P<slug>[\w, -]+)/cfp/(?P<uuid>[\w, -]+)$', views.CFPEditView.as_view(), name='event_cfp_edit_form'),
     url(r'^(?P<slug>[\w, -]+)/schedule/$', views.schedule_redirect, name='schedule'),
-    url(r'^(?P<slug>[\w, -]+)/schedule/(?P<day>[\d, -]+)$', views.ScheduleView.as_view(), name='schedule'),
+    url(r'^(?P<slug>[\w, -]+)/schedule/(?P<date>\d{4}-\d{2}-\d{2})/$', views.ScheduleView.as_view(), name='schedule'),
+
     url(r'^(?P<slug>[\w, -]+)/tickets/$', views.event_public_tickets, name='event_tickets'),
     url(r'^(?P<slug>[\w, -]+)/$', views.event_details_view, name='event_details'),
     url(r'^order/(?P<order_uuid>[\w, -]+)/$', views.EventOrderDetailView.as_view(), name='order_detail'),

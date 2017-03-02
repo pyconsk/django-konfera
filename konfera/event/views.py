@@ -191,7 +191,9 @@ class CFPEditView(CFPView):
 
 
 def schedule_redirect(request, slug):
-    return redirect('schedule', slug=slug, day=0)
+    event = get_object_or_404(Event.objects.published(), slug=slug)
+
+    return redirect('schedule', slug=slug, date=event.date_from.strftime("%Y-%m-%d"))
 
 
 class ScheduleView(DetailView):
@@ -202,16 +204,26 @@ class ScheduleView(DetailView):
         event = kwargs['object']
 
         context = super().get_context_data()
-        context['day'] = int(self.kwargs['day'])
+        context['date'] = self.kwargs['date']
+        date = datetime.strptime(self.kwargs['date'], '%Y-%m-%d')
 
-        date = event.date_from + timedelta(days=context['day'])
-        context['schedule'] = event.schedules.filter(start__date=date.date()).order_by('room', 'start')
+        rooms_data = {}
+        rooms = []
+        for room in event.location.rooms.all():
+            rooms_data[room.slugify()] = room
+            rooms.append({room.slugify(): event.schedules.filter(start__date=date.date(), room=room).order_by('start')})
 
-        event_duration = event.date_to - event.date_from
-        context['interval'] = [
-            {'day': day, 'date': event.date_from + timedelta(days=day)}
-            for day in range(event_duration.days + 1)
-        ]
+        context['no_room'] = event.schedules.filter(start__date=date.date(), room=None).order_by('start')
+        context['rooms'] = rooms
+        context['rooms_data'] = rooms_data
+
+        def daterange(start_date, end_date):
+            for n in range(int((end_date - start_date).days)+1):
+                yield start_date + timedelta(n)
+
+        context['interval'] = []
+        for single_date in daterange(event.date_from, event.date_to):
+            context['interval'].append(single_date)
 
         update_event_context(event, context)
 

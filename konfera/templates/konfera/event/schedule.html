@@ -8,58 +8,196 @@
 
 
 {% block content_details %}
-    <h1>{% trans "Schedule" %}</h1>
-    <div>
-        {% for date in interval %}
-            {% if day == date.day %}
-                {{ date.date|date:"N j, Y" }} |
-            {% else %}
-            <a href="{% url "schedule" event.slug date.day %}">
-                {{ date.date|date:"N j, Y" }}
-            </a> |
-            {% endif %}
-        {% endfor %}
+  <h1>{% trans "Schedule" %}</h1>
+  <p class="lead">{{ schedule.0.start|date:"N j, Y" }}</p>
 
-        <h2> {{ schedule.0.start|date:"N j, Y" }}</h2>
-        <div>
-            {% for thing in schedule %}
-                {% ifchanged thing.room %}
-                <table class="table table-striped table-hover schedule">
-                    {% if thing.room %}
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="text-center">
-                                <span class="room">{{thing.room}}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    {% endif %}
-                {% endifchanged %}
-
-                <tr class="event">
-                    <td class="info-meta">
-                        <div class="time">{{ thing.start|date:"H:m" }}</div>
-                    </td>
-                    <td class="info-main" data-toggle="dropdown">
-                    {% if thing.talk %}
-                        <div class="talk">{{thing.talk}}</div>
-                        <div class="speaker">
-                            {{ thing.talk.primary_speaker }}
-                            {% if thing.talk.secondary_speaker %}
-                                &amp;
-                                {{ things.talk.secondary_speaker }}
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    {{ thing.description }}
-                  </td>
-                </tr>
-            {% endfor %}
-            {% if schedule %}
-              </tbody>
-            </table> <!-- closing tag for <table class="table table-striped table-hover schedule"> -->
-            {% endif %}
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="horizontal-list hidden-print">
+      {% for day in interval %}
+        <li{% if date == day.date|date:"Y-m-d" %} class="active"{% endif %}><a href="{% url "schedule" event.slug day.date|date:"Y-m-d" %}">{{ day.date|date:"l, j"}}<sup>{{ day.date|date:"S" }}</sup> {{ day.date|date:"N Y" }}</a></li>
+      {% endfor %}
+      </ul>
+      <p>{% trans "This schedule is subject to change." %}</p>
     </div>
+  </div>
+
+  {% if no_room %}
+  <div class="row">
+    <div class="col-md-6 narrow">
+      <table class="table table-striped table-hover schedule">
+        <tbody>
+        {% for thing in no_room %}
+          <tr class="event-dummy event-registration">
+            <td class="info-meta">
+              <div class="time">{{ thing.start|date:"H:i" }}</div>
+            </td>
+            <td class="info-main" data-toggle="dropdown">
+              <div class="talk">{{ thing.description }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    {% for room in rooms %}
+      {% for roomid, queryset in room.items %}
+        {% if forloop.parentloop.counter|divisibleby:2 %}<div class="row">{% endif %}
+        {% if queryset %}
+    <div class="col-md-6 narrow">
+      <table class="table table-striped table-hover schedule">
+      {% for slug, room_data in rooms_data.items %}
+        {% if slug == roomid %}
+        <thead>
+          <tr>
+            <th colspan="2" class="text-center"><span class="room">{{ room_data.title }}</span></th>
+          </tr>
+        </thead>
+        {% endif %}
+      {% endfor %}
+
+        <tbody>
+          {% for item in queryset %}
+          <tr class="{% if item.talk %}event{% else %}event-dummy{% endif %}">
+            <td class="info-meta">
+              <div class="time">{{ item.start|date:"H:i" }}</div>
+              <div class="lang">{{ item.talk.language }}</div>
+            </td>
+            <td class="info-main" data-toggle="dropdown">
+              {% if item.talk %}
+                <div class="talk" data-duration="{{ item.talk.duration }}" data-abstract="{{ item.talk.abstract }}">{{ item.talk }}</div>
+                <div class="speaker" data-id="{{ item.talk.primary_speaker|slugify }}">
+                  {{ item.talk.primary_speaker }}
+                </div>
+                {% if item.talk.secondary_speaker %}
+                  &amp; {{ item.talk.secondary_speaker }}
+                {% endif %}
+              {% endif %}
+              {{ item.description }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+      {% endif %}
+
+      {% if forloop.parentloop.counter|divisibleby:2 %}</div>{% endif %}
+    {% endfor %}
+    {% endfor %}
+  </div>
+
+{% endblock %}
+
+
+{% block bottom %}
+<div id="event-details" class="modal modal-transparent fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title" id="event-title"></h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-8 talk-abstract">
+            <p id="event-desc" class="text-justify"></p>
+          </div>
+          <div class="col-md-4 talk-data">
+            <table class="table table-side">
+              <tbody>
+                <tr><th>Beginning:</th><td id="event-startime"></td></tr>
+                <tr><th>Room:</th><td id="event-room"></td></tr>
+                <tr><th>Language:</th><td id="event-lang"></td></tr>
+                <tr><th>Speaker:</th><td id="event-speaker"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row" id="speaker-bio"></div>
+        <div class="row" id="speaker2-bio"></div>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script type="text/javascript">
+var speakers_url = '{% url 'event_speakers' '2017' %}';
+var speakers_page = null;
+
+function update_speaker_bio(mod, speaker_id, speaker_id2) {
+  var speaker_row, speaker2_row;
+  var speaker_bio = mod.find('#speaker-bio');
+  var speaker2_bio = mod.find('#speaker2-bio');
+
+  speaker_bio.empty();
+  speaker2_bio.empty();
+
+  if (!speaker_id) {
+    return false;
+  }
+
+  function update() {
+    speaker_row = speakers_page.find('#' + speaker_id);
+
+    if (speaker_row.length) {
+      speaker_bio.html(speaker_row.html());
+
+      if (speaker_id2) {
+        speaker2_row = speakers_page.find('#' + speaker_id2);
+
+        if (speaker2_row) {
+          speaker2_bio.html(speaker2_row.html());
+        }
+      }
+    }
+  }
+
+  if (speakers_page) {
+    update();
+  } else {
+    $.ajax({'url': speakers_url, 'cache': true}).done(function(html, state, xhr) {
+      speakers_page = $(html);
+      update();
+    });
+  }
+}
+
+function tr_click() {
+  var mod = $('#event-details');
+  var tr = $(this).parent();
+  var talk = tr.find('div.talk');
+  var speaker = tr.find('div.speaker');
+  var room;
+
+  mod.find('#event-title').html(talk.html());
+  mod.find('#event-desc').html(talk.data('abstract'));
+  mod.find('#event-speaker').html(speaker.html());
+  mod.find('#event-startime').html(tr.find('div.time').html() + ' ('+ talk.data('duration') +'&nbsp;min.)');
+  mod.find('#event-lang').html(tr.find('div.lang').html());
+  room = tr.parent().parent().find('span.room:last');
+
+  if (room.length) {
+    mod.find('#event-room').html(room.html());
+  } else {
+    mod.find('#event-room').empty();
+  }
+
+  update_speaker_bio(mod, speaker.data('id'), speaker.data('id2'));
+
+  // Here we go
+  mod.modal('show');
+}
+
+$(document).ready(function() {
+  $('tr.event td.info-main').click(tr_click);
+});
+</script>
 
 {% endblock %}
