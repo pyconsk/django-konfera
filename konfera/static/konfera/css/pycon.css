@@ -439,7 +439,7 @@ table.schedule > thead > tr > th:first-child , table.schedule > tbody > tr > td:
 }
 
 table.schedule .time {
-  height: 44px;  /* for a 30 min slot */
+  height: 64px;  /* for a 30 min slot */
   width: 54px;
   font-weight: bold;
 }
@@ -451,7 +451,7 @@ table.schedule .lang {
 
 table.schedule .talk {
   font-weight: bold;
-  height: 40px;  /* for a 30 min slot */
+  height: 60px;  /* for a 30 min slot */
 }
 
 table.schedule .talk.free {
