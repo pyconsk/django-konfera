@@ -12,7 +12,7 @@
   <h2>{{ event }}</h2>
 
   {% for speaker in speakers %}
-  <div class="row" id="{{ speaker.last_name.split|join:"-" }}">
+  <div class="row" id="{{ speaker|slugify }}">
 
     {% if forloop.counter|divisibleby:2 %}  {# even loop: picture on left #}
     <div class="col-xs-3 text-center">
