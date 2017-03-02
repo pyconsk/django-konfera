@@ -8,61 +8,82 @@
 
 
 {% block content_details %}
-    <h1>{% trans "Schedule" %}</h1>
-    <div>
-        {% for date in interval %}
-            {% if day == date.day %}
-                {{ date.date|date:"N j, Y" }} |
-            {% else %}
-            <a href="{% url "schedule" event.slug date.day %}">
-                {{ date.date|date:"N j, Y" }}
-            </a> |
-            {% endif %}
-        {% endfor %}
+  <h1>{% trans "Schedule" %}</h1>
+  <p class="lead">{{ schedule.0.start|date:"N j, Y" }}</p>
 
-        <h2> {{ schedule.0.start|date:"N j, Y" }}</h2>
-        <div>
-            {% for thing in schedule %}
-
-                {% ifchanged thing.room %}
-                <table class="table table-striped table-hover schedule">
-                    {% if thing.room %}
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="text-center">
-                                <span class="room">{{thing.room}}</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    {% endif %}
-                {% endifchanged %}
-
-                <tr class="event">
-                    <td class="info-meta">
-                        <div class="time">{{ thing.start|date:"H:i" }}</div>
-                        <div class="lang">{{ thing.talk.language }}</div>
-                    </td>
-                    <td class="info-main" data-toggle="dropdown">
-                    {% if thing.talk %}
-                        <div class="talk" data-duration="{{ thing.talk.duration }}" data-abstract="{{ thing.talk.abstract }}">{{ thing.talk }}</div>
-                        <div class="speaker" data-id="{{ thing.talk.primary_speaker|slugify }}">
-                            {{ thing.talk.primary_speaker }}
-
-                        </div>
-                      {% if thing.talk.secondary_speaker %}
-                                &amp; {{ things.talk.secondary_speaker }}
-                            {% endif %}
-                    {% endif %}
-                    {{ thing.description }}
-                  </td>
-                </tr>
-            {% endfor %}
-            {% if schedule %}
-              </tbody>
-            </table> <!-- closing tag for <table class="table table-striped table-hover schedule"> -->
-            {% endif %}
-        </div>
+  <div class="row">
+    <div class="col-md-12">
+      <ul class="horizontal-list hidden-print">
+      {% for day in interval %}
+        <li{% if date == day.date|date:"Y-m-d" %} class="active"{% endif %}><a href="{% url "schedule" event.slug day.date|date:"Y-m-d" %}">{{ day.date|date:"l, j"}}<sup>{{ day.date|date:"S" }}</sup> {{ day.date|date:"N Y" }}</a></li>
+      {% endfor %}
+      </ul>
+      <p>{% trans "This schedule is subject to change." %}</p>
     </div>
+  </div>
+
+  {% if no_room %}
+  <div class="row">
+    <div class="col-md-6 narrow">
+      <table class="table table-striped table-hover schedule">
+        <tbody>
+        {% for thing in no_room %}
+          <tr class="event-dummy event-registration">
+            <td class="info-meta">
+              <div class="time">{{ thing.start|date:"H:i" }}</div>
+            </td>
+            <td class="info-main" data-toggle="dropdown">
+              <div class="talk">{{ thing.description }}</div>
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    {% for room in rooms %}
+    {% for roomid, queryset in room.items %}
+      {% if queryset %}
+    <div class="col-md-6 narrow">
+      <table class="table table-striped table-hover schedule">
+
+        <thead>
+          <tr>
+            <th colspan="2" class="text-center"><span class="room">{{ roomid }}</span> (room -1.61)</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in queryset %}
+          <tr class="event">
+            <td class="info-meta">
+              <div class="time">{{ item.start|date:"H:i" }}</div>
+              <div class="lang">{{ item.talk.language }}</div>
+            </td>
+            <td class="info-main" data-toggle="dropdown">
+              {% if item.talk %}
+                <div class="talk" data-duration="{{ item.talk.duration }}" data-abstract="{{ item.talk.abstract }}">{{ item.talk }}</div>
+                <div class="speaker" data-id="{{ item.talk.primary_speaker|slugify }}">
+                  {{ item.talk.primary_speaker }}
+                </div>
+                {% if item.talk.secondary_speaker %}
+                  &amp; {{ item.talk.secondary_speaker }}
+                {% endif %}
+              {% endif %}
+              {{ item.description }}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+      {% endif %}
+    {% endfor %}
+    {% endfor %}
+  </div>
 
 {% endblock %}
 
