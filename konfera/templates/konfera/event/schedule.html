@@ -50,12 +50,15 @@
         {% if queryset %}
     <div class="col-md-6 narrow">
       <table class="table table-striped table-hover schedule">
-
+      {% for slug, room_data in rooms_data.items %}
+        {% if slug == roomid %}
         <thead>
           <tr>
-            <th colspan="2" class="text-center"><span class="room">{{ roomid }}</span> (room -1.61)</th>
+            <th colspan="2" class="text-center"><span class="room">{{ room_data.title }}</span></th>
           </tr>
         </thead>
+        {% endif %}
+      {% endfor %}
 
         <tbody>
           {% for item in queryset %}

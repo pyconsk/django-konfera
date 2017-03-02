@@ -207,12 +207,15 @@ class ScheduleView(DetailView):
         context['date'] = self.kwargs['date']
         date = datetime.strptime(self.kwargs['date'], '%Y-%m-%d')
 
+        rooms_data = {}
         rooms = []
         for room in event.location.rooms.all():
+            rooms_data[room.slugify()] = room
             rooms.append({room.slugify(): event.schedules.filter(start__date=date.date(), room=room).order_by('start')})
 
         context['no_room'] = event.schedules.filter(start__date=date.date(), room=None).order_by('start')
         context['rooms'] = rooms
+        context['rooms_data'] = rooms_data
 
         def daterange(start_date, end_date):
             for n in range(int((end_date - start_date).days)+1):
