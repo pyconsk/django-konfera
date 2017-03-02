@@ -10,3 +10,6 @@ class Room(KonferaModel):
 
     def __str__(self):
         return self.title
+
+    def slugify(self):
+        return self.title.strip().replace(' ', '-').lower()
