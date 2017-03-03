@@ -211,14 +211,16 @@ class ScheduleView(DetailView):
         rooms = []
         for room in event.location.rooms.all().order_by('pk'):
             rooms_data[room.slugify()] = room
-            rooms.append({room.slugify(): event.schedules.filter(start__date=date.date(), room=room).order_by('start')})
+            rooms.append({
+                room.slugify(): event.schedules.filter(start__date=date.date(), room=room).order_by('start'),
+            })
 
         context['no_room'] = event.schedules.filter(start__date=date.date(), room=None).order_by('start')
         context['rooms'] = rooms
         context['rooms_data'] = rooms_data
 
         def daterange(start_date, end_date):
-            for n in range(int((end_date - start_date).days)+1):
+            for n in range(int((end_date - start_date).days) + 1):
                 yield start_date + timedelta(n)
 
         context['interval'] = []
