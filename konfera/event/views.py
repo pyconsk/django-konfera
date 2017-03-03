@@ -209,7 +209,7 @@ class ScheduleView(DetailView):
 
         rooms_data = {}
         rooms = []
-        for room in event.location.rooms.all():
+        for room in event.location.rooms.all().order_by('pk'):
             rooms_data[room.slugify()] = room
             rooms.append({room.slugify(): event.schedules.filter(start__date=date.date(), room=room).order_by('start')})
 

@@ -70,12 +70,9 @@
             <td class="info-main" data-toggle="dropdown">
               {% if item.talk %}
                 <div class="talk" data-duration="{{ item.talk.duration }}" data-abstract="{{ item.talk.abstract }}">{{ item.talk }}</div>
-                <div class="speaker" data-id="{{ item.talk.primary_speaker|slugify }}">
-                  {{ item.talk.primary_speaker }}
+                <div class="speaker" data-id="{{ item.talk.primary_speaker|slugify }}"{% if item.talk.secondary_speaker %} data-id2="{{ item.talk.secondary_speaker|slugify }}"{% endif %}>
+                  {{ item.talk.primary_speaker }}{% if item.talk.secondary_speaker %} &amp; {{ item.talk.secondary_speaker }}{% endif %}
                 </div>
-                {% if item.talk.secondary_speaker %}
-                  &amp; {{ item.talk.secondary_speaker }}
-                {% endif %}
               {% endif %}
               {{ item.description }}
             </td>
