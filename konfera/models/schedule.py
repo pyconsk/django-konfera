@@ -47,7 +47,7 @@ class Schedule(KonferaModel):
         # time in the same room, eg. schedule datetime + duration in room is unique.
         schedules = Schedule.objects.filter(start__gte=self.start,
                                             start__lte=self.start + duration_delta,
-                                            room=self.room)
+                                            room=self.room).exclude(pk=self.pk)
 
         if schedules.exists():
             # this means that there are events with the same schedule
