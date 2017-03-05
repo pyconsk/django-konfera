@@ -1,3 +1,4 @@
+from datetime import timedelta
 from decimal import Decimal
 
 from django.core.validators import MinValueValidator
@@ -5,9 +6,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 
 from konfera.models.abstract import KonferaModel
 from konfera.models.receipt import Receipt
+from konfera.settings import UNPAID_ORDER_NOTIFICATION_REPEAT, UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY
 
 
 class Order(KonferaModel):
@@ -90,3 +93,16 @@ class Order(KonferaModel):
                 self.discount += ticket.discount_calculator()
 
         self.save()
+
+    @staticmethod
+    def get_unpaid_orders(overdue=False):
+        deadline = timezone.now() - timedelta(days=UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
+        orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
+        orders = orders.filter((Q(unpaid_notification_sent_amount=0) & Q(date_created__lt=deadline)) |
+                               Q(unpaid_notification_sent_at__lt=deadline))
+        if overdue:
+            return orders.filter(unpaid_notification_sent_amount=UNPAID_ORDER_NOTIFICATION_REPEAT)
+        return orders.filter(unpaid_notification_sent_amount__lt=UNPAID_ORDER_NOTIFICATION_REPEAT)
+
+    def expire_overdue_orders(self):
+        self.get_unpaid_orders(overdue=True)

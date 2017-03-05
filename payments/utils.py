@@ -172,29 +172,85 @@ def get_full_order_url(order):
     return SITE_URL + reverse('order_detail', kwargs={'order_uuid': order.uuid})
 
 
-def get_unpaid_orders(overdue=False):
-    deadline = timezone.now() - timedelta(days=UNPAID_ORDER_NOTIFICATION_REPEAT_DELAY)
-    orders = Order.objects.filter(Q(status=Order.AWAITING) | Q(status=Order.PARTLY_PAID))
-    orders = orders.filter((Q(unpaid_notification_sent_amount=0) & Q(date_created__lt=deadline)) |
-                           Q(unpaid_notification_sent_at__lt=deadline))
-    if overdue:
-        return orders.filter(unpaid_notification_sent_amount=UNPAID_ORDER_NOTIFICATION_REPEAT)
-    return orders.filter(unpaid_notification_sent_amount__lt=UNPAID_ORDER_NOTIFICATION_REPEAT)
+def get_unpaid_orders_print_results(overdue, verbose):
+    orders_no = 0
+    tickets_no = 0
+    for order in Order.get_unpaid_orders(overdue=overdue):
+        orders_no += 1
+        tickets_no += len(order.ticket_set.all())
+
+        if verbose == 3:
+            print('Order variable symbol: %s, has number of tickets %s, notified %s time(s) last at %s. ' % (
+                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount, order.unpaid_notification_sent_at
+            ), end='')
+            print('Tickets: ', end='')
+            for ticket in order.ticket_set.all():
+                print('%s %s, ' % (ticket.first_name, ticket.last_name), end='')
+            print('')
+
+        if verbose == 2:
+            print('Order variable symbol: %s, has number of tickets %s, notified %s time(s) last at %s' % (
+                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount, order.unpaid_notification_sent_at
+            ))
+
+    return orders_no, tickets_no
 
 
-def send_unpaid_order_email_notifications(verbose=0):
+def show_overdue_orders(verbose=0):
+    """
+    Display all users who has orders overdue.
+    """
+    return get_unpaid_orders_print_results(True, verbose)
+
+
+def show_unpaid_orders(verbose=0):
+    """
+    Display all users who has no paid orders yet.
+    """
+    return get_unpaid_orders_print_results(False, verbose)
+
+
+def email_overdue_orders(verbose=0):
+    """
+    Mark overdue orders as EXPIRED and send email notifications
+    """
+    overdue_orders = Order.get_unpaid_orders(overdue=True)
+    template_name = 'expired_order_notification'
+
+    for order in overdue_orders:
+        subject = 'Your order for {event} has expired.'.format(event=order.event.title)
+        order_url = get_full_order_url(order)
+
+        for ticket in order.ticket_set.all():
+            content_data = {
+                'first_name': ticket.first_name,
+                'last_name': ticket.last_name,
+                'event': order.event.title,
+                'order_url': order_url,
+            }
+            addresses = {'to': [ticket.email], 'bcc': EMAIL_NOTIFY_BCC}
+            send_email(addresses, subject, template_name, content_data)
+            msg = 'Email template expired_order_notification has been send to: %s' % ticket.email
+
+            if verbose > 2:
+                print(msg)
+            logger.debug(msg)
+
+            order.unpaid_notification_sent_at = timezone.now()
+            order.unpaid_notification_sent_amount += 1
+
+        order.status = Order.EXPIRED
+        order.save()
+
+
+def email_unpaid_orders(verbose=0):
     """
     Send email to all users who has unpaid orders.
     """
-    # cancel overdue orders with enough notifications
-    overdue_orders = get_unpaid_orders(overdue=True)
-
-    for order in overdue_orders:
-        order.status = Order.CANCELLED
-        order.save()
+    email_overdue_orders(verbose=verbose)
 
     # notify the rest
-    orders = get_unpaid_orders()
+    orders = Order.get_unpaid_orders()
     template_name = 'unpaid_order_notification'
 
     for order in orders:
@@ -210,9 +266,13 @@ def send_unpaid_order_email_notifications(verbose=0):
             }
             addresses = {'to': [ticket.email], 'bcc': EMAIL_NOTIFY_BCC}
             send_email(addresses, subject, template_name, content_data)
-            msg = 'Email template unpaid_ticket_notifier has been send to: %s' % ticket.email
+            msg = 'Email template unpaid_order_notification has been send to: %s' % ticket.email
+
+            if verbose > 2:
+                print(msg)
             logger.debug(msg)
 
             order.unpaid_notification_sent_at = timezone.now()
             order.unpaid_notification_sent_amount += 1
-            order.save()
+
+        order.save()
