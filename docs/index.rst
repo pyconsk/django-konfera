@@ -15,6 +15,7 @@ Contents:
    contributing
    options
    talks
+   orders
 
 Indices and tables
 ==================
