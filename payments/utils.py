@@ -181,7 +181,8 @@ def get_unpaid_orders_print_results(overdue, verbose):
 
         if verbose == 3:
             print('Order variable symbol: %s, has number of tickets %s, notified %s time(s) last at %s. ' % (
-                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount, order.unpaid_notification_sent_at
+                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount,
+                order.unpaid_notification_sent_at
             ), end='')
             print('Tickets: ', end='')
             for ticket in order.ticket_set.all():
@@ -190,7 +191,8 @@ def get_unpaid_orders_print_results(overdue, verbose):
 
         if verbose == 2:
             print('Order variable symbol: %s, has number of tickets %s, notified %s time(s) last at %s' % (
-                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount, order.unpaid_notification_sent_at
+                order.variable_symbol, len(order.ticket_set.all()), order.unpaid_notification_sent_amount,
+                order.unpaid_notification_sent_at
             ))
 
     return orders_no, tickets_no
