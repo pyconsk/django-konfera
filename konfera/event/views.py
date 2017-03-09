@@ -432,7 +432,7 @@ class CheckInDetailView(CheckInAccessMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['show_form'] = context['object'].status in [Ticket.REGISTERED, Ticket.CHECKEDIN]
+        context['show_form'] = context['object'].status in [Ticket.REQUESTED, Ticket.REGISTERED, Ticket.CHECKEDIN]
         context['form'] = CheckInTicket(instance=context['object'])
         context['event'] = context['object'].type.event
 

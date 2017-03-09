@@ -39,7 +39,7 @@ class CheckInTicket(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         if self.instance and self.instance.status is not None:
-            new_choices = [(Ticket.CHECKEDIN, 'Checked-in'), (Ticket.REGISTERED, 'Registered')]
+            new_choices = [(Ticket.CHECKEDIN, 'Checked-in')]  # (Ticket.REGISTERED, 'Registered')]
             self.fields['status'].choices = new_choices
             self.fields['status'].widget.choices = new_choices
 

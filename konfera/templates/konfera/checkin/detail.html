@@ -36,24 +36,27 @@
     {% if show_form %}
         <form action="." method="post">
             {% csrf_token %}
-            {{ form }}
+            {{ form.as_p }}
             <input type="submit" class="btn btn-primary">
         </form>
     {% else %}
         <p>{% trans "Tiket's status cannot be changed." %}</p>
     {% endif %}
 
-    {% if request.user.is_staff %}
-        <hr>
-        <p>
-            <a href="{% url 'admin:konfera_ticket_change' object.id %}" class="btn btn-warning">
-                {% trans "Show ticket in admin" %}
-            </a>
+    <hr>
+      <p>
+      <a href="{% url 'check_in' event.slug %}" class="btn btn-danger">
+        {% trans "Back" %}
+      </a>
+      {% if request.user.is_staff %}
+        <a href="{% url 'admin:konfera_ticket_change' object.id %}" class="btn btn-warning">
+          {% trans "Show ticket in admin" %}
+        </a>
 
-            <a href="{% url 'admin:konfera_order_change' object.order.id %}" class="btn btn-warning">
-                {% trans "Show order in admin" %}
-            </a>
-        </p>
-    {% endif %}
+        <a href="{% url 'admin:konfera_order_change' object.order.id %}" class="btn btn-warning">
+          {% trans "Show order in admin" %}
+        </a>
+      {% endif %}
+      </p>
 </div>
 {% endblock %}
