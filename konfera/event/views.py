@@ -49,6 +49,11 @@ def event_sponsors_list_view(request, slug):
     context['sponsors'] = event.sponsors.all().order_by('type', 'title')
     context['one_last_sponsor'] = (1, 4, 7, 10, 13, 16, 19)
     context['two_last_sponsor'] = (2, 5, 8, 11, 14, 17, 20)
+    context['supporters'] = Ticket.objects.filter(order__status=Order.PAID)\
+        .filter(type__attendee_type=TicketType.SUPPORTER)\
+        .filter(type__event__pk=event.pk)\
+        .exclude(status=Ticket.CANCELLED)
+
     update_event_context(event, context, show_sponsors=False)
 
     return render(request=request, template_name='konfera/event/sponsors.html', context=context)

@@ -48,4 +48,19 @@
   <hr>
   {% endfor %}
 </div> <!-- div sponsors -->
+
+<div id="supporters" class="row">
+  <div class="col-md-12 text-center">
+    <h2>Supporters</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    {% for supporter in  supporters %}
+    <p class="sline">{{ supporter.first_name }} {{ supporter.last_name }}{% if supporter.order.receipt_of.title %} - {{ supporter.order.receipt_of.title }}{% endif %}</p>
+    {% endfor %}
+  </div>
+</div>
+
 {% endblock %}
