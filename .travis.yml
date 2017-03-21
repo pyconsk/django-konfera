@@ -42,7 +42,8 @@ after_success:
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/2f5f7550882030346bca
+      - "https://webhooks.gitter.im/e/2f5f7550882030346bca"
+      - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MHJpY2NvJTNBcHl0aG9uLnNrLyUyMUdWc25RR3VQeXlTcW91enhiVyUzQXB5dGhvbi5zaw"
     on_success: change
     on_failure: always
     on_start: never
