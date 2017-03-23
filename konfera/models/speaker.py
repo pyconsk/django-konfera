@@ -1,8 +1,14 @@
+from unidecode import unidecode
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.models.countries import COUNTRIES
 from konfera.models.abstract import KonferaModel
+
+
+def img_path(instance, filename):
+    return 'speaker/{0}'.format(unidecode(filename))
 
 
 class Speaker(KonferaModel):
@@ -38,7 +44,7 @@ class Speaker(KonferaModel):
         default=COUNTRY_DEFAULT
     )
     sponsor = models.ForeignKey('Sponsor', blank=True, null=True, related_name='sponsored_speakers')
-    image = models.ImageField(upload_to='speaker/', blank=True)
+    image = models.ImageField(upload_to=img_path, blank=True)
 
     def __str__(self):
         return '{first_name} {last_name}'.format(

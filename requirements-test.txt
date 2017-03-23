@@ -3,3 +3,4 @@ pytz==2016.7
 flake8==3.0.4
 coverage==4.2
 Pillow==3.4.2
+Unidecode==0.04.20
