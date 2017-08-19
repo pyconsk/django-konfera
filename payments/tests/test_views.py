@@ -41,9 +41,9 @@ class TestPayOrderByPaypal(TestCase):
         self.assertEqual(order.left_to_pay, Decimal('52.5'))
 
     # Tests for .get()
-
     def test_get_invalid_order(self):
-        url = reverse('konfera_payments:paypal_button_url', kwargs={'order_uuid': 7})
+        url = reverse('konfera_payments:paypal_button_url',
+                      kwargs={'order_uuid': 'f90e3237-321a-41be-b275-e4b1310b9e30'})
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 

@@ -21,7 +21,7 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 DEPS = [
-    'django>=1.10.3',
+    'django>=1.8.18',
     'pytz>=2016.7',
     'fiobank>=1.2.0',
     'paypalrestsdk>=1.12.0',

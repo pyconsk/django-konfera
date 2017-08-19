@@ -22,6 +22,8 @@ MANIFEST
 env
 envs
 envs3
+venv
+venv3
 .initialized
 
 # Databases

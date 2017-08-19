@@ -1,8 +1,0 @@
-# Project dependencies
-django>=1.10
-django-sitetree==1.6.0
-Pillow==3.4.2
-pytz==2016.7
-
-# The app itself in editable mode
--e ../

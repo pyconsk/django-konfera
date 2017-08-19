@@ -5,6 +5,4 @@ include README.rst
 include setup.py
 recursive-include konfera *.py 
 recursive-include payments *.py *.md
-recursive-include konfera/templates *.html
 recursive-include konfera/locale *.po *.mo
-recursive-include konfera/static *.css *.ico
