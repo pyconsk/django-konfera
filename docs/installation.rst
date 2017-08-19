@@ -63,34 +63,6 @@ Example::
     GOOGLE_ANALYTICS = 'UA-XXXXXXXX-X'
 
 
-
-.. _settings-navigation_enabled:
-
-``NAVIGATION_ENABLED``
-^^^^^^^^^^^^^^^^^^^^^^
-
-Default: ``False`` 
-
-
-
-.. _settings-navigation_brand:
-
-``NAVIGATION_BRAND``
-^^^^^^^^^^^^^^^^^^^^
-
-Default: ``'Konfera'`` 
-
-
-
-.. _settings-navigation_url:
-
-``NAVIGATION_URL``
-^^^^^^^^^^^^^^^^^^
-
-Default: ``'/'`` 
-
-
-
 .. _settings-currency:
 
 ``CURRENCY``
