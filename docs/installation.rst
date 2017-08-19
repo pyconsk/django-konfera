@@ -91,17 +91,6 @@ Default: ``'/'``
 
 
 
-.. _settings-navigation_logo:
-
-``NAVIGATION_LOGO``
-^^^^^^^^^^^^^^^^^^^
-
-Default: ``None`` 
-
-Application supports django-sitetree navigation support, weather it should be passed to template.
-
-
-
 .. _settings-currency:
 
 ``CURRENCY``
