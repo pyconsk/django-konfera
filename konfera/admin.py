@@ -4,46 +4,30 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from konfera.forms import OrderedTicketsInlineFormSet
-from konfera.models import (Receipt, Order, Location, Event, Sponsor, TicketType, DiscountCode, Ticket, Speaker, Talk,
-                            Room, Schedule, Organizer, EmailTemplate)
-
-
-class SponsorshipInline(admin.TabularInline):
-    model = Event.sponsors.through
-    extra = 1
+from konfera.models import Receipt, Order, Event, TicketType, DiscountCode, Ticket, Speaker, Talk, Organizer
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'date_from', 'date_to', 'cfp_end', 'event_type', 'status')
-    list_filter = ('event_type', 'status')
+    list_display = ('title', 'date_from', 'date_to', 'cfp_end', 'status')
+    list_filter = ('status',)
     ordering = ('date_from', 'date_to', 'title')
     search_fields = ('=title',)
     readonly_fields = ('uuid', 'date_created', 'date_modified')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'slug', 'organizer', 'description', 'contact_email'),
+            'fields': ('title', 'slug', 'organizer',),
         }),
         (_('Dates'), {
             'fields': ('date_from', 'date_to', 'cfp_end'),
         }),
         (_('Details'), {
-            'fields': ('uuid', 'event_type', 'status', 'location', 'cfp_allowed', 'footer_text', 'analytics'),
-        }),
-        (_('Code of Conduct'), {
-            'fields': ('coc', 'coc_phone', 'coc_phone2'),
-        }),
-        (_('Social media'), {
-            'fields': ('enc_social_media_meta_tags', 'enc_social_media_data'),
-            'classes': ('collapse',),
+            'fields': ('uuid', 'status',),
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
             'classes': ('collapse',),
         }),
     )
-    inlines = [
-        SponsorshipInline,
-    ]
     prepopulated_fields = {
         'slug': ('title',),
     }
@@ -70,7 +54,7 @@ class SecondarySpeakerTalksInline(admin.StackedInline):
 
 class SpeakerAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'country', 'social_url',)
-    list_filter = ('country', 'title', 'sponsor')
+    list_filter = ('country', 'title')
     ordering = ('last_name', 'first_name',)
     search_fields = ('=last_name', '=first_name',)  # case insensitive searching
     readonly_fields = ('date_created', 'date_modified')
@@ -82,7 +66,7 @@ class SpeakerAdmin(admin.ModelAdmin):
             'fields': ('email', 'phone',)
         }),
         (_('About'), {
-            'fields': ('bio', 'country', ('url', 'social_url',), 'image', 'sponsor',)
+            'fields': ('bio', 'country', ('url', 'social_url',), 'image',)
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
@@ -153,75 +137,6 @@ class TalkAdmin(admin.ModelAdmin):
 admin.site.register(Talk, TalkAdmin)
 
 
-class SponsoredEventsInline(admin.TabularInline):
-    # Django 1.8 doesn't allow Sponsor.sponsored_events.through (caused by related_name)
-    model = Event.sponsors.through
-    verbose_name = _('Sponsored event')
-    verbose_name_plural = _('Sponsored events')
-    extra = 1
-
-
-class SponsoredSpeakersInline(admin.StackedInline):
-    model = Speaker
-    verbose_name = _('Sponsored speaker')
-    verbose_name_plural = _('Sponsored speakers')
-    extra = 1
-
-
-class SponsorAdmin(admin.ModelAdmin):
-    list_display = ('title', 'type', 'url',)
-    list_filter = ('type',)
-    search_fields = ('=title',)
-    ordering = ('type', 'title',)
-    readonly_fields = ('date_created', 'date_modified')
-    fieldsets = (
-        (_('Details'), {
-            'fields': ('title', 'type', 'logo', 'url', 'about_us',)
-        }),
-        (_('Modifications'), {
-            'fields': ('date_created', 'date_modified'),
-            'classes': ('collapse',),
-        }),
-    )
-    inlines = [
-        SponsoredEventsInline,
-        SponsoredSpeakersInline,
-    ]
-
-
-admin.site.register(Sponsor, SponsorAdmin)
-
-
-class RoomsInline(admin.StackedInline):
-    model = Room
-    extra = 1
-
-
-class LocationAdmin(admin.ModelAdmin):
-    list_display = ('title', 'city', 'capacity')
-    list_filter = ('city',)
-    ordering = ('city', 'title')
-    readonly_fields = ('date_created', 'date_modified')
-    fieldsets = (
-        (_('Details'), {
-            'fields': ('title', 'website', 'capacity',)
-        }),
-        (_('Address'), {
-            'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country', 'get_here')
-        }),
-        (_('Modifications'), {
-            'fields': ('date_created', 'date_modified'),
-            'classes': ('collapse',),
-        }),
-    )
-    inlines = [
-        RoomsInline,
-    ]
-
-
-admin.site.register(Location, LocationAdmin)
-
-
 class OrderedTicketsInline(admin.TabularInline):
     model = Ticket
     verbose_name = _('Ordered ticket')
@@ -276,7 +191,7 @@ admin.site.register(Order, OrderAdmin)
 
 class TicketTypeAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'attendee_type', 'event', 'available_tickets', 'status', 'accessibility')
-    list_filter = ('attendee_type', 'accessibility', 'event__event_type', 'event')
+    list_filter = ('attendee_type', 'accessibility', 'event')
     search_fields = ('=title',)
     ordering = ('event', 'title', 'date_from')
     readonly_fields = ('status', 'uuid', 'date_created', 'date_modified', 'issued_tickets', 'available_tickets')
@@ -372,29 +287,6 @@ class TicketAdmin(admin.ModelAdmin):
 admin.site.register(Ticket, TicketAdmin)
 
 
-class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('start', 'duration', 'talk', 'room')
-    list_filter = ('talk__event', 'room')
-    ordering = ('start', 'room', 'event')
-    search_fields = ('=description',)
-    readonly_fields = ('date_created', 'date_modified')
-    fieldsets = (
-        (_('Time'), {
-            'fields': ('start', 'duration'),
-        }),
-        (_('Details'), {
-            'fields': ('event', 'talk', 'room', 'description')
-        }),
-        (_('Modifications'), {
-            'fields': ('date_created', 'date_modified'),
-            'classes': ('collapse',),
-        }),
-    )
-
-
-admin.site.register(Schedule, ScheduleAdmin)
-
-
 class OrganizerAdmin(admin.ModelAdmin):
     list_display = ('title', 'city', 'country',)
     list_filter = ('organized_events',)
@@ -403,13 +295,13 @@ class OrganizerAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified',)
     fieldsets = (
         (_('Basic Info'), {
-            'fields': ('title', 'about_us'),
+            'fields': ('title',),
         }),
         (_('Address'), {
             'fields': ('street', 'street2', 'city', 'postcode', 'state', 'country',),
         }),
         (_('Legal details'), {
-            'fields': ('company_id', 'tax_id', 'vat_id', 'other'),
+            'fields': ('company_id', 'tax_id', 'vat_id',),
             'classes': ('collapse',),
         }),
         (_('Modifications'), {
@@ -420,25 +312,3 @@ class OrganizerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Organizer, OrganizerAdmin)
-
-
-class EmailTemplateAdmin(admin.ModelAdmin):
-    list_display = ('name', 'text_template', 'counter')
-    ordering = ('name',)
-    search_fields = ('=name',)
-    readonly_fields = ('date_created', 'date_modified', 'counter')
-    fieldsets = (
-        (_('Basic Info'), {
-            'fields': ('name', 'counter'),
-        }),
-        (_('Templates'), {
-            'fields': ('text_template', 'html_template',),
-        }),
-        (_('Modifications'), {
-            'fields': ('date_created', 'date_modified',),
-            'classes': ('collapse',),
-        }),
-    )
-
-
-admin.site.register(EmailTemplate, EmailTemplateAdmin)

@@ -15,14 +15,6 @@ class EventManager(models.Manager):
 
 
 class Event(FromToModel):
-    CONFERENCE = 'conference'
-    MEETUP = 'meetup'
-
-    EVENT_TYPE_CHOICES = (
-        (CONFERENCE, _('Conference')),
-        (MEETUP, _('Meetup')),
-    )
-
     DRAFT = 'draft'
     PUBLISHED = 'published'
     PRIVATE = 'private'
@@ -38,30 +30,10 @@ class Event(FromToModel):
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
     slug = models.SlugField(verbose_name=_('Event url'), max_length=128, unique=True,
                             help_text=_('Slug field, relative URL to the event.'))
-    description = models.TextField(blank=True)
-    event_type = models.CharField(choices=EVENT_TYPE_CHOICES, max_length=20)
     status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
-    location = models.ForeignKey('Location', related_name='events')
     organizer = models.ForeignKey('Organizer', on_delete=models.deletion.SET_NULL,
                                   related_name='organized_events', null=True, )
-    sponsors = models.ManyToManyField('Sponsor', blank=True, related_name='sponsored_events')
-    footer_text = models.TextField(blank=True)
-    analytics = models.TextField(blank=True)
-    enc_social_media_meta_tags = models.TextField(blank=True)
-    enc_social_media_data = models.TextField(blank=True)
-
-    cfp_allowed = models.BooleanField(default=True, help_text=_('Is it allowed to submit talk proposals?'))
     cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True, blank=True)
-    contact_email = models.EmailField(verbose_name=_('E-mail'), blank=True,
-                                      help_text=_('Publicly displayed email to contact organizers.'))
-    coc = models.TextField(verbose_name=_('Code of Conduct'), blank=True)
-    coc_phone = models.CharField(verbose_name=_('Code of Conduct contact'),
-                                 help_text=_('Publicly displayed phone to contact organizers.'),
-                                 max_length=20, blank=True)
-    coc_phone2 = models.CharField(verbose_name=_('Code of Conduct contact 2'),
-                                  help_text=_('Publicly displayed phone to contact organizers.'),
-                                  max_length=20, blank=True)
-
     objects = EventManager()
 
     class Meta:
@@ -76,14 +48,12 @@ class Event(FromToModel):
 
     @property
     def cfp_open(self):
-        return self.cfp_allowed and self.cfp_end and self.cfp_end >= timezone.now()
+        return self.cfp_end and self.cfp_end >= timezone.now()
 
     def clean(self):
-        if self.cfp_allowed and not self.cfp_end:
-            raise ValidationError(_('CFP deadline has to be defined if CFP is allowed.'))
-        # at this point cfp_end is defined
-        if self.cfp_allowed and self.cfp_end >= self.date_from:
+        if self.cfp_end and self.cfp_end >= self.date_from:
             raise ValidationError(_('CFP deadline should be before the event starts.'))
+
         super(Event, self).clean()
 
     def save(self, *args, **kwargs):
@@ -92,26 +62,6 @@ class Event(FromToModel):
 
     def get_absolute_url(self):
         return reverse('event_details', kwargs={'slug': self.slug})
-
-    @property
-    def social_media_meta_tags(self):
-        if self.enc_social_media_meta_tags:
-            return json.loads(self.enc_social_media_meta_tags)
-        return dict()
-
-    @social_media_meta_tags.setter
-    def social_media_meta_tags(self, data):
-        self.enc_social_media_meta_tags = json.dumps(data)
-
-    @property
-    def social_media_data(self):
-        if self.enc_social_media_data:
-            return json.loads(self.enc_social_media_data)
-        return dict()
-
-    @social_media_data.setter
-    def social_media_data(self, data):
-        self.enc_social_media_data = json.dumps(data)
 
 
 Event._meta.get_field('date_from').blank = False
