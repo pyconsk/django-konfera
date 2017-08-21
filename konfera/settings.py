@@ -5,13 +5,6 @@ from django.conf import settings
 GOOGLE_ANALYTICS = getattr(settings, 'GOOGLE_ANALYTICS', None)  # just define analytics code: 'UA-XXXXXXXX-X'
 GOOGLE_ANALYTICS_ECOMMERCE = getattr(settings, 'GOOGLE_ANALYTICS_ECOMMERCE', False)
 
-"""
-Application supports django-sitetree navigation support, weather it shouold be passed to template
-"""
-NAVIGATION_ENABLED = getattr(settings, 'NAVIGATION_ENABLED', False)
-NAVIGATION_BRAND = getattr(settings, 'NAVIGATION_BRAND', 'Konfera')
-NAVIGATION_URL = getattr(settings, 'NAVIGATION_URL', '/')
-NAVIGATION_LOGO = getattr(settings, 'NAVIGATION_LOGO', None)
 
 """
 Currency used in the application. (Currently support just one currency).
