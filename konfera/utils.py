@@ -5,8 +5,6 @@ from smtplib import SMTPException
 
 from django.core.mail import EmailMultiAlternatives
 
-from konfera.models.email_template import EmailTemplate
-from konfera.models.sponsor import Sponsor
 from konfera.models.order import Order
 from konfera.settings import GOOGLE_ANALYTICS, GOOGLE_ANALYTICS_ECOMMERCE, EMAIL_NOTIFY_BCC, CURRENCY
 
@@ -38,10 +36,6 @@ def update_order_status_context(status, context):
 
 def update_event_context(event, context, show_sponsors=True):
     context['event'] = event
-
-    if show_sponsors:
-        frontend_sponsors = (Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER)
-        context['show_sponsors'] = event.sponsors.filter(type__in=frontend_sponsors).order_by('type', 'title')
 
     if event.analytics:
         context['ga'] = event.analytics
