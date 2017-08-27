@@ -1,5 +1,3 @@
-import json
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
@@ -48,11 +46,13 @@ class Event(FromToModel):
 
     @property
     def cfp_open(self):
-        return self.cfp_end and self.cfp_end >= timezone.now()
+        if not self.cfp_end or self.cfp_end > self.date_to or timezone.now() > self.cfp_end:
+            return False
+        return True
 
     def clean(self):
-        if self.cfp_end and self.cfp_end >= self.date_from:
-            raise ValidationError(_('CFP deadline should be before the event starts.'))
+        if self.cfp_end and self.cfp_end > self.date_to:
+            raise ValidationError(_('CFP deadline should be before the event end.'))
 
         super(Event, self).clean()
 
