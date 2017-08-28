@@ -363,14 +363,14 @@ class OrderTest(TestCase):
 class TicketTest(TestCase):
 
     def setUp(self):
-        self.event = mommy.make(Event,  date_from=now + 7 * day, date_to=now + 10 * day)
+        self.event = mommy.make(Event, date_from=now + 7 * day, date_to=now + 10 * day)
 
-        self.tt = mommy.make(TicketType, price=100, date_from= now, date_to=self.event.date_from, event=self.event)
-        self.tt2 = mommy.make(TicketType, price=10, date_from= now, date_to=self.event.date_from, event=self.event)
+        self.tt = mommy.make(TicketType, price=100, date_from=now, date_to=self.event.date_from, event=self.event)
+        self.tt2 = mommy.make(TicketType, price=10, date_from=now, date_to=self.event.date_from, event=self.event)
 
-        self.dc = mommy.make(DiscountCode, date_from= now, date_to=self.event.date_from, ticket_type=self.tt,
+        self.dc = mommy.make(DiscountCode, date_from=now, date_to=self.event.date_from, ticket_type=self.tt,
                              discount=60, usage=1)
-        self.dc2 = mommy.make(DiscountCode, date_from= now, date_to=self.event.date_from, ticket_type=self.tt2,
+        self.dc2 = mommy.make(DiscountCode, date_from=now, date_to=self.event.date_from, ticket_type=self.tt2,
                               discount=25, usage=1)
 
     def test_string_representation(self):
@@ -408,7 +408,7 @@ class TicketTest(TestCase):
         ticket.save()
 
         # if saved with a code that matches the ticket type of the ticket, the ticket should save successfully
-        ticket2 = mommy.make(Ticket, type=self.tt, discount_code=self.dc)
+        mommy.make(Ticket, type=self.tt, discount_code=self.dc)
         # if discount code has been applied, the discount code should not be available
         self.assertIs(self.dc.is_available, False)
         self.assertEquals(self.dc.issued_tickets, 1)
@@ -429,8 +429,8 @@ class TicketTest(TestCase):
         """
         Test mixing tickets for different events in one order should result in ValidationError.
         """
-        event2 = mommy.make(Event,  date_from=now + 360 * day, date_to=now + 365 * day)
-        event2_tt = mommy.make(TicketType, price=10, date_from= now, date_to=event2.date_from, event=event2)
+        event2 = mommy.make(Event, date_from=now + 360 * day, date_to=now + 365 * day)
+        event2_tt = mommy.make(TicketType, price=10, date_from=now, date_to=event2.date_from, event=event2)
 
         ticket = mommy.make(Ticket, type=self.tt)
         ticket2 = mommy.prepare(Ticket, type=event2_tt, order=ticket.order)

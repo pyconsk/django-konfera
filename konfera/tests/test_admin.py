@@ -67,8 +67,8 @@ class ModelAdminTests(TestCase):
         order = OrderAdmin(Event, self.site)
         order_default_fieldsets = (
             ('Details', {
-                'fields': ( 'uuid', 'variable_symbol', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
-                            'amount_paid', 'unpaid_notification_sent_at')
+                'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
+                           'amount_paid', 'unpaid_notification_sent_at')
             }),
             ('Modifications', {
                 'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'), 'classes': ('collapse',)
