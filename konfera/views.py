@@ -49,14 +49,3 @@ class EventsByTypeListView(ListView):
 
 class EventsListView(EventsByTypeListView):
     template_name = 'konfera/list_events.html'
-
-
-class MeetupsListView(EventsByTypeListView):
-    paginate_by = 15
-    event_type = Event.MEETUP
-    template_name = 'konfera/list_meetups.html'
-
-
-class ConferencesListView(EventsByTypeListView):
-    event_type = Event.CONFERENCE
-    template_name = 'konfera/list_conferences.html'
