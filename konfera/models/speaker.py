@@ -37,7 +37,6 @@ class Speaker(KonferaModel):
         max_length=2,
         default=COUNTRY_DEFAULT
     )
-    sponsor = models.ForeignKey('Sponsor', blank=True, null=True, related_name='sponsored_speakers')
     image = models.ImageField(upload_to='speaker/', blank=True)
 
     def __str__(self):

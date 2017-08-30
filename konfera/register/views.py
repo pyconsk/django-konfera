@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 from konfera import settings
-from konfera.models.sponsor import Sponsor
 from konfera.models.event import Event
 from konfera.models.ticket import Ticket
 from konfera.models.ticket_type import TicketType
@@ -62,7 +61,6 @@ def _register_ticket(request, event, ticket_type):
         return redirect(settings.ORDER_REDIRECT, new_ticket.order.uuid)
 
     context['event'] = event
-    context['sponsors'] = event.sponsors.filter(type__in=(Sponsor.PLATINUM, Sponsor.GOLD, Sponsor.SILVER))
     context['form'] = form
     context['title'] = ticket_type.title
     context['type'] = ticket_type.attendee_type

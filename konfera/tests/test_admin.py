@@ -1,6 +1,6 @@
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
-from django.utils.translation import ugettext_lazy as _
+from model_mommy import mommy
 
 from konfera.admin import EventAdmin, OrderAdmin
 from konfera.models import Event, Order
@@ -20,19 +20,15 @@ request.user = MockSuperUser()
 
 
 class ModelAdminTests(TestCase):
-    fixtures = ['test_data.json']
-
     def setUp(self):
         self.site = AdminSite()
+        self.event = mommy.make(Event, title='PyCon SK 2016')
 
     def test_default_fields(self):
         ev = EventAdmin(Event, self.site)
         event = Event.objects.get(title='PyCon SK 2016')
-        ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'description', 'event_type', 'status',
-                             'location', 'organizer', 'sponsors', 'footer_text', 'analytics',
-                             'enc_social_media_meta_tags', 'enc_social_media_data', 'cfp_allowed', 'cfp_end',
-                             'contact_email', 'coc', 'coc_phone', 'coc_phone2', 'uuid', 'date_created',
-                             'date_modified']
+        ev_default_fields = ['date_from', 'date_to', 'title', 'slug', 'status', 'organizer', 'cfp_end', 'uuid',
+                             'date_created', 'date_modified']
 
         self.assertEqual(list(ev.get_fields(request)), ev_default_fields)
         self.assertEqual(list(ev.get_fields(request, event)), ev_default_fields)
@@ -51,26 +47,18 @@ class ModelAdminTests(TestCase):
         ev = EventAdmin(Event, self.site)
         event = Event.objects.get(title='PyCon SK 2016')
         ev_default_fieldsets = (
-            (_('Description'), {
-                'fields': ('title', 'slug', 'organizer', 'description', 'contact_email'),
+            ('Description', {
+                'fields': ('title', 'slug', 'organizer'),
             }),
-            (_('Dates'), {
-                'fields': ('date_from', 'date_to', 'cfp_end'),
+            ('Dates', {
+                'fields': ('date_from', 'date_to', 'cfp_end')
             }),
-            (_('Details'), {
-                'fields': ('uuid', 'event_type', 'status', 'location', 'cfp_allowed', 'footer_text', 'analytics'),
+            ('Details', {
+                'fields': ('uuid', 'status')
             }),
-            (_('Code of Conduct'), {
-                'fields': ('coc', 'coc_phone', 'coc_phone2'),
-            }),
-            (_('Social media'), {
-                'fields': ('enc_social_media_meta_tags', 'enc_social_media_data'),
-                'classes': ('collapse',),
-            }),
-            (_('Modifications'), {
-                'fields': ('date_created', 'date_modified'),
-                'classes': ('collapse',),
-            }),
+            ('Modifications', {
+                'fields': ('date_created', 'date_modified'), 'classes': ('collapse',)
+            })
         )
 
         self.assertEqual(ev.get_fieldsets(request), ev_default_fieldsets)
@@ -78,14 +66,13 @@ class ModelAdminTests(TestCase):
 
         order = OrderAdmin(Event, self.site)
         order_default_fieldsets = (
-            (_('Details'), {
+            ('Details', {
                 'fields': ('uuid', 'variable_symbol', 'price', 'discount', 'processing_fee', 'to_pay', 'status',
-                           'amount_paid', 'unpaid_notification_sent_at'),
+                           'amount_paid', 'unpaid_notification_sent_at')
             }),
-            (_('Modifications'), {
-                'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'),
-                'classes': ('collapse',),
-            }),
+            ('Modifications', {
+                'fields': ('purchase_date', 'payment_date', 'date_created', 'date_modified'), 'classes': ('collapse',)
+            })
         )
 
         self.assertEqual(order.get_fieldsets(request), order_default_fieldsets)
