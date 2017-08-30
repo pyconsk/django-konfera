@@ -4,7 +4,7 @@ from smtplib import SMTPException
 
 from django.core.mail import EmailMultiAlternatives
 
-from konfera.settings import EMAIL_NOTIFY_BCC, CURRENCY
+from konfera.settings import EMAIL_NOTIFY_BCC
 
 
 logger = logging.getLogger(__name__)
