@@ -63,45 +63,6 @@ Example::
     GOOGLE_ANALYTICS = 'UA-XXXXXXXX-X'
 
 
-
-.. _settings-navigation_enabled:
-
-``NAVIGATION_ENABLED``
-^^^^^^^^^^^^^^^^^^^^^^
-
-Default: ``False`` 
-
-
-
-.. _settings-navigation_brand:
-
-``NAVIGATION_BRAND``
-^^^^^^^^^^^^^^^^^^^^
-
-Default: ``'Konfera'`` 
-
-
-
-.. _settings-navigation_url:
-
-``NAVIGATION_URL``
-^^^^^^^^^^^^^^^^^^
-
-Default: ``'/'`` 
-
-
-
-.. _settings-navigation_logo:
-
-``NAVIGATION_LOGO``
-^^^^^^^^^^^^^^^^^^^
-
-Default: ``None`` 
-
-Application supports django-sitetree navigation support, weather it should be passed to template.
-
-
-
 .. _settings-currency:
 
 ``CURRENCY``

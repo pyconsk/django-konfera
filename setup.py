@@ -21,19 +21,26 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 DEPS = [
-    'django>=1.8.18',
+    # konfera
+    'django>=1.8',
+    'django-wkhtmltopdf>=3.1',
+    'django-sitetree>=1.6',
+    'mock>=2.0.0',
     'pytz>=2016.7',
+    'Pillow>=3.4.2',
+
+    # payments
+    'requests>=2.11.1',
     'fiobank>=1.2.0',
     'paypalrestsdk>=1.12.0',
-    'requests>=2.11.1',
 ]
 
 CLASSIFIERS = [
     'Development Status :: 4 - Beta',
     'Framework :: Django',
     'Framework :: Django :: 1.8',
-    'Framework :: Django :: 1.9',
     'Framework :: Django :: 1.10',
+    'Framework :: Django :: 1.11',
     'Intended Audience :: Customer Service',
     'Intended Audience :: Education',
     'Intended Audience :: End Users/Desktop',
@@ -44,6 +51,7 @@ CLASSIFIERS = [
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
+    'Programming Language :: Python :: 3.6',
     'Topic :: Internet :: WWW/HTTP',
     'Topic :: Internet :: WWW/HTTP :: WSGI',
 ]
