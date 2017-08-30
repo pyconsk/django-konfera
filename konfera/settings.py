@@ -2,10 +2,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 
-GOOGLE_ANALYTICS = getattr(settings, 'GOOGLE_ANALYTICS', None)  # just define analytics code: 'UA-XXXXXXXX-X'
-GOOGLE_ANALYTICS_ECOMMERCE = getattr(settings, 'GOOGLE_ANALYTICS_ECOMMERCE', False)
-
-
 """
 Currency used in the application. (Currently support just one currency).
 Defined as tuple of Currency Symbol (Unicode block) and  Currency code (ISO 4217)

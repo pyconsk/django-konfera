@@ -29,7 +29,6 @@ try:
                 },
             },
         ],
-        ROOT_URLCONF="runtests_urls",
         INSTALLED_APPS=[
             "django.contrib.auth",
             "django.contrib.contenttypes",
