@@ -84,7 +84,7 @@ class TicketType(FromToModel):
 
     @property
     def issued_tickets(self):
-        return len(self.ticket_set.exclude(status=Ticket.CANCELLED))
+        return self.ticket_set.exclude(status=Ticket.CANCELLED).count()
 
     @property
     def available_tickets(self):

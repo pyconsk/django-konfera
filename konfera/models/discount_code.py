@@ -26,9 +26,7 @@ class DiscountCode(FromToModel):
 
     @property
     def issued_tickets(self):
-        tickets = Ticket.objects.filter(discount_code__hash=self.hash)
-
-        return len(tickets)
+        return Ticket.objects.filter(discount_code__hash=self.hash).count()
 
     @property
     def is_available(self):
