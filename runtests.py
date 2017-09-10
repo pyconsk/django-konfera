@@ -35,6 +35,7 @@ try:
             "django.contrib.sessions",
             "django.contrib.sites",
             "django.contrib.messages",
+            "rest_framework",
             "konfera",
             "payments",
         ],

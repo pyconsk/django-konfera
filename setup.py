@@ -25,6 +25,7 @@ DEPS = [
     'django>=1.8',
     'django-wkhtmltopdf>=3.1',
     'django-sitetree>=1.6',
+    'djangorestframework>=3.6',
     'mock>=2.0.0',
     'pytz>=2016.7',
     'Pillow>=3.4.2',
