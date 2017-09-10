@@ -45,27 +45,24 @@ Development standards
 
 * We do use standard PEP8, with extended line to 119 characters.
 * Each pull request is tested against our automated test suite (yes, PEP8 is one of the tests).
-* Writing automated tests for the new code is preferred, but not required.
+* Writing automated tests for the new code is required.
 
 Development setup
 -----------------
-
-You can either follow guide in example directory, but that is most just for testing the app from cloned repo.
 
 This is reusable django app, which means you have to create project first. Create directory and run the following commands (in Linux, or Mac).
 
 1. ``pyvenv envs3`` this will create virtual environments for you, where you can install all requirements needed
 2. ``source envs3/bin/activate`` activate virtual environments
-3. ``pip install django`` install out main dependency
+3. ``pip install -r requirements-test.txt`` install out main dependency
 4. ``django-admin startproject pyconsk`` start your own django project (feel free to name it differently)
 5. ``git clone git@github.com:YOUR-GITHUB-ACCOUNT/django-konfera.git`` make a clone of your fork of django-konfera
 6. ``cd pyconsk`` lets go inside the project directory
 7. ``ln -s ../django-konfera/konfera .`` create a symbolic link to it is in PYTHONPATH and app can be found by Django
-8. in pyconsk/settings.py add ``konfera`` into INSTALLED APPS
-9. in pyconsk/settings.py add ``konfera.utils.collect_view_data`` into TEMPLATES, context_processors
-10. ``url(r'', include('konfera.urls'))`` include konfera urls in project's pyconsk/urls.py file (don't forget from django.conf.ulrs import include)
+8. in pyconsk/settings.py add ``rest_framework`` and ``konfera`` into INSTALLED APPS
+9. ``url(r'', include('konfera.urls'))`` include konfera urls in project's pyconsk/urls.py file (don't forget ``from django.conf.ulrs import include``)
+10. ``url(r'^docs/', include_docs_urls())`` include REST documentation urls (don't forget ``from rest_framework.documentation import include_docs_urls``).
 11. ``python manage.py migrate`` execute migration so it will pre-populate the DB structure
-12. ``python manage.py loaddata konfera/fixtures/test_data.json`` insert dummy data into DB
 13. ``python manage.py runserver`` start development server, and check the app in browser
 
 Development methodology

@@ -57,3 +57,6 @@ pip-log.txt
 
 # Files uploaded by a user
 media/
+
+# Development files
+pyconsk/
