@@ -51,6 +51,7 @@ class Talk(KonferaModel):
         blank=True,
         null=True,
     )
+    flag = models.CharField(max_length=32, blank=True)
     event = models.ForeignKey('Event')
 
     def __str__(self):
