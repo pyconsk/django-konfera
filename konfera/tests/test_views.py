@@ -1,4 +1,5 @@
-from konfera.serializers import SpeakerSerializer
+import json
+
 from model_mommy import mommy
 from rest_framework import status
 from rest_framework.test import APITestCase
@@ -50,18 +51,27 @@ class CFPViewSetTest(APITestCase):
             }
         })
 
-    def test_get_cfp_by_uuid(self):  # todo: fix this test
+    def test_get_cfp_by_uuid(self):
         talk = mommy.make(Talk, event=self.event)
         response = self.client.get('/talks/' + str(talk.uuid) + '/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        print(response.data)
-        self.assertEqual(response.data, {
-            'event_uuid': talk.event_uuid,
+        self.assertEquals(json.loads(response.content.decode('utf-8')), {
             'title': talk.title,
             'abstract': talk.abstract,
             'type': talk.type,
-            'language': talk.language,
             'duration': talk.duration,
-            'primary_speaker': SpeakerSerializer(talk.primary_speaker).data,
+            'event_uuid': str(talk.event_uuid()),
+            'language': talk.language,
+            'primary_speaker': {
+                'bio': talk.primary_speaker.bio,
+                'country': talk.primary_speaker.country,
+                'email': talk.primary_speaker.email,
+                'first_name': talk.primary_speaker.first_name,
+                'last_name': talk.primary_speaker.last_name,
+                'phone': talk.primary_speaker.phone,
+                'social_url': talk.primary_speaker.social_url,
+                'title': talk.primary_speaker.title,
+                'url': talk.primary_speaker.url,
+            }
         })
