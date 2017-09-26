@@ -72,4 +72,20 @@ class TalkSerializer(
         return talk
 
     def update(self, instance, validated_data):
-        raise NotImplementedError()  # todo: implement me!
+
+        # Update normal fields
+        for key in ('title', 'abstract', 'type', 'language', 'duration'):
+            value = validated_data.pop(key) if key in validated_data else getattr(instance, key)
+            setattr(instance, key, value)
+
+        # Update speakers
+        for key in ('primary_speaker', 'secondary_speaker'):
+            speaker = SpeakerSerializer(
+                instance=getattr(instance, key),
+                data=validated_data.pop(key)
+            )
+            speaker.is_valid()
+            setattr(instance, key, speaker.save())
+
+        instance.save()
+        return instance

@@ -75,3 +75,62 @@ class CFPViewSetTest(APITestCase):
                 'url': talk.primary_speaker.url,
             }
         })
+
+    def test_update_cfp(self):
+        talk = Talk.objects.create(
+            event=self.event,
+            title='Old title',
+            abstract='Old abstract',
+            status=Talk.CFP,
+            duration=45,
+            primary_speaker=Speaker.objects.create(
+                first_name='Zoli',
+                last_name='Typo',
+                email='zoli@exampl.ecom'
+            ),
+            secondary_speaker=Speaker.objects.create(
+                first_name='Riso',
+                last_name='Typo',
+                email='riso@exampl.ecom',
+            )
+        )
+
+        event_uuid = talk.event_uuid()
+
+        data = {
+            'event_uuid': event_uuid,
+            'title': 'New title',
+            'abstract': 'New abstract',
+            'duration': 30,
+            'status': Talk.APPROVED,  # This cannot be changed!
+            'primary_speaker': {
+                'first_name': 'Zoltan',
+                'last_name': 'Onody',
+                'email': 'zoli@example.com',
+            },
+            'secondary_speaker': {
+                'first_name': 'Richard',
+                'last_name': 'Kellner',
+                'email': 'riso@example.com',
+            }
+        }
+
+        response = self.client.put('/talks/' + str(talk.uuid) + '/', data, format='json')
+
+        self.maxDiff = None
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        talk = Talk.objects.first()
+
+        self.assertEqual(Talk.objects.count(), 1)
+        self.assertEqual(talk.event_uuid(), event_uuid)
+        self.assertEqual(talk.status, Talk.CFP)
+        self.assertEqual(talk.title, 'New title')
+        self.assertEqual(talk.abstract, 'New abstract')
+        self.assertEqual(talk.duration, 30)
+        self.assertEqual(talk.primary_speaker.first_name, 'Zoltan')
+        self.assertEqual(talk.primary_speaker.last_name, 'Onody')
+        self.assertEqual(talk.primary_speaker.email, 'zoli@example.com')
+        self.assertEqual(talk.secondary_speaker.first_name, 'Richard')
+        self.assertEqual(talk.secondary_speaker.last_name, 'Kellner')
+        self.assertEqual(talk.secondary_speaker.email, 'riso@example.com')
