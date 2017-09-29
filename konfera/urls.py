@@ -1,9 +1,9 @@
 from rest_framework import routers
 
-from konfera.views import SpeakerViewSet
+from konfera.views import TalkViewSet
 
 
 router = routers.SimpleRouter()
-router.register(r'speakers', SpeakerViewSet)
+router.register(r'talks', TalkViewSet)
 
 urlpatterns = router.urls

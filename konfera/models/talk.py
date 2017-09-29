@@ -57,6 +57,9 @@ class Talk(KonferaModel):
     def __str__(self):
         return self.title
 
+    def event_uuid(self):
+        return self.event.uuid
+
     def clean(self):
         if hasattr(self, 'primary_speaker') and hasattr(self, 'secondary_speaker') \
                 and self.primary_speaker == self.secondary_speaker:

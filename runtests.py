@@ -13,22 +13,6 @@ try:
                 "ENGINE": "django.db.backends.sqlite3",
             }
         },
-        TEMPLATES=[
-            {
-                'BACKEND': 'django.template.backends.django.DjangoTemplates',
-                'DIRS': ['konfera.templates'],
-                'APP_DIRS': True,
-                'OPTIONS': {
-                    'context_processors': [
-                        'django.template.context_processors.debug',
-                        'django.template.context_processors.request',
-                        'django.contrib.auth.context_processors.auth',
-                        'django.contrib.messages.context_processors.messages',
-                        'konfera.utils.collect_view_data',
-                    ],
-                },
-            },
-        ],
         INSTALLED_APPS=[
             "django.contrib.auth",
             "django.contrib.contenttypes",
@@ -45,6 +29,7 @@ try:
             'django.contrib.sessions.middleware.SessionMiddleware',
             'django.contrib.messages.middleware.MessageMiddleware',
         ),
+        ROOT_URLCONF='konfera.urls',
     )
 
     try:
@@ -64,7 +49,7 @@ except ImportError:
 
 def run_tests(*test_args):
     if not test_args:
-        test_args = ['konfera.tests',] # 'payments.tests']
+        test_args = ['konfera.tests']  # 'payments.tests']
 
     # Run tests
     TestRunner = get_runner(settings)
