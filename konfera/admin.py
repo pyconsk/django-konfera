@@ -83,14 +83,14 @@ admin.site.register(Speaker, SpeakerAdmin)
 
 
 class TalkAdmin(admin.ModelAdmin):
-    list_display = ('title', 'speaker', 'type', 'duration', 'event', 'status',)
-    list_filter = ('type', 'duration', 'status', 'event',)
+    list_display = ('title', 'speaker', 'flag', 'type', 'duration', 'event', 'status',)
+    list_filter = ('type', 'duration', 'status', 'event', 'flag')
     search_fields = ('=title', '=primary_speaker__first_name', '=primary_speaker__last_name', '=event__title')
     ordering = ('title', 'event')
     readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'abstract', 'language', 'event',)
+            'fields': ('title', 'abstract', 'flag',  'language', 'event',)
         }),
         (_('Details'), {
             'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)

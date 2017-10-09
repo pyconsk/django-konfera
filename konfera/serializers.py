@@ -52,6 +52,7 @@ class TalkSerializer(
             'type',
             'language',
             'duration',
+            'flag',
             'primary_speaker',
             'secondary_speaker',
         ]
