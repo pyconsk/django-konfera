@@ -39,6 +39,9 @@ class Ticket(KonferaModel):
             last_name=self.last_name
         ).strip()
 
+    def type_uuid(self):
+        return self.type.uuid
+
     def discount_calculator(self):
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100

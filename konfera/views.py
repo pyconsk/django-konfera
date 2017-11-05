@@ -1,8 +1,19 @@
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
 
-from konfera.models import Speaker, Talk
-from konfera.serializers import SpeakerSerializer, TalkSerializer
+from konfera.models import Speaker, Talk, Ticket
+from konfera.serializers import SpeakerSerializer, TalkSerializer, AidTicketSerializer
+
+
+class TicketViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    viewsets.GenericViewSet,
+):
+    lookup_field = 'uuid'
+    queryset = Ticket.objects.all()
+    serializer_class = AidTicketSerializer
 
 
 class SpeakerViewSet(viewsets.ReadOnlyModelViewSet):
