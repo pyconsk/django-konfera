@@ -9,15 +9,11 @@ python:
   - "nightly"
 
 env:
-  - DJANGO_VERSION=1.8.18
-  - DJANGO_VERSION=1.10.7
-  - DJANGO_VERSION=1.11.4
+  - DJANGO_VERSION=1.10.8
+  - DJANGO_VERSION=1.11.7
 
 matrix:
   include:
-    - python: "3.3"
-      env: DJANGO_VERSION=1.8.18
-
     - python: "3.6"
       env: TEST_PEP8=True
       install: pip install flake8
