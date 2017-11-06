@@ -57,12 +57,13 @@ class CFPViewSetTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEquals(json.loads(response.content.decode('utf-8')), {
+            'event_uuid': str(talk.event_uuid()),
             'title': talk.title,
             'abstract': talk.abstract,
             'type': talk.type,
             'duration': talk.duration,
-            'event_uuid': str(talk.event_uuid()),
             'language': talk.language,
+            'flag': talk.flag,
             'primary_speaker': {
                 'bio': talk.primary_speaker.bio,
                 'country': talk.primary_speaker.country,
