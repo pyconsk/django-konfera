@@ -90,7 +90,7 @@ class TicketType(FromToModel):
     def calculate_available_tickets(self, numeric_only=False, negative_usage=False):
         if self.usage == -1:
             if numeric_only:
-                left = 32767
+                left = float('inf')
             else:
                 left = '∞'
         else:
