@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from konfera.models import Speaker, Talk, Event, TicketType, Ticket
+from konfera.models import Speaker, Talk, Event, TicketType, Ticket, Organizer
 
 now = timezone.now()
 hour = datetime.timedelta(hours=1)
@@ -15,6 +15,52 @@ earlier = now - 8 * hour
 later = now + 8 * hour
 past = now - 3 * day
 future = now + 3 * day
+
+
+class EventViewSetTest(APITestCase):
+    def setUp(self):
+        self.url = '/events/'
+        organizer = mommy.make(Organizer)
+        self.event = mommy.make(Event, organizer=organizer, date_from=now + 3 * day, date_to=now + 4 * day,
+                                cfp_end=now + day, status=Event.PUBLISHED)
+        self.data = {
+            'uuid': str(self.event.uuid),
+            'title': self.event.title,
+            'slug': self.event.slug,
+            'organizer': {
+                'title': self.event.organizer.title,
+            },
+            'date_from': self.event.date_from.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+            'date_to': self.event.date_to.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
+            'cfp_end': self.event.cfp_end.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        }
+
+    def test_get_events(self):
+        response = self.client.get(self.url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), [self.data])
+
+    def test_get_event_by_uuid(self):
+        response = self.client.get(self.url + str(self.event.slug) + '/', format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), self.data)
+
+    def test_post_not_allowed(self):
+        data = {
+            'title': 'New Event',
+        }
+        response = self.client.post(self.url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.data, {'detail': 'Method "POST" not allowed.'})
+
+        events = Event.objects.filter(title='New Event')
+        self.assertEqual(events.count(), 0)
+
+        response = self.client.put(self.url + str(self.event.slug) + '/', self.data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+        self.assertEqual(response.data, {'detail': 'Method "PUT" not allowed.'})
 
 
 class AidTicketViewSetTest(APITestCase):

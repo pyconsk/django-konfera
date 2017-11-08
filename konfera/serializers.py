@@ -2,7 +2,7 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 
-from konfera.models import Speaker, Talk, Event, Ticket, TicketType
+from konfera.models import Speaker, Talk, Event, Ticket, TicketType, Organizer
 from konfera.validators import event_uuid_validator, aid_ticket_type_uuid_validator
 
 
@@ -14,6 +14,30 @@ class CustomToRepresentationMixin:
         # errors as null values are treated differently as they would be omitted.
         returned = super().to_representation(instance)
         return OrderedDict(list(filter(lambda x: x[1] is not None, returned.items())))
+
+
+class OrganizerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organizer
+        fields = [
+            'title',
+        ]
+
+
+class EventSerializer(serializers.ModelSerializer):
+    organizer = OrganizerSerializer()
+
+    class Meta:
+        model = Event
+        fields = [
+            'uuid',
+            'title',
+            'slug',
+            'organizer',
+            'date_from',
+            'date_to',
+            'cfp_end',
+        ]
 
 
 class AidTicketSerializer(
