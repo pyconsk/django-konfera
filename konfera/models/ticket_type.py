@@ -73,7 +73,8 @@ class TicketType(FromToModel):
             status = TicketType.NOT_AVAILABLE
         elif self.date_to < now:
             status = TicketType.EXPIRED
-        elif self.usage - self.issued_tickets == 0:
+        elif self.usage != -1 and self.calculate_available_tickets() <= 0:
+            # if usage is unlimited default status (ACTIVE) apply
             status = TicketType.SOLDOUT
 
         return status
@@ -86,9 +87,20 @@ class TicketType(FromToModel):
     def issued_tickets(self):
         return self.ticket_set.exclude(status=Ticket.CANCELLED).count()
 
+    def calculate_available_tickets(self):
+        left = self.usage - self.issued_tickets
+
+        if self.usage == -1:
+            left = float('inf')
+
+        return left
+
     @property
     def available_tickets(self):
-        return self.usage - self.issued_tickets
+        if self.usage == -1:
+            return '∞'
+
+        return self.calculate_available_tickets()
 
     def clean(self):
         now = timezone.now()
@@ -110,5 +122,10 @@ class TicketType(FromToModel):
 
             if self.date_to > self.event.date_to:
                 raise ValidationError({'date_to': msg})
+
+        if self.calculate_available_tickets() < 0:
+            raise ValidationError(
+                {'usage': _('Ticket usage is too low. It is not possible to have negative available tickets.')}
+            )
 
         super(TicketType, self).clean()

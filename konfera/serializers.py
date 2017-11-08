@@ -2,8 +2,8 @@ from collections import OrderedDict
 
 from rest_framework import serializers
 
-from konfera.models import Speaker, Talk, Event
-from konfera.validators import event_uuid_validator
+from konfera.models import Speaker, Talk, Event, Ticket, TicketType
+from konfera.validators import event_uuid_validator, aid_ticket_type_uuid_validator
 
 
 class CustomToRepresentationMixin:
@@ -14,6 +14,36 @@ class CustomToRepresentationMixin:
         # errors as null values are treated differently as they would be omitted.
         returned = super().to_representation(instance)
         return OrderedDict(list(filter(lambda x: x[1] is not None, returned.items())))
+
+
+class AidTicketSerializer(
+    CustomToRepresentationMixin,
+    serializers.ModelSerializer
+):
+    type_uuid = serializers.UUIDField(validators=[aid_ticket_type_uuid_validator])
+    description = serializers.CharField(required=True)
+
+    class Meta:
+        model = Ticket
+        fields = [
+            'type_uuid',
+            'title',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'description'
+        ]
+
+    def create(self, validated_data):
+        tt_uuid = validated_data.pop('type_uuid')
+
+        ticket = Ticket(**validated_data)
+        ticket.type = TicketType.objects.get(uuid=tt_uuid)
+        ticket.status = Ticket.REQUESTED
+        ticket.save()
+
+        return ticket
 
 
 class SpeakerSerializer(

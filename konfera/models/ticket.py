@@ -39,6 +39,9 @@ class Ticket(KonferaModel):
             last_name=self.last_name
         ).strip()
 
+    def type_uuid(self):
+        return self.type.uuid
+
     def discount_calculator(self):
         if self.discount_code:
             return self.type.price * self.discount_code.discount / 100
@@ -55,6 +58,11 @@ class Ticket(KonferaModel):
         if self.discount_code and not self.discount_code.is_available:
             raise ValidationError(
                 {'discount_code': _('Usage of the discount code has already exceeded allowed number.')})
+
+        if not self.id and self.type.status != self.type.STATUSES[self.type.ACTIVE]:
+            raise ValidationError(
+                {'type': _('No available tickets of this type.')})
+
         super().clean()
 
     def save(self, *args, **kwargs):

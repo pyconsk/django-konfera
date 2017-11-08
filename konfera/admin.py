@@ -90,7 +90,7 @@ class TalkAdmin(admin.ModelAdmin):
     readonly_fields = ('date_created', 'date_modified', 'uuid')
     fieldsets = (
         (_('Description'), {
-            'fields': ('title', 'abstract', 'flag',  'language', 'event',)
+            'fields': ('title', 'abstract', 'flag', 'language', 'event',)
         }),
         (_('Details'), {
             'fields': (('type', 'duration',), 'status', ('primary_speaker', 'secondary_speaker',), 'uuid',)
@@ -255,13 +255,13 @@ class TicketAdmin(admin.ModelAdmin):
     list_filter = ('status', 'order__status', 'type__attendee_type', 'type__event')
     ordering = ('-order__purchase_date', 'email')
     search_fields = ('=last_name', '=first_name', '=email')  # case insensitive searching
-    readonly_fields = ('link_to_order', 'date_created', 'date_modified')
+    readonly_fields = ('uuid', 'link_to_order', 'date_created', 'date_modified')
     fieldsets = (
         (_('Personal details'), {
             'fields': ('title', 'first_name', 'last_name', 'email', 'phone')
         }),
         (_('Ticket info'), {
-            'fields': ('link_to_order', 'type', 'discount_code', 'status', 'description')
+            'fields': ('uuid', 'link_to_order', 'type', 'discount_code', 'status', 'description')
         }),
         (_('Modifications'), {
             'fields': ('date_created', 'date_modified'),
