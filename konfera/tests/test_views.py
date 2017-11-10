@@ -22,7 +22,7 @@ class EventViewSetTest(APITestCase):
         self.url = '/events/'
         organizer = mommy.make(Organizer)
         self.event = mommy.make(Event, organizer=organizer, date_from=now + 3 * day, date_to=now + 4 * day,
-                                cfp_end=now + day, status=Event.PUBLISHED)
+                                cfp_end=now + day, status=Event.PUBLIC)
         self.data = {
             'uuid': str(self.event.uuid),
             'title': self.event.title,
@@ -64,7 +64,7 @@ class EventViewSetTest(APITestCase):
 
     def test_get_event_statuses(self):
         past_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now - 9 * day, date_to=now - 8 * day,
-                                status=Event.PUBLISHED)
+                                status=Event.PUBLIC)
         response = self.client.get(self.url + str(past_event.slug) + '/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

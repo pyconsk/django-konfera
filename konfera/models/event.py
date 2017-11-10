@@ -8,25 +8,25 @@ from konfera.models.abstract import FromToModel
 
 
 class EventManager(models.Manager):
-    def published(self):
-        return self.get_queryset().filter(status=Event.PUBLISHED).select_related('location')
+    def public(self):
+        return self.get_queryset().filter(status=Event.PUBLIC).select_related('location')
 
 
 class Event(FromToModel):
     DRAFT = 'draft'
-    PUBLISHED = 'published'
+    PUBLIC = 'public'
     PRIVATE = 'private'
 
     EVENT_STATUS_CHOICES = (
         (DRAFT, _('Draft')),
-        (PUBLISHED, _('Published')),
+        (PUBLIC, _('Public')),
         (PRIVATE, _('Private')),
     )
 
     title = models.CharField(verbose_name=_('Event name'), max_length=128)
     slug = models.SlugField(verbose_name=_('Event url'), max_length=128, unique=True,
                             help_text=_('Slug field, relative URL to the event.'))
-    status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20)
+    status = models.CharField(choices=EVENT_STATUS_CHOICES, max_length=20, default=DRAFT)
     organizer = models.ForeignKey('Organizer', on_delete=models.deletion.SET_NULL,
                                   related_name='organized_events', null=True, )
     cfp_end = models.DateTimeField(verbose_name=_('Call for proposals deadline'), null=True, blank=True)
