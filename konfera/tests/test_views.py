@@ -30,9 +30,9 @@ class EventViewSetTest(APITestCase):
             'organizer': {
                 'title': self.event.organizer.title,
             },
-            'date_from': self.event.date_from.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-            'date_to': self.event.date_to.strftime('%Y-%m-%dT%H:%M:%S.%fZ'),
-            'cfp_end': self.event.cfp_end.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+            'date_from': self.event.date_from.isoformat().replace('+00:00', 'Z'),
+            'date_to': self.event.date_to.isoformat().replace('+00:00', 'Z'),
+            'cfp_end': self.event.cfp_end.isoformat().replace('+00:00', 'Z'),
         }
 
     def test_get_events(self):
