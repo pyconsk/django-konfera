@@ -68,7 +68,7 @@ class EventViewSetTest(APITestCase):
         response = self.client.get(self.url + str(past_event.slug) + '/', format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        draft_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now + 7 * day, date_to=now + 8 * day,
+        draft_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now + day, date_to=now + 2 * day,
                                  status=Event.DRAFT)
         response = self.client.get(self.url + str(draft_event.slug) + '/', format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
