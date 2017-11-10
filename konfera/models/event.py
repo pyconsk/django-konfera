@@ -16,13 +16,11 @@ class Event(FromToModel):
     DRAFT = 'draft'
     PUBLISHED = 'published'
     PRIVATE = 'private'
-    EXPIRED = 'expired'
 
     EVENT_STATUS_CHOICES = (
         (DRAFT, _('Draft')),
         (PUBLISHED, _('Published')),
         (PRIVATE, _('Private')),
-        (EXPIRED, _('Expired')),
     )
 
     title = models.CharField(verbose_name=_('Event name'), max_length=128)

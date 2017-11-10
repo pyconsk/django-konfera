@@ -41,13 +41,13 @@ class EventViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEquals(json.loads(response.content.decode('utf-8')), [self.data])
 
-    def test_get_event_by_uuid(self):
+    def test_get_event_by_slug(self):
         response = self.client.get(self.url + str(self.event.slug) + '/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEquals(json.loads(response.content.decode('utf-8')), self.data)
 
-    def test_post_not_allowed(self):
+    def test_post_and_put_not_allowed(self):
         data = {
             'title': 'New Event',
         }
@@ -61,6 +61,22 @@ class EventViewSetTest(APITestCase):
         response = self.client.put(self.url + str(self.event.slug) + '/', self.data, format='json')
         self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
         self.assertEqual(response.data, {'detail': 'Method "PUT" not allowed.'})
+
+    def test_get_event_statuses(self):
+        past_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now - 9 * day, date_to=now - 8 * day,
+                                status=Event.PUBLISHED)
+        response = self.client.get(self.url + str(past_event.slug) + '/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        draft_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now + 7 * day, date_to=now + 8 * day,
+                                 status=Event.DRAFT)
+        response = self.client.get(self.url + str(draft_event.slug) + '/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        private_event = mommy.make(Event, organizer=mommy.make(Organizer), date_from=now, date_to=now + day,
+                                   status=Event.PRIVATE)
+        response = self.client.get(self.url + str(private_event.slug) + '/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class AidTicketViewSetTest(APITestCase):

@@ -7,7 +7,7 @@ from konfera.serializers import EventSerializer, SpeakerSerializer, TalkSerializ
 
 class EventViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
-    queryset = Event.objects.all()
+    queryset = Event.objects.filter(status=Event.PUBLISHED)
     serializer_class = EventSerializer
 
 
