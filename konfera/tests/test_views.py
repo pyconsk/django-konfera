@@ -30,7 +30,7 @@ class EventViewSetTest(APITestCase):
             'organizer': {
                 'title': self.event.organizer.title,
             },
-            'date_from': self.event.date_from.isoformat().replace('+00:00', 'Z'),
+            'date_from': self.event.date_from.isoformat().replace('+00:00', 'Z'),  # DRF serialize +00:00 to Zulu
             'date_to': self.event.date_to.isoformat().replace('+00:00', 'Z'),
             'cfp_end': self.event.cfp_end.isoformat().replace('+00:00', 'Z'),
         }
