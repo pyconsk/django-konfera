@@ -1,14 +1,33 @@
 from rest_framework import viewsets, status, mixins
 from rest_framework.response import Response
+from rest_framework import generics
 
-from konfera.models import Event, Speaker, Talk, Ticket
-from konfera.serializers import EventSerializer, SpeakerSerializer, TalkSerializer, AidTicketSerializer
+from konfera.models import Event, Speaker, Talk, Ticket, TicketType
+from konfera.serializers import EventSerializer, SpeakerSerializer, TalkSerializer, TicketTypeListSerializer, \
+    TicketTypeDetailSerializer, AidTicketSerializer
 
 
 class EventViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
     queryset = Event.objects.filter(status=Event.PUBLIC)
     serializer_class = EventSerializer
+
+
+class EventTicketTypesList(generics.ListAPIView):
+    serializer_class = TicketTypeListSerializer
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return TicketType.objects.filter(event__slug=slug, accessibility=TicketType.PUBLIC)
+
+
+class EventTicketTypeDetail(generics.RetrieveAPIView):
+    lookup_field = 'uuid'
+    serializer_class = TicketTypeDetailSerializer
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return TicketType.objects.filter(event__slug=slug)
 
 
 class AidTicketViewSet(
