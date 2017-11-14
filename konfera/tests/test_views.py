@@ -79,6 +79,82 @@ class EventViewSetTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
+class EventTicketTypesList(APITestCase):
+    def setUp(self):
+        organizer = mommy.make(Organizer)
+        self.event = mommy.make(Event, organizer=organizer, date_from=now + 3 * day, date_to=now + 4 * day,
+                                cfp_end=now + day, status=Event.PUBLIC)
+        self.event2 = mommy.make(Event, organizer=organizer, date_from=now + day, date_to=now + 2 * day,
+                                 status=Event.PUBLIC)
+        self.url = '/event/%s/ticket-types/' % self.event.slug
+
+        self.tt = mommy.make(TicketType, event=self.event, date_from=now, date_to=now + 3 * day,
+                             attendee_type=TicketType.ATTENDEE, accessibility=TicketType.PRIVATE)
+        self.tt2 = mommy.make(TicketType, event=self.event, date_from=now, date_to=now + day,
+                              attendee_type=TicketType.AID, accessibility=TicketType.PUBLIC)
+
+    def test_get_ticket_type_list(self):
+        response = self.client.get(self.url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # We have 2 events and 2 ticket types, but only PUBLIC ticket type for self.event should be loaded
+        self.assertEquals(len(json.loads(response.content.decode('utf-8'))), 1)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), [{
+            'title': self.tt2.title,
+            'description': self.tt2.description,
+            'price': str(self.tt2.price),
+            'status': self.tt2.status,
+            'usage': self.tt2.usage,
+        }])
+
+
+class EventTicketTypesDetail(APITestCase):
+    def setUp(self):
+        organizer = mommy.make(Organizer)
+        self.event = mommy.make(Event, organizer=organizer, date_from=now + 3 * day, date_to=now + 4 * day,
+                                cfp_end=now + day, status=Event.PUBLIC)
+        self.event2 = mommy.make(Event, organizer=organizer, date_from=now + day, date_to=now + 2 * day,
+                                 status=Event.PUBLIC)
+        self.url = '/event/%s/ticket-types/' % self.event.slug
+
+        self.tt = mommy.make(TicketType, event=self.event, date_from=now, date_to=now + 3 * day,
+                             attendee_type=TicketType.ATTENDEE, accessibility=TicketType.PRIVATE)
+        self.tt2 = mommy.make(TicketType, event=self.event2, date_from=now, date_to=now + day,
+                              attendee_type=TicketType.AID, accessibility=TicketType.PUBLIC)
+
+    def test_get_ticket_type_details(self):
+        response = self.client.get(self.url + str(self.tt.uuid) + '/', format='json')
+        # We can get also details of private ticket type if we know UUID
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEquals(json.loads(response.content.decode('utf-8')), {
+            'uuid': str(self.tt.uuid),
+            'title': self.tt.title,
+            'description': self.tt.description,
+            'date_from': self.tt.date_from.isoformat().replace('+00:00', 'Z'),
+            'date_to': self.tt.date_to.isoformat().replace('+00:00', 'Z'),
+            'price': str(self.tt.price),
+            'attendee_type': self.tt.attendee_type,
+            'accessibility': self.tt.accessibility,
+            'status': self.tt.status,
+            'usage': self.tt.usage,
+            'issued_tickets': self.tt.issued_tickets,
+            'available_tickets': self.tt.available_tickets,
+            'event': {
+                'uuid': str(self.event.uuid),
+                'title': self.event.title,
+                'slug': self.event.slug,
+                'organizer': {
+                    'title': self.event.organizer.title,
+                },
+                'date_from': self.event.date_from.isoformat().replace('+00:00', 'Z'),  # DRF serialize +00:00 to Zulu
+                'date_to': self.event.date_to.isoformat().replace('+00:00', 'Z'),
+                'cfp_end': self.event.cfp_end.isoformat().replace('+00:00', 'Z'),
+            }
+        })
+
+        response = self.client.get(self.url + str(self.tt2.uuid) + '/', format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
 class AidTicketViewSetTest(APITestCase):
     def setUp(self):
         self.url = '/tickets/aid/'

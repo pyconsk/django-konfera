@@ -40,6 +40,40 @@ class EventSerializer(serializers.ModelSerializer):
         ]
 
 
+class TicketTypeListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicketType
+        fields = [
+            'title',
+            'description',
+            'price',
+            'status',
+            'usage',
+        ]
+
+
+class TicketTypeDetailSerializer(serializers.ModelSerializer):
+    event = EventSerializer()
+
+    class Meta:
+        model = TicketType
+        fields = [
+            'uuid',
+            'title',
+            'description',
+            'date_from',
+            'date_to',
+            'price',
+            'attendee_type',
+            'accessibility',
+            'status',
+            'usage',
+            'issued_tickets',
+            'available_tickets',
+            'event',
+        ]
+
+
 class AidTicketSerializer(
     CustomToRepresentationMixin,
     serializers.ModelSerializer
