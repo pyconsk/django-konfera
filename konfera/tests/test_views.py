@@ -99,10 +99,12 @@ class EventTicketTypesList(APITestCase):
         # We have 2 events and 2 ticket types, but only PUBLIC ticket type for self.event should be loaded
         self.assertEquals(len(json.loads(response.content.decode('utf-8'))), 1)
         self.assertEquals(json.loads(response.content.decode('utf-8')), [{
+            'uuid': str(self.tt2.uuid),
             'title': self.tt2.title,
             'description': self.tt2.description,
             'price': str(self.tt2.price),
             'status': self.tt2.status,
+            'attendee_type': self.tt2.attendee_type,
             'usage': self.tt2.usage,
         }])
 
