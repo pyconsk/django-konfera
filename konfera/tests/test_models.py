@@ -347,7 +347,7 @@ class OrderTest(TestCase):
         ticket_type = mommy.make(TicketType, date_from=now, date_to=now + 3 * day)
 
         # Create Ticket with TicketType, order should get event from ticket type
-        models.Ticket.objects.create(title='Test Ticket', type=ticket_type, order=self.order)
+        models.Ticket.objects.create(type=ticket_type, order=self.order)
         self.assertEqual(self.order.event, ticket_type.event)
 
     def test_order_event_without_ticket(self):
