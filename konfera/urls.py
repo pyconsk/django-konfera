@@ -5,10 +5,8 @@ from konfera.views import EventViewSet, TalkViewSet, AidTicketViewSet, EventTick
 
 router = routers.SimpleRouter()
 router.register(r'events', EventViewSet)
-router.register(r'talks', TalkViewSet)
-router.register(r'tickets/aid', AidTicketViewSet)
-
-
+router.register(r'event/(?P<slug>.+)/talks', TalkViewSet)
+router.register(r'event/(?P<slug>.+)/tickets/aid', AidTicketViewSet)
 # urlpatterns = router.urls
 
 urlpatterns = [

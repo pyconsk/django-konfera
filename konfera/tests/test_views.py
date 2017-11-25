@@ -159,8 +159,8 @@ class EventTicketTypesDetail(APITestCase):
 
 class AidTicketViewSetTest(APITestCase):
     def setUp(self):
-        self.url = '/tickets/aid/'
         self.tt = mommy.make(TicketType, date_from=now, date_to=now + day, attendee_type=TicketType.AID)
+        self.url = '/event/%s/tickets/aid/' % self.tt.event.slug
 
     def test_post_valid_data_saves_object_and_returns_uuid(self):
         data = {
@@ -272,7 +272,7 @@ class CFPViewSetTest(APITestCase):
                 'email': 'richard@example.com',
             },
         }
-        response = self.client.post('/talks/', data, format='json')
+        response = self.client.post('/event/' + self.event.slug + '/talks/', data, format='json')
 
         talks = Talk.objects.all()
         speakers = Speaker.objects.all()
@@ -283,7 +283,7 @@ class CFPViewSetTest(APITestCase):
         self.assertEqual(response.data, {'key': talks.first().uuid})
 
     def test_invalid_data_shows_validation_erros(self):
-        response = self.client.post('/talks/', {'primary_speaker': {}}, format='json')
+        response = self.client.post('/event/' + self.event.slug + '/talks/', {'primary_speaker': {}}, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data, {
             'event_uuid': ['This field is required.'],
@@ -298,7 +298,7 @@ class CFPViewSetTest(APITestCase):
 
     def test_get_cfp_by_uuid(self):
         talk = mommy.make(Talk, event=self.event)
-        response = self.client.get('/talks/' + str(talk.uuid) + '/', format='json')
+        response = self.client.get('/event/' + talk.event.slug + '/talks/' + str(talk.uuid) + '/', format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEquals(json.loads(response.content.decode('utf-8')), {
@@ -361,7 +361,7 @@ class CFPViewSetTest(APITestCase):
             }
         }
 
-        response = self.client.put('/talks/' + str(talk.uuid) + '/', data, format='json')
+        response = self.client.put('/event/' + talk.event.slug + '/talks/' + str(talk.uuid) + '/', data, format='json')
 
         self.maxDiff = None
         self.assertEqual(response.status_code, status.HTTP_200_OK)
