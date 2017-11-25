@@ -18,7 +18,18 @@ class EventTicketTypesList(generics.ListAPIView):
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        return TicketType.objects.filter(event__slug=slug, accessibility=TicketType.PUBLIC)
+        attendee_type = self.kwargs.get('attendee_type', None)
+        exclude = []
+        all_ticket_types = TicketType.objects.filter(event__slug=slug, accessibility=TicketType.PUBLIC)
+
+        for ticket_type in all_ticket_types:
+            if ticket_type.get_current_status() != TicketType.ACTIVE:
+                exclude.append(str(ticket_type.uuid))
+
+        if attendee_type:
+            all_ticket_types = all_ticket_types.filter(attendee_type=attendee_type)
+
+        return all_ticket_types.exclude(uuid__in=exclude)
 
 
 class EventTicketTypeDetail(generics.RetrieveAPIView):

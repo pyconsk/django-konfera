@@ -13,6 +13,7 @@ router.register(r'tickets/aid', AidTicketViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
+    url('^event/(?P<slug>.+)/ticket-types/detail/(?P<uuid>.+)/$', EventTicketTypeDetail.as_view()),
     url('^event/(?P<slug>.+)/ticket-types/$', EventTicketTypesList.as_view()),
-    url('^event/(?P<slug>.+)/ticket-types/(?P<uuid>.+)/$', EventTicketTypeDetail.as_view()),
+    url('^event/(?P<slug>.+)/ticket-types/(?P<attendee_type>.+)/$', EventTicketTypesList.as_view()),
 ]

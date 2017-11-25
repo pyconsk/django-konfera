@@ -116,7 +116,7 @@ class EventTicketTypesDetail(APITestCase):
                                 cfp_end=now + day, status=Event.PUBLIC)
         self.event2 = mommy.make(Event, organizer=organizer, date_from=now + day, date_to=now + 2 * day,
                                  status=Event.PUBLIC)
-        self.url = '/event/%s/ticket-types/' % self.event.slug
+        self.url = '/event/%s/ticket-types/detail/' % self.event.slug
 
         self.tt = mommy.make(TicketType, event=self.event, date_from=now, date_to=now + 3 * day,
                              attendee_type=TicketType.ATTENDEE, accessibility=TicketType.PRIVATE)
