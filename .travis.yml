@@ -3,14 +3,12 @@
 language: python
 
 python:
-  - "3.4"
   - "3.5"
   - "3.6"
   - "nightly"
 
 env:
-  - DJANGO_VERSION=1.10.8
-  - DJANGO_VERSION=1.11.7
+  - DJANGO_VERSION=2.0
 
 matrix:
   include:
@@ -37,10 +35,6 @@ notifications:
   webhooks:
     urls:
       - "https://webhooks.gitter.im/e/2f5f7550882030346bca"
-      - "https://scalar.vector.im/api/neb/services/hooks/dHJhdmlzLWNpLyU0MHJpY2NvJTNBcHl0aG9uLnNrLyUyMUdWc25RR3VQeXlTcW91enhiVyUzQXB5dGhvbi5zaw"
     on_success: change
     on_failure: always
     on_start: never
-  slack:
-    rooms:
-      - pyconsk:itD3xMGpyFdaNubLLCwwFinz#django-konfera
