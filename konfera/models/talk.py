@@ -43,16 +43,18 @@ class Talk(KonferaModel):
         'Speaker',
         related_name='primary_speaker_talks',
         verbose_name=_('Primary speaker'),
+        on_delete=models.PROTECT,
     )
     secondary_speaker = models.ForeignKey(
         'Speaker',
         related_name='secondary_speaker_talks',
         verbose_name=_('Secondary speaker'),
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
     )
     flag = models.CharField(max_length=32, blank=True)
-    event = models.ForeignKey('Event')
+    event = models.ForeignKey('Event', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.title

@@ -60,7 +60,7 @@ class TicketType(FromToModel):
     accessibility = models.CharField(choices=ACCESSIBILITY, max_length=32, default=PRIVATE)
     usage = models.IntegerField(default=-1, help_text=_('Number of tickets which can be issued. '
                                                         'For unlimited amount use -1.'))
-    event = models.ForeignKey('Event')
+    event = models.ForeignKey('Event', on_delete=models.PROTECT)
 
     def __str__(self):
         return self.title

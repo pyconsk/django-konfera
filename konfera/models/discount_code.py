@@ -19,7 +19,7 @@ class DiscountCode(FromToModel):
         help_text=_('Value is percentage discount from ticket type price.'),
     )
     usage = models.IntegerField(default=1, help_text=_('Amount of tickets that can be issued.'))
-    ticket_type = models.ForeignKey('TicketType')
+    ticket_type = models.ForeignKey('TicketType', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
