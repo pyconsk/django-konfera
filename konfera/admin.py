@@ -1,3 +1,6 @@
+import csv
+from django.http import HttpResponse
+from django.utils.encoding import smart_str
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -100,7 +103,7 @@ class TalkAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
-    actions = ['make_draft', 'make_approved', 'make_published', 'make_rejected', 'make_withdrawn']
+    actions = ['make_draft', 'make_approved', 'make_published', 'make_rejected', 'make_withdrawn', 'export_csv']
 
     def make_draft(self, request, queryset):
         rows_updated = queryset.update(status=Talk.DRAFT)
@@ -122,6 +125,55 @@ class TalkAdmin(admin.ModelAdmin):
         rows_updated = queryset.update(status=Talk.WITHDRAWN)
         self.message_user(request, "%s talk(s) status updated." % rows_updated)
 
+    def export_csv(self, request, queryset):
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=mymodel.csv'
+        writer = csv.writer(response, csv.excel)
+        response.write(u'\ufeff'.encode('utf8'))
+        writer.writerow([
+            smart_str("Talk Title"),
+            smart_str("Abstract"),
+            smart_str("Flag"),
+            smart_str("Language"),
+            smart_str("Event"),
+            smart_str("Type"),
+            smart_str("Duration"),
+            smart_str("Status"),
+            smart_str("Speaker Title"),
+            smart_str("Speaker First Name"),
+            smart_str("Speaker Last Name"),
+            smart_str("Speaker Bio"),
+            smart_str("Speaker Country"),
+            smart_str("Secondary Speaker Title"),
+            smart_str("Secondary Speaker First Name"),
+            smart_str("Secondary Speaker Last Name"),
+            smart_str("Secondary Speaker Bio"),
+            smart_str("Secondary Speaker Country"),
+        ])
+        for obj in queryset:
+            writer.writerow([
+                smart_str(obj.title),
+                smart_str(obj.abstract),
+                smart_str(getattr(obj, 'flag', '')),
+                smart_str(obj.language),
+                smart_str(obj.event),
+                smart_str(obj.type),
+                smart_str(obj.duration),
+                smart_str(obj.status),
+                smart_str(getattr(obj.primary_speaker, 'title', '')),
+                smart_str(getattr(obj.primary_speaker, 'first_name', '')),
+                smart_str(getattr(obj.primary_speaker, 'last_name', '')),
+                smart_str(getattr(obj.primary_speaker, 'bio', '')),
+                smart_str(getattr(obj.primary_speaker, 'country', '')),
+                smart_str(getattr(obj.secondary_speaker, 'title', '')),
+                smart_str(getattr(obj.secondary_speaker, 'first_name', '')),
+                smart_str(getattr(obj.secondary_speaker, 'last_name', '')),
+                smart_str(getattr(obj.secondary_speaker, 'bio', '')),
+                smart_str(getattr(obj.secondary_speaker, 'country', '')),
+            ])
+        return response
+
+    export_csv.short_description = u"Export selected talks to CSV file"
     make_draft.short_description = "Set selected talks to draft"
     make_approved.short_description = "Set selected talks to approved"
     make_published.short_description = "Set selected talks to published"
