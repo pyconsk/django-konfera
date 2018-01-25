@@ -44,10 +44,12 @@ class TicketTypeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = TicketType
         fields = [
+            'uuid',
             'title',
             'description',
             'price',
             'status',
+            'attendee_type',
             'usage',
         ]
 
