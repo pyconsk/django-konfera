@@ -1,7 +1,8 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from konfera.views import EventViewSet, TalkViewSet, AidTicketViewSet, EventTicketTypesList, EventTicketTypeDetail
+from .views import EventViewSet, TalkViewSet, AidTicketViewSet, EventTicketTypesList, EventTicketTypeDetail, \
+    EventTalksList
 
 router = routers.SimpleRouter()
 router.register(r'events', EventViewSet)
@@ -15,4 +16,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     url('^event/(?P<slug>.+)/ticket-types/$', EventTicketTypesList.as_view()),
     url('^event/(?P<slug>.+)/ticket-types/(?P<uuid>.+)/$', EventTicketTypeDetail.as_view()),
+    url('^event/(?P<slug>.+)/talks/', EventTalksList.as_view()),
 ]

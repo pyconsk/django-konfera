@@ -30,6 +30,14 @@ class EventTicketTypeDetail(generics.RetrieveAPIView):
         return TicketType.objects.filter(event__slug=slug)
 
 
+class EventTalksList(generics.ListAPIView):
+    serializer_class = TalkSerializer
+
+    def get_queryset(self):
+        slug = self.kwargs['slug']
+        return Talk.objects.filter(event__slug=slug).filter(status=Talk.PUBLISHED)
+
+
 class AidTicketViewSet(
     mixins.CreateModelMixin,
     mixins.RetrieveModelMixin,
