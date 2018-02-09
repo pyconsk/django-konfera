@@ -37,6 +37,7 @@ class EventSerializer(serializers.ModelSerializer):
             'date_from',
             'date_to',
             'cfp_end',
+            'status'
         ]
 
 
@@ -114,8 +115,8 @@ class SpeakerSerializer(
             'title',
             'first_name',
             'last_name',
-            # 'email',
-            # 'phone',
+            # 'email',  # Private Information!
+            # 'phone',  # Private Information!
             'bio',
             'url',
             'social_url',

@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import EventViewSet, TalkViewSet, AidTicketViewSet, EventTicketTypesList, EventTicketTypeDetail, \
-    EventTalksList
+    EventTalksList, EventSpeakersList
 
 router = routers.SimpleRouter()
 router.register(r'events', EventViewSet)
@@ -17,4 +17,5 @@ urlpatterns = [
     url('^event/(?P<slug>.+)/ticket-types/$', EventTicketTypesList.as_view()),
     url('^event/(?P<slug>.+)/ticket-types/(?P<uuid>.+)/$', EventTicketTypeDetail.as_view()),
     url('^event/(?P<slug>.+)/talks/', EventTalksList.as_view()),
+    url('^event/(?P<slug>.+)/speakers/', EventSpeakersList.as_view())
 ]
