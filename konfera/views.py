@@ -55,7 +55,7 @@ class EventSpeakersList(generics.ListAPIView):
 
     def get_queryset(self):
         slug = self.kwargs['slug']
-        return Speaker.objects.filter(primary_speaker_talks__event__status=Event.PUBLIC).filter(
+        return Speaker.objects.filter(
             Q(primary_speaker_talks__event__slug=slug) | Q(secondary_speaker_talks__event__slug=slug)).filter(
             Q(primary_speaker_talks__status=Talk.PUBLISHED) | Q(secondary_speaker_talks__status=Talk.PUBLISHED))\
             .distinct('first_name', 'last_name').order_by('last_name', 'first_name')
